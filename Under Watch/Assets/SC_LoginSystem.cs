@@ -25,6 +25,16 @@ public class SC_LoginSystem : MonoBehaviour
 
     string rootURL = "https://erinjktruesdell.com/"; //Path where php files are located
 
+    public bool getIsLoggedIn()
+    {
+        return isLoggedIn;
+    }
+
+    public string getUsername()
+    {
+        return userName;
+    }
+
     void OnGUI()
     {
         if (!isLoggedIn)
