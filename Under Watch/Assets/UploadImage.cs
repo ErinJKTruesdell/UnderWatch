@@ -11,7 +11,6 @@ public class UploadImage : MonoBehaviour
 {
 
     public string uploadURL = "https://erinjktruesdell.com/uploadImage.php";
-    public InputField filePathInput;
     public SC_LoginSystem loginSystem;
 
     // Start is called before the first frame update
@@ -25,22 +24,17 @@ public class UploadImage : MonoBehaviour
 
     }
 
-    public void uploadIt()
+    public void uploadIt(string path)
     {
-        StartCoroutine(uploadFile());
+        StartCoroutine(uploadFile(path));
     }
 
-    public IEnumerator uploadFile()
+    public IEnumerator uploadFile(string filePath)
     {
         if (loginSystem != null && loginSystem.getIsLoggedIn())
         {
-
-
-            //WebClient client = new WebClient();
-
-            string filePath = filePathInput.text;
             string loggedInUser = loginSystem.getUsername();
-            //Debug.Log(filePath);
+            Debug.Log(filePath);
 
             if (File.Exists(filePath))
             {

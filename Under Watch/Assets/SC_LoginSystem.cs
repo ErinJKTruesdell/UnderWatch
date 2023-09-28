@@ -41,7 +41,7 @@ public class SC_LoginSystem : MonoBehaviour
         {
             if (currentWindow == CurrentWindow.Login)
             {
-                GUI.Window(0, new Rect(Screen.width / 2 - 125, Screen.height / 2 - 115, 250, 230), LoginWindow, "Login");
+                GUI.Window(0, new Rect(Screen.width / 2 - 250, Screen.height / 2 - 230, 500, 460), LoginWindow, "Login");
             }
             if (currentWindow == CurrentWindow.Register)
             {
