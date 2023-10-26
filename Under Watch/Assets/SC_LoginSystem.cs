@@ -35,6 +35,12 @@ public class SC_LoginSystem : MonoBehaviour
         return userName;
     }
 
+    private void Awake()
+    {
+
+        DontDestroyOnLoad(this);
+    }
+
     void OnGUI()
     {
         if (!isLoggedIn)
@@ -190,8 +196,8 @@ public class SC_LoginSystem : MonoBehaviour
         errorMessage = "";
 
         WWWForm form = new WWWForm();
-        form.AddField("email", loginEmail);
-        form.AddField("password", loginPassword);
+        form.AddField("email", "ejktruesdell@gmail.com");
+        form.AddField("password", "nernpass1");
 
         using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "login.php", form))
         {
@@ -211,7 +217,6 @@ public class SC_LoginSystem : MonoBehaviour
                     userName = dataChunks[1];
                     userEmail = dataChunks[2];
                     isLoggedIn = true;
-
                     ResetValues();
                 }
                 else
@@ -222,6 +227,7 @@ public class SC_LoginSystem : MonoBehaviour
         }
 
         isWorking = false;
+        UnityEngine.SceneManagement.SceneManager.LoadScene(1);
     }
 
     void ResetValues()

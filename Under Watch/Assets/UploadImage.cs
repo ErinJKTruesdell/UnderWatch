@@ -14,8 +14,14 @@ public class UploadImage : MonoBehaviour
     public SC_LoginSystem loginSystem;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
+        DontDestroyOnLoad(this);
+        loginSystem = GameObject.FindObjectOfType<SC_LoginSystem>();
+        if(loginSystem == null)
+        {
+            loginSystem = new SC_LoginSystem();
+        }
     }
 
     // Update is called once per frame
@@ -31,13 +37,16 @@ public class UploadImage : MonoBehaviour
 
     public IEnumerator uploadFile(string filePath)
     {
+        Debug.Log("File Upload Coroutine");
         if (loginSystem != null && loginSystem.getIsLoggedIn())
         {
+            Debug.Log("Getting logged in user...");
             string loggedInUser = loginSystem.getUsername();
             Debug.Log(filePath);
 
             if (File.Exists(filePath))
             {
+                Debug.Log("File exists! Uploading Form...");
                 WWWForm form = new WWWForm();
                 string[] imageNames = filePath.Split("/");
                 string imageName = imageNames[imageNames.Length - 1];
@@ -45,6 +54,7 @@ public class UploadImage : MonoBehaviour
                 form.AddField("username", loggedInUser);
 
                 UnityWebRequest www = UnityWebRequest.Post(uploadURL, form);
+                Debug.Log("Sending web request...");
 
                 yield return www.SendWebRequest();
 
