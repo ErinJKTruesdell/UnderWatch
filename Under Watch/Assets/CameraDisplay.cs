@@ -57,11 +57,20 @@ public class CameraDisplay : MonoBehaviour
         yield return frameEnd;
 
 
-        var width = (int)rear.rectTransform.rect.width;
-        var height = (int)rear.rectTransform.rect.height;
-        var tex = new Texture2D(width, height, TextureFormat.RGB24, false);
 
-        tex.ReadPixels(new Rect(rear.rectTransform.rect.position.x, rear.rectTransform.rect.position.y, rear.rectTransform.rect.width, rear.rectTransform.rect.height), 0, 0);
+        Vector3[] corners = new Vector3[4];
+        rear.rectTransform.GetWorldCorners(corners);
+        Vector3 topLeft = corners[0];
+
+        var width = (int)(corners[3].x - corners[0].x); //.rect.width;
+        var height = (int)(corners[1].y - corners[0].y);
+        var tex = new Texture2D(width, height, TextureFormat.RGB24, false);
+        // Rescale the size appropriately based on the current Canvas scale
+        Vector2 scaledSize = new Vector2(width, height);
+
+        
+
+        tex.ReadPixels(new Rect(topLeft, scaledSize), 0, 0);
         tex.Apply();
 
         byte[] bytes = tex.EncodeToPNG();

@@ -533,6 +533,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   front: {fileID: 96101882}
   rear: {fileID: 1980748268}
+  uploader: {fileID: 1967155780}
 --- !u!1 &1711121041
 GameObject:
   m_ObjectHideFlags: 0
