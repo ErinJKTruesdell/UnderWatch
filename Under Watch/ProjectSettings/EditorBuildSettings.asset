@@ -11,4 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TwoCameraScene.unity
     guid: 7a36335a92768c94a9989493786177b3
+  - enabled: 0
+    path: Assets/Scenes/SocialFeed.unity
+    guid: 298a31c50f03bc84bb38b87d115ad10e
+  - enabled: 0
+    path: Assets/Scenes/Demo2.unity
+    guid: 48da4499451f44851ad18827470b951c
   m_configObjects: {}
