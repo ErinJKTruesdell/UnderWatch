@@ -20,7 +20,12 @@ public class CameraDisplay : MonoBehaviour
 
     public UploadImage uploader;
 
+    public MeshRenderer rearMesh;
+    public MeshRenderer frontMesh;
+
     WaitForEndOfFrame frameEnd = new WaitForEndOfFrame();
+
+    Vector3 currentLocalEurlerAngles = Vector3.zero;
     // Start is called before the first frame update
     void Start()
     {
@@ -36,8 +41,10 @@ public class CameraDisplay : MonoBehaviour
             }
         }
         webcam0 = new WebCamTexture(devices[0].name);
+
+
         webcam0.Play();
-        rear.texture = webcam0;
+        rearMesh.material.SetTexture("_MainTex", webcam0);
 
         uploader = GameObject.FindObjectOfType<UploadImage>();
         if(uploader == null )
@@ -90,13 +97,13 @@ public class CameraDisplay : MonoBehaviour
             Texture2D snap = new Texture2D(webcam0.width, webcam0.height);
             snap.SetPixels(webcam0.GetPixels());
             snap.Apply();
-            rear.texture = snap;
+            rearMesh.material.SetTexture("_MainTex", snap);
             //byte[] bytes = snap.EncodeToPNG();
-            front.gameObject.SetActive(true);
+            frontMesh.gameObject.SetActive(true);
             webcam0.Stop();
             webcam1 = new WebCamTexture(devices[1].name);
             webcam1.Play();
-            front.texture = webcam1;
+            frontMesh.material.SetTexture("_MainTex",webcam1);
             rearTaken = true;
 
         }
@@ -105,7 +112,7 @@ public class CameraDisplay : MonoBehaviour
             Texture2D snap = new Texture2D(webcam1.width, webcam1.height);
             snap.SetPixels(webcam1.GetPixels());
             snap.Apply();
-            front.texture = snap;
+            frontMesh.material.SetTexture("_MainTex", snap);
             webcam1.Stop();
             StartCoroutine(takeSnap());
         }
