@@ -227,7 +227,98 @@ public class SC_LoginSystem : MonoBehaviour
         }
 
         isWorking = false;
-        UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+        //UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+    }
+
+    public void RecordLocation()
+    {
+        if (isLoggedIn)
+        {
+            StartCoroutine(GetAndSendLocationData());
+        }
+    }
+
+    IEnumerator GetAndSendLocationData()
+    {
+        Debug.Log("GO GO GO");
+        float latitude = 0f;
+        float longitude = 0f;
+        // get location data
+        if (!Input.location.isEnabledByUser)
+            Debug.Log("Location not enabled on device or app does not have permission to access location");
+
+        // Starts the location service.
+        Input.location.Start();
+
+        // Waits until the location service initializes
+        int maxWait = 20;
+        while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
+        {
+            yield return new WaitForSeconds(1);
+            maxWait--;
+        }
+
+        // If the service didn't initialize in 20 seconds this cancels location service use.
+        if (maxWait < 1)
+        {
+            Debug.Log("Timed out");
+            yield break;
+        }
+
+        // If the connection failed this cancels location service use.
+        if (Input.location.status == LocationServiceStatus.Failed)
+        {
+            Debug.LogError("Unable to determine device location");
+            yield break;
+        }
+        else
+        {
+            // If the connection succeeded, this retrieves the device's current location and displays it in the Console window.
+            Debug.Log("Location: " + Input.location.lastData.latitude + " " + Input.location.lastData.longitude + " " + Input.location.lastData.altitude + " " + Input.location.lastData.horizontalAccuracy + " " + Input.location.lastData.timestamp);
+
+            latitude = Input.location.lastData.latitude;
+            longitude = Input.location.lastData.longitude;
+        }
+
+        // Stops the location service if there is no need to query location updates continuously.
+        Input.location.Stop();
+
+
+        if(latitude != 0)
+        {
+            isWorking = true;
+            errorMessage = "";
+
+            string lat = latitude.ToString();
+            string longi = longitude.ToString();
+
+            Debug.Log("Attempting Upload: " + userName + " lat: " + lat + " long: " + longi);
+
+            WWWForm form = new WWWForm();
+            form.AddField("username", userName);
+            form.AddField("lat", lat);
+            form.AddField("long", longi);
+
+            using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "recordLocation.php", form))
+            {
+                yield return www.SendWebRequest();
+
+                if (www.result != UnityWebRequest.Result.Success)
+                {
+                    errorMessage = www.error;
+                }
+                else
+                {
+                    string responseText = www.downloadHandler.text;
+
+                    Debug.Log(responseText);
+                }
+            }
+
+            isWorking = false;
+            //send locatrion data
+        }
+
     }
 
     void ResetValues()
