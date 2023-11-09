@@ -731,6 +731,7 @@ MonoBehaviour:
   Count: 100
   PullCount: 25
   sampleTex: {fileID: 2800000, guid: 45c7c943b5ad4144e923c6647047959f, type: 3}
+  sfd: {fileID: 1992330859}
 --- !u!4 &1992330858
 Transform:
   m_ObjectHideFlags: 0

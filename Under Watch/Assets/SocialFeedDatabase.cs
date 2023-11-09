@@ -3,33 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using static SC_LoginSystem;
 using UnityEngine.Networking;
+using System;
+using UnityEngine.UI;
 
-public class SocialFeedObject
+public class GetNextImageCommand
 {
-    public string timestamp;
-    public string username;
-    public Texture photo;
+    public Text usernameText { get; set; }
+    public RawImage pictureImage { get; set; }
 
-    public SocialFeedObject()
+    public GetNextImageCommand( Text usernameText, RawImage pictureImage)
     {
-        this.timestamp = "";
-        this.username = string.Empty;
-        this.photo = null;
+        this.usernameText = usernameText;
+        this.pictureImage = pictureImage;
     }
 
-    public SocialFeedObject(string timestamp, string username, Texture photo)
-    {
-        this.timestamp = timestamp;
-        this.username = username;
-        this.photo = photo;
-    }
 }
 
 public class SocialFeedDatabase : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    string currentPhotoTimestamp = "";
+    string currentPhotoTimestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
     string currentPhotoURL = "";
 
@@ -37,30 +31,53 @@ public class SocialFeedDatabase : MonoBehaviour
 
     Texture currentPhoto;
 
+    SC_LoginSystem loginSystem;
+
     bool isWorking = false;
 
 
     string rootURL = "https://erinjktruesdell.com/";
 
-    public SocialFeedObject getNextPost()
+    Queue<GetNextImageCommand> queue;
+
+    private void Awake()
     {
-        StartCoroutine(GetRequest());
-        isWorking = true;
-
-        while (isWorking)
-        {
-            // wait. turn an async function into a sync one. there's probably a better way to do this. 
-        }
-
-        return new SocialFeedObject(currentPhotoTimestamp,currentPhotoUsername,currentPhoto);
+        loginSystem = FindObjectOfType<SC_LoginSystem>();
+        queue = new Queue<GetNextImageCommand>();
     }
 
-    IEnumerator GetRequest()
+    public void getNextPost(RawImage image, Text text)
     {
-        WWWForm form = new WWWForm();
-        form.AddField("datetime", currentPhotoTimestamp);
+        //if (loginSystem != null)
+        //{
+        Debug.Log("Queueing New Command");
+        queue.Enqueue(new GetNextImageCommand(text, image));
+       //StartCoroutine(GetRequest(image, text));
+        
+    }
 
-        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "getPhoto.php", form))
+    public void Update()
+    {
+        if(!isWorking && queue.Count > 0)
+        {
+            GetNextImageCommand command = queue.Dequeue();
+            Debug.Log("Starting New Command");
+            StartCoroutine(GetRequest(command.pictureImage, command.usernameText));
+            isWorking = true;
+        }
+    }
+
+    IEnumerator GetRequest(RawImage image, Text text)
+    {
+        Debug.Log("Starting Request: " + currentPhotoTimestamp);
+        WWWForm form = new WWWForm();
+        form.AddField("previousDate", currentPhotoTimestamp);
+
+        //placeholder fake username
+        form.AddField("username", "blargj");
+
+
+        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "/get-next-photo.php", form))
         {
             yield return www.SendWebRequest();
 
@@ -68,24 +85,51 @@ public class SocialFeedDatabase : MonoBehaviour
             {
                 //yay show the picture
                 //errorMessage = www.error;
+                string errorMessage = www.error;
+                Debug.Log(errorMessage);
+
+                Debug.Log("Data get error, releasing queue");
                 isWorking = false;
             }
             else
             {
                 //return null
-                isWorking = false;
+                string responseText = www.downloadHandler.text;
+                string[] datachunks = responseText.Split("|");
+                //Debug.Log(datachunks.Length);
+                if (datachunks.Length > 1)
+                {
+                    currentPhotoTimestamp = datachunks[2];
+                    currentPhotoUsername = datachunks[0];
+                    currentPhotoURL = datachunks[1];
+                    text.text = currentPhotoUsername.Replace("\n", "");
+                    Debug.Log("Starting Download");
+                    StartCoroutine(downloadImageFromURL(rootURL + currentPhotoURL, image));
+                }
+                else
+                {
+
+                    Debug.Log("Data get failed, releasing queue");
+                    isWorking = false;
+                }
             }
         }
     }
 
-    IEnumerator downloadImageFromURL(string url)
+    IEnumerator downloadImageFromURL(string url, RawImage image)
     {
+
+        Debug.Log("Starting Download Request");
         UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
         yield return request.SendWebRequest();
         if (request.isNetworkError || request.isHttpError)
             Debug.Log(request.error);
         else
             currentPhoto = ((DownloadHandlerTexture)request.downloadHandler).texture;
+            image.texture = currentPhoto;
+
+        Debug.Log("Releasing Queued Command");
+        isWorking = false;
 
     }
 }

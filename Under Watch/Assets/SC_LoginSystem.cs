@@ -19,6 +19,11 @@ public class SC_LoginSystem : MonoBehaviour
     bool registrationCompleted = false;
     bool isLoggedIn = false;
 
+    public GameObject LoginButton;
+    public GameObject RegisterButton;
+
+    public int registerSceneIndex;
+
     //Logged-in user data
     string userName = "";
     string userEmail = "";
@@ -41,34 +46,53 @@ public class SC_LoginSystem : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
-    void OnGUI()
+    public void goToRegistration()
     {
-        if (!isLoggedIn)
-        {
-            if (currentWindow == CurrentWindow.Login)
-            {
-                GUI.Window(0, new Rect(Screen.width / 2 - 250, Screen.height / 2 - 230, 500, 460), LoginWindow, "Login");
-            }
-            if (currentWindow == CurrentWindow.Register)
-            {
-                GUI.Window(0, new Rect(Screen.width / 2 - 125, Screen.height / 2 - 165, 250, 330), RegisterWindow, "Register");
-            }
-        }
-
-        GUI.Label(new Rect(5, 5, 500, 25), "Status: " + (isLoggedIn ? "Logged-in Username: " + userName + " Email: " + userEmail : "Logged-out"));
-        if (isLoggedIn)
-        {
-            if (GUI.Button(new Rect(5, 30, 100, 25), "Log Out"))
-            {
-                isLoggedIn = false;
-                userName = "";
-                userEmail = "";
-                currentWindow = CurrentWindow.Login;
-            }
-        }
+        UnityEngine.SceneManagement.SceneManager.LoadScene(registerSceneIndex);
     }
 
-    void LoginWindow(int index)
+    void OnGUI()
+    {
+
+        // attempt login with any saved information
+        if (PlayerPrefs.GetString("savedUsername", "") != "")
+        {
+
+        }
+        else
+        {
+            //else show login/register buttons
+            LoginButton.SetActive(true);
+            RegisterButton.SetActive(true);
+        }
+
+
+            //if (!isLoggedIn)
+            //{
+            //    if (currentWindow == CurrentWindow.Login)
+            //    {
+            //        GUI.Window(0, new Rect(Screen.width / 2 - 250, Screen.height / 2 - 230, 500, 460), LoginWindow, "Login");
+            //    }
+            //    if (currentWindow == CurrentWindow.Register)
+            //    {
+            //        GUI.Window(0, new Rect(Screen.width / 2 - 125, Screen.height / 2 - 165, 250, 330), RegisterWindow, "Register");
+            //    }
+            //}
+
+            //GUI.Label(new Rect(5, 5, 500, 25), "Status: " + (isLoggedIn ? "Logged-in Username: " + userName + " Email: " + userEmail : "Logged-out"));
+            //if (isLoggedIn)
+            //{
+            //    if (GUI.Button(new Rect(5, 30, 100, 25), "Log Out"))
+            //    {
+            //        isLoggedIn = false;
+            //        userName = "";
+            //        userEmail = "";
+            //        currentWindow = CurrentWindow.Login;
+            //    }
+            //}
+        }
+
+        void LoginWindow(int index)
     {
         if (isWorking)
         {
