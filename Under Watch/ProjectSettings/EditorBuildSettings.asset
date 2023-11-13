@@ -8,7 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LoginScene.unity
     guid: 73ab46dea96d3564ba4a8bd10d3acf2d
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TwoCameraScene.unity
     guid: 7a36335a92768c94a9989493786177b3
   - enabled: 0
@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Demo2.unity
     guid: 48da4499451f44851ad18827470b951c
+  - enabled: 1
+    path: Assets/Scenes/ProfileSetup.unity
+    guid: d616cbfb49f086348b34b814aeec81f9
   m_configObjects: {}

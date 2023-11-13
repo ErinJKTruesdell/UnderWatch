@@ -20,7 +20,7 @@ public class Demo2 : MonoBehaviour
 
     public Texture sampleTex;
 
-    SocialFeedDatabase sfd;
+    public SocialFeedDatabase sfd;
 
     void Start()
     {
@@ -32,9 +32,11 @@ public class Demo2 : MonoBehaviour
             _list.Add(i);
         }
         Scroll.InitData(_list.Count);
-
-        sfd = GameObject.FindObjectOfType<SocialFeedDatabase>();
-        if(sfd == null)
+        if (sfd == null)
+        {
+            sfd = FindObjectOfType<SocialFeedDatabase>();
+        }
+            if (sfd == null)
         {
             sfd = new SocialFeedDatabase();
         }
@@ -43,9 +45,9 @@ public class Demo2 : MonoBehaviour
     void OnFillItem(int index, GameObject item)
     {
         //database code here
-        SocialFeedObject sfo = sfd.getNextPost();
-        item.GetComponentInChildren<Text>().text = sfo.username;
-        item.GetComponentInChildren<RawImage>().texture = sfo.photo;
+        sfd.getNextPost(item.GetComponentInChildren<RawImage>(), item.GetComponentInChildren<Text>());
+        //item.GetComponentInChildren<Text>().text = sfo.username;
+        //item.GetComponentInChildren<RawImage>().texture = sfo.photo;
     }
 
     int OnHeightItem(int index)
