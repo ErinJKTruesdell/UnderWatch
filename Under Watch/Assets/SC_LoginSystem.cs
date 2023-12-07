@@ -44,16 +44,6 @@ public class SC_LoginSystem : MonoBehaviour
     {
 
         DontDestroyOnLoad(this);
-    }
-
-    public void goToRegistration()
-    {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(registerSceneIndex);
-    }
-
-    void OnGUI()
-    {
-
         // attempt login with any saved information
         if (PlayerPrefs.GetString("savedUsername", "") != "")
         {
@@ -65,6 +55,17 @@ public class SC_LoginSystem : MonoBehaviour
             LoginButton.SetActive(true);
             RegisterButton.SetActive(true);
         }
+    }
+
+    public void goToRegistration()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(registerSceneIndex);
+    }
+
+    void OnGUI()
+    {
+
+        
 
 
             //if (!isLoggedIn)

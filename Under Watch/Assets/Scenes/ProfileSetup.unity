@@ -786,6 +786,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f75e099a302dd145a528a5861236347, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  email: {fileID: 27544415}
+  password: {fileID: 1976328331}
+  username: {fileID: 1343413406}
+  errorText: {fileID: 652218226}
+  profPic: {fileID: 171679029}
+  profPicOverlay: {fileID: 158842886}
+  socialFeedIndex: 2
 --- !u!1 &158842884
 GameObject:
   m_ObjectHideFlags: 0
@@ -902,7 +909,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 158842886}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 107233620}
+        m_TargetAssemblyTypeName: RegistrationManager, Assembly-CSharp
+        m_MethodName: SetProfilePicture
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &171679027
 GameObject:
   m_ObjectHideFlags: 0
@@ -1540,7 +1559,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 697495465}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 107233620}
+        m_TargetAssemblyTypeName: RegistrationManager, Assembly-CSharp
+        m_MethodName: RegisterUser
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &697495465
 MonoBehaviour:
   m_ObjectHideFlags: 0
