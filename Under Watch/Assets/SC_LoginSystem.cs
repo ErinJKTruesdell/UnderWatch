@@ -121,7 +121,7 @@ public class SC_LoginSystem : MonoBehaviour
 
         if (GUILayout.Button("Submit", GUILayout.Width(85)))
         {
-            StartCoroutine(LoginEnumerator());
+            //StartCoroutine(LoginEnumerator());
         }
 
         GUILayout.FlexibleSpace();
@@ -214,15 +214,15 @@ public class SC_LoginSystem : MonoBehaviour
         isWorking = false;
     }
 
-    IEnumerator LoginEnumerator()
+    IEnumerator LoginEnumerator(string email, string password)
     {
         isWorking = true;
         registrationCompleted = false;
         errorMessage = "";
 
         WWWForm form = new WWWForm();
-        form.AddField("email", "ejktruesdell@gmail.com");
-        form.AddField("password", "nernpass1");
+        form.AddField("email", email);
+        form.AddField("password", password);
 
         using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "login.php", form))
         {
@@ -261,6 +261,41 @@ public class SC_LoginSystem : MonoBehaviour
         {
             StartCoroutine(GetAndSendLocationData());
         }
+    }
+
+    public IEnumerator sendResetRequest()
+    {
+        //ErinTestAccount
+        //This eventually gets replaced by real data from the login system (loggedInUser) but. that's a problem for Later Erin.
+
+
+        isWorking = true;
+        errorMessage = "";
+
+        WWWForm form = new WWWForm();
+        form.AddField("email", "nern.strudel@gmail.com");
+
+        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "pwd_reset_query.php", form))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                errorMessage = www.error;
+            }
+            else
+            {
+                string responseText = www.downloadHandler.text;
+
+                Debug.Log(responseText);
+               // else
+               // {
+               //     errorMessage = responseText;
+                //}
+            }
+        }
+
+        isWorking = false;
     }
 
     IEnumerator GetAndSendLocationData()

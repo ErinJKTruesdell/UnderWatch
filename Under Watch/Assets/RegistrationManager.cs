@@ -10,8 +10,6 @@ using UnityEngine.SceneManagement;
 
 public class RegistrationManager : MonoBehaviour
 {
-
-
     public TMP_InputField email;
     public TMP_InputField password;
     public TMP_InputField username;
@@ -64,6 +62,10 @@ public class RegistrationManager : MonoBehaviour
         instance.StartCoroutine(instance.GetTex(path));
     }
 
+    public void testPasswordReset()
+    {
+        StartCoroutine(loginSystem.sendResetRequest());
+    }
     public IEnumerator GetTex(string path)
     {
         using (UnityWebRequest uwr = UnityWebRequestTexture.GetTexture(path))
@@ -154,9 +156,10 @@ public class RegistrationManager : MonoBehaviour
             {
                 errorMessage = www.error;
             }
-            else
-            {
+            //else
+           // {
                 string responseText = www.downloadHandler.text;
+                Debug.Log(responseText);
                 if (responseText.StartsWith("Success"))
                 {
                     SceneManager.LoadScene(socialFeedIndex);
@@ -166,7 +169,7 @@ public class RegistrationManager : MonoBehaviour
                     errorMessage = responseText;
                     errorText.text = errorMessage;
                 }
-            }
+            //}
         }
 
         isWorking = false;
