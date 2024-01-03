@@ -21,8 +21,12 @@ public class SC_LoginSystem : MonoBehaviour
 
     public GameObject LoginButton;
     public GameObject RegisterButton;
+    public GameObject ForgotPasswordButton;
 
     public int registerSceneIndex;
+
+    public PasswordQueryManager pqm;
+    public GameManager gm;
 
     //Logged-in user data
     string userName = "";
@@ -54,6 +58,7 @@ public class SC_LoginSystem : MonoBehaviour
             //else show login/register buttons
             LoginButton.SetActive(true);
             RegisterButton.SetActive(true);
+            ForgotPasswordButton.SetActive(true);
         }
     }
 
@@ -214,7 +219,7 @@ public class SC_LoginSystem : MonoBehaviour
         isWorking = false;
     }
 
-    IEnumerator LoginEnumerator(string email, string password)
+    public IEnumerator LoginEnumerator(string email, string password)
     {
         isWorking = true;
         registrationCompleted = false;
@@ -252,7 +257,7 @@ public class SC_LoginSystem : MonoBehaviour
         }
 
         isWorking = false;
-        //UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+        gm.ProgressToScene("SocialFeed");
     }
 
     public void RecordLocation()
@@ -263,17 +268,13 @@ public class SC_LoginSystem : MonoBehaviour
         }
     }
 
-    public IEnumerator sendResetRequest()
+    public IEnumerator sendResetRequest(string email)
     {
-        //ErinTestAccount
-        //This eventually gets replaced by real data from the login system (loggedInUser) but. that's a problem for Later Erin.
-
-
         isWorking = true;
         errorMessage = "";
 
         WWWForm form = new WWWForm();
-        form.AddField("email", "nern.strudel@gmail.com");
+        form.AddField("email", email);
 
         using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "pwd_reset_query.php", form))
         {
@@ -282,17 +283,53 @@ public class SC_LoginSystem : MonoBehaviour
             if (www.result != UnityWebRequest.Result.Success)
             {
                 errorMessage = www.error;
+                Debug.Log(www.error);
             }
-            else
-            {
-                string responseText = www.downloadHandler.text;
+            
+            string responseText = www.downloadHandler.text;
+            Debug.Log(responseText);
 
-                Debug.Log(responseText);
-               // else
-               // {
-               //     errorMessage = responseText;
-                //}
+            if(pqm != null)
+            {
+                pqm.receiveQueryResponse(responseText);
             }
+            
+        }
+
+        isWorking = false;
+    }
+
+    public IEnumerator sendResetUpdatePassword(string email, string code, string newpw)
+    {
+
+
+        isWorking = true;
+        errorMessage = "";
+
+        WWWForm form = new WWWForm();
+        form.AddField("email", email);
+
+        form.AddField("new_pw", newpw);
+
+        form.AddField("reset_code", code);
+
+        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "pwd_reset_action.php", form))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                errorMessage = www.error;
+            }
+            
+            string responseText = www.downloadHandler.text;
+
+            Debug.Log(responseText);
+            if (pqm != null)
+            {
+                pqm.receiveResetResponse(responseText);
+            }
+
         }
 
         isWorking = false;

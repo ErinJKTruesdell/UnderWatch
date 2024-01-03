@@ -14,6 +14,8 @@ public class RegistrationManager : MonoBehaviour
     public TMP_InputField password;
     public TMP_InputField username;
 
+
+
     public TMP_Text errorText;
 
     public RawImage profPic;
@@ -62,10 +64,7 @@ public class RegistrationManager : MonoBehaviour
         instance.StartCoroutine(instance.GetTex(path));
     }
 
-    public void testPasswordReset()
-    {
-        StartCoroutine(loginSystem.sendResetRequest());
-    }
+
     public IEnumerator GetTex(string path)
     {
         using (UnityWebRequest uwr = UnityWebRequestTexture.GetTexture(path))
