@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 public class SC_LoginSystem : MonoBehaviour
 {
@@ -34,6 +36,13 @@ public class SC_LoginSystem : MonoBehaviour
 
     string rootURL = "https://erinjktruesdell.com/"; //Path where php files are located
 
+
+    public event TargetHandler Target;
+    public EventArgs e = null;
+    public delegate void TargetHandler(string m, EventArgs e);
+
+
+
     public bool getIsLoggedIn()
     {
         return isLoggedIn;
@@ -42,6 +51,64 @@ public class SC_LoginSystem : MonoBehaviour
     public string getUsername()
     {
         return userName;
+    }
+
+    public void loginUponRegister(string username, string email)
+    {
+        userName = username;
+        userEmail = email;
+        isLoggedIn = true;
+    }
+
+  
+
+    public IEnumerator doTargetAssignment(string username, int pointsToAdd)
+    {
+        while (isWorking)
+        {
+            yield return new WaitForSeconds(0.2f);
+        }
+        isWorking = true;
+        if (isLoggedIn)
+        {
+            string errorMessage = "";
+
+            WWWForm form = new WWWForm();
+            form.AddField("username", username);
+            form.AddField("points", pointsToAdd);
+
+
+            using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "assignTarget.php", form))
+            {
+                yield return www.SendWebRequest();
+
+                if (www.result != UnityWebRequest.Result.Success)
+                {
+                    errorMessage = www.error;
+                }
+                //else
+                // {
+                string responseText = www.downloadHandler.text;
+
+                string returnText = "";
+
+                if (responseText.StartsWith("Success"))
+                {
+                    returnText = responseText;
+                }
+                else
+                {
+                    returnText = responseText;
+                }
+                //}
+                if(Target != null)
+                {
+                    Target(returnText, e);
+                }
+            }
+
+            isWorking = false;
+        }
     }
 
     private void Awake()
@@ -224,7 +291,6 @@ public class SC_LoginSystem : MonoBehaviour
         isWorking = true;
         registrationCompleted = false;
         errorMessage = "";
-
         WWWForm form = new WWWForm();
         form.AddField("email", email);
         form.AddField("password", password);
@@ -232,15 +298,14 @@ public class SC_LoginSystem : MonoBehaviour
         using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "login.php", form))
         {
             yield return www.SendWebRequest();
-
             if (www.result != UnityWebRequest.Result.Success)
             {
+                Debug.Log("Non-Success Result");
                 errorMessage = www.error;
             }
             else
             {
                 string responseText = www.downloadHandler.text;
-
                 if (responseText.StartsWith("Success"))
                 {
                     string[] dataChunks = responseText.Split('|');
@@ -257,7 +322,7 @@ public class SC_LoginSystem : MonoBehaviour
         }
 
         isWorking = false;
-        gm.ProgressToScene("SocialFeed");
+        //gm.ProgressToScene("SocialFeed");
     }
 
     public void RecordLocation()

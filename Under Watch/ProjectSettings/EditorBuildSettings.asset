@@ -23,4 +23,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ForgotPassword.unity
     guid: 0c9a4be1e716cfa4fbd52c77a3ef85b2
+  - enabled: 1
+    path: Assets/Scenes/UpdateProfilePicture.unity
+    guid: c70a9faeb2b082547981286723dd3176
+  - enabled: 1
+    path: Assets/Scenes/SingleCameraScene.unity
+    guid: 8fd5160b54563374c803e9cf2f430b7a
   m_configObjects: {}
