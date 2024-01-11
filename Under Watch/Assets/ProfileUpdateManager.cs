@@ -2,25 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using NativeGalleryNamespace;
 using UnityEngine.Networking;
-using static SC_LoginSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class ProfileUpdateManager : MonoBehaviour
 {
-    public TMP_InputField email;
-    public TMP_InputField password;
-    public TMP_InputField username;
-
 
 
     public TMP_Text errorText;
 
     public RawImage profPic;
     public RawImage profPicOverlay;
-
     SC_LoginSystem loginSystem;
 
     public int socialFeedIndex;
@@ -66,52 +59,6 @@ public class ProfileUpdateManager : MonoBehaviour
     public static void picturePassthrough(string path, RegistrationManager instance)
     {
         instance.StartCoroutine(instance.GetTex(path));
-    }
-
-    public void UpdatePicture()
-    {
-        StartCoroutine(DoUpdatePicture());
-    }
-
-    public IEnumerator DoUpdatePicture()
-    {
-        isWorking = true;
-        string errorMessage = "";
-
-        WWWForm form = new WWWForm();
-        form.AddField("email", email.text);
-
-        form.AddField("submit", "submit");
-
-        if (profImageSet)
-        {
-            form.AddBinaryData("file", ImageConversion.EncodeToPNG(((Texture2D)profPic.texture)), username.text + "profPic.png");
-        }
-
-
-        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "updateProfile.php", form))
-        {
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                errorMessage = www.error;
-            }
-
-            string responseText = www.downloadHandler.text;
-            Debug.Log(responseText);
-            if (responseText.StartsWith("Success"))
-            {
-                gm.ProgressToScene("SocialFeed"); //TODO this should go to a "profile" page eventually. once it exists
-            }
-            else
-            {
-                errorMessage = responseText;
-                errorText.text = errorMessage;
-            }
-        }
-
-        isWorking = false;
     }
 
     public IEnumerator GetTex(string path)
@@ -166,60 +113,55 @@ public class ProfileUpdateManager : MonoBehaviour
         }
     }
 
-    //public void RegisterUser()
-    //{
-    //    if (email.text == "" || username.text == "" || password.text == "")
-    //    {
-    //        errorText.text = "Missing one or more fields.";
-    //    }
-    //    else if (!isWorking)
-    //    {
-    //        errorText.text = "";
-    //        StartCoroutine(doRegistration());
-    //    }
+    public void RegisterUser()
+    {
+        
+        if (!isWorking && profImageSet)
+        {
+            errorText.text = "";
+            StartCoroutine(doUpdate());
+        }
 
-    //}
+    }
 
-    //public IEnumerator doRegistration()
-    //{
-    //    isWorking = true;
-    //    string errorMessage = "";
+    public IEnumerator doUpdate()
+    {
+        isWorking = true;
+        string errorMessage = "";
 
-    //    WWWForm form = new WWWForm();
-    //    form.AddField("email", email.text);
-    //    form.AddField("username", username.text);
-    //    form.AddField("password1", password.text);
-    //    form.AddField("submit", "submit");
-    //    if (profImageSet)
-    //    {
-    //        form.AddBinaryData("file", ImageConversion.EncodeToPNG(((Texture2D)profPic.texture)), username.text + "profPic.png");
-    //    }
+        WWWForm form = new WWWForm();
+        form.AddField("username", loginSystem.getUsername());
+        form.AddField("submit", "submit");
+        if (profImageSet)
+        {
+            form.AddBinaryData("file", ImageConversion.EncodeToPNG(((Texture2D)profPic.texture)), loginSystem.getUsername() + "profPic.png");
+        }
 
 
-    //    using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "register.php", form))
-    //    {
-    //        yield return www.SendWebRequest();
+        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "updatePicture.php", form))
+        {
+            yield return www.SendWebRequest();
 
-    //        if (www.result != UnityWebRequest.Result.Success)
-    //        {
-    //            errorMessage = www.error;
-    //        }
-    //        //else
-    //        // {
-    //        string responseText = www.downloadHandler.text;
-    //        Debug.Log(responseText);
-    //        if (responseText.StartsWith("Success"))
-    //        {
-    //            SceneManager.LoadScene(socialFeedIndex);
-    //        }
-    //        else
-    //        {
-    //            errorMessage = responseText;
-    //            errorText.text = errorMessage;
-    //        }
-    //        //}
-    //    }
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                errorMessage = www.error;
+            }
+            //else
+            // {
+            string responseText = www.downloadHandler.text;
+            Debug.Log(responseText);
+            if (responseText.StartsWith("Success"))
+            {
+                SceneManager.LoadScene(socialFeedIndex);
+            }
+            else
+            {
+                errorMessage = responseText;
+                errorText.text = errorMessage;
+            }
+            //}
+        }
 
-    //    isWorking = false;
-    //}
+        isWorking = false;
+    }
 }
