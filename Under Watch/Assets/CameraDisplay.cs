@@ -80,6 +80,15 @@ public class CameraDisplay : MonoBehaviour
         tex.ReadPixels(new Rect(topLeft, scaledSize), 0, 0);
         tex.Apply();
 
+        while (tex.height > 1024 || tex.width > 1024)
+        {
+            Debug.Log("Old: " + tex.width);
+            tex = ScaleTexture(tex, tex.width / 2, tex.height / 2);
+            Debug.Log("NEW: " + tex.width);
+        }
+
+
+
         byte[] bytes = tex.EncodeToPNG();
         string filename = uploader.loginSystem.getUsername() + "-" + DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day + "-" + DateTime.Now.Hour + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Second + ".png";
         string path = Application.persistentDataPath + filename;
@@ -88,6 +97,21 @@ public class CameraDisplay : MonoBehaviour
         Debug.Log("------------------------------------------------------------------------------------------");
         System.IO.File.WriteAllBytes(path, bytes);
         uploader.uploadIt(path);
+    }
+
+    private Texture2D ScaleTexture(Texture2D source, int targetWidth, int targetHeight)
+    {
+        Texture2D result = new Texture2D(targetWidth, targetHeight, source.format, true);
+        Color[] rpixels = result.GetPixels(0);
+        float incX = (1.0f / (float)targetWidth);
+        float incY = (1.0f / (float)targetHeight);
+        for (int px = 0; px < rpixels.Length; px++)
+        {
+            rpixels[px] = source.GetPixelBilinear(incX * ((float)px % targetWidth), incY * ((float)Mathf.Floor(px / targetWidth)));
+        }
+        result.SetPixels(rpixels, 0);
+        result.Apply();
+        return result;
     }
 
     public void capturePhoto()
