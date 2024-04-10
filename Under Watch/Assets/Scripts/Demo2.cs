@@ -45,7 +45,8 @@ public class Demo2 : MonoBehaviour
     void OnFillItem(int index, GameObject item)
     {
         //database code here
-        sfd.getNextPost(item.GetComponentInChildren<RawImage>(), item.GetComponentInChildren<Text>());
+        ListItem li = item.GetComponentInChildren<ListItem>();
+        sfd.getNextPost(li.photoImg, li.profImage);
         //item.GetComponentInChildren<Text>().text = sfo.username;
         //item.GetComponentInChildren<RawImage>().texture = sfo.photo;
     }
