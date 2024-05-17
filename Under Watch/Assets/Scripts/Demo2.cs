@@ -22,8 +22,13 @@ public class Demo2 : MonoBehaviour
 
     public SocialFeedDatabase sfd;
 
+    public int screenWidth = 500;
+
     void Start()
     {
+
+        screenWidth = Screen.width;
+        Debug.Log("SCREEN WITDTH: " + screenWidth);
         Scroll.OnFill += OnFillItem;
         Scroll.OnHeight += OnHeightItem;
         Scroll.OnPull += OnPullItem;
@@ -53,7 +58,7 @@ public class Demo2 : MonoBehaviour
 
     int OnHeightItem(int index)
     {
-        return 500;
+        return 800;
     }
 
     void OnPullItem(InfiniteScroll.Direction direction)

@@ -30,6 +30,12 @@ public class SC_LoginSystem : MonoBehaviour
     public PasswordQueryManager pqm;
     public GameManager gm;
 
+    public GameObject loginFields;
+    public TMPro.TMP_InputField emailField;
+    public TMPro.TMP_InputField pwField;
+
+    public TMPro.TMP_Text errorText;
+
     //Logged-in user data
     string userName = "";
     string userEmail = "";
@@ -60,7 +66,34 @@ public class SC_LoginSystem : MonoBehaviour
         isLoggedIn = true;
     }
 
-  
+    public void showLoginFields()
+    {
+        if (loginFields != null)
+        {
+            LoginButton.SetActive(false);
+            RegisterButton.SetActive(false);
+            ForgotPasswordButton.SetActive(false);
+
+            loginFields.SetActive(true);
+        }
+    }
+
+    public void tryLogin()
+    {
+        if(pwField != null && emailField != null)
+        {
+            if(emailField.text == "")
+            {
+                errorText.text = "Missing email.";
+            } else if (pwField.text == "")
+            {
+                errorText.text = "Missing password.";
+            } else
+            {
+                StartCoroutine(LoginEnumerator(emailField.text, pwField.text));
+            }
+        }
+    }
 
     public IEnumerator doTargetAssignment(string username, int pointsToAdd)
     {
@@ -101,7 +134,7 @@ public class SC_LoginSystem : MonoBehaviour
                     returnText = responseText;
                 }
                 //}
-                if(Target != null)
+                if (Target != null)
                 {
                     Target(returnText, e);
                 }
@@ -118,7 +151,8 @@ public class SC_LoginSystem : MonoBehaviour
         // attempt login with any saved information
         if (PlayerPrefs.GetString("savedUsername", "") != "")
         {
-
+            //TODO
+            StartCoroutine(LoginEnumerator(PlayerPrefs.GetString("savedUsername", ""), PlayerPrefs.GetString("savedPassword", "")));
         }
         else
         {
@@ -137,35 +171,35 @@ public class SC_LoginSystem : MonoBehaviour
     void OnGUI()
     {
 
-        
 
 
-            //if (!isLoggedIn)
-            //{
-            //    if (currentWindow == CurrentWindow.Login)
-            //    {
-            //        GUI.Window(0, new Rect(Screen.width / 2 - 250, Screen.height / 2 - 230, 500, 460), LoginWindow, "Login");
-            //    }
-            //    if (currentWindow == CurrentWindow.Register)
-            //    {
-            //        GUI.Window(0, new Rect(Screen.width / 2 - 125, Screen.height / 2 - 165, 250, 330), RegisterWindow, "Register");
-            //    }
-            //}
 
-            //GUI.Label(new Rect(5, 5, 500, 25), "Status: " + (isLoggedIn ? "Logged-in Username: " + userName + " Email: " + userEmail : "Logged-out"));
-            //if (isLoggedIn)
-            //{
-            //    if (GUI.Button(new Rect(5, 30, 100, 25), "Log Out"))
-            //    {
-            //        isLoggedIn = false;
-            //        userName = "";
-            //        userEmail = "";
-            //        currentWindow = CurrentWindow.Login;
-            //    }
-            //}
-        }
+        //if (!isLoggedIn)
+        //{
+        //    if (currentWindow == CurrentWindow.Login)
+        //    {
+        //        GUI.Window(0, new Rect(Screen.width / 2 - 250, Screen.height / 2 - 230, 500, 460), LoginWindow, "Login");
+        //    }
+        //    if (currentWindow == CurrentWindow.Register)
+        //    {
+        //        GUI.Window(0, new Rect(Screen.width / 2 - 125, Screen.height / 2 - 165, 250, 330), RegisterWindow, "Register");
+        //    }
+        //}
 
-        void LoginWindow(int index)
+        //GUI.Label(new Rect(5, 5, 500, 25), "Status: " + (isLoggedIn ? "Logged-in Username: " + userName + " Email: " + userEmail : "Logged-out"));
+        //if (isLoggedIn)
+        //{
+        //    if (GUI.Button(new Rect(5, 30, 100, 25), "Log Out"))
+        //    {
+        //        isLoggedIn = false;
+        //        userName = "";
+        //        userEmail = "";
+        //        currentWindow = CurrentWindow.Login;
+        //    }
+        //}
+    }
+
+    void LoginWindow(int index)
     {
         if (isWorking)
         {
@@ -313,10 +347,12 @@ public class SC_LoginSystem : MonoBehaviour
                     userEmail = dataChunks[2];
                     isLoggedIn = true;
                     ResetValues();
+                    gm.ProgressToScene("SocialFeed");
                 }
                 else
                 {
                     errorMessage = responseText;
+                    errorText.text = errorMessage;
                 }
             }
         }
@@ -350,15 +386,15 @@ public class SC_LoginSystem : MonoBehaviour
                 errorMessage = www.error;
                 Debug.Log(www.error);
             }
-            
+
             string responseText = www.downloadHandler.text;
             Debug.Log(responseText);
 
-            if(pqm != null)
+            if (pqm != null)
             {
                 pqm.receiveQueryResponse(responseText);
             }
-            
+
         }
 
         isWorking = false;
@@ -386,7 +422,7 @@ public class SC_LoginSystem : MonoBehaviour
             {
                 errorMessage = www.error;
             }
-            
+
             string responseText = www.downloadHandler.text;
 
             Debug.Log(responseText);
@@ -446,7 +482,7 @@ public class SC_LoginSystem : MonoBehaviour
         Input.location.Stop();
 
 
-        if(latitude != 0)
+        if (latitude != 0)
         {
             isWorking = true;
             errorMessage = "";
