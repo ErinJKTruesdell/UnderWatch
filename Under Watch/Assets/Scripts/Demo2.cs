@@ -51,7 +51,7 @@ public class Demo2 : MonoBehaviour
     {
         //database code here
         ListItem li = item.GetComponentInChildren<ListItem>();
-        sfd.getNextPost(li.photoImg, li.profImage);
+        sfd.getNextPost(li.photoImg, li.profImage, li.unText);
         //item.GetComponentInChildren<Text>().text = sfo.username;
         //item.GetComponentInChildren<RawImage>().texture = sfo.photo;
     }

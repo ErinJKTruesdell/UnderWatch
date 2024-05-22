@@ -5,16 +5,20 @@ using static SC_LoginSystem;
 using UnityEngine.Networking;
 using System;
 using UnityEngine.UI;
+using TMPro;
 
 public class GetNextImageCommand
 {
     public RawImage profileImage { get; set; }
     public RawImage pictureImage { get; set; }
 
-    public GetNextImageCommand( RawImage profImage, RawImage pictureImage)
+    public TMP_Text username_text { get; set; }
+
+    public GetNextImageCommand( RawImage profImage, RawImage pictureImage, TMP_Text un)
     {
         this.profileImage = profImage;
         this.pictureImage = pictureImage;
+        this.username_text = un;
     }
 
 }
@@ -27,7 +31,11 @@ public class SocialFeedDatabase : MonoBehaviour
 
     string currentPhotoURL = "";
 
-    string currentPhotoUsername;
+    string currentPhotoProfileURL;
+
+    string currentProfileUsername;
+
+    //string 
 
     Texture currentPhoto;
 
@@ -46,12 +54,12 @@ public class SocialFeedDatabase : MonoBehaviour
         queue = new Queue<GetNextImageCommand>();
     }
 
-    public void getNextPost(RawImage image, RawImage image2)
+    public void getNextPost(RawImage image, RawImage image2, TMP_Text username)
     {
         //if (loginSystem != null)
         //{
         Debug.Log("Queueing New Command");
-        queue.Enqueue(new GetNextImageCommand(image2, image));
+        queue.Enqueue(new GetNextImageCommand(image2, image, username));
        //StartCoroutine(GetRequest(image, text));
         
     }
@@ -62,12 +70,12 @@ public class SocialFeedDatabase : MonoBehaviour
         {
             GetNextImageCommand command = queue.Dequeue();
             Debug.Log("Starting New Command");
-            StartCoroutine(GetRequest(command.pictureImage, command.profileImage));
+            StartCoroutine(GetRequest(command.pictureImage, command.profileImage, command.username_text));
             isWorking = true;
         }
     }
 
-    IEnumerator GetRequest(RawImage image, RawImage profImage)
+    IEnumerator GetRequest(RawImage image, RawImage profImage, TMP_Text usernameText)
     {
         Debug.Log("Starting Request: " + currentPhotoTimestamp);
         WWWForm form = new WWWForm();
@@ -100,11 +108,14 @@ public class SocialFeedDatabase : MonoBehaviour
                 if (datachunks.Length > 1)
                 {
                     currentPhotoTimestamp = datachunks[2];
-                    currentPhotoUsername = datachunks[0];
+                    currentPhotoProfileURL = datachunks[0];
                     currentPhotoURL = datachunks[1];
-                    currentPhotoUsername = currentPhotoUsername.Replace("\n", "");
+                    currentPhotoProfileURL = currentPhotoProfileURL.Replace("\n", "");
+                    currentProfileUsername = datachunks[3];
+                    usernameText.text = currentProfileUsername;
+
                     Debug.Log("Starting Download");
-                    StartCoroutine(downloadImageFromURL(rootURL + currentPhotoURL, image, rootURL + currentPhotoUsername, profImage));
+                    StartCoroutine(downloadImageFromURL(rootURL + currentPhotoURL, image, rootURL + currentPhotoProfileURL, profImage));
                 }
                 else
                 {
@@ -116,7 +127,7 @@ public class SocialFeedDatabase : MonoBehaviour
         }
     }
 
-    IEnumerator downloadImageFromURL(string url1, RawImage image1, string url2, RawImage image2 )
+    IEnumerator downloadImageFromURL(string url1, RawImage image1, string url2, RawImage image2)
     {
 
         Debug.Log("Starting Download Request");
