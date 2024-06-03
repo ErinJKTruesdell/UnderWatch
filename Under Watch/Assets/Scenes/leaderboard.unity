@@ -732,10 +732,10 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 1500
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 238.76016
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -759,13 +759,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1570147436}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -14, y: 0, z: -248}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &1611221236
 GameObject:
   m_ObjectHideFlags: 0
@@ -783,7 +783,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1611221237
 RectTransform:
   m_ObjectHideFlags: 0
@@ -891,7 +891,7 @@ GameObject:
   - component: {fileID: 1892967688}
   - component: {fileID: 1892967687}
   - component: {fileID: 1892967686}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Map
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1024,7 +1024,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1892967685}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 950ee17c19f816a49bd815a7b0b2be7f, type: 3}
   m_Name: 
@@ -1088,7 +1088,7 @@ MonoBehaviour:
   drawingMode: 0
   drawingShader: {fileID: 4800000, guid: 07fd051d8972c7a4bac96bfa8038d08b, type: 3}
   overlayFromParentTiles: 1
-  tileMaterial: {fileID: 0}
+  tileMaterial: {fileID: 2100000, guid: 2814bfa082f6ddb47938c938cac7c1d5, type: 2}
   tilesetShader: {fileID: 4800000, guid: e951aa0c126d1a7409bfec1296857a7b, type: 3}
   _mipmapForTiles: 0
 --- !u!114 &1892967693
@@ -1151,7 +1151,7 @@ MonoBehaviour:
   lockRedraw: 0
   needRedraw: 1
   notInteractUnderGUI: 1
-  mapType: arcgis.worldimagery
+  mapType: google.satellite
   osmServer: 0
   proxyURL: https://service.infinity-code.com/redirect.php?
   redrawOnPlay: 1
@@ -1169,8 +1169,8 @@ MonoBehaviour:
   useProxy: 1
   useSoftwareJPEGDecoder: 0
   width: 512
-  _activeTypeSettings: 
-  _zoom: 13.1
+  _activeTypeSettings: 12Tile version1513979
+  _zoom: 4.1
   latitude: 0
   longitude: 0
 --- !u!4 &1892967696
@@ -1181,13 +1181,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1892967685}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: 67, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &1992330856
 GameObject:
   m_ObjectHideFlags: 0
