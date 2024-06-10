@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -15,6 +16,8 @@ public class ProfileDatabase : MonoBehaviour
     public Transform contentTransform;
 
     string rootURL = "https://erinjktruesdell.com/";
+
+    public TMP_Text usernameText;
 
     // Start is called before the first frame update
     void Start()
@@ -41,6 +44,8 @@ public class ProfileDatabase : MonoBehaviour
         WWWForm form = new WWWForm();
         form.AddField("username", username); //dummy data
 
+        usernameText.text = "@" + username;
+        usernameText.gameObject.SetActive(true);
 
         using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "/get-all-user-photos.php", form))
         {
@@ -63,11 +68,15 @@ public class ProfileDatabase : MonoBehaviour
                 string[] userChunks = responseText.Split('|');
 
                 //resize content
-                contentTransform.GetComponent<RectTransform>().sizeDelta = new Vector2(750, Mathf.Ceil(userChunks.Length/3f) * 250);
+                contentTransform.GetComponent<RectTransform>().sizeDelta = new Vector2(750, Mathf.Floor(userChunks.Length/3f) * 250);
+
+                string profUrl = "/" + userChunks[0].Substring(1);
+                StartCoroutine(downloadImageFromURL(rootURL + profUrl,profileImage));
 
                 //create prefab and load images
-                foreach (string i in userChunks)
+                for (int s = 1; s<userChunks.Length; s++)
                 {
+                    string i = userChunks[s];
                     if (i != "")
                     {
                         GameObject picItem = Instantiate(photoPrefab) as GameObject;
