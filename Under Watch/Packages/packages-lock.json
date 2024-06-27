@@ -225,6 +225,13 @@
       },
       "url": "https://packages.unity.com"
     },
+    "dev.kyubuns.appiconchangerunity": {
+      "version": "https://github.com/kyubuns/AppIconChangerUnity.git?path=Assets/AppIconChanger",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "4174496f792561e7e9c9ea76cf7d74f4e849e30b"
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,
