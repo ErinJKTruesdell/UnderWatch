@@ -18,13 +18,10 @@ public class pointsData
 public class LeaderboardDatabase : MonoBehaviour
 {
 
-
+    List<GameObject> lbitems = new List<GameObject>();
     public GameObject leaderboardItemPrefab;
 
-    public GameObject leaderboardloading;
-
     string rootURL = "https://erinjktruesdell.com/";
-
 
     public Transform gridObj;
 
@@ -36,11 +33,12 @@ public class LeaderboardDatabase : MonoBehaviour
 
     public void doLeaderboard()
     {
-
-        if (leaderboardloading != null)
+        foreach (GameObject g in lbitems)
         {
-            leaderboardloading.SetActive(true);
+            Destroy(g);
         }
+
+        lbitems = new List<GameObject>();
         StartCoroutine(StockLeaderBoard());
     }
 
@@ -99,7 +97,7 @@ public class LeaderboardDatabase : MonoBehaviour
 
                     li.usernameText.text = i.username;
                     li.pointsText.text = i.points.ToString() + " points";
-
+                    lbitems.Add(leaderBoardUserItem);
                     //downlaod prof img
                     StartCoroutine(downloadImageFromURL(rootURL + i.profUrl, li.profilePic));
                 }
@@ -111,10 +109,7 @@ public class LeaderboardDatabase : MonoBehaviour
 
 
             //close loading screen, if one implemented
-            if (leaderboardloading != null)
-            {
-                leaderboardloading.SetActive(false);
-            }
+           
         }
     }
 

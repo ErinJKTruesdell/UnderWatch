@@ -7,6 +7,7 @@ public class UsageDataManager : MonoBehaviour
 {
     public TabButton usageTab;
     public LeaderboardDatabase database;
+    public UsageDataGetter udg;
 
     // Start is called before the first frame update
     void Awake()
@@ -22,9 +23,10 @@ public class UsageDataManager : MonoBehaviour
         RefreshUsageData();
     }
 
-    void RefreshUsageData()
+    public void RefreshUsageData()
     {
         database.doLeaderboard();
+        udg.doUsageData();
     }
 
     // Update is called once per frame

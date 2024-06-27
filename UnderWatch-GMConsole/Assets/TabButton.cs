@@ -22,7 +22,7 @@ public class TabButton : MonoBehaviour
 
     public IEnumerator eventWait()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.1f);
         if (Activated != null)
         {
             Activated(this, e);
