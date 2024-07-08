@@ -1,3 +1,4 @@
+using Mopsicus.InfiniteScroll;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,7 @@ using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class pointsData
+public class  pointsData
 {
     public string username;
     public int points;
@@ -18,10 +19,14 @@ public class pointsData
 public class LeaderboardDatabase : MonoBehaviour
 {
 
-    List<GameObject> lbitems = new List<GameObject>();
+
     public GameObject leaderboardItemPrefab;
 
+    public GameObject leaderboardloading;
+
     string rootURL = "https://erinjktruesdell.com/";
+
+    bool isWorking;
 
     public Transform gridObj;
 
@@ -31,14 +36,17 @@ public class LeaderboardDatabase : MonoBehaviour
 
     }
 
+    private void Awake()
+    {
+        if (leaderboardloading != null)
+        {
+            leaderboardloading.SetActive(true);
+        }
+        StartCoroutine(StockLeaderBoard());
+    }
+
     public void doLeaderboard()
     {
-        foreach (GameObject g in lbitems)
-        {
-            Destroy(g);
-        }
-
-        lbitems = new List<GameObject>();
         StartCoroutine(StockLeaderBoard());
     }
 
@@ -62,13 +70,12 @@ public class LeaderboardDatabase : MonoBehaviour
                 Debug.Log(errorMessage);
 
                 Debug.Log("Data get error, releasing queue");
+                isWorking = false;
             }
             else
             {
                 //return null
                 string responseText = www.downloadHandler.text;
-
-                Debug.Log(responseText);
                 string[] userChunks = responseText.Split('%');
                 foreach (string chunk in userChunks)
                 {
@@ -86,9 +93,9 @@ public class LeaderboardDatabase : MonoBehaviour
                 allPoints.Sort((x, y) => x.points.CompareTo(y.points));
                 allPoints.Reverse();
 
-                gridObj.GetComponent<RectTransform>().sizeDelta = new Vector2(200, allPoints.Count * 70);
+                gridObj.GetComponent<RectTransform>().sizeDelta = new Vector2(700, allPoints.Count * 200);
 
-                foreach (pointsData i in allPoints)
+                foreach(pointsData i in allPoints)
                 {
 
                     GameObject leaderBoardUserItem = Instantiate(leaderboardItemPrefab) as GameObject;
@@ -97,7 +104,7 @@ public class LeaderboardDatabase : MonoBehaviour
 
                     li.usernameText.text = i.username;
                     li.pointsText.text = i.points.ToString() + " points";
-                    lbitems.Add(leaderBoardUserItem);
+
                     //downlaod prof img
                     StartCoroutine(downloadImageFromURL(rootURL + i.profUrl, li.profilePic));
                 }
@@ -109,7 +116,10 @@ public class LeaderboardDatabase : MonoBehaviour
 
 
             //close loading screen, if one implemented
-           
+            if (leaderboardloading != null)
+            {
+                leaderboardloading.SetActive(false);
+            }
         }
     }
 
