@@ -13,6 +13,7 @@ public class GetNextImageCommand
 
     public TMP_Text username_text { get; set; }
 
+
     public GetNextImageCommand( RawImage profImage, RawImage pictureImage, TMP_Text un)
     {
         this.profileImage = profImage;
@@ -33,6 +34,7 @@ public class SocialFeedDatabase : MonoBehaviour
     string currentPhotoProfileURL;
 
     string currentProfileUsername;
+    public PlayerViewTab pvt;
 
     //string 
 
@@ -79,7 +81,7 @@ public class SocialFeedDatabase : MonoBehaviour
         form.AddField("previousDate", currentPhotoTimestamp);
 
         //placeholder fake username
-        form.AddField("username", "blargj");
+        form.AddField("username", pvt.loggedinUser);
 
 
         using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "/get-next-photo.php", form))

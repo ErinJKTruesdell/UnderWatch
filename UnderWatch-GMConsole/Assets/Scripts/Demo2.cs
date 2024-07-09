@@ -58,7 +58,7 @@ public class Demo2 : MonoBehaviour
 
     int OnHeightItem(int index)
     {
-        return 800;
+        return 218;
     }
 
     void OnPullItem(InfiniteScroll.Direction direction)
