@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Scenes/SocialFeed.unity
+- path: Assets/Scenes/leaderboard.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0

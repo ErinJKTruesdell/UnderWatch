@@ -76,7 +76,7 @@ public class SocialFeedDatabase : MonoBehaviour
 
     IEnumerator GetRequest(RawImage image, RawImage profImage, TMP_Text usernameText)
     {
-        Debug.Log("Starting Request: " + currentPhotoTimestamp);
+        //Debug.Log("Starting Request: " + currentPhotoTimestamp);
         WWWForm form = new WWWForm();
         form.AddField("previousDate", currentPhotoTimestamp);
 
@@ -95,7 +95,7 @@ public class SocialFeedDatabase : MonoBehaviour
                 string errorMessage = www.error;
                 Debug.Log(errorMessage);
 
-                Debug.Log("Data get error, releasing queue");
+                //Debug.Log("Data get error, releasing queue");
                 isWorking = false;
             }
             else
@@ -146,7 +146,7 @@ public class SocialFeedDatabase : MonoBehaviour
             currentPhoto = ((DownloadHandlerTexture)request2.downloadHandler).texture;
             image2.texture = currentPhoto;
 
-        Debug.Log("Releasing Queued Command");
+        //Debug.Log("Releasing Queued Command");
         isWorking = false;
 
     }

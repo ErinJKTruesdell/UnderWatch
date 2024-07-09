@@ -21,7 +21,7 @@ public class LeaderboardDatabase : MonoBehaviour
 
 
     public GameObject leaderboardItemPrefab;
-
+    public int height = 50;
     public GameObject leaderboardloading;
 
     string rootURL = "https://erinjktruesdell.com/";
@@ -93,7 +93,7 @@ public class LeaderboardDatabase : MonoBehaviour
                 allPoints.Sort((x, y) => x.points.CompareTo(y.points));
                 allPoints.Reverse();
 
-                gridObj.GetComponent<RectTransform>().sizeDelta = new Vector2(700, allPoints.Count * 200);
+                gridObj.GetComponent<RectTransform>().sizeDelta = new Vector2(180, allPoints.Count * height);
 
                 foreach(pointsData i in allPoints)
                 {

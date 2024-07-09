@@ -13,6 +13,10 @@ public class PlayerViewTab : MonoBehaviour
     public TabButton playerViewButton;
     public String loggedinUser;
 
+    public event DropdownChangeHandler dropdownChanged;
+    public EventArgs e = null;
+    public delegate void DropdownChangeHandler(EventArgs e);
+
     List<string> allUsers;
 
     string rootURL = "https://erinjktruesdell.com/";
@@ -82,9 +86,13 @@ public class PlayerViewTab : MonoBehaviour
     public void getDropdownValue()
     {
         selectUser(playerDropdown.options[playerDropdown.value].text);
-    }
+        if (dropdownChanged != null)
+        {
+            dropdownChanged(null);
+        }
+        }
 
-    public void selectUser(string s)
+        public void selectUser(string s)
     {
         loggedinUser = s;
     }
