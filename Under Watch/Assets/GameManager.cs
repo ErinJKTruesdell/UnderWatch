@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
-using static OnlineMapsGPXObject;
+//using static OnlineMapsGPXObject;
 
 public class GameManager : MonoBehaviour
 {
