@@ -18,6 +18,7 @@ public class ProfileDatabase : MonoBehaviour
     string rootURL = "https://erinjktruesdell.com/";
 
     public TMP_Text usernameText;
+    public TMP_Text fullNameText;
 
     // Start is called before the first frame update
     void Start()
@@ -31,20 +32,22 @@ public class ProfileDatabase : MonoBehaviour
         
     }
 
-    public void fillCanvas(string username)
+    public void fillCanvas(string username, string fullName)
     {
-        Debug.Log("Filling Canvas: " + username);
-        StartCoroutine(getAndDownloadImages(username));
+        Debug.Log("Filling Canvas: " + username + fullName);
+        StartCoroutine(getAndDownloadImages(username, fullName));
     }
 
 
-    private IEnumerator getAndDownloadImages(string username)
+    private IEnumerator getAndDownloadImages(string username, string fullName)
     {
         // get data from server
         WWWForm form = new WWWForm();
         form.AddField("username", username); //dummy data
+        form.AddField("fullName", fullName); //dummy data
 
         usernameText.text = "@" + username;
+        fullNameText.text = fullName;
         usernameText.gameObject.SetActive(true);
 
         using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "/get-all-user-photos.php", form))
