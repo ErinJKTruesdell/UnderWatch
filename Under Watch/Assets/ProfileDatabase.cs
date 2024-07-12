@@ -44,7 +44,6 @@ public class ProfileDatabase : MonoBehaviour
         // get data from server
         WWWForm form = new WWWForm();
         form.AddField("username", username); //dummy data
-        form.AddField("fullName", fullName); //dummy data
 
         usernameText.text = "@" + username;
         fullNameText.text = fullName;
@@ -68,12 +67,13 @@ public class ProfileDatabase : MonoBehaviour
                 //get response
                 string responseText = www.downloadHandler.text;
                 Debug.Log(responseText);
+                //chunk 0 is url of pfp
                 string[] userChunks = responseText.Split('|');
 
                 //resize content
                 contentTransform.GetComponent<RectTransform>().sizeDelta = new Vector2(750, Mathf.Floor(userChunks.Length/3f) * 250);
-
                 string profUrl = "/" + userChunks[0].Substring(1);
+                Debug.Log(profUrl);
                 StartCoroutine(downloadImageFromURL(rootURL + profUrl,profileImage));
 
                 //create prefab and load images
