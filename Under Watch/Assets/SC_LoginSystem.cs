@@ -359,6 +359,7 @@ public class SC_LoginSystem : MonoBehaviour
                     userEmail = dataChunks[2];
                     isLoggedIn = true;
                     ResetValues();
+                    gm.saveLoginTime();
                     gm.ProgressToScene("SocialFeed");
                 }
                 else
