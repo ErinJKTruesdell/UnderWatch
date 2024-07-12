@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BottomBarButton : MonoBehaviour
 {
-    public int sceneIndex = 0;
+    public string sceneName = "";
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +20,8 @@ public class BottomBarButton : MonoBehaviour
 
     public void moveToScene()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneIndex);
+        GameManager gm = GameObject.FindObjectOfType<GameManager>();
+        gm.ProgressToScene(sceneName);
+        
     }
 }
