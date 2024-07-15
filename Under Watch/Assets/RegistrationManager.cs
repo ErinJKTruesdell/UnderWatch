@@ -14,8 +14,6 @@ public class RegistrationManager : MonoBehaviour
     public TMP_InputField email;
     public TMP_InputField password;
     public TMP_InputField username;
-    public TMP_InputField firstName;
-    public TMP_InputField lastName;
 
 
 
@@ -35,9 +33,6 @@ public class RegistrationManager : MonoBehaviour
 
     bool profImageSet = false;
 
-    public GameManager gm;
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -47,16 +42,13 @@ public class RegistrationManager : MonoBehaviour
         {
             loginSystem = new SC_LoginSystem();
         }
-
-        gm = GameObject.FindObjectOfType<GameManager>();
-
-        if (gm == null)
-        {
-            gm = new GameManager();
-        }
-
     }
 
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 
     public void SetProfilePicture()
     {
@@ -149,7 +141,7 @@ public class RegistrationManager : MonoBehaviour
     }
     public void RegisterUser()
     {
-        if(email.text == "" || username.text == "" || password.text == "" || lastName.text == "" || firstName.text == "")
+        if(email.text == "" || username.text == "" || password.text == "")
         {
             errorText.text = "Missing one or more fields.";
         }
@@ -172,8 +164,6 @@ public class RegistrationManager : MonoBehaviour
         form.AddField("email", email.text);
         form.AddField("username", username.text);
         form.AddField("password1", password.text);
-        form.AddField("firstName", firstName.text);
-        form.AddField("lastName", lastName.text);
         form.AddField("submit", "submit");
         if (profImageSet)
         {
@@ -188,7 +178,6 @@ public class RegistrationManager : MonoBehaviour
             if (www.result != UnityWebRequest.Result.Success)
             {
                 errorMessage = www.error;
-                Debug.Log("error");
             }
             //else
            // {
@@ -209,9 +198,5 @@ public class RegistrationManager : MonoBehaviour
         loginSystem.loginUponRegister(username.text, email.text);
 
         isWorking = false;
-    }
-    public void backButtton()
-    {
-        gm.ProgressToScene("LoginScene");
     }
 }

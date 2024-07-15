@@ -77,18 +77,6 @@ public class SC_LoginSystem : MonoBehaviour
             loginFields.SetActive(true);
         }
     }
-    //acts like a back button for if a player accidentally clicks the login button
-    public void showAllButtons()
-    {
-        if (loginFields)
-        {
-            LoginButton.SetActive(true);
-            RegisterButton.SetActive(true);
-            ForgotPasswordButton.SetActive(true);
-
-            loginFields.SetActive(false);
-        }
-    }
 
     public void tryLogin()
     {

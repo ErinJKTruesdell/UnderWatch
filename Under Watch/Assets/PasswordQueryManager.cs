@@ -72,9 +72,6 @@ public class PasswordQueryManager : MonoBehaviour
         StartCoroutine(gm.scls.sendResetUpdatePassword(currentEmail, codeField.text.Trim(), newPw));
     }
 
-    void backButtton()
-    {
-        gm.ProgressToScene("LoginScene");
-    }
+
 
 }
