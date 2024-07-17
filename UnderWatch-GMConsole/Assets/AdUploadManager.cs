@@ -71,15 +71,17 @@ public class AdUploadManager : MonoBehaviour
 
     public void startUpload()
     {
-        if (!isWorking)
+        if (!isWorking && filepaths != null)
         {
 
             //get filepaths, then do all uploads
+            if (filepaths.Length > 0)
+            {
+                StartCoroutine(uploadAllAds());
+            }
 
-            StartCoroutine(uploadAllAds());
-
-        }
-        else
+            }
+            else
         {
             errorText.text = "Upload or ad selection already in progress.";
         }
@@ -198,7 +200,8 @@ public class AdUploadManager : MonoBehaviour
 
     public IEnumerator uploadAllAds()
     {
-
+        errorText.text = "";
+        int errorCount = 0;
         foreach (string s in filepaths)
         {
             string[] filenameParts = s.Split("\\");
@@ -211,6 +214,19 @@ public class AdUploadManager : MonoBehaviour
             //create WWform with username and image to upload, plus set timestamp (month/day) year can be appended automatically
 
             Tuple<int, int> monthDay = atm.selectedTimestamp();
+
+            string month = monthDay.Item1.ToString();
+            string day = monthDay.Item2.ToString();
+
+            //padding with zeroes
+            if(month.Length < 2)
+            {
+                month = "0" + month;
+            }
+            if (day.Length < 2)
+            {
+                day = "0" + day;
+            }
 
             isWorking = true;
             string errorMessage = "";
@@ -240,7 +256,7 @@ public class AdUploadManager : MonoBehaviour
             {
                 form.AddBinaryData("file", FileUpload, "AD-" + "username" + DateTime.Now.ToString() + ".png", "image/png");
 
-                using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "register.php", form))
+                using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "uploadAdImage.php", form))
                 {
                     yield return www.SendWebRequest();
 
@@ -252,14 +268,17 @@ public class AdUploadManager : MonoBehaviour
                     // {
                     string responseText = www.downloadHandler.text;
                     Debug.Log(responseText);
-                    if (responseText.StartsWith("Success"))
+                    if (responseText.StartsWith("Error"))
                     {
-                        SceneManager.LoadScene(5);
+                        errorCount += 1;
+                        errorMessage = responseText;
+                        errorText.text += "\nError uploading file " + filename + ": " + errorMessage;
+                        errorText.color = Color.red;
                     }
                     else
                     {
-                        errorMessage = responseText;
-                        errorText.text += "\nError uploading file " + filename + ": " + errorMessage;
+                        errorText.color = Color.white;
+                        errorText.text += "Server reply: " + filename + ": " + errorMessage;
                     }
                     //}
                 }
@@ -267,6 +286,14 @@ public class AdUploadManager : MonoBehaviour
 
 
             isWorking = false;
+            if(errorCount == 0)
+            {
+                errorText.color = Color.white;
+                errorText.text = "Ads successfully uploaded.";
+                filepaths = new string[0];
+                numadstext.text = "0 ad files selected.";
+
+            }
 
             //if error, add to  error text, but keep going
 

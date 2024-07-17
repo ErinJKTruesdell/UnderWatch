@@ -22,11 +22,6 @@ public class LoginManager : MonoBehaviour
     {
         DontDestroyOnLoad(gameObject);
 
-        LoginManager other = GameObject.FindObjectOfType<LoginManager>();
-        if(other != null)
-        {
-            Destroy(gameObject);
-        }
     }
     public void tryLogin()
     {
