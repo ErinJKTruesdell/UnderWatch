@@ -165,6 +165,8 @@ public class RegistrationManager : MonoBehaviour
         form.AddField("username", username.text);
         form.AddField("password1", password.text);
         form.AddField("submit", "submit");
+
+        Debug.Log("this is occurring");
         if (profImageSet)
         {
             form.AddBinaryData("file", ImageConversion.EncodeToPNG(((Texture2D)profPic.texture)), username.text + "profPic.png");
@@ -185,6 +187,9 @@ public class RegistrationManager : MonoBehaviour
                 Debug.Log(responseText);
                 if (responseText.StartsWith("Success"))
                 {
+                    //store registration information - em
+                    loginSystem.SetLoginPrefs(email.text, password.text);
+
                     SceneManager.LoadScene(5);
                 }
                 else

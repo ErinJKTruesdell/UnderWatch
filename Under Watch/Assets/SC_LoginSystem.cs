@@ -149,10 +149,11 @@ public class SC_LoginSystem : MonoBehaviour
 
         DontDestroyOnLoad(this);
         // attempt login with any saved information
-        if (PlayerPrefs.GetString("savedUsername", "") != "")
+        if (PlayerPrefs.GetString("savedUsername", "") != "" || PlayerPrefs.GetString("savedPassword", "") != "")
         {
             //TODO
             StartCoroutine(LoginEnumerator(PlayerPrefs.GetString("savedUsername", ""), PlayerPrefs.GetString("savedPassword", "")));
+            Debug.Log("Cached login data used");
         }
         else
         {
@@ -166,6 +167,24 @@ public class SC_LoginSystem : MonoBehaviour
     public void goToRegistration()
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene(registerSceneIndex);
+    }
+
+
+    public void SetLoginPrefs(string email, string password)
+    {
+        PlayerPrefs.SetString("savedUsername", email);
+        PlayerPrefs.SetString("savedPassword", password);
+
+        Debug.Log("User login data successfully cached");
+    }
+    //testing code, remove for prod:
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            PlayerPrefs.DeleteAll();
+            Debug.Log("User login data cleared");
+        }
     }
 
     void OnGUI()
@@ -342,6 +361,8 @@ public class SC_LoginSystem : MonoBehaviour
                 string responseText = www.downloadHandler.text;
                 if (responseText.StartsWith("Success"))
                 {
+
+
                     string[] dataChunks = responseText.Split('|');
                     userName = dataChunks[1];
                     userEmail = dataChunks[2];
@@ -349,6 +370,9 @@ public class SC_LoginSystem : MonoBehaviour
                     ResetValues();
                     gm.saveLoginTime();
                     gm.ProgressToScene("SocialFeed");
+
+                    //store registration information - em
+                    SetLoginPrefs(email, password);
                 }
                 else
                 {
