@@ -11,11 +11,11 @@ using UnityEditor;
 
 public class RegistrationManager : MonoBehaviour
 {
+    public TMP_InputField firstName;
+    public TMP_InputField lastName;
     public TMP_InputField email;
     public TMP_InputField password;
     public TMP_InputField username;
-
-
 
     public TMP_Text errorText;
 
@@ -141,7 +141,7 @@ public class RegistrationManager : MonoBehaviour
     }
     public void RegisterUser()
     {
-        if(email.text == "" || username.text == "" || password.text == "")
+        if(email.text == "" || username.text == "" || password.text == "" || firstName.text == "" || lastName.text == "")
         {
             errorText.text = "Missing one or more fields.";
         }
@@ -161,12 +161,13 @@ public class RegistrationManager : MonoBehaviour
         string errorMessage = "";
 
         WWWForm form = new WWWForm();
+        form.AddField("firstName", firstName.text);
+        form.AddField("lastName", lastName.text);
         form.AddField("email", email.text);
         form.AddField("username", username.text);
         form.AddField("password1", password.text);
         form.AddField("submit", "submit");
 
-        Debug.Log("this is occurring");
         if (profImageSet)
         {
             form.AddBinaryData("file", ImageConversion.EncodeToPNG(((Texture2D)profPic.texture)), username.text + "profPic.png");
@@ -190,7 +191,7 @@ public class RegistrationManager : MonoBehaviour
                     //store registration information - em
                     loginSystem.SetLoginPrefs(email.text, password.text);
 
-                    SceneManager.LoadScene(5);
+                    SceneManager.LoadScene("SocialFeed");
                 }
                 else
                 {

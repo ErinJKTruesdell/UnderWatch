@@ -18,6 +18,7 @@ public class ProfileDatabase : MonoBehaviour
     string rootURL = "https://erinjktruesdell.com/";
 
     public TMP_Text usernameText;
+    public TMP_Text fullNameText;
 
     // Start is called before the first frame update
     void Start()
@@ -31,9 +32,9 @@ public class ProfileDatabase : MonoBehaviour
         
     }
 
-    public void fillCanvas(string username)
+    public void fillCanvas(string username, string fullName)
     {
-        Debug.Log("Filling Canvas: " + username);
+        Debug.Log("Filling Canvas: " + username + fullName);
         StartCoroutine(getAndDownloadImages(username));
     }
 

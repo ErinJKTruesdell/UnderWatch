@@ -69,6 +69,7 @@ public class PasswordQueryManager : MonoBehaviour
     public void sendResetData()
     {
         newPw = pwField.text;
+        gm.scls.SetLoginPrefs(emailField.text, pwField.text);
         StartCoroutine(gm.scls.sendResetUpdatePassword(currentEmail, codeField.text.Trim(), newPw));
     }
 

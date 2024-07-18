@@ -20,6 +20,7 @@ public class SC_LoginSystem : MonoBehaviour
     bool isWorking = false;
     bool registrationCompleted = false;
     bool isLoggedIn = false;
+    bool isCached = false;
 
     public GameObject LoginButton;
     public GameObject RegisterButton;
@@ -151,7 +152,7 @@ public class SC_LoginSystem : MonoBehaviour
         // attempt login with any saved information
         if (PlayerPrefs.GetString("savedUsername", "") != "" || PlayerPrefs.GetString("savedPassword", "") != "")
         {
-            //TODO
+            isCached = true;
             StartCoroutine(LoginEnumerator(PlayerPrefs.GetString("savedUsername", ""), PlayerPrefs.GetString("savedPassword", "")));
             Debug.Log("Cached login data used");
         }
@@ -174,7 +175,6 @@ public class SC_LoginSystem : MonoBehaviour
     {
         PlayerPrefs.SetString("savedUsername", email);
         PlayerPrefs.SetString("savedPassword", password);
-
         Debug.Log("User login data successfully cached");
     }
     //testing code, remove for prod:
@@ -361,8 +361,6 @@ public class SC_LoginSystem : MonoBehaviour
                 string responseText = www.downloadHandler.text;
                 if (responseText.StartsWith("Success"))
                 {
-
-
                     string[] dataChunks = responseText.Split('|');
                     userName = dataChunks[1];
                     userEmail = dataChunks[2];
@@ -371,8 +369,12 @@ public class SC_LoginSystem : MonoBehaviour
                     gm.saveLoginTime();
                     gm.ProgressToScene("SocialFeed");
 
-                    //store registration information - em
-                    SetLoginPrefs(email, password);
+                    //store registration information 
+                    if (isCached == false)
+                    {
+                       Debug.Log(isCached);
+                       SetLoginPrefs(email, password);
+                    }
                 }
                 else
                 {

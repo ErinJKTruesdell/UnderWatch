@@ -286,7 +286,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1ec78a9a3958ac4087a64e1ebc2f342, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scls: {fileID: 0}
+  scls: {fileID: 629090172}
 --- !u!4 &165167010
 Transform:
   m_ObjectHideFlags: 0
@@ -898,7 +898,7 @@ MonoBehaviour:
   ForgotPasswordButton: {fileID: 953027611}
   registerSceneIndex: 1
   pqm: {fileID: 0}
-  gm: {fileID: 0}
+  gm: {fileID: 165167009}
   loginFields: {fileID: 902446563}
   emailField: {fileID: 2020765860}
   pwField: {fileID: 2059905467}
