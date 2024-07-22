@@ -412,7 +412,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 509, y: 600}
+  m_ReferenceResolution: {x: 395, y: 509}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -626,7 +626,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -20}
+  m_AnchoredPosition: {x: 0, y: -20.000397}
   m_SizeDelta: {x: 0, y: -40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1611221238
@@ -641,12 +641,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d584a012d92e744e19fbad8784a4a909, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemCount: 0
+  frameColorChange: {fileID: 0}
   Prefab: {fileID: 1213794582161676, guid: b3be0441af2d548b68eb12fb02c3c0b4, type: 3}
   TopPadding: 10
   BottomPadding: 10
   LeftPadding: 10
   RightPadding: 10
-  ItemSpacing: 2
+  ItemSpacing: 40
   LabelsFont: {fileID: 11400000, guid: a8c90286d549d4f11a8ef619f1631209, type: 2}
   TopPullLabel: Pull to refresh
   TopReleaseLabel: Release to load
@@ -745,10 +747,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 495, y: 600}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -904,19 +906,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6426694562040935267, guid: 23677e8534865e547a1b3e695feeac55, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 775.5292
+      value: 609.1864
       objectReference: {fileID: 0}
     - target: {fileID: 6426694562040935267, guid: 23677e8534865e547a1b3e695feeac55, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.515
+      value: 0.6223969
       objectReference: {fileID: 0}
     - target: {fileID: 6426694562040935267, guid: 23677e8534865e547a1b3e695feeac55, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.515
+      value: 0.6223969
       objectReference: {fileID: 0}
     - target: {fileID: 6426694562040935267, guid: 23677e8534865e547a1b3e695feeac55, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.515
+      value: 0.3296
       objectReference: {fileID: 0}
     - target: {fileID: 6426694562040935267, guid: 23677e8534865e547a1b3e695feeac55, type: 3}
       propertyPath: m_LocalPosition.x
@@ -965,6 +967,10 @@ PrefabInstance:
     - target: {fileID: 6426694562040935267, guid: 23677e8534865e547a1b3e695feeac55, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6426694562040935267, guid: 23677e8534865e547a1b3e695feeac55, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

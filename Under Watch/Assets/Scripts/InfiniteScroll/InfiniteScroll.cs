@@ -19,10 +19,14 @@ namespace Mopsicus.InfiniteScroll {
 	/// </summary>
 	public class InfiniteScroll : MonoBehaviour, IDropHandler {
 
-		/// <summary>
-		/// Period for no-update list, if very fast add
-		/// </summary>
-		private const int UPDATE_TIME_DIFF = 500;
+		//look line 1064 for counting
+		public int itemCount = 0;
+		[SerializeField] public FrameColorChange frameColorChange;
+
+        /// <summary>
+        /// Period for no-update list, if very fast add
+        /// </summary>
+        private const int UPDATE_TIME_DIFF = 500;
 
 		/// <summary>
 		/// Speed for scroll on move
@@ -313,12 +317,12 @@ namespace Mopsicus.InfiniteScroll {
 			_widths = new Dictionary<int, int> ();
 			_positions = new Dictionary<int, float> ();
 			CreateLabels ();
-		}
+        }
 
-		/// <summary>
-		/// Main loop to check items positions and heights
-		/// </summary>
-		void Update () {
+        /// <summary>
+        /// Main loop to check items positions and heights
+        /// </summary>
+        void Update () {
 			if (Type == 0) {
 				UpdateVertical ();
 			} else {
@@ -1054,21 +1058,26 @@ namespace Mopsicus.InfiniteScroll {
 				height += item;
 			}
 			height = height / _heights.Count;
-			int fillCount = Mathf.RoundToInt (_container.height / height) + 4;
-			_views = new GameObject[fillCount];
+			//int fillCount = Mathf.RoundToInt (_container.height / height) + 4;
+			int fillCount = 6;
+            _views = new GameObject[fillCount];
 			for (int i = 0; i < fillCount; i++) {
 				clone = (GameObject) Instantiate (Prefab, Vector3.zero, Quaternion.identity);
 				clone.transform.SetParent (_content);
 				clone.transform.localScale = Vector3.one;
 				clone.transform.localPosition = Vector3.zero;
-				rect = clone.GetComponent<RectTransform> ();
+                rect = clone.GetComponent<RectTransform> ();
 				rect.pivot = new Vector2 (0.5f, 1f);
 				rect.anchorMin = new Vector2 (0f, 1f);
 				rect.anchorMax = Vector2.one;
 				rect.offsetMax = Vector2.zero;
 				rect.offsetMin = Vector2.zero;
 				_views[i] = clone;
-			}
+
+				itemCount++;
+				//frameColorChange.ChangeImageColor(itemCount);
+
+            }
 			_rects = new RectTransform[_views.Length];
 			for (int i = 0; i < _views.Length; i++) {
 				_rects[i] = _views[i].gameObject.GetComponent<RectTransform> ();
