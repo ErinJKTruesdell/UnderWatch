@@ -6,6 +6,7 @@ using System.IO;
 using TMPro;
 using SimpleFileBrowser;
 using UnityEngine.UI;
+using System;
 
 public class ConfederateUploader : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class ConfederateUploader : MonoBehaviour
     public string[] toUpload;
 
     public Button uploadButton;
+
+    public ConfTimestamper cts;
 
     // Start is called before the first frame update
     void Start()
@@ -75,6 +78,10 @@ public class ConfederateUploader : MonoBehaviour
         string imageName = imageNames[imageNames.Length - 1];
         form.AddBinaryData("file", File.ReadAllBytes(filePath), imageName);
         form.AddField("username", loggedInUser);
+        Tuple<int, int, int> time = cts.selectedTimestamp();
+        form.AddField("month", time.Item1);
+        form.AddField("day",time.Item2);
+        form.AddField("hour", time.Item3);
 
         UnityWebRequest www = UnityWebRequest.Post(uploadURL, form);
         Debug.Log("Sending web request...");
