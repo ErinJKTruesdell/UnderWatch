@@ -82,7 +82,11 @@ public class SocialFeedDatabase : MonoBehaviour
         form.AddField("previousDate", currentPhotoTimestamp);
 
         //placeholder fake username
-        form.AddField("username", "blargj");
+        form.AddField("username", currentProfileUsername);
+
+        form.AddField("emoji", PostUIHandling.emojiClicked);
+        form.AddField("image_url", currentPhotoURL);
+
 
 
         using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "/get-next-photo.php", form))

@@ -7,6 +7,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -19,9 +20,12 @@ namespace Mopsicus.InfiniteScroll {
 	/// </summary>
 	public class InfiniteScroll : MonoBehaviour, IDropHandler {
 
-		//look line 1064 for counting
-		public int itemCount = 0;
-		[SerializeField] public FrameColorChange frameColorChange;
+		//look line 1100 for counting
+		static public Color32 blueCol;
+		static public Color32 pinkCol;
+		static public Color32 redCol;
+
+		public PostUIHandling postUIHandling;
 
         /// <summary>
         /// Period for no-update list, if very fast add
@@ -317,7 +321,26 @@ namespace Mopsicus.InfiniteScroll {
 			_widths = new Dictionary<int, int> ();
 			_positions = new Dictionary<int, float> ();
 			CreateLabels ();
+
+			postUIHandling = GameObject.FindObjectOfType<PostUIHandling>();
+
+            blueCol = new Color32(99, 202, 225, 255);
+			pinkCol = new Color32(237, 30, 121, 255);
+			redCol = new Color32(180, 17, 75, 255);
+
+			postUIHandling.banner.color = new Color32(0, 0, 0, 255);
+
         }
+
+		/*public void ChangeBanner(GameObject clone, Color32 fillColor, Color32 borderColor)
+		{
+			for (int i = 0; i <= 4; i++)
+			{
+				//postUIHandling.banner.color = fillColor;
+				//postUIHandling.bannerBorder.color = borderColor;
+			}
+		}*/
+
 
         /// <summary>
         /// Main loop to check items positions and heights
@@ -463,11 +486,10 @@ namespace Mopsicus.InfiniteScroll {
 			}
 			_previousPosition = position;
 		}
-
-		/// <summary>
-		/// Handler on scroller
-		/// </summary>
-		void OnScrollChange (Vector2 vector) {
+            /// <summary>
+            /// Handler on scroller
+            /// </summary>
+            void OnScrollChange (Vector2 vector) {
 			if (Type == 0) {
 				ScrollChangeVertical (vector);
 			} else {
@@ -1074,9 +1096,27 @@ namespace Mopsicus.InfiniteScroll {
 				rect.offsetMin = Vector2.zero;
 				_views[i] = clone;
 
-				itemCount++;
-				//frameColorChange.ChangeImageColor(itemCount);
+				//It's not good, but every other method breaks
+				if (i == 0 || i == 3)
+				{
+					//blue
+					clone.transform.GetChild(2).GetComponent<Image>().color = blueCol;
+					clone.tag = "blue";
+                }
+				if (i == 1 || i == 4) 
+				{
+					//pink
+                    clone.transform.GetChild(2).GetComponent<Image>().color = pinkCol;
+                    clone.tag = "pink";
 
+                }
+                if (i == 2 || i == 5)
+                {
+					//red, techincally magenta
+                    clone.transform.GetChild(2).GetComponent<Image>().color = redCol;
+                    clone.tag = "red";
+
+                }
             }
 			_rects = new RectTransform[_views.Length];
 			for (int i = 0; i < _views.Length; i++) {
