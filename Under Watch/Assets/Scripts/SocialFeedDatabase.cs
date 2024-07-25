@@ -25,8 +25,6 @@ public class GetNextImageCommand
 
 public class SocialFeedDatabase : MonoBehaviour
 {
-    // Start is called before the first frame update
-
     string currentPhotoTimestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
     string currentPhotoURL = "";
@@ -35,11 +33,13 @@ public class SocialFeedDatabase : MonoBehaviour
 
     string currentProfileUsername;
 
-    //string 
+    string postID = "";
 
     Texture currentPhoto;
 
-    SC_LoginSystem loginSystem;
+    //SC_LoginSystem loginSystem;
+
+    [SerializeField] PostUIHandling postUIHandling;
 
     bool isWorking = false;
 
@@ -50,8 +50,18 @@ public class SocialFeedDatabase : MonoBehaviour
 
     private void Awake()
     {
-        loginSystem = FindObjectOfType<SC_LoginSystem>();
+       // loginSystem = FindObjectOfType<SC_LoginSystem>();
         queue = new Queue<GetNextImageCommand>();
+    }
+
+    private void Start()
+    {
+        postUIHandling = GameObject.FindObjectOfType<PostUIHandling>();
+
+        if (postUIHandling == null)
+        {
+            postUIHandling = new PostUIHandling();
+        }
     }
 
     public void getNextPost(RawImage image, RawImage image2, TMP_Text username)
@@ -60,13 +70,13 @@ public class SocialFeedDatabase : MonoBehaviour
         //{
         Debug.Log("Queueing New Command");
         queue.Enqueue(new GetNextImageCommand(image2, image, username));
-       //StartCoroutine(GetRequest(image, text));
-        
+        //StartCoroutine(GetRequest(image, text));
+
     }
 
     public void Update()
     {
-        if(!isWorking && queue.Count > 0)
+        if (!isWorking && queue.Count > 0)
         {
             GetNextImageCommand command = queue.Dequeue();
             Debug.Log("Starting New Command");
@@ -75,19 +85,14 @@ public class SocialFeedDatabase : MonoBehaviour
         }
     }
 
+
     IEnumerator GetRequest(RawImage image, RawImage profImage, TMP_Text usernameText)
     {
         Debug.Log("Starting Request: " + currentPhotoTimestamp);
         WWWForm form = new WWWForm();
         form.AddField("previousDate", currentPhotoTimestamp);
-
-        //placeholder fake username
-        form.AddField("username", currentProfileUsername);
-
-        form.AddField("emoji", PostUIHandling.emojiClicked);
-        form.AddField("image_url", currentPhotoURL);
-
-
+        //placeholder username
+        form.AddField("username", "baksdf");
 
         using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "/get-next-photo.php", form))
         {
@@ -99,14 +104,18 @@ public class SocialFeedDatabase : MonoBehaviour
                 //errorMessage = www.error;
                 string errorMessage = www.error;
                 Debug.Log(errorMessage);
+                Debug.Log("FAIL" + www.downloadHandler.text);
 
                 Debug.Log("Data get error, releasing queue");
                 isWorking = false;
             }
             else
             {
+
                 //return null
                 string responseText = www.downloadHandler.text;
+                Debug.Log("SUCCESS?" + responseText);
+
                 string[] datachunks = responseText.Split("|");
                 //Debug.Log(datachunks.Length);
                 if (datachunks.Length > 1)
@@ -115,16 +124,24 @@ public class SocialFeedDatabase : MonoBehaviour
                     currentPhotoProfileURL = datachunks[0];
                     currentPhotoURL = datachunks[1];
                     currentPhotoProfileURL = currentPhotoProfileURL.Replace("\n", "");
-                    currentProfileUsername = datachunks[3];
+                    //currentProfileUsername = datachunks[3];
+
+                    //postID = datachunks[4];
+                    //Debug.Log("loaded post ID: " + postID);
                     usernameText.text = currentProfileUsername;
+
+                    //react chunks
+                    //string reactChunk
 
                     Debug.Log("Starting Download");
                     StartCoroutine(downloadImageFromURL(rootURL + currentPhotoURL, image, rootURL + currentPhotoProfileURL, profImage));
+                    //StartCoroutine(GetReactions());
                 }
                 else
                 {
 
                     Debug.Log("Data get failed, releasing queue");
+
                     isWorking = false;
                 }
             }
@@ -141,7 +158,7 @@ public class SocialFeedDatabase : MonoBehaviour
             Debug.Log(request.error);
         else
             currentPhoto = ((DownloadHandlerTexture)request.downloadHandler).texture;
-            image1.texture = currentPhoto;
+        image1.texture = currentPhoto;
 
         UnityWebRequest request2 = UnityWebRequestTexture.GetTexture(url2);
         yield return request2.SendWebRequest();
@@ -149,10 +166,71 @@ public class SocialFeedDatabase : MonoBehaviour
             Debug.Log(request2.error);
         else
             currentPhoto = ((DownloadHandlerTexture)request2.downloadHandler).texture;
-            image2.texture = currentPhoto;
+        image2.texture = currentPhoto;
 
         Debug.Log("Releasing Queued Command");
         isWorking = false;
 
+    }
+
+    IEnumerator GetReactions()
+    {
+        WWWForm form = new WWWForm();
+
+        form.AddField("username", currentProfileUsername);
+        form.AddField("react", postUIHandling.emojiClicked);
+        form.AddField("post_id", postID);
+
+        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "toggle_reaction.php", form))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                string errorMessage = www.error;
+                Debug.Log(errorMessage);
+
+                //do I want this??
+                Debug.Log("React data get error, releasing queue");
+                isWorking = false;
+
+            }
+            else
+            {
+
+                string responseText = www.downloadHandler.text;
+                string[] reactData = responseText.Split("@");
+                string[] datachunks = reactData[1].Split("%");
+                Debug.Log("react data" + reactData);
+
+                if (datachunks.Length > 1)
+                {
+                    //hey at least its readable
+                    postUIHandling.smileLikes = Convert.ToInt32(datachunks[0].Split(":")[1]);
+                    postUIHandling.isLikedByLoggedIn.Add(Convert.ToBoolean(datachunks[0].Split("|")[1]));
+
+                    postUIHandling.thumbLikes = Convert.ToInt32(datachunks[1].Split(":")[1]);
+                    postUIHandling.isLikedByLoggedIn.Add(Convert.ToBoolean(datachunks[1].Split("|")[1]));
+
+                    postUIHandling.fireLikes = Convert.ToInt32(datachunks[2].Split(":")[1]);
+                    postUIHandling.isLikedByLoggedIn.Add(Convert.ToBoolean(datachunks[2].Split("|")[1]));
+
+                    postUIHandling.eyeLikes = Convert.ToInt32(datachunks[3].Split(":")[1]);
+                    postUIHandling.isLikedByLoggedIn.Add(Convert.ToBoolean(datachunks[3].Split("|")[1]));
+
+                    postUIHandling.gatorLikes = Convert.ToInt32(datachunks[4].Split(":")[1]);
+                    postUIHandling.isLikedByLoggedIn.Add(Convert.ToBoolean(datachunks[4].Split("|")[1]));
+
+                    postUIHandling.OnPostLoad();
+                }
+                else
+                {
+
+                    Debug.Log("Data get failed, releasing queue");
+                    isWorking = false;
+                }
+            }
+
+        }
     }
 }

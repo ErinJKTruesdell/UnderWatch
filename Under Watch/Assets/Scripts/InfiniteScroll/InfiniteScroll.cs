@@ -328,20 +328,9 @@ namespace Mopsicus.InfiniteScroll {
 			pinkCol = new Color32(237, 30, 121, 255);
 			redCol = new Color32(180, 17, 75, 255);
 
-			postUIHandling.banner.color = new Color32(0, 0, 0, 255);
+			if (postUIHandling != null) { postUIHandling.banner.color = new Color32(0, 0, 0, 255); }
 
         }
-
-		/*public void ChangeBanner(GameObject clone, Color32 fillColor, Color32 borderColor)
-		{
-			for (int i = 0; i <= 4; i++)
-			{
-				//postUIHandling.banner.color = fillColor;
-				//postUIHandling.bannerBorder.color = borderColor;
-			}
-		}*/
-
-
         /// <summary>
         /// Main loop to check items positions and heights
         /// </summary>
@@ -875,13 +864,12 @@ namespace Mopsicus.InfiniteScroll {
 				}
 			}
 		}
-
-		/// <summary>
-		/// Update list after items delete
-		/// </summary>
-		/// <param name="index">Index to move from</param>
-		/// <param name="height">New height</param>
-		void MoveDataTo (int index, float height) {
+        /// <summary>
+        /// Update list after items delete
+        /// </summary>
+        /// <param name="index">Index to move from</param>
+        /// <param name="height">New height</param>
+        void MoveDataTo (int index, float height) {
 			if (Type == 0) {
 				MoveDataToVertical (index, height);
 			} else {
@@ -1080,8 +1068,7 @@ namespace Mopsicus.InfiniteScroll {
 				height += item;
 			}
 			height = height / _heights.Count;
-			//int fillCount = Mathf.RoundToInt (_container.height / height) + 4;
-			int fillCount = 6;
+			int fillCount = Mathf.RoundToInt (_container.height / height) + 4;
             _views = new GameObject[fillCount];
 			for (int i = 0; i < fillCount; i++) {
 				clone = (GameObject) Instantiate (Prefab, Vector3.zero, Quaternion.identity);
@@ -1095,28 +1082,31 @@ namespace Mopsicus.InfiniteScroll {
 				rect.offsetMax = Vector2.zero;
 				rect.offsetMin = Vector2.zero;
 				_views[i] = clone;
-
 				//It's not good, but every other method breaks
-				if (i == 0 || i == 3)
+				if (postUIHandling != null)
 				{
-					//blue
-					clone.transform.GetChild(2).GetComponent<Image>().color = blueCol;
-					clone.tag = "blue";
-                }
-				if (i == 1 || i == 4) 
-				{
-					//pink
-                    clone.transform.GetChild(2).GetComponent<Image>().color = pinkCol;
-                    clone.tag = "pink";
+					if (i == 0 || i == 3)
 
-                }
-                if (i == 2 || i == 5)
-                {
-					//red, techincally magenta
-                    clone.transform.GetChild(2).GetComponent<Image>().color = redCol;
-                    clone.tag = "red";
+					{
+						//blue
+						clone.transform.GetChild(2).GetComponent<Image>().color = blueCol;
+						clone.tag = "blue";
+					}
+					if (i == 1 || i == 4)
+					{
+						//pink
+						clone.transform.GetChild(2).GetComponent<Image>().color = pinkCol;
+						clone.tag = "pink";
 
-                }
+					}
+					if (i == 2 || i == 5)
+					{
+						//red, techincally magenta
+						clone.transform.GetChild(2).GetComponent<Image>().color = redCol;
+						clone.tag = "red";
+
+					}
+				}
             }
 			_rects = new RectTransform[_views.Length];
 			for (int i = 0; i < _views.Length; i++) {
@@ -1131,6 +1121,7 @@ namespace Mopsicus.InfiniteScroll {
 			if (_views != null) {
 				return;
 			}
+			Debug.Log("horiz");
 			GameObject clone;
 			RectTransform rect;
 			int width = 0;
