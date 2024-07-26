@@ -7,6 +7,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -19,10 +20,17 @@ namespace Mopsicus.InfiniteScroll {
 	/// </summary>
 	public class InfiniteScroll : MonoBehaviour, IDropHandler {
 
-		/// <summary>
-		/// Period for no-update list, if very fast add
-		/// </summary>
-		private const int UPDATE_TIME_DIFF = 500;
+		//look line 1100 for counting
+		static public Color32 blueCol;
+		static public Color32 pinkCol;
+		static public Color32 redCol;
+
+		public PostUIHandling postUIHandling;
+
+        /// <summary>
+        /// Period for no-update list, if very fast add
+        /// </summary>
+        private const int UPDATE_TIME_DIFF = 500;
 
 		/// <summary>
 		/// Speed for scroll on move
@@ -313,12 +321,20 @@ namespace Mopsicus.InfiniteScroll {
 			_widths = new Dictionary<int, int> ();
 			_positions = new Dictionary<int, float> ();
 			CreateLabels ();
-		}
 
-		/// <summary>
-		/// Main loop to check items positions and heights
-		/// </summary>
-		void Update () {
+			postUIHandling = GameObject.FindObjectOfType<PostUIHandling>();
+
+            blueCol = new Color32(99, 202, 225, 255);
+			pinkCol = new Color32(237, 30, 121, 255);
+			redCol = new Color32(180, 17, 75, 255);
+
+			if (postUIHandling != null) { postUIHandling.banner.color = new Color32(0, 0, 0, 255); }
+
+        }
+        /// <summary>
+        /// Main loop to check items positions and heights
+        /// </summary>
+        void Update () {
 			if (Type == 0) {
 				UpdateVertical ();
 			} else {
@@ -459,11 +475,10 @@ namespace Mopsicus.InfiniteScroll {
 			}
 			_previousPosition = position;
 		}
-
-		/// <summary>
-		/// Handler on scroller
-		/// </summary>
-		void OnScrollChange (Vector2 vector) {
+            /// <summary>
+            /// Handler on scroller
+            /// </summary>
+            void OnScrollChange (Vector2 vector) {
 			if (Type == 0) {
 				ScrollChangeVertical (vector);
 			} else {
@@ -849,13 +864,12 @@ namespace Mopsicus.InfiniteScroll {
 				}
 			}
 		}
-
-		/// <summary>
-		/// Update list after items delete
-		/// </summary>
-		/// <param name="index">Index to move from</param>
-		/// <param name="height">New height</param>
-		void MoveDataTo (int index, float height) {
+        /// <summary>
+        /// Update list after items delete
+        /// </summary>
+        /// <param name="index">Index to move from</param>
+        /// <param name="height">New height</param>
+        void MoveDataTo (int index, float height) {
 			if (Type == 0) {
 				MoveDataToVertical (index, height);
 			} else {
@@ -1055,20 +1069,45 @@ namespace Mopsicus.InfiniteScroll {
 			}
 			height = height / _heights.Count;
 			int fillCount = Mathf.RoundToInt (_container.height / height) + 4;
-			_views = new GameObject[fillCount];
+            _views = new GameObject[fillCount];
 			for (int i = 0; i < fillCount; i++) {
 				clone = (GameObject) Instantiate (Prefab, Vector3.zero, Quaternion.identity);
 				clone.transform.SetParent (_content);
 				clone.transform.localScale = Vector3.one;
 				clone.transform.localPosition = Vector3.zero;
-				rect = clone.GetComponent<RectTransform> ();
+                rect = clone.GetComponent<RectTransform> ();
 				rect.pivot = new Vector2 (0.5f, 1f);
 				rect.anchorMin = new Vector2 (0f, 1f);
 				rect.anchorMax = Vector2.one;
 				rect.offsetMax = Vector2.zero;
 				rect.offsetMin = Vector2.zero;
 				_views[i] = clone;
-			}
+				//It's not good, but every other method breaks
+				if (postUIHandling != null)
+				{
+					if (i == 0 || i == 3)
+
+					{
+						//blue
+						clone.transform.GetChild(2).GetComponent<Image>().color = blueCol;
+						clone.tag = "blue";
+					}
+					if (i == 1 || i == 4)
+					{
+						//pink
+						clone.transform.GetChild(2).GetComponent<Image>().color = pinkCol;
+						clone.tag = "pink";
+
+					}
+					if (i == 2 || i == 5)
+					{
+						//red, techincally magenta
+						clone.transform.GetChild(2).GetComponent<Image>().color = redCol;
+						clone.tag = "red";
+
+					}
+				}
+            }
 			_rects = new RectTransform[_views.Length];
 			for (int i = 0; i < _views.Length; i++) {
 				_rects[i] = _views[i].gameObject.GetComponent<RectTransform> ();
@@ -1082,6 +1121,7 @@ namespace Mopsicus.InfiniteScroll {
 			if (_views != null) {
 				return;
 			}
+			Debug.Log("horiz");
 			GameObject clone;
 			RectTransform rect;
 			int width = 0;
