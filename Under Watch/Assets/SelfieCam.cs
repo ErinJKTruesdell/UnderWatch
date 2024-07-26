@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
+using System.IO;
 
 public class SelfieCam : MonoBehaviour
 {
@@ -12,6 +14,7 @@ public class SelfieCam : MonoBehaviour
 
     WebCamTexture webcam;
 
+    public string uploadURL = "https://erinjktruesdell.com/uploadImage.php";
 
     public MeshRenderer camMesh;
     WaitForEndOfFrame frameEnd = new WaitForEndOfFrame();
@@ -96,20 +99,66 @@ public class SelfieCam : MonoBehaviour
         Debug.Log("------------------------------------------------------------------------------------------");
         System.IO.File.WriteAllBytes(path, bytes);
 
-        bool isTarget = doFaceRecognition(path);
+        //get last location
+        Input.location.Start();
 
-        if (isTarget)
+        // Waits until the location service initializes
+        int maxWait = 20;
+        while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
         {
-            //show success popup
+            yield return new WaitForSeconds(1);
+            maxWait--;
+        }
 
-            //assign points
-            StartCoroutine(scls.doTargetAssignment(scls.getUsername(), 1));
+        float latitude = Input.location.lastData.latitude;
+        float longitude = Input.location.lastData.longitude;
+
+
+        //upload to server
+
+
+
+
+        Debug.Log("File Upload Coroutine");
+        if (gm.scls != null && gm.scls.getIsLoggedIn())
+        {
+            Debug.Log("Getting logged in user...");
+            string loggedInUser = gm.scls.getUsername();
+            Debug.Log(path);
+
+            if (File.Exists(path))
+            {
+                Debug.Log("File exists! Uploading Form...");
+                WWWForm form = new WWWForm();
+                string[] imageNames = path.Split("/");
+                string imageName = imageNames[imageNames.Length - 1];
+                form.AddBinaryData("file", File.ReadAllBytes(path), imageName);
+                form.AddField("username", loggedInUser);
+                form.AddField("latitude", latitude.ToString());
+                form.AddField("longitude", longitude.ToString());
+
+                UnityWebRequest www = UnityWebRequest.Post(uploadURL, form);
+                Debug.Log("Sending web request...");
+
+                yield return www.SendWebRequest();
+
+                if (www.isNetworkError || www.isHttpError)
+                {
+                    Debug.Log(www.error);
+                }
+                else
+                {
+                    Debug.Log("Form upload complete! " + System.Text.Encoding.ASCII.GetString(www.downloadHandler.data));
+
+                }
+            }
+            else
+            {
+                Debug.Log("File does not exist");
+            }
 
         }
-        else
-        {
-            //show failure popup
-        }
+
     }
 
     public void capturePhoto()
@@ -125,9 +174,5 @@ public class SelfieCam : MonoBehaviour
 
     }
 
-    public bool doFaceRecognition(string path)
-    {
-        //TODO https api call goes here!
-        return true;
-    }
+  
 }
