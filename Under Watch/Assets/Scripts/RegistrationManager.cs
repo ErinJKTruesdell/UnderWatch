@@ -23,6 +23,7 @@ public class RegistrationManager : MonoBehaviour
     public RawImage profPicOverlay;
 
     SC_LoginSystem loginSystem;
+    public ActivityStarter activityStarter;
 
     public int socialFeedIndex;
 
@@ -188,6 +189,8 @@ public class RegistrationManager : MonoBehaviour
                 Debug.Log(responseText);
                 if (responseText.StartsWith("Success"))
                 {
+                    //activityStarter.setAlarms();
+                    StartCoroutine(loginSystem.doTargetAssignment(username.text, 0));
                     //store registration information - em
                     loginSystem.SetLoginPrefs(email.text, password.text);
 

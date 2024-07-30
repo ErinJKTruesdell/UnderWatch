@@ -28,7 +28,7 @@ public class Demo2 : MonoBehaviour
     {
 
         screenWidth = Screen.width;
-        Debug.Log("SCREEN WITDTH: " + screenWidth);
+        //Debug.Log("SCREEN WITDTH: " + screenWidth);
         Scroll.OnFill += OnFillItem;
         Scroll.OnHeight += OnHeightItem;
         Scroll.OnPull += OnPullItem;

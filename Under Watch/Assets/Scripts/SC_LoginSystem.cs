@@ -38,7 +38,7 @@ public class SC_LoginSystem : MonoBehaviour
     public TMPro.TMP_Text errorText;
 
     //Logged-in user data
-    string userName = "";
+    public string userName = "";
     string userEmail = "";
 
     string rootURL = "https://erinjktruesdell.com/"; //Path where php files are located

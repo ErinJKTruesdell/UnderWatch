@@ -31,9 +31,9 @@ public class SocialFeedDatabase : MonoBehaviour
 
     string currentPhotoProfileURL;
 
-    string currentProfileUsername;
+    public string currentProfileUsername;
 
-    string postID = "";
+    public string postID = "";
 
     Texture currentPhoto;
 
@@ -44,7 +44,7 @@ public class SocialFeedDatabase : MonoBehaviour
     bool isWorking = false;
 
 
-    string rootURL = "https://erinjktruesdell.com/";
+    public string rootURL = "https://erinjktruesdell.com/";
 
     Queue<GetNextImageCommand> queue;
 
@@ -64,6 +64,10 @@ public class SocialFeedDatabase : MonoBehaviour
         }
     }
 
+    public string getLocationCoords()
+    {
+        return "asd";
+    }
     public void getNextPost(RawImage image, RawImage image2, TMP_Text username)
     {
         //if (loginSystem != null)
@@ -116,30 +120,47 @@ public class SocialFeedDatabase : MonoBehaviour
                 string responseText = www.downloadHandler.text;
                 Debug.Log("SUCCESS?" + responseText);
 
-                string[] datachunks = responseText.Split("|");
-                //Debug.Log(datachunks.Length);
-                if (datachunks.Length > 1)
+                string[] partition = responseText.Split("@");
+
+                if (partition.Length > 1)
                 {
-                    currentPhotoTimestamp = datachunks[2];
-                    currentPhotoProfileURL = datachunks[0];
-                    currentPhotoURL = datachunks[1];
-                    currentPhotoProfileURL = currentPhotoProfileURL.Replace("\n", "");
-                    //currentProfileUsername = datachunks[3];
+                    string[] datachunks = partition[0].Split("|");
 
-                    //postID = datachunks[4];
-                    //Debug.Log("loaded post ID: " + postID);
-                    usernameText.text = currentProfileUsername;
+                        currentPhotoProfileURL = datachunks[0];
+                        currentPhotoURL = datachunks[1];
+                        currentPhotoTimestamp = datachunks[2];
+                        currentPhotoProfileURL = currentPhotoProfileURL.Replace("\n", "");
+                        currentProfileUsername = datachunks[3];
+                        //[4] needs to be split by % for lat/long
+                        postID = datachunks[^1];
+                        //Debug.Log("loaded post ID: " + postID);
+                        usernameText.text = currentProfileUsername;
 
-                    //react chunks
-                    //string reactChunk
+
+                    string[] reactChunks = partition[1].Split("%");
+                    //hey at least its *sorta readable
+                        postUIHandling.smileLikes = Convert.ToInt32(reactChunks[0].Split(":")[1].Split("|")[0]);
+                        postUIHandling.isLikedByLoggedIn.Add(Convert.ToBoolean(reactChunks[0].Split("|")[1]));
+
+                        postUIHandling.thumbLikes = Convert.ToInt32(reactChunks[1].Split(":")[1].Split("|")[0]);
+                        postUIHandling.isLikedByLoggedIn.Add(Convert.ToBoolean(reactChunks[1].Split("|")[1]));
+
+                        postUIHandling.fireLikes = Convert.ToInt32(reactChunks[2].Split(":")[1].Split("|")[0]);
+                        postUIHandling.isLikedByLoggedIn.Add(Convert.ToBoolean(reactChunks[2].Split("|")[1]));
+
+                        postUIHandling.eyeLikes = Convert.ToInt32(reactChunks[3].Split(":")[1].Split("|")[0]);
+                        postUIHandling.isLikedByLoggedIn.Add(Convert.ToBoolean(reactChunks[3].Split("|")[1]));
+
+                        postUIHandling.gatorLikes = Convert.ToInt32(reactChunks[4].Split(":")[1].Split("|")[0]);
+                        postUIHandling.isLikedByLoggedIn.Add(Convert.ToBoolean(reactChunks[4].Split("|")[1]));
+
+                        postUIHandling.OnPostLoad();
 
                     Debug.Log("Starting Download");
                     StartCoroutine(downloadImageFromURL(rootURL + currentPhotoURL, image, rootURL + currentPhotoProfileURL, profImage));
-                    //StartCoroutine(GetReactions());
                 }
                 else
                 {
-
                     Debug.Log("Data get failed, releasing queue");
 
                     isWorking = false;
@@ -171,66 +192,5 @@ public class SocialFeedDatabase : MonoBehaviour
         Debug.Log("Releasing Queued Command");
         isWorking = false;
 
-    }
-
-    IEnumerator GetReactions()
-    {
-        WWWForm form = new WWWForm();
-
-        form.AddField("username", currentProfileUsername);
-        form.AddField("react", postUIHandling.emojiClicked);
-        form.AddField("post_id", postID);
-
-        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "toggle_reaction.php", form))
-        {
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                string errorMessage = www.error;
-                Debug.Log(errorMessage);
-
-                //do I want this??
-                Debug.Log("React data get error, releasing queue");
-                isWorking = false;
-
-            }
-            else
-            {
-
-                string responseText = www.downloadHandler.text;
-                string[] reactData = responseText.Split("@");
-                string[] datachunks = reactData[1].Split("%");
-                Debug.Log("react data" + reactData);
-
-                if (datachunks.Length > 1)
-                {
-                    //hey at least its readable
-                    postUIHandling.smileLikes = Convert.ToInt32(datachunks[0].Split(":")[1]);
-                    postUIHandling.isLikedByLoggedIn.Add(Convert.ToBoolean(datachunks[0].Split("|")[1]));
-
-                    postUIHandling.thumbLikes = Convert.ToInt32(datachunks[1].Split(":")[1]);
-                    postUIHandling.isLikedByLoggedIn.Add(Convert.ToBoolean(datachunks[1].Split("|")[1]));
-
-                    postUIHandling.fireLikes = Convert.ToInt32(datachunks[2].Split(":")[1]);
-                    postUIHandling.isLikedByLoggedIn.Add(Convert.ToBoolean(datachunks[2].Split("|")[1]));
-
-                    postUIHandling.eyeLikes = Convert.ToInt32(datachunks[3].Split(":")[1]);
-                    postUIHandling.isLikedByLoggedIn.Add(Convert.ToBoolean(datachunks[3].Split("|")[1]));
-
-                    postUIHandling.gatorLikes = Convert.ToInt32(datachunks[4].Split(":")[1]);
-                    postUIHandling.isLikedByLoggedIn.Add(Convert.ToBoolean(datachunks[4].Split("|")[1]));
-
-                    postUIHandling.OnPostLoad();
-                }
-                else
-                {
-
-                    Debug.Log("Data get failed, releasing queue");
-                    isWorking = false;
-                }
-            }
-
-        }
     }
 }
