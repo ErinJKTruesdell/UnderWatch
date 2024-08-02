@@ -33,6 +33,7 @@ public class RegistrationManager : MonoBehaviour
     string rootURL = "https://erinjktruesdell.com/";
 
     bool profImageSet = false;
+    public Toggle cacheCheckToggle;
 
     // Start is called before the first frame update
     void Start()
@@ -45,10 +46,9 @@ public class RegistrationManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void BackButton()
     {
-
+        SceneManager.LoadScene("LoginScene");
     }
 
     public void SetProfilePicture()
@@ -192,7 +192,7 @@ public class RegistrationManager : MonoBehaviour
                     //activityStarter.setAlarms();
                     StartCoroutine(loginSystem.doTargetAssignment(username.text, 0));
                     //store registration information - em
-                    loginSystem.SetLoginPrefs(email.text, password.text);
+                    loginSystem.SetLoginPrefs(email.text, password.text, cacheCheckToggle.isOn);
 
                     SceneManager.LoadScene("SocialFeed");
                 }

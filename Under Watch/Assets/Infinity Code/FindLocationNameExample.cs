@@ -25,9 +25,9 @@ namespace InfinityCode.OnlineMapsExamples
         {
             // If the map is not specified, get the current instance.
             if (map == null) map = OnlineMaps.instance;
-            
+            OnMapClick();
             // Subscribe to click event.
-            map.control.OnMapClick += OnMapClick;
+            //map.control.OnMapClick += OnMapClick;
         }
 
         private void OnMapClick()
@@ -35,8 +35,10 @@ namespace InfinityCode.OnlineMapsExamples
             // Get the coordinates where the user clicked.
             Vector2 mouseCoords = map.control.GetCoords();
 
+            Vector2 coords = new Vector2(39.9583f, -75.1898f);
+
             // Try find location name by coordinates.
-            OnlineMapsGoogleGeocoding request = new OnlineMapsGoogleGeocoding(mouseCoords, googleAPIKey);
+            OnlineMapsGoogleGeocoding request = new OnlineMapsGoogleGeocoding(coords, googleAPIKey);
             request.Send();
             request.OnComplete += OnRequestComplete;
         }

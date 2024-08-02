@@ -787,8 +787,8 @@ MonoBehaviour:
   m_MovementType: 1
   m_Elasticity: 0.1
   m_Inertia: 1
-  m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_DecelerationRate: 0.3
+  m_ScrollSensitivity: 10
   m_Viewport: {fileID: 725761102}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 0}
@@ -975,7 +975,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c38565cd1d14b5f44aa264ac6e003143, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Lat: 
+  currentProfileUsername: 
+  postID: 
   postUIHandling: {fileID: 1635502286}
+  rootURL: https://erinjktruesdell.com/
 --- !u!1001 &4562319892792138872
 PrefabInstance:
   m_ObjectHideFlags: 0

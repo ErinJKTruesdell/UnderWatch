@@ -37,10 +37,10 @@ namespace Mopsicus.InfiniteScroll {
 		/// </summary>
 		private const float SCROLL_SPEED = 50f;
 
-		/// <summary>
-		/// Duration for scroll move
-		/// </summary>
-		private const float SCROLL_DURATION = 0.25f;
+        /// <summary>
+        /// Duration for scroll move
+        /// </summary>
+        private const float SCROLL_DURATION = 0.25f;
 
 		/// <summary>
 		/// Load direction
@@ -1098,15 +1098,15 @@ namespace Mopsicus.InfiniteScroll {
 						clone.transform.GetChild(2).GetComponent<Image>().color = pinkCol;
 						clone.tag = "pink";
 
-					}
-					if (i == 2 || i == 5)
+                    }
+                    if (i == 2 || i == 5)
 					{
 						//red, techincally magenta
 						clone.transform.GetChild(2).GetComponent<Image>().color = redCol;
 						clone.tag = "red";
 
-					}
-				}
+                    }
+                }
             }
 			_rects = new RectTransform[_views.Length];
 			for (int i = 0; i < _views.Length; i++) {

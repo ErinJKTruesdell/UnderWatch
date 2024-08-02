@@ -50,6 +50,7 @@ public class Demo2 : MonoBehaviour
     void OnFillItem(int index, GameObject item)
     {
         //database code here
+        //this may be where we put in the emoji react stuff?
         ListItem li = item.GetComponentInChildren<ListItem>();
         sfd.getNextPost(li.photoImg, li.profImage, li.unText);
         //item.GetComponentInChildren<Text>().text = sfo.username;

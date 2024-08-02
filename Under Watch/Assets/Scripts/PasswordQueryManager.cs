@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class PasswordQueryManager : MonoBehaviour
 {
@@ -69,10 +70,14 @@ public class PasswordQueryManager : MonoBehaviour
     public void sendResetData()
     {
         newPw = pwField.text;
-        gm.scls.SetLoginPrefs(emailField.text, pwField.text);
+        gm.scls.SetLoginPrefs(emailField.text, pwField.text, false);
         StartCoroutine(gm.scls.sendResetUpdatePassword(currentEmail, codeField.text.Trim(), newPw));
     }
 
+    public void BackButton()
+    {
+        SceneManager.LoadScene("LoginScene");
+    }
 
 
 }

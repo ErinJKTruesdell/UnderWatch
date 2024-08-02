@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class SC_LoginSystem : MonoBehaviour
 {
@@ -20,11 +21,14 @@ public class SC_LoginSystem : MonoBehaviour
     bool isWorking = false;
     bool registrationCompleted = false;
     bool isLoggedIn = false;
+
     bool isCached = false;
 
     public GameObject LoginButton;
     public GameObject RegisterButton;
     public GameObject ForgotPasswordButton;
+
+    public Toggle cacheCheckToggle;
 
     public int registerSceneIndex;
 
@@ -34,6 +38,8 @@ public class SC_LoginSystem : MonoBehaviour
     public GameObject loginFields;
     public TMPro.TMP_InputField emailField;
     public TMPro.TMP_InputField pwField;
+
+    public GameObject backButton;
 
     public TMPro.TMP_Text errorText;
 
@@ -75,6 +81,7 @@ public class SC_LoginSystem : MonoBehaviour
             RegisterButton.SetActive(false);
             ForgotPasswordButton.SetActive(false);
 
+            backButton.SetActive(true);
             loginFields.SetActive(true);
         }
     }
@@ -96,6 +103,15 @@ public class SC_LoginSystem : MonoBehaviour
         }
     }
 
+    public void backToLogin()
+    {
+        LoginButton.SetActive(true);
+        RegisterButton.SetActive(true);
+        ForgotPasswordButton.SetActive(true);
+
+        backButton.SetActive(false);
+        loginFields.SetActive(false);
+    }
     public IEnumerator doTargetAssignment(string username, int pointsToAdd)
     {
         while (isWorking)
@@ -167,15 +183,19 @@ public class SC_LoginSystem : MonoBehaviour
 
     public void goToRegistration()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(registerSceneIndex);
+        SceneManager.LoadScene(registerSceneIndex);
     }
 
 
-    public void SetLoginPrefs(string email, string password)
+    public void SetLoginPrefs(string email, string password, bool save)
     {
-        PlayerPrefs.SetString("savedUsername", email);
-        PlayerPrefs.SetString("savedPassword", password);
-        Debug.Log("User login data successfully cached");
+        Debug.Log(save);
+        if (save == true)
+        {
+            PlayerPrefs.SetString("savedUsername", email);
+            PlayerPrefs.SetString("savedPassword", password);
+            Debug.Log("User login data successfully cached");
+        }
     }
     //testing code, remove for prod:
     public void Update()
@@ -185,6 +205,7 @@ public class SC_LoginSystem : MonoBehaviour
             PlayerPrefs.DeleteAll();
             Debug.Log("User login data cleared");
         }
+
     }
 
     void OnGUI()
@@ -373,7 +394,7 @@ public class SC_LoginSystem : MonoBehaviour
                     if (isCached == false)
                     {
                        Debug.Log(isCached);
-                       SetLoginPrefs(email, password);
+                       SetLoginPrefs(email, password, cacheCheckToggle.isOn);
                     }
                 }
                 else

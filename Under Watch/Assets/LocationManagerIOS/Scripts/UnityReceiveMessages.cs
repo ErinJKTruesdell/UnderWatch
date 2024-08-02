@@ -1,6 +1,10 @@
-﻿using UnityEngine;
+﻿#if UNITY_IOS
+
+
+using UnityEngine;
 using System.Collections;
 using System.IO;
+
 public class UnityReceiveMessages : MonoBehaviour {
 	public static UnityReceiveMessages Instance;
 	string location;
@@ -48,3 +52,4 @@ public class UnityReceiveMessages : MonoBehaviour {
 		return address;
 	}
 }
+#endif

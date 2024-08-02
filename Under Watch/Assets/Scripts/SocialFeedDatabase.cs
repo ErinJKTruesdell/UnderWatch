@@ -31,6 +31,9 @@ public class SocialFeedDatabase : MonoBehaviour
 
     string currentPhotoProfileURL;
 
+    public string Lat;
+    string Long;
+
     public string currentProfileUsername;
 
     public string postID = "";
@@ -66,7 +69,8 @@ public class SocialFeedDatabase : MonoBehaviour
 
     public string getLocationCoords()
     {
-        return "asd";
+        Debug.Log(Lat);
+        return Lat + "°N" + Long + "°W";
     }
     public void getNextPost(RawImage image, RawImage image2, TMP_Text username)
     {
@@ -131,14 +135,23 @@ public class SocialFeedDatabase : MonoBehaviour
                         currentPhotoTimestamp = datachunks[2];
                         currentPhotoProfileURL = currentPhotoProfileURL.Replace("\n", "");
                         currentProfileUsername = datachunks[3];
-                        //[4] needs to be split by % for lat/long
-                        postID = datachunks[^1];
+                    //[4] needs to be split by % for lat/long
+                    Lat = datachunks[5].Split('%')[0];
+                    Long = datachunks[5].Split('%')[1];
+                    Debug.Log(datachunks[5]);
+
+                    Debug.Log("Lat: " + Lat);
+                    Debug.Log("Long: " + Long);
+
+
+                    postID = datachunks[^1];
                         //Debug.Log("loaded post ID: " + postID);
-                        usernameText.text = currentProfileUsername;
+                        usernameText.text = currentProfileUsername.Trim();
 
 
                     string[] reactChunks = partition[1].Split("%");
                     //hey at least its *sorta readable
+
                         postUIHandling.smileLikes = Convert.ToInt32(reactChunks[0].Split(":")[1].Split("|")[0]);
                         postUIHandling.isLikedByLoggedIn.Add(Convert.ToBoolean(reactChunks[0].Split("|")[1]));
 
@@ -154,7 +167,7 @@ public class SocialFeedDatabase : MonoBehaviour
                         postUIHandling.gatorLikes = Convert.ToInt32(reactChunks[4].Split(":")[1].Split("|")[0]);
                         postUIHandling.isLikedByLoggedIn.Add(Convert.ToBoolean(reactChunks[4].Split("|")[1]));
 
-                        postUIHandling.OnPostLoad();
+                    //postUIHandling.OnPostLoad();
 
                     Debug.Log("Starting Download");
                     StartCoroutine(downloadImageFromURL(rootURL + currentPhotoURL, image, rootURL + currentPhotoProfileURL, profImage));
@@ -188,6 +201,8 @@ public class SocialFeedDatabase : MonoBehaviour
         else
             currentPhoto = ((DownloadHandlerTexture)request2.downloadHandler).texture;
         image2.texture = currentPhoto;
+        postUIHandling.doneLoading = true;
+
 
         Debug.Log("Releasing Queued Command");
         isWorking = false;

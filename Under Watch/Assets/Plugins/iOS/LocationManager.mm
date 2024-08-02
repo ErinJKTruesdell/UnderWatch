@@ -5,7 +5,6 @@
 //  Created by Mayank Gupta on 24/07/17.
 //  Copyright (c) 2017 Mayank Gupta. All rights reserved.
 //
-
 #import "LocationManager.h"
 
 @interface LocationManager() {

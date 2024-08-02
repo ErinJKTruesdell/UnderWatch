@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class ListItem : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class ListItem : MonoBehaviour
     public RawImage photoImg;
     public RawImage profImage;
     public TMP_Text unText;
+    public TMP_Text locText;
     public TMP_Text postIDText;
 
     public SC_LoginSystem scls;
@@ -26,5 +28,18 @@ public class ListItem : MonoBehaviour
         scls = new SC_LoginSystem();
 
         unText.text = sfd.currentProfileUsername;
+        locText.text = sfd.Lat;
     }
+
+    public void ClickOnProfile()
+    {
+        ShowClickedProfile.usernName = unText.text;
+        ShowClickedProfile.sceneCameFrom = SceneManager.GetActiveScene().name;
+
+        SceneManager.LoadScene("ClickedProfile");
+    }
+
+
+
+
 }

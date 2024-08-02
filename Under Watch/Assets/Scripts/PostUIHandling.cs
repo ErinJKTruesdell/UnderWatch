@@ -21,6 +21,7 @@ public class PostUIHandling : MonoBehaviour
     public GameObject bannerObj;
     [SerializeField] GameObject colorEmoji;
     [SerializeField] GameObject parentItem;
+    public Image colorBorder;
 
     public Color32 blankCol;
 
@@ -34,9 +35,28 @@ public class PostUIHandling : MonoBehaviour
     public int eyeLikes;
     public int gatorLikes;
     //same order as the variables above
-    public List<bool> isLikedByLoggedIn;
+    public List<bool> isLikedByLoggedIn = new();
 
     public string emojiClicked;
+
+    public bool doneLoading;
+    bool loadedOnce = false;
+
+    private void Update()
+    {
+        //Debug.Log("eyes " + eyeLikes);
+
+        if (doneLoading && !loadedOnce)
+        {
+            if (smileLikes > 0) { ColorizeReacts(isLikedByLoggedIn[0]); Debug.Log("smile"); }
+            if (thumbLikes > 0) { ColorizeReacts(isLikedByLoggedIn[1]); Debug.Log("thumb"); }
+            if (fireLikes > 0) { ColorizeReacts(isLikedByLoggedIn[2]); Debug.Log("fire"); }
+            if (eyeLikes > 0) { ColorizeReacts(isLikedByLoggedIn[3]); Debug.Log("eye"); }
+            if (gatorLikes > 0) { ColorizeReacts(isLikedByLoggedIn[4]); Debug.Log("Gator"); }
+            //prevents this from running every tick
+            loadedOnce = true;
+        }
+    }
     void Start()
     {
         blankCol = new Color32(0, 0, 0, 0);
@@ -51,17 +71,13 @@ public class PostUIHandling : MonoBehaviour
 
     public void OnPostLoad()
     {
-        foreach (var item in isLikedByLoggedIn)
-        {
-            Debug.Log("occuring" + item.ToString());
-        }
-
-        if (smileLikes > 1) { ColorizeReacts(isLikedByLoggedIn[0]); }
-        if (thumbLikes > 1) { ColorizeReacts(isLikedByLoggedIn[1]); }
-        if (fireLikes > 1) { ColorizeReacts(isLikedByLoggedIn[2]); }
-        if (eyeLikes > 1) { ColorizeReacts(isLikedByLoggedIn[3]); }
-        if (gatorLikes > 1) { ColorizeReacts(isLikedByLoggedIn[4]); }
+        if (smileLikes > 0){ ColorizeReacts(isLikedByLoggedIn[0]); Debug.Log("smile"); }
+        if (thumbLikes > 0) { ColorizeReacts(isLikedByLoggedIn[1]); Debug.Log("thumb"); }
+        if (fireLikes > 0) { ColorizeReacts(isLikedByLoggedIn[2]); Debug.Log("fire"); }
+        if (eyeLikes > 0) { ColorizeReacts(isLikedByLoggedIn[3]); Debug.Log("eye"); }
+        if (gatorLikes > 0) { ColorizeReacts(isLikedByLoggedIn[4]); Debug.Log("Gator"); }
     }
+
     public void ChangeButtonImage()
     {
         if (greyEmoji.color == blankCol)
@@ -95,7 +111,6 @@ public class PostUIHandling : MonoBehaviour
         int posNegNum = (1 - positive) * (-1) + (positive * 1);
        
         if (name == "eyeReact") { eyeLikes += posNegNum; emojiClicked = "eye"; }
-        Debug.Log(eyeLikes);
         if (name == "fireReact") { fireLikes += posNegNum; emojiClicked = "fire"; }
         if (name == "gatorReact") { gatorLikes += posNegNum; emojiClicked = "gator"; }
         if (name == "smileReact") { smileLikes += posNegNum; emojiClicked = "smile"; }
@@ -157,25 +172,21 @@ public class PostUIHandling : MonoBehaviour
 
     public void ColorizeReacts(bool isLoggedInReact)
     {
-        if (parentItem.CompareTag("blue"))
+        if (colorBorder.color == InfiniteScroll.blueCol)
         {
-            Debug.Log("blue");
             if (isLoggedInReact) { bannerBorder.color = InfiniteScroll.pinkCol; }
             banner.color = InfiniteScroll.redCol;
             colorEmoji.SetActive(true);
+            Debug.Log("blue");
         }
         if (parentItem.CompareTag("pink"))
         {
-            Debug.Log("pink");
-
             if (isLoggedInReact) { bannerBorder.color = InfiniteScroll.redCol; }
             banner.color = InfiniteScroll.blueCol;
             colorEmoji.SetActive(true);
         }
         if (parentItem.CompareTag("red"))
         {
-            Debug.Log("red");
-
             if (isLoggedInReact) { bannerBorder.color = InfiniteScroll.blueCol; } 
             banner.color = InfiniteScroll.pinkCol;
             colorEmoji.SetActive(true);

@@ -1,7 +1,9 @@
+#if UNITY_IOS
+
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class LocationManager : MonoBehaviour {
 	string authStatus;
 	string msgReceivingGameObjectName;
@@ -120,3 +122,4 @@ public class LocationManager : MonoBehaviour {
 		GUI.Label (new Rect (560, 400, labelWidth, labelHeight), "Address === "+UnityReceiveMessages.Instance.getAddress ());
 	}
 }
+#endif

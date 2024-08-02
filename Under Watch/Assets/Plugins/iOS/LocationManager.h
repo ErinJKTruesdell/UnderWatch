@@ -1,3 +1,4 @@
+#if UNITY_IOS
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
@@ -8,3 +9,4 @@
 @interface LocationManager : NSObject<CLLocationManagerDelegate>
 
 @end
+#endif

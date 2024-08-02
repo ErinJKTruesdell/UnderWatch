@@ -95,9 +95,12 @@ public class LeaderboardDatabase : MonoBehaviour
 
                     GameObject leaderBoardUserItem = Instantiate(leaderboardItemPrefab) as GameObject;
                     leaderBoardUserItem.transform.parent = gridObj;
+                    leaderBoardUserItem.transform.localScale = new Vector3(1, 1, 1);
+
+
                     LeaderboardItem li = leaderBoardUserItem.GetComponent<LeaderboardItem>();
 
-                    li.usernameText.text = i.username;
+                    li.usernameText.text = i.username.Trim();
                     li.pointsText.text = i.points.ToString() + " points";
 
                     //downlaod prof img

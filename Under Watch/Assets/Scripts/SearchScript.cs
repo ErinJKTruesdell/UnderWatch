@@ -5,6 +5,9 @@ using TMPro;
 using Mopsicus.InfiniteScroll;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using System.Net;
+using System.Xml.Linq;
+using UnityEngine.SceneManagement;
 
 public class userData
 {
@@ -21,11 +24,8 @@ public class SearchScript : MonoBehaviour
 {
     public GameObject ContentHolder;
     //change to a list for infinite space
-    public GameObject[] Element;
-
+    
     public GameObject SearchBar;
-
-    public int totalElements;
 
     public GameObject searchProfileItem;
 
@@ -33,32 +33,45 @@ public class SearchScript : MonoBehaviour
 
     string rootURL = "https://erinjktruesdell.com/";
 
-    bool isWorking;
-
     public Transform gridObj;
+
+    public List<GameObject> Element = new();
+
+    public static string prevSearches;
 
     private void Awake()
     {
         if (loading != null)
         {
             loading.SetActive(true);
-
-            StartCoroutine(PopulateSearch());
         }
+
+        StartCoroutine(PopulateSearch());
+
+        prevSearches = PlayerPrefs.GetString("SearchedUNs");
     }
 
-    void Start()
+    public void Start()
     {
-        totalElements = ContentHolder.transform.childCount;
-
-        Element = new GameObject[totalElements];
-
-        for (int i = 0; i < totalElements; i++)
+        Debug.Log("reload");
+        Debug.Log("Saved search:" + SearchScript.prevSearches);
+        //todo: figure out why the saving is inconsistent AF
+        foreach (GameObject ele in Element)
         {
-            Element[i] = ContentHolder.transform.GetChild(i).gameObject;
+            if (prevSearches.Contains(ele.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text))
+            {
+                ele.SetActive(true);
+            }
         }
     }
-
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("Clearing cached searches");
+            PlayerPrefs.DeleteKey("SearchedUNs");
+        }
+    }
     IEnumerator PopulateSearch()
     {
         // get data from server
@@ -79,25 +92,29 @@ public class SearchScript : MonoBehaviour
                 Debug.Log(errorMessage);
 
                 Debug.Log("Data get error, releasing queue");
-                isWorking = false;
             }
             else
             {
                 //return null
                 string responseText = www.downloadHandler.text;
-                Debug.Log(responseText);
+                Debug.Log("search response:" + responseText);
                 //this should two chunks: usernames, then pfps 
                 string[] dataPartition = responseText.Split("@");
                 string[] UNData = dataPartition[0].Split('|');
                 string[] PFPData = dataPartition[1].Split('|');
 
-            foreach (string chunk in UNData)
-            {
-                userNames.Add(new userData(UNData[0], PFPData[0]));
-            }
-                Debug.Log(dataPartition);
+                for (int j = 0; j < UNData.Length; j++)
+                {
+                    if (UNData[j].Length > 2) // trim off that last empty bit
+                    {
+                        Debug.Log(PFPData[j]);
+                        userNames.Add(new userData(UNData[j], PFPData[j]));
+                    }
+                }
 
                 //sort list alphabetically
+                userNames.Sort((x, y) => x.username.CompareTo(y.username));
+
                 gridObj.GetComponent<RectTransform>().sizeDelta = new Vector2(700, userNames.Count * 200);
 
                 foreach (userData i in userNames)
@@ -105,12 +122,21 @@ public class SearchScript : MonoBehaviour
 
                     GameObject searchUserItem = Instantiate(searchProfileItem) as GameObject;
                     searchUserItem.transform.parent = gridObj;
+                    searchUserItem.transform.localScale = new Vector3(1, 1, 1);
+
+                    Element.Add(searchUserItem);
+
                     searchListItem li = searchUserItem.GetComponent<searchListItem>();
 
-                    li.usernameText.text = i.username;
+                    li.usernameText.text = i.username.Trim();
+                    if (!prevSearches.Contains(i.username.Trim()))
+                    {
+                        searchUserItem.SetActive(false);
+                    }
+
 
                     //downlaod prof img
-                    StartCoroutine(downloadImageFromURL(rootURL + i.profUrl, li.profilePic));
+                    StartCoroutine(downloadImageFromURL(i.profUrl, li.profilePic));
                 }
 
             }
@@ -150,8 +176,8 @@ public class SearchScript : MonoBehaviour
         foreach (GameObject ele in Element)
         {
             searchedElements++;
-
-            if (ele.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text.Length >= searchTxtLength)
+            
+            if (ele.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text.Length >= searchTxtLength)//and if the search text is greater than 0
             {
                 if (SearchText.ToLower() == ele.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text.Substring(0, searchTxtLength).ToLower())
                 {
@@ -162,7 +188,7 @@ public class SearchScript : MonoBehaviour
                 {
                     ele.SetActive(false);
                 }
-            }
+            }      
         }
     }
     
