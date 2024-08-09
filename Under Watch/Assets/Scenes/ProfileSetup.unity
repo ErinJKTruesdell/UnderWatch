@@ -1243,7 +1243,7 @@ MonoBehaviour:
   profPicOverlay: {fileID: 158842886}
   activityStarter: {fileID: 101250685}
   socialFeedIndex: 2
-  saveLogin: 1
+  cacheCheckToggle: {fileID: 1119123165}
 --- !u!1 &158842884
 GameObject:
   m_ObjectHideFlags: 0
@@ -2756,10 +2756,10 @@ RectTransform:
   - {fileID: 1856218176}
   m_Father: {fileID: 1842103409}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000015258789, y: -602}
-  m_SizeDelta: {x: 160, y: 76.9112}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: -0.000015258789, y: 115}
+  m_SizeDelta: {x: 160, y: 76.911194}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1119123165
 MonoBehaviour:

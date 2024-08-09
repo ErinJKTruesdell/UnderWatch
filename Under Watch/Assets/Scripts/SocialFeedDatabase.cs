@@ -122,7 +122,6 @@ public class SocialFeedDatabase : MonoBehaviour
 
                 //return null
                 string responseText = www.downloadHandler.text;
-                Debug.Log("SUCCESS?" + responseText);
 
                 string[] partition = responseText.Split("@");
 
@@ -138,10 +137,9 @@ public class SocialFeedDatabase : MonoBehaviour
                     //[4] needs to be split by % for lat/long
                     Lat = datachunks[5].Split('%')[0];
                     Long = datachunks[5].Split('%')[1];
-                    Debug.Log(datachunks[5]);
 
-                    Debug.Log("Lat: " + Lat);
-                    Debug.Log("Long: " + Long);
+                    //Debug.Log("Lat: " + Lat);
+                    //Debug.Log("Long: " + Long);
 
 
                     postID = datachunks[^1];

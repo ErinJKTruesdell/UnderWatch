@@ -40,12 +40,6 @@ public class ProfileUpdateManager : MonoBehaviour
         loginSystem = gm.scls;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void SetProfilePicture()
     {
         NativeGallery.GetImageFromGallery(ngmpc, "Select Profile Image");

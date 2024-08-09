@@ -23,6 +23,7 @@ public class SelfieCam : MonoBehaviour
     public SC_LoginSystem scls;
 
     public GameObject testBox;
+    public ApiClient api;
 
     Vector3 currentLocalEurlerAngles = Vector3.zero;
     // Start is called before the first frame update
@@ -39,8 +40,10 @@ public class SelfieCam : MonoBehaviour
                 break;
             }
         }
-        webcam = new WebCamTexture(devices[1].name);
-
+        if (devices[1].name != " ")
+        {
+           webcam = new WebCamTexture(devices[1].name);
+        }
 
         webcam.Play();
         camMesh.material.SetTexture("_MainTex", webcam);
@@ -62,19 +65,12 @@ public class SelfieCam : MonoBehaviour
             testBox.SetActive(true);
         }
     }
-
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public IEnumerator takeSnap()
     {
         yield return frameEnd;
 
-
+        Debug.Log("100");
+        scls.doTargetAssignment(scls.getUsername(), 100);
 
         Vector3[] corners = new Vector3[4];
         rear.rectTransform.GetWorldCorners(corners);
@@ -99,6 +95,7 @@ public class SelfieCam : MonoBehaviour
         Debug.Log("------------------------------------------------------------------------------------------");
         System.IO.File.WriteAllBytes(path, bytes);
 
+
         //get last location
         Input.location.Start();
 
@@ -115,15 +112,19 @@ public class SelfieCam : MonoBehaviour
 
 
         //upload to server
+        Debug.Log("Getting logged in user...");
+        string loggedInUser = gm.scls.getUsername();
 
-
+        //check if person is present
+        if (!string.IsNullOrEmpty(path))
+        {
+            StartCoroutine(api.UploadImage(path, loggedInUser));
+        }
 
 
         Debug.Log("File Upload Coroutine");
         if (gm.scls != null && gm.scls.getIsLoggedIn())
         {
-            Debug.Log("Getting logged in user...");
-            string loggedInUser = gm.scls.getUsername();
             Debug.Log(path);
 
             if (File.Exists(path))

@@ -11,21 +11,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ProfileSetup.unity
     guid: d616cbfb49f086348b34b814aeec81f9
+  - enabled: 1
+    path: Assets/Scenes/ForgotPassword.unity
+    guid: 0c9a4be1e716cfa4fbd52c77a3ef85b2
   - enabled: 0
     path: Assets/Scenes/TwoCameraScene.unity
     guid: 7a36335a92768c94a9989493786177b3
   - enabled: 1
     path: Assets/Scenes/SocialFeed.unity
     guid: 298a31c50f03bc84bb38b87d115ad10e
-  - enabled: 0
-    path: Assets/Scenes/Demo2.unity
-    guid: 48da4499451f44851ad18827470b951c
   - enabled: 1
-    path: Assets/Scenes/ForgotPassword.unity
-    guid: 0c9a4be1e716cfa4fbd52c77a3ef85b2
-  - enabled: 1
-    path: Assets/Scenes/UpdateProfilePicture.unity
-    guid: c70a9faeb2b082547981286723dd3176
+    path: Assets/Scenes/SearchScene.unity
+    guid: 63bd762c42f50c8429b3ff9fef8a537d
   - enabled: 1
     path: Assets/Scenes/SingleCameraScene.unity
     guid: 8fd5160b54563374c803e9cf2f430b7a
@@ -35,9 +32,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/leaderboard.unity
     guid: 6b8bd253f45f1f94198c94f44512c405
+  - enabled: 0
+    path: Assets/Scenes/Demo2.unity
+    guid: 48da4499451f44851ad18827470b951c
   - enabled: 1
-    path: Assets/Scenes/SearchScene.unity
-    guid: 63bd762c42f50c8429b3ff9fef8a537d
+    path: Assets/Scenes/UpdateProfilePicture.unity
+    guid: c70a9faeb2b082547981286723dd3176
   - enabled: 1
     path: Assets/Scenes/ClickedProfile.unity
     guid: a947c05f381bd134ea5e66da110c9e0b

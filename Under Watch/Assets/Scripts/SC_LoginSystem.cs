@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
@@ -205,7 +206,6 @@ public class SC_LoginSystem : MonoBehaviour
             PlayerPrefs.DeleteAll();
             Debug.Log("User login data cleared");
         }
-
     }
 
     void OnGUI()

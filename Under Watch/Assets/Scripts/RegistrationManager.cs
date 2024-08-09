@@ -154,8 +154,6 @@ public class RegistrationManager : MonoBehaviour
 
     }
 
-  
-
     public IEnumerator doRegistration()
     {
         isWorking = true;
@@ -186,11 +184,12 @@ public class RegistrationManager : MonoBehaviour
             //else
            // {
                 string responseText = www.downloadHandler.text;
-                Debug.Log(responseText);
+                Debug.Log("response"  + responseText);
+                Debug.Log(username.text);
                 if (responseText.StartsWith("Success"))
                 {
                     //activityStarter.setAlarms();
-                    StartCoroutine(loginSystem.doTargetAssignment(username.text, 0));
+                    StartCoroutine(loginSystem.doTargetAssignment(username.text, 1));
                     //store registration information - em
                     loginSystem.SetLoginPrefs(email.text, password.text, cacheCheckToggle.isOn);
 

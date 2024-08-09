@@ -52,7 +52,8 @@ public class GetTargetLocation : MonoBehaviour
     public void showMap()
     {
         //get target location
-        StartCoroutine(LocateTarget("ErinTest"));
+        StartCoroutine(LocateTarget(sclogin.getUsername()));
+        Debug.Log(sclogin.getUsername());
 
     }
 

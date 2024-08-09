@@ -1,8 +1,9 @@
+#if UNITY_ANDROID	
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Android;
-
 public class ActivityStarter : MonoBehaviour
 {
     
@@ -45,3 +46,4 @@ public class ActivityStarter : MonoBehaviour
         customClass.CallStatic("StartCheckerService");
     }
 }
+#endif

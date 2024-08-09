@@ -27,9 +27,11 @@ public class ProfileDatabase : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    public void DeleteLogin()
     {
-        
+        PlayerPrefs.DeleteAll();
+        Debug.Log("User login data cleared");
+
     }
 
     public void fillCanvas(string username, string fullName)

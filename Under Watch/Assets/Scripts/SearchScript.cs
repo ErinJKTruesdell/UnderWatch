@@ -46,6 +46,7 @@ public class SearchScript : MonoBehaviour
             loading.SetActive(true);
         }
 
+
         StartCoroutine(PopulateSearch());
 
         prevSearches = PlayerPrefs.GetString("SearchedUNs");
@@ -53,14 +54,15 @@ public class SearchScript : MonoBehaviour
 
     public void Start()
     {
-        Debug.Log("reload");
+        Debug.Log("stat");
         Debug.Log("Saved search:" + SearchScript.prevSearches);
         //todo: figure out why the saving is inconsistent AF
         foreach (GameObject ele in Element)
         {
-            if (prevSearches.Contains(ele.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text))
+            if (prevSearches.Contains(ele.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text.ToLower()))
             {
                 ele.SetActive(true);
+                Debug.Log("Contains: " + ele.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
             }
         }
     }
@@ -186,7 +188,13 @@ public class SearchScript : MonoBehaviour
                 }
                 else
                 {
-                    ele.SetActive(false);
+                    if (!prevSearches.Contains(ele.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text))
+                    {
+                        //this...shouldn't work but it really does
+                        ele.SetActive(false);
+                        Debug.Log("Contains: " + ele.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
+                    }
+                    Debug.Log("ele:" + ele.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
                 }
             }      
         }
