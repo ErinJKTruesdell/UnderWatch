@@ -301,7 +301,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   leaderboardItemPrefab: {fileID: 1213794582161676, guid: 866da9af9c8feb745a13cd25ee3d2939, type: 3}
-  leaderboardloading: {fileID: 0}
+  leaderboardloading: {fileID: 577993059}
   gridObj: {fileID: 244529788}
 --- !u!1 &108601716
 GameObject:
@@ -2720,6 +2720,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MapObj
       objectReference: {fileID: 0}
+    - target: {fileID: 1401132643185453982, guid: dd4ed2135e4488f418bca90caf7f6922, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3379228127640653590, guid: dd4ed2135e4488f418bca90caf7f6922, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.000015258789
@@ -2759,6 +2763,10 @@ PrefabInstance:
     - target: {fileID: 3379228127640653590, guid: dd4ed2135e4488f418bca90caf7f6922, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8177524176692105344, guid: dd4ed2135e4488f418bca90caf7f6922, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

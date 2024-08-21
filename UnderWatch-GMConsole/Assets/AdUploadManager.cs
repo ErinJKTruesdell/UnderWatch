@@ -8,11 +8,13 @@ using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using SimpleFileBrowser;
 using System.IO;
+using UnityEngine.UI;
 
 public class AdUploadManager : MonoBehaviour
 {
 
     public TabButton adUploadTab;
+    public ConfederateUploader confUploader;
 
     string[] filepaths;
     public TMP_Text errorText;
@@ -25,6 +27,9 @@ public class AdUploadManager : MonoBehaviour
     public TMP_Text numadstext;
 
     string rootURL = "https://erinjktruesdell.com/";
+
+    public Button multiAdButton;
+    string multiAdUN = "Sponsored";
 
 
     // Start is called before the first frame update
@@ -109,8 +114,6 @@ public class AdUploadManager : MonoBehaviour
     public void refreshAdRate()
     {
         StartCoroutine(getAdRate());
-
-
     }
 
     public IEnumerator setAdRate() {
@@ -301,5 +304,47 @@ public class AdUploadManager : MonoBehaviour
         }
 
         yield return null;
+    }
+
+    public void onUploadButtonPress()
+    {
+        StartCoroutine(uploadFile(filepaths[0]));
+    }
+
+    public IEnumerator uploadFile(string filePath)
+    {
+        string loggedInUser = multiAdUN;
+        Debug.Log(filePath);
+
+
+        WWWForm form = new WWWForm();
+        string[] imageNames = filePath.Split("/");
+        string imageName = imageNames[imageNames.Length - 1];
+        form.AddBinaryData("file", File.ReadAllBytes(filePath), imageName);
+        form.AddField("username", loggedInUser);
+        Tuple<int, int, int> time = confUploader.cts.selectedTimestamp();
+        form.AddField("month", time.Item1);
+        form.AddField("day", time.Item2);
+        form.AddField("hour", time.Item3);
+
+        UnityWebRequest www = UnityWebRequest.Post(rootURL + "uploadImage.php", form);
+        Debug.Log("Sending web request...");
+
+        yield return www.SendWebRequest();
+
+        if (www.isNetworkError || www.isHttpError)
+        {
+            Debug.Log(www.error);
+            errorText.color = Color.red;
+            errorText.text = ("Error: " + www.error);
+
+        }
+        else
+        {
+            errorText.color = Color.white;
+            errorText.text = ("Succsessfully uploaded ads to all players");
+            filepaths = new string[0];
+            multiAdButton.interactable = false;
+        }
     }
 }

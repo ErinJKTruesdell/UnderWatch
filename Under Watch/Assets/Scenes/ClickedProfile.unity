@@ -507,9 +507,33 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3229704590823642935, guid: 31ac6f51e44c37649b794f7f7616487b, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3229704590823642935, guid: 31ac6f51e44c37649b794f7f7616487b, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3229704590823642935, guid: 31ac6f51e44c37649b794f7f7616487b, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3229704590823642935, guid: 31ac6f51e44c37649b794f7f7616487b, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3229704590823642935, guid: 31ac6f51e44c37649b794f7f7616487b, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4027665046005128109, guid: 31ac6f51e44c37649b794f7f7616487b, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396682251554413877, guid: 31ac6f51e44c37649b794f7f7616487b, type: 3}
+      propertyPath: m_text
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4415282360186814488, guid: 31ac6f51e44c37649b794f7f7616487b, type: 3}
       propertyPath: m_IsActive
@@ -547,6 +571,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 7214598804217094152, guid: 31ac6f51e44c37649b794f7f7616487b, type: 3}
+      propertyPath: m_Texture
+      value: 
+      objectReference: {fileID: 2800000, guid: 86fc385f383321449b999c971072afd7, type: 3}
     - target: {fileID: 7591249837319734584, guid: 31ac6f51e44c37649b794f7f7616487b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -618,6 +646,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   zoomedImage: {fileID: 2121776603}
   pd: {fileID: 2121776604}
+  searchScript: {fileID: 0}
 --- !u!1 &2121776603 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4027665046005128109, guid: 31ac6f51e44c37649b794f7f7616487b, type: 3}

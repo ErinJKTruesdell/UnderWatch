@@ -17,6 +17,9 @@ public class ListItem : MonoBehaviour
     public SC_LoginSystem scls;
     public SocialFeedDatabase sfd;
 
+    public GameObject[] unsponsoredObjs;
+    public GameObject[] sponsoredObjs;
+
     void Start()
     {
         if (sfd == null)
@@ -29,11 +32,27 @@ public class ListItem : MonoBehaviour
 
         unText.text = sfd.currentProfileUsername;
         locText.text = sfd.Lat;
+
+
+        if (sfd.isAd)
+        {
+            unText.text = "Sponsored";
+
+            foreach (GameObject obj in unsponsoredObjs)
+            {
+                obj.SetActive(false);
+            }
+
+            foreach (GameObject obj in sponsoredObjs)
+            {
+                obj.SetActive(true);
+            }
+        }
     }
 
     public void ClickOnProfile()
     {
-        ShowClickedProfile.usernName = unText.text;
+        ShowClickedProfile.userName = unText.text;
         ShowClickedProfile.sceneCameFrom = SceneManager.GetActiveScene().name;
 
         SceneManager.LoadScene("ClickedProfile");

@@ -847,10 +847,34 @@ MonoBehaviour:
       m_Calls: []
   m_OnSelect:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1254846610}
+        m_TargetAssemblyTypeName: SearchInputResizer, Assembly-CSharp
+        m_MethodName: OnKeyboardEnter
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnDeselect:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1254846610}
+        m_TargetAssemblyTypeName: SearchInputResizer, Assembly-CSharp
+        m_MethodName: OnKeyboardExit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnTextSelection:
     m_PersistentCalls:
       m_Calls: []
@@ -1097,6 +1121,7 @@ GameObject:
   - component: {fileID: 1254846609}
   - component: {fileID: 1254846608}
   - component: {fileID: 1254846607}
+  - component: {fileID: 1254846610}
   m_Layer: 5
   m_Name: Scroll View
   m_TagString: Untagged
@@ -1122,9 +1147,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 779}
-  m_SizeDelta: {x: 700, y: 1020}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.000046064266, y: 1313.51}
+  m_SizeDelta: {x: 700, y: 1044.51}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1254846607
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1193,6 +1218,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1254846605}
   m_CullTransparentMesh: 1
+--- !u!114 &1254846610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1254846605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb6ca53756a48d1418c4543e8e3a1d01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scrollView: {fileID: 1254846606}
 --- !u!1 &1570147436
 GameObject:
   m_ObjectHideFlags: 0
@@ -1524,7 +1562,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 53.6
+  m_fontSize: 53.2
   m_fontSizeBase: 42.97
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1610,7 +1648,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000030517578, y: 0.000061035156}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1841735847

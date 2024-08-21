@@ -10,12 +10,12 @@ public class ShowClickedProfile : MonoBehaviour
     public ProfileDatabase pd;
     public SearchScript searchScript;
 
-    public static string usernName;
+    public static string userName;
     public static string sceneCameFrom;
 
     private void Start()
     {
-        pd.fillCanvas(usernName, "Texas Red");
+        pd.fillCanvas(userName, pd.fullNameText.text);
 
         searchScript = new SearchScript();
     }

@@ -108,7 +108,7 @@ public class GetTargetLocation : MonoBehaviour
             else
             {
                 errorMessage = responseText;
-                Debug.Log(errorMessage);
+                Debug.Log("Error Line 110: " + errorMessage);
             }
             //}
         }

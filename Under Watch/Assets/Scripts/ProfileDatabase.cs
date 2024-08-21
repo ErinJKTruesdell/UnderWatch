@@ -20,12 +20,6 @@ public class ProfileDatabase : MonoBehaviour
     public TMP_Text usernameText;
     public TMP_Text fullNameText;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     public void DeleteLogin()
     {
@@ -46,7 +40,7 @@ public class ProfileDatabase : MonoBehaviour
         // get data from server
         WWWForm form = new WWWForm();
         form.AddField("username", username); //dummy data
-
+        Debug.Log("usn: " + username);
         usernameText.text = "@" + username;
         usernameText.gameObject.SetActive(true);
 
@@ -67,34 +61,41 @@ public class ProfileDatabase : MonoBehaviour
             {
                 //get response
                 string responseText = www.downloadHandler.text;
-                Debug.Log(responseText);
+                Debug.Log("profile: " + responseText);
                 string[] userChunks = responseText.Split('|');
 
                 //resize content
                 contentTransform.GetComponent<RectTransform>().sizeDelta = new Vector2(750, Mathf.Floor(userChunks.Length/3f) * 250);
 
-                string profUrl = "/" + userChunks[0].Substring(1);
-                StartCoroutine(downloadImageFromURL(rootURL + profUrl,profileImage));
-
-                //create prefab and load images
-                for (int s = 1; s<userChunks.Length; s++)
+                if (userChunks.Length > 1)
                 {
-                    string i = userChunks[s];
-                    if (i != "")
-                    {
-                        GameObject picItem = Instantiate(photoPrefab) as GameObject;
-                        picItem.transform.SetParent(contentTransform, false);
+                    fullNameText.text = userChunks[0].Trim();
+                    Debug.Log("name: " + fullNameText.text);
 
-                        PlayerPhotoProfile ppp = picItem.GetComponent<PlayerPhotoProfile>();
-                        ppp.zoomedImage = zoomedImage;
-                        ppp.zoomedImageObj = zoomedImageObject;
-                        //downlaod prof img
-                        StartCoroutine(downloadImageFromURL(rootURL + i, ppp.thisImage));
-                    }
+                    string profUrl = "/" + userChunks[1];
+                    Debug.Log(profUrl);
+                    StartCoroutine(downloadImageFromURL(rootURL + profUrl, profileImage));
+
+                    //create prefab and load images
+                    for (int s = 1; s < userChunks.Length; s++)
+                    {
+                        string i = userChunks[s];
+                        if (i != "")
+                        {
+                            GameObject picItem = Instantiate(photoPrefab) as GameObject;
+                            picItem.transform.SetParent(contentTransform, false);
+
+                            PlayerPhotoProfile ppp = picItem.GetComponent<PlayerPhotoProfile>();
+                            ppp.zoomedImage = zoomedImage;
+                            ppp.zoomedImageObj = zoomedImageObject;
+                            //downlaod prof img
+                            StartCoroutine(downloadImageFromURL(rootURL + i, ppp.thisImage));
+                        }
                     }
 
                 }
-            
+            }
+
         }
 
     }

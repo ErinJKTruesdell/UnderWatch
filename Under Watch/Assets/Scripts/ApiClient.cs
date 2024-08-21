@@ -117,6 +117,7 @@ public class ApiClient : MonoBehaviour
         StopAllCoroutines(); // Stop the processing animation
 
         //yeah, it's not great, lets fix it later
+        Debug.Log(jsonResponse + "json");
 
         if (jsonResponse.Contains("Selfie Approved"))
         {

@@ -22,7 +22,7 @@ public class RegistrationManager : MonoBehaviour
     public RawImage profPic;
     public RawImage profPicOverlay;
 
-    SC_LoginSystem loginSystem;
+    public SC_LoginSystem loginSystem;
     public ActivityStarter activityStarter;
 
     public int socialFeedIndex;
@@ -194,12 +194,15 @@ public class RegistrationManager : MonoBehaviour
                     loginSystem.SetLoginPrefs(email.text, password.text, cacheCheckToggle.isOn);
 
                     SceneManager.LoadScene("SocialFeed");
+                    Debug.Log("success");
                 }
                 else
                 {
                     errorMessage = responseText;
                     errorText.text = errorMessage;
-                }
+                    Debug.Log("error: " + errorMessage);
+
+            }
             //}
         }
 

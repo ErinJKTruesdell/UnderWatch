@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
 
 
     public SC_LoginSystem scls;
+    public TouchScreenKeyboard keyboard;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,12 +29,6 @@ public class GameManager : MonoBehaviour
         scls.gm = this;
 
         DontDestroyOnLoad(this);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void saveLoginTime()

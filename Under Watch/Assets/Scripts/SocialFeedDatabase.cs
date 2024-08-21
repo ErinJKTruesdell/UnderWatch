@@ -45,7 +45,7 @@ public class SocialFeedDatabase : MonoBehaviour
     [SerializeField] PostUIHandling postUIHandling;
 
     bool isWorking = false;
-
+    public bool isAd = false;
 
     public string rootURL = "https://erinjktruesdell.com/";
 
@@ -124,31 +124,35 @@ public class SocialFeedDatabase : MonoBehaviour
                 string responseText = www.downloadHandler.text;
 
                 string[] partition = responseText.Split("@");
-
+                Debug.Log(responseText);
                 if (partition.Length > 1)
                 {
                     string[] datachunks = partition[0].Split("|");
 
+                    if (datachunks[3] == "Sponsored")
+                    {
+                        currentPhotoTimestamp = datachunks[2];
+                        currentPhotoURL = datachunks[1];
+                        isAd = true;
+                        StartCoroutine(downloadAdImageFromURL(rootURL + currentPhotoURL, image));
+                    }
+
+                    else
+                    {
                         currentPhotoProfileURL = datachunks[0];
                         currentPhotoURL = datachunks[1];
                         currentPhotoTimestamp = datachunks[2];
                         currentPhotoProfileURL = currentPhotoProfileURL.Replace("\n", "");
                         currentProfileUsername = datachunks[3];
-                    //[4] needs to be split by % for lat/long
-                    Lat = datachunks[5].Split('%')[0];
-                    Long = datachunks[5].Split('%')[1];
-
-                    //Debug.Log("Lat: " + Lat);
-                    //Debug.Log("Long: " + Long);
-
-
-                    postID = datachunks[^1];
+                        //[4] needs to be split by % for lat/long
+                        Lat = datachunks[5].Split('%')[0];
+                        Long = datachunks[5].Split('%')[1];
+                        postID = datachunks[^1];
                         //Debug.Log("loaded post ID: " + postID);
                         usernameText.text = currentProfileUsername.Trim();
 
-
-                    string[] reactChunks = partition[1].Split("%");
-                    //hey at least its *sorta readable
+                        string[] reactChunks = partition[1].Split("%");
+                        //hey at least its sorta readable
 
                         postUIHandling.smileLikes = Convert.ToInt32(reactChunks[0].Split(":")[1].Split("|")[0]);
                         postUIHandling.isLikedByLoggedIn.Add(Convert.ToBoolean(reactChunks[0].Split("|")[1]));
@@ -165,10 +169,11 @@ public class SocialFeedDatabase : MonoBehaviour
                         postUIHandling.gatorLikes = Convert.ToInt32(reactChunks[4].Split(":")[1].Split("|")[0]);
                         postUIHandling.isLikedByLoggedIn.Add(Convert.ToBoolean(reactChunks[4].Split("|")[1]));
 
-                    //postUIHandling.OnPostLoad();
+                        //postUIHandling.OnPostLoad();
 
-                    Debug.Log("Starting Download");
-                    StartCoroutine(downloadImageFromURL(rootURL + currentPhotoURL, image, rootURL + currentPhotoProfileURL, profImage));
+                        Debug.Log("Starting Download");
+                        StartCoroutine(downloadImageFromURL(rootURL + currentPhotoURL, image, rootURL + currentPhotoProfileURL, profImage));
+                    }
                 }
                 else
                 {
@@ -205,5 +210,24 @@ public class SocialFeedDatabase : MonoBehaviour
         Debug.Log("Releasing Queued Command");
         isWorking = false;
 
+    }
+
+    IEnumerator downloadAdImageFromURL(string url, RawImage image)
+    {
+        Debug.Log("Starting Ad Download Request");
+        UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
+        yield return request.SendWebRequest();
+
+        if (request.isNetworkError || request.isHttpError)
+        {
+
+            Debug.Log(request.error);
+        }
+        else
+        {
+            currentPhoto = ((DownloadHandlerTexture)request.downloadHandler).texture;
+
+        }
+        image.texture = currentPhoto;
     }
 }

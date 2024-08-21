@@ -109,7 +109,7 @@ public class SearchScript : MonoBehaviour
                 {
                     if (UNData[j].Length > 2) // trim off that last empty bit
                     {
-                        Debug.Log(PFPData[j]);
+                        //Debug.Log(PFPData[j]);
                         userNames.Add(new userData(UNData[j], PFPData[j]));
                     }
                 }
@@ -192,9 +192,9 @@ public class SearchScript : MonoBehaviour
                     {
                         //this...shouldn't work but it really does
                         ele.SetActive(false);
-                        Debug.Log("Contains: " + ele.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
+                        //Debug.Log("Contains: " + ele.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
                     }
-                    Debug.Log("ele:" + ele.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
+                    //Debug.Log("ele:" + ele.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
                 }
             }      
         }

@@ -16,7 +16,7 @@ public class ProfileUpdateManager : MonoBehaviour
     public RawImage profPicOverlay;
     SC_LoginSystem loginSystem;
 
-    public int socialFeedIndex;
+   // public int socialFeedIndex;
 
     public NativeGallery.MediaPickCallback ngmpc = new NativeGallery.MediaPickCallback(handleNewPicture);
 
@@ -167,7 +167,7 @@ public class ProfileUpdateManager : MonoBehaviour
             Debug.Log(responseText);
             if (responseText.StartsWith("Success"))
             {
-                SceneManager.LoadScene(socialFeedIndex);
+                SceneManager.LoadScene("PlayerProfile");
             }
             else
             {

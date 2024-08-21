@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using System.IO;
+using TMPro;
+using System.Net;
 
 public class SelfieCam : MonoBehaviour
 {
@@ -24,6 +26,10 @@ public class SelfieCam : MonoBehaviour
 
     public GameObject testBox;
     public ApiClient api;
+
+    public TextMeshProUGUI responseText;
+    public GameObject blockingPanel;
+    public GameObject closeButton;
 
     Vector3 currentLocalEurlerAngles = Vector3.zero;
     // Start is called before the first frame update
@@ -69,7 +75,6 @@ public class SelfieCam : MonoBehaviour
     {
         yield return frameEnd;
 
-        Debug.Log("100");
         scls.doTargetAssignment(scls.getUsername(), 100);
 
         Vector3[] corners = new Vector3[4];
@@ -110,22 +115,18 @@ public class SelfieCam : MonoBehaviour
         float latitude = Input.location.lastData.latitude;
         float longitude = Input.location.lastData.longitude;
 
-
         //upload to server
         Debug.Log("Getting logged in user...");
         string loggedInUser = gm.scls.getUsername();
-
-        //check if person is present
-        if (!string.IsNullOrEmpty(path))
-        {
-            StartCoroutine(api.UploadImage(path, loggedInUser));
-        }
-
 
         Debug.Log("File Upload Coroutine");
         if (gm.scls != null && gm.scls.getIsLoggedIn())
         {
             Debug.Log(path);
+
+            responseText.text = "Verifying Image...";
+            StartCoroutine(ShowProcessingAnimation());
+            blockingPanel.SetActive(true);
 
             if (File.Exists(path))
             {
@@ -134,7 +135,7 @@ public class SelfieCam : MonoBehaviour
                 string[] imageNames = path.Split("/");
                 string imageName = imageNames[imageNames.Length - 1];
                 form.AddBinaryData("file", File.ReadAllBytes(path), imageName);
-                form.AddField("username", loggedInUser);
+                form.AddField("username", scls.getUsername());
                 form.AddField("latitude", latitude.ToString());
                 form.AddField("longitude", longitude.ToString());
 
@@ -145,11 +146,17 @@ public class SelfieCam : MonoBehaviour
 
                 if (www.isNetworkError || www.isHttpError)
                 {
+                    responseText.text = "Error: " + www.error;
+
                     Debug.Log(www.error);
+                    StopAllCoroutines(); // Stop the processing animation
+                    closeButton.SetActive(true);
                 }
                 else
                 {
                     Debug.Log("Form upload complete! " + System.Text.Encoding.ASCII.GetString(www.downloadHandler.data));
+                    HandleServerResponse(www.downloadHandler.text);
+                    closeButton.SetActive(true);
 
                 }
             }
@@ -175,5 +182,68 @@ public class SelfieCam : MonoBehaviour
 
     }
 
-  
+    public void CloseBlockerPanel()
+    {
+        blockingPanel.SetActive(false);
+        responseText.text = "";
+    }
+
+    IEnumerator ShowProcessingAnimation()
+    {
+        int dotCount = 0;
+        while (true)
+        {
+            responseText.text = "Verifying Image" + new string('.', dotCount % 4);
+            dotCount++;
+            yield return new WaitForSeconds(0.5f);
+        }
+    }
+
+    void HandleServerResponse(string jsonResponse)
+    {
+        StopAllCoroutines(); // Stop the processing animation
+
+        //yeah, it's not great, lets fix it later
+        if (jsonResponse.Contains("Selfie Approved"))
+        {
+            responseText.text = "Verification successful";
+        }
+        else if (jsonResponse.Contains("Selfie Not Approved"))
+        {
+            responseText.text = "Verification failed, re-upload or try a different image.";
+        }
+        else
+        {
+            responseText.text = "Error parsing server response.";
+        }
+
+        /*bool match = false;
+
+        try
+        {
+            var response = JsonUtility.FromJson<ServerResponse>(jsonResponse);
+            match = response.match;
+            Debug.Log("114" + response);
+        }
+        catch
+        {
+            responseText.text = "Error parsing server response.";
+            return;
+        }*/
+
+        /*if (match)
+        {
+            responseText.text = "Verification successful";
+        }
+        else
+        {
+            responseText.text = "Verification failed, re-upload or try a different image.";
+        }*/
+    }
+
+    [System.Serializable]
+    private class ServerResponse
+    {
+        public bool match;
+    }
 }
