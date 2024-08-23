@@ -9,6 +9,7 @@ public class ProfileDatabase : MonoBehaviour
 {
 
     public RawImage profileImage;
+
     public RawImage zoomedImage;
     public GameObject zoomedImageObject;
 
@@ -33,8 +34,6 @@ public class ProfileDatabase : MonoBehaviour
         Debug.Log("Filling Canvas: " + username + fullName);
         StartCoroutine(getAndDownloadImages(username));
     }
-
-
     private IEnumerator getAndDownloadImages(string username)
     {
         // get data from server

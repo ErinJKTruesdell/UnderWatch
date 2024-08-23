@@ -2,9 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 public class CameraDisplay : MonoBehaviour
 {
@@ -18,12 +20,14 @@ public class CameraDisplay : MonoBehaviour
     WebCamTexture webcam1;
     WebCamTexture webcam0;
 
-    public UploadImage uploader;
-
     public MeshRenderer rearMesh;
     public MeshRenderer frontMesh;
 
     WaitForEndOfFrame frameEnd = new WaitForEndOfFrame();
+
+    public TextMeshProUGUI usernameText;
+
+    public string path;
 
     Vector3 currentLocalEurlerAngles = Vector3.zero;
     // Start is called before the first frame update
@@ -45,12 +49,6 @@ public class CameraDisplay : MonoBehaviour
 
         webcam0.Play();
         rearMesh.material.SetTexture("_MainTex", webcam0);
-
-        uploader = GameObject.FindObjectOfType<UploadImage>();
-        if(uploader == null )
-        {
-            uploader = new UploadImage();
-        }
     }
 
     // Update is called once per frame
@@ -90,13 +88,14 @@ public class CameraDisplay : MonoBehaviour
 
 
         byte[] bytes = tex.EncodeToPNG();
-        string filename = uploader.loginSystem.getUsername() + "-" + DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day + "-" + DateTime.Now.Hour + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Second + ".png";
-        string path = Application.persistentDataPath + filename;
+        string filename = usernameText.text + "profPic.png";
+        path = Application.persistentDataPath + filename;
         Debug.Log("--------------------------------------SAVING TO PATH--------------------------------------");
         Debug.Log(path);
         Debug.Log("------------------------------------------------------------------------------------------");
         System.IO.File.WriteAllBytes(path, bytes);
-        uploader.uploadIt(path);
+
+        
     }
 
     private Texture2D ScaleTexture(Texture2D source, int targetWidth, int targetHeight)

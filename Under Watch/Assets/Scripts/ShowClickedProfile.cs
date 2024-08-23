@@ -24,7 +24,6 @@ public class ShowClickedProfile : MonoBehaviour
     {
         zoomedImage.SetActive(false);
     }
-
     public void BackButton()
     {
         SceneManager.LoadScene(sceneCameFrom);

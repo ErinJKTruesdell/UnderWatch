@@ -25,7 +25,6 @@ public class SelfieCam : MonoBehaviour
     public SC_LoginSystem scls;
 
     public GameObject testBox;
-    public ApiClient api;
 
     public TextMeshProUGUI responseText;
     public GameObject blockingPanel;

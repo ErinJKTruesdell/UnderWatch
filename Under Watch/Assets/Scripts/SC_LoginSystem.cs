@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class SC_LoginSystem : MonoBehaviour
 {
@@ -28,6 +29,7 @@ public class SC_LoginSystem : MonoBehaviour
     public GameObject LoginButton;
     public GameObject RegisterButton;
     public GameObject ForgotPasswordButton;
+    public GameObject logo;
 
     public Toggle cacheCheckToggle;
 
@@ -55,6 +57,12 @@ public class SC_LoginSystem : MonoBehaviour
     public EventArgs e = null;
     public delegate void TargetHandler(string m, EventArgs e);
 
+    void Start()
+    {
+        LoginButton.transform.DOLocalMoveY(-1000, .7f).From().SetEase(Ease.OutQuad);
+        RegisterButton.transform.DOLocalMoveY((-1000 - 138f), .7f).From().SetEase(Ease.OutQuad);
+        logo.transform.DOLocalMoveY(1000, .7f).From().SetEase(Ease.OutQuad);
+    }
 
 
     public bool getIsLoggedIn()
@@ -78,13 +86,40 @@ public class SC_LoginSystem : MonoBehaviour
     {
         if (loginFields != null)
         {
-            LoginButton.SetActive(false);
-            RegisterButton.SetActive(false);
-            ForgotPasswordButton.SetActive(false);
+            EnableLoginFields(true);
 
-            backButton.SetActive(true);
-            loginFields.SetActive(true);
+            loginFields.transform.DOLocalMoveX(0, .5f).SetEase(Ease.OutQuad);
+
+            LoginButton.transform.DOLocalMoveX(-1400f, .5f).SetEase(Ease.OutQuad);     
+            RegisterButton.transform.DOLocalMoveX(-1400f, .5f).SetEase(Ease.OutQuad);
+            logo.transform.DOLocalMoveX(-1400f, .5f).SetEase(Ease.OutQuad).OnComplete(() => EnableLoginReg(false));
         }
+    }
+    public void backToLogin()
+    {
+        EnableLoginReg(true);
+
+        backButton.SetActive(false);
+        loginFields.transform.DOLocalMoveX(1400f, .5f).SetEase(Ease.OutQuad);
+
+        LoginButton.transform.DOLocalMoveX(0, .5f).SetEase(Ease.OutQuad);
+        RegisterButton.transform.DOLocalMoveX(0, .5f).SetEase(Ease.OutQuad);
+        logo.transform.DOLocalMoveX(0f, .5f).SetEase(Ease.OutQuad).OnComplete(() => EnableLoginFields(true));
+
+    }
+
+    void EnableLoginReg(bool enabling)
+    {
+            LoginButton.SetActive(enabling);
+            RegisterButton.SetActive(enabling);
+            logo.SetActive(enabling);
+    }
+
+    void EnableLoginFields(bool enabling)
+    {
+        ForgotPasswordButton.SetActive(enabling);
+        backButton.SetActive(enabling);
+        loginFields.SetActive(enabling);
     }
 
     public void tryLogin()
@@ -104,15 +139,6 @@ public class SC_LoginSystem : MonoBehaviour
         }
     }
 
-    public void backToLogin()
-    {
-        LoginButton.SetActive(true);
-        RegisterButton.SetActive(true);
-        ForgotPasswordButton.SetActive(true);
-
-        backButton.SetActive(false);
-        loginFields.SetActive(false);
-    }
     public IEnumerator doTargetAssignment(string username, int pointsToAdd)
     {
         while (isWorking)
@@ -179,15 +205,20 @@ public class SC_LoginSystem : MonoBehaviour
             //else show login/register buttons
             LoginButton.SetActive(true);
             RegisterButton.SetActive(true);
-            ForgotPasswordButton.SetActive(true);
+            ForgotPasswordButton.SetActive(false);
         }
+
+        //can change any settings inside the init
+        DOTween.Init();
+
     }
 
     public void goToRegistration()
     {
-        SceneManager.LoadScene(registerSceneIndex);
+        LoginButton.transform.DOLocalMoveX(-1400f, .5f).SetEase(Ease.OutQuad);
+        RegisterButton.transform.DOLocalMoveX(-1400f, .5f).SetEase(Ease.OutQuad);
+        logo.transform.DOLocalMoveX(-1400f, .5f).SetEase(Ease.OutQuad).OnComplete(() => SceneManager.LoadScene(registerSceneIndex));
     }
-
 
     public void SetLoginPrefs(string email, string password, bool save)
     {

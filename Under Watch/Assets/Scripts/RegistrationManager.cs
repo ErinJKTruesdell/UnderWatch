@@ -5,9 +5,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using NativeGalleryNamespace;
 using UnityEngine.Networking;
+using System.Net;
+using System.IO;
 using static SC_LoginSystem;
 using UnityEngine.SceneManagement;
 using UnityEditor;
+using System;
 
 public class RegistrationManager : MonoBehaviour
 {
@@ -24,16 +27,34 @@ public class RegistrationManager : MonoBehaviour
 
     public SC_LoginSystem loginSystem;
     public ActivityStarter activityStarter;
+    public GameManager gm;
+    public CameraDisplay camDisplay;
 
     public int socialFeedIndex;
 
-    public NativeGallery.MediaPickCallback ngmpc = new NativeGallery.MediaPickCallback(handleNewPicture);
+    //public NativeGallery.MediaPickCallback ngmpc = new NativeGallery.MediaPickCallback(handleNewPicture);
 
     bool isWorking = false;
     string rootURL = "https://erinjktruesdell.com/";
 
     bool profImageSet = false;
     public Toggle cacheCheckToggle;
+
+    //camera stuff:
+    public GameObject camUI;
+    /*
+    public RawImage rear;
+    WebCamDevice[] devices;
+
+    WebCamTexture webcam;
+    public MeshRenderer camMesh;
+
+    WaitForEndOfFrame frameEnd = new WaitForEndOfFrame();
+
+    public TextMeshProUGUI responseText;
+
+    Vector3 currentLocalEurlerAngles = Vector3.zero;*/
+
 
     // Start is called before the first frame update
     void Start()
@@ -44,6 +65,35 @@ public class RegistrationManager : MonoBehaviour
         {
             loginSystem = new SC_LoginSystem();
         }
+        /*gm = GameObject.FindObjectOfType<GameManager>();
+
+        if (gm == null)
+        {
+            gm = new GameManager();
+        }
+
+        devices = WebCamTexture.devices;
+        WebCamDevice frontCamera;
+        for (int i = 1; i < devices.Length; i++)
+        {
+            if (devices[i].isFrontFacing)
+            {
+                frontCamera = devices[i];
+                break;
+            }
+        }
+        if (devices[1].name != " ")
+        {
+            webcam = new WebCamTexture(devices[1].name);
+        }
+
+        webcam.Play();
+        camMesh.material.SetTexture("_MainTex", webcam);*/
+    }
+
+    public void ShowCamUI()
+    {
+        camUI.SetActive(true);
     }
 
     public void BackButton()
@@ -51,7 +101,7 @@ public class RegistrationManager : MonoBehaviour
         SceneManager.LoadScene("LoginScene");
     }
 
-    public void SetProfilePicture()
+    /*public void SetProfilePicture()
     {
         NativeGallery.GetImageFromGallery(ngmpc, "Select Profile Image");
     }
@@ -64,7 +114,38 @@ public class RegistrationManager : MonoBehaviour
     public static void picturePassthrough(string path, RegistrationManager instance)
     {
         instance.StartCoroutine(instance.GetTex(path));
-    }
+    }*/
+
+    /*public void capturePhoto()
+    {
+        Texture2D snap = new Texture2D(webcam.width, webcam.height);
+        snap.SetPixels(webcam.GetPixels());
+        snap.Apply();
+        camMesh.material.SetTexture("_MainTex", snap);
+        //byte[] bytes = snap.EncodeToPNG();
+        webcam.Stop();
+
+        //process photo into file...I think
+        Vector3[] corners = new Vector3[4];
+        rear.rectTransform.GetWorldCorners(corners);
+        Vector3 topLeft = corners[0];
+
+        var width = (int)(corners[3].x - corners[0].x); //.rect.width;
+        var height = (int)(corners[1].y - corners[0].y);
+        var tex = new Texture2D(width, height, TextureFormat.RGB24, false);
+        // Rescale the size appropriately based on the current Canvas scale
+        Vector2 scaledSize = new Vector2(width, height);
+
+        tex.ReadPixels(new Rect(topLeft, scaledSize), 0, 0);
+        tex.Apply();
+
+        byte[] bytes = tex.EncodeToPNG();
+        string filename = gm.scls.getUsername() + "-" + DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day + "-" + DateTime.Now.Hour + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Second + ".png";
+        string path = Application.persistentDataPath + filename;
+
+        StartCoroutine(GetTex(path));
+
+    }*/
 
 
     public IEnumerator GetTex(string path)
@@ -169,7 +250,7 @@ public class RegistrationManager : MonoBehaviour
 
         if (profImageSet)
         {
-            form.AddBinaryData("file", ImageConversion.EncodeToPNG(((Texture2D)profPic.texture)), username.text + "profPic.png");
+            form.AddBinaryData("file", File.ReadAllBytes(camDisplay.path), username.text + "profPic.png");
         }
 
 
