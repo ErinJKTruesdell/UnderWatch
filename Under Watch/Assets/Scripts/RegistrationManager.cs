@@ -11,6 +11,8 @@ using static SC_LoginSystem;
 using UnityEngine.SceneManagement;
 using UnityEditor;
 using System;
+using UnityEngine.AI;
+using UnityEngine.Windows.WebCam;
 
 public class RegistrationManager : MonoBehaviour
 {
@@ -28,7 +30,6 @@ public class RegistrationManager : MonoBehaviour
     public SC_LoginSystem loginSystem;
     public ActivityStarter activityStarter;
     public GameManager gm;
-    public CameraDisplay camDisplay;
 
     public int socialFeedIndex;
 
@@ -42,19 +43,22 @@ public class RegistrationManager : MonoBehaviour
 
     //camera stuff:
     public GameObject camUI;
-    /*
+    public GameObject regTextFields;
+    public GameObject regAndPfp;
+    public GameObject nextButton;
+    public GameObject pfpImage;
+
     public RawImage rear;
     WebCamDevice[] devices;
 
     WebCamTexture webcam;
     public MeshRenderer camMesh;
-
     WaitForEndOfFrame frameEnd = new WaitForEndOfFrame();
 
+    public GameObject testBox;
+
     public TextMeshProUGUI responseText;
-
-    Vector3 currentLocalEurlerAngles = Vector3.zero;*/
-
+    public string pfpPath;
 
     // Start is called before the first frame update
     void Start()
@@ -65,13 +69,7 @@ public class RegistrationManager : MonoBehaviour
         {
             loginSystem = new SC_LoginSystem();
         }
-        /*gm = GameObject.FindObjectOfType<GameManager>();
-
-        if (gm == null)
-        {
-            gm = new GameManager();
-        }
-
+        
         devices = WebCamTexture.devices;
         WebCamDevice frontCamera;
         for (int i = 1; i < devices.Length; i++)
@@ -88,17 +86,44 @@ public class RegistrationManager : MonoBehaviour
         }
 
         webcam.Play();
-        camMesh.material.SetTexture("_MainTex", webcam);*/
-    }
+        camMesh.material.SetTexture("_MainTex", webcam);
 
-    public void ShowCamUI()
-    {
-        camUI.SetActive(true);
+        gm = FindObjectOfType<GameManager>();
+        if (gm == null)
+        {
+            gm = new GameManager();
+        }
     }
-
     public void BackButton()
     {
-        SceneManager.LoadScene("LoginScene");
+        if (camUI.activeSelf)
+        {
+            regTextFields.SetActive(true);
+            camUI.SetActive(false);
+            nextButton.SetActive(true);
+        }
+        else
+        {
+            SceneManager.LoadScene("LoginScene");
+        }
+
+    }
+
+    public void NextToCamera()
+    {
+        if (email.text == "" || username.text == "" || password.text == "" || firstName.text == "" || lastName.text == "")
+        {
+            errorText.text = "Missing one or more fields.";
+        }
+        else
+        {
+            errorText.text = "";
+
+            regTextFields.SetActive(false);
+            nextButton.SetActive(false);
+            camUI.SetActive(true);
+            pfpImage.SetActive(false);
+        }
     }
 
     /*public void SetProfilePicture()
@@ -114,40 +139,8 @@ public class RegistrationManager : MonoBehaviour
     public static void picturePassthrough(string path, RegistrationManager instance)
     {
         instance.StartCoroutine(instance.GetTex(path));
-    }*/
-
-    /*public void capturePhoto()
-    {
-        Texture2D snap = new Texture2D(webcam.width, webcam.height);
-        snap.SetPixels(webcam.GetPixels());
-        snap.Apply();
-        camMesh.material.SetTexture("_MainTex", snap);
-        //byte[] bytes = snap.EncodeToPNG();
-        webcam.Stop();
-
-        //process photo into file...I think
-        Vector3[] corners = new Vector3[4];
-        rear.rectTransform.GetWorldCorners(corners);
-        Vector3 topLeft = corners[0];
-
-        var width = (int)(corners[3].x - corners[0].x); //.rect.width;
-        var height = (int)(corners[1].y - corners[0].y);
-        var tex = new Texture2D(width, height, TextureFormat.RGB24, false);
-        // Rescale the size appropriately based on the current Canvas scale
-        Vector2 scaledSize = new Vector2(width, height);
-
-        tex.ReadPixels(new Rect(topLeft, scaledSize), 0, 0);
-        tex.Apply();
-
-        byte[] bytes = tex.EncodeToPNG();
-        string filename = gm.scls.getUsername() + "-" + DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day + "-" + DateTime.Now.Hour + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Second + ".png";
-        string path = Application.persistentDataPath + filename;
-
-        StartCoroutine(GetTex(path));
-
-    }*/
-
-
+    }
+    */
     public IEnumerator GetTex(string path)
     {
         using (UnityWebRequest uwr = UnityWebRequestTexture.GetTexture(path))
@@ -221,9 +214,10 @@ public class RegistrationManager : MonoBehaviour
         result.Apply();
         return result;
     }
+
     public void RegisterUser()
     {
-        if(email.text == "" || username.text == "" || password.text == "" || firstName.text == "" || lastName.text == "")
+        if (email.text == "" || username.text == "" || password.text == "" || firstName.text == "" || lastName.text == "")
         {
             errorText.text = "Missing one or more fields.";
         }
@@ -232,15 +226,29 @@ public class RegistrationManager : MonoBehaviour
             errorText.text = "";
             StartCoroutine(doRegistration());
         }
-
     }
 
     public IEnumerator doRegistration()
     {
+        yield return frameEnd;
+
         isWorking = true;
         string errorMessage = "";
 
         WWWForm form = new WWWForm();
+
+        if (File.Exists(pfpPath))
+        {
+            string[] imageNames = pfpPath.Split("/");
+            string imageName = imageNames[imageNames.Length - 1];
+            form.AddBinaryData("file", File.ReadAllBytes(pfpPath), imageName);
+        }
+
+        else
+        {
+            Debug.Log("File does not exist");
+        }
+
         form.AddField("firstName", firstName.text);
         form.AddField("lastName", lastName.text);
         form.AddField("email", email.text);
@@ -248,13 +256,7 @@ public class RegistrationManager : MonoBehaviour
         form.AddField("password1", password.text);
         form.AddField("submit", "submit");
 
-        if (profImageSet)
-        {
-            form.AddBinaryData("file", File.ReadAllBytes(camDisplay.path), username.text + "profPic.png");
-        }
-
-
-         using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "register.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "register.php", form))
         {
             yield return www.SendWebRequest();
 
@@ -263,25 +265,25 @@ public class RegistrationManager : MonoBehaviour
                 errorMessage = www.error;
             }
             //else
-           // {
-                string responseText = www.downloadHandler.text;
-                Debug.Log("response"  + responseText);
-                Debug.Log(username.text);
-                if (responseText.StartsWith("Success"))
-                {
-                    //activityStarter.setAlarms();
-                    StartCoroutine(loginSystem.doTargetAssignment(username.text, 1));
-                    //store registration information - em
-                    loginSystem.SetLoginPrefs(email.text, password.text, cacheCheckToggle.isOn);
+            // {
+            string responseText = www.downloadHandler.text;
+            Debug.Log("response" + responseText);
+            Debug.Log(username.text);
+            if (responseText.StartsWith("Success"))
+            {
+                //activityStarter.setAlarms();
+                StartCoroutine(loginSystem.doTargetAssignment(username.text, 1));
+                //store registration information - em
+                loginSystem.SetLoginPrefs(email.text, password.text, cacheCheckToggle.isOn);
 
-                    SceneManager.LoadScene("SocialFeed");
-                    Debug.Log("success");
-                }
-                else
-                {
-                    errorMessage = responseText;
-                    errorText.text = errorMessage;
-                    Debug.Log("error: " + errorMessage);
+                SceneManager.LoadScene("SocialFeed");
+                Debug.Log("success");
+            }
+            else
+            {
+                errorMessage = responseText;
+                errorText.text = errorMessage;
+                Debug.Log("error: " + errorMessage);
 
             }
             //}
@@ -290,5 +292,47 @@ public class RegistrationManager : MonoBehaviour
         loginSystem.loginUponRegister(username.text, email.text);
 
         isWorking = false;
+    }
+
+
+
+    public void capturePhoto()
+    {
+        regAndPfp.SetActive(true);
+        regTextFields.SetActive(true);
+        camUI.SetActive(false); ;
+        pfpImage.SetActive(true);
+
+        Texture2D snap = new Texture2D(webcam.width, webcam.height);
+        snap.SetPixels(webcam.GetPixels());
+        snap.Apply();
+        camMesh.material.SetTexture("_MainTex", snap);
+        //byte[] bytes = snap.EncodeToPNG();
+        webcam.Stop();
+
+        Vector3[] corners = new Vector3[4];
+        rear.rectTransform.GetWorldCorners(corners);
+        Vector3 topLeft = corners[0];
+
+        var width = (int)(corners[3].x - corners[0].x); //.rect.width;
+        var height = (int)(corners[1].y - corners[0].y);
+        var tex = new Texture2D(width, height, TextureFormat.RGB24, false);
+        // Rescale the size appropriately based on the current Canvas scale
+        Vector2 scaledSize = new Vector2(width, height);
+
+
+        tex.ReadPixels(new Rect(topLeft, scaledSize), 0, 0);
+        tex.Apply();
+
+        byte[] bytes = tex.EncodeToPNG();
+        string filename = username.text + "profPic.png";
+        pfpPath = Application.persistentDataPath + filename;
+        Debug.Log("--------------------------------------SAVING TO PATH--------------------------------------");
+        Debug.Log(pfpPath);
+        Debug.Log("------------------------------------------------------------------------------------------");
+        System.IO.File.WriteAllBytes(pfpPath, bytes);
+
+        StartCoroutine(GetTex(pfpPath));
+
     }
 }
