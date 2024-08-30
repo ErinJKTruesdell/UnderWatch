@@ -31,6 +31,8 @@ public class SC_LoginSystem : MonoBehaviour
     public GameObject ForgotPasswordButton;
     public GameObject logo;
 
+    public GameObject canvasElement;
+
     public Toggle cacheCheckToggle;
 
     public int registerSceneIndex;
@@ -215,9 +217,11 @@ public class SC_LoginSystem : MonoBehaviour
 
     public void goToRegistration()
     {
+        SceneManager.LoadSceneAsync(registerSceneIndex);
+        //wait until the scene fully loads
         LoginButton.transform.DOLocalMoveX(-1400f, .5f).SetEase(Ease.OutQuad);
         RegisterButton.transform.DOLocalMoveX(-1400f, .5f).SetEase(Ease.OutQuad);
-        logo.transform.DOLocalMoveX(-1400f, .5f).SetEase(Ease.OutQuad).OnComplete(() => SceneManager.LoadScene(registerSceneIndex));
+        logo.transform.DOLocalMoveX(-1400f, .5f).SetEase(Ease.OutQuad);
     }
 
     public void SetLoginPrefs(string email, string password, bool save)
@@ -420,7 +424,7 @@ public class SC_LoginSystem : MonoBehaviour
                     isLoggedIn = true;
                     ResetValues();
                     gm.saveLoginTime();
-                    gm.ProgressToScene("SocialFeed");
+                    canvasElement.transform.DOLocalMoveY(Screen.height * 3, .7f).SetEase(Ease.OutQuad).OnComplete(() => gm.ProgressToScene("SocialFeed"));
 
                     //store registration information 
                     if (isCached == false)

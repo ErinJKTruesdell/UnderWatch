@@ -1,4 +1,4 @@
-using System;
+/*using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,10 +7,10 @@ using UnityEngine.UI;
 using System.IO;
 using TMPro;
 using System.Net;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
-public class SelfieCam : MonoBehaviour
+public class ProfilePhoto : MonoBehaviour
 {
-
     public RawImage rear;
     WebCamDevice[] devices;
 
@@ -27,8 +27,7 @@ public class SelfieCam : MonoBehaviour
     public GameObject testBox;
 
     public TextMeshProUGUI responseText;
-    public GameObject blockingPanel;
-    public GameObject closeButton;
+    public TextMeshProUGUI usernameText;
 
     Vector3 currentLocalEurlerAngles = Vector3.zero;
     // Start is called before the first frame update
@@ -37,29 +36,21 @@ public class SelfieCam : MonoBehaviour
 
         devices = WebCamTexture.devices;
         WebCamDevice frontCamera;
-        if (devices.Length > 1)
+        for (int i = 1; i < devices.Length; i++)
         {
-            for (int i = 1; i < devices.Length; i++)
+            if (devices[i].isFrontFacing)
             {
-                if (devices[i].isFrontFacing)
-                {
-                    frontCamera = devices[i];
-                    break;
-                }
+                frontCamera = devices[i];
+                break;
             }
-            if (devices[1].name != " ")
-            {
-                webcam = new WebCamTexture(devices[1].name);
-            }
+        }
+        if (devices[1].name != " ")
+        {
+            webcam = new WebCamTexture(devices[1].name);
+        }
 
-            webcam.Play();
-            camMesh.material.SetTexture("_MainTex", webcam);
-        }
-        else
-        {
-            responseText.color = Color.red; 
-            responseText.text = "No camera detected";
-        }
+        webcam.Play();
+        camMesh.material.SetTexture("_MainTex", webcam);
 
         gm = FindObjectOfType<GameManager>();
         if (gm == null)
@@ -67,22 +58,10 @@ public class SelfieCam : MonoBehaviour
             gm = new GameManager();
         }
         scls = gm.scls;
-
-        scls.Target += new SC_LoginSystem.TargetHandler(showNewTarget);
-    }
-
-    public void showNewTarget(string s, EventArgs e)
-    {
-        if (s.StartsWith("Success"))
-        {
-            testBox.SetActive(true);
-        }
     }
     public IEnumerator takeSnap()
     {
         yield return frameEnd;
-
-        scls.doTargetAssignment(scls.getUsername(), 100);
 
         Vector3[] corners = new Vector3[4];
         rear.rectTransform.GetWorldCorners(corners);
@@ -95,12 +74,11 @@ public class SelfieCam : MonoBehaviour
         Vector2 scaledSize = new Vector2(width, height);
 
 
-
         tex.ReadPixels(new Rect(topLeft, scaledSize), 0, 0);
         tex.Apply();
 
         byte[] bytes = tex.EncodeToPNG();
-        string filename = gm.scls.getUsername() + "-" + DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day + "-" + DateTime.Now.Hour + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Second + ".png";
+        string filename = usernameText.text + "profPic.png";
         string path = Application.persistentDataPath + filename;
         Debug.Log("--------------------------------------SAVING TO PATH--------------------------------------");
         Debug.Log(path);
@@ -132,8 +110,6 @@ public class SelfieCam : MonoBehaviour
             Debug.Log(path);
 
             responseText.text = "Verifying Image...";
-            StartCoroutine(ShowProcessingAnimation());
-            blockingPanel.SetActive(true);
 
             if (File.Exists(path))
             {
@@ -178,86 +154,15 @@ public class SelfieCam : MonoBehaviour
 
     public void capturePhoto()
     {
-        if (devices.Length > 1)
-        {
-            Texture2D snap = new Texture2D(webcam.width, webcam.height);
-            snap.SetPixels(webcam.GetPixels());
-            snap.Apply();
-            camMesh.material.SetTexture("_MainTex", snap);
-            //byte[] bytes = snap.EncodeToPNG();
-            webcam.Stop();
+        Texture2D snap = new Texture2D(webcam.width, webcam.height);
+        snap.SetPixels(webcam.GetPixels());
+        snap.Apply();
+        camMesh.material.SetTexture("_MainTex", snap);
+        //byte[] bytes = snap.EncodeToPNG();
+        webcam.Stop();
 
-            StartCoroutine(takeSnap());
-        }
-        else
-        {
-            responseText.color = Color.red;
-            responseText.text = "No camera detected";
-        }
-    }
+        StartCoroutine(takeSnap());
 
-    public void CloseBlockerPanel()
-    {
-        blockingPanel.SetActive(false);
-        responseText.text = "";
-    }
-
-    IEnumerator ShowProcessingAnimation()
-    {
-        int dotCount = 0;
-        while (true)
-        {
-            responseText.text = "Verifying Image" + new string('.', dotCount % 4);
-            dotCount++;
-            yield return new WaitForSeconds(0.5f);
-        }
-    }
-
-    void HandleServerResponse(string jsonResponse)
-    {
-        StopAllCoroutines(); // Stop the processing animation
-
-        //yeah, it's not great, lets fix it later
-        if (jsonResponse.Contains("Selfie Approved"))
-        {
-            responseText.text = "Verification successful";
-        }
-        else if (jsonResponse.Contains("Selfie Not Approved"))
-        {
-            responseText.text = "Verification failed, re-upload or try a different image.";
-        }
-        else
-        {
-            responseText.text = "Error parsing server response.";
-        }
-
-        /*bool match = false;
-
-        try
-        {
-            var response = JsonUtility.FromJson<ServerResponse>(jsonResponse);
-            match = response.match;
-            Debug.Log("114" + response);
-        }
-        catch
-        {
-            responseText.text = "Error parsing server response.";
-            return;
-        }*/
-
-        /*if (match)
-        {
-            responseText.text = "Verification successful";
-        }
-        else
-        {
-            responseText.text = "Verification failed, re-upload or try a different image.";
-        }*/
-    }
-
-    [System.Serializable]
-    private class ServerResponse
-    {
-        public bool match;
     }
 }
+*/

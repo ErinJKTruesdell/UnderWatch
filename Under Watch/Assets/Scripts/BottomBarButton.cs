@@ -37,7 +37,7 @@ public class BottomBarButton : MonoBehaviour
     public void moveToScene()
     {
         GameManager gm = GameObject.FindObjectOfType<GameManager>();
-        if (SceneManager.GetActiveScene().name != sceneName)
+        if (SceneManager.GetActiveScene().name != sceneName && gm != null)
         {
             gm.ProgressToScene(sceneName);
 
