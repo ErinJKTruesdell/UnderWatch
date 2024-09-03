@@ -37,7 +37,7 @@ public class RegistrationManager : MonoBehaviour
     //public NativeGallery.MediaPickCallback ngmpc = new NativeGallery.MediaPickCallback(handleNewPicture);
 
     bool isWorking = false;
-    string rootURL = "https://erinjktruesdell.com/";
+    string rootURL = "egs01.westphal.drexel.edu/";
 
     bool profImageSet = false;
     public Toggle cacheCheckToggle;

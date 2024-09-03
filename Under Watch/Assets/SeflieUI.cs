@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 
 public class SeflieUI : MonoBehaviour
 {
-    /* string rootURL = "https://erinjktruesdell.com/";
+    /* string rootURL = "egs01.westphal.drexel.edu/";
 
      public TextMeshProUGUI playerUN;
      public TextMeshProUGUI targetUN;

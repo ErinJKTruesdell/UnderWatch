@@ -21,7 +21,7 @@ public class GetTargetLocation : MonoBehaviour
 
     SC_LoginSystem sclogin;
 
-    string rootURL = "https://erinjktruesdell.com/";
+    string rootURL = "egs01.westphal.drexel.edu/";
 
     public TMP_Text targetText;
     public RawImage targetProf;

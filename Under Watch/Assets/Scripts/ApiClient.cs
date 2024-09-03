@@ -11,7 +11,7 @@ public class ApiClient : MonoBehaviour
    // public Button selectButton;
     //public Button uploadButton;
     public TextMeshProUGUI responseText;
-    public string rootURL = "https://erinjktruesdell.com/";
+    public string rootURL = "egs01.westphal.drexel.edu/";
     public GameObject blockingPanel;
     public GameObject closeButton;
 

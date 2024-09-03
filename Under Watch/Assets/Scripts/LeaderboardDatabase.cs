@@ -24,7 +24,7 @@ public class LeaderboardDatabase : MonoBehaviour
 
     public GameObject leaderboardloading;
 
-    string rootURL = "https://erinjktruesdell.com/";
+    string rootURL = "egs01.westphal.drexel.edu/";
 
     bool isWorking;
 

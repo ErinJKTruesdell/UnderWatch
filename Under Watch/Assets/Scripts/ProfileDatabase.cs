@@ -16,7 +16,7 @@ public class ProfileDatabase : MonoBehaviour
     public GameObject photoPrefab; // has RawImage component that holds actual image
     public Transform contentTransform;
 
-    string rootURL = "https://erinjktruesdell.com/";
+    string rootURL = "egs01.westphal.drexel.edu/";
 
     public TMP_Text usernameText;
     public TMP_Text fullNameText;

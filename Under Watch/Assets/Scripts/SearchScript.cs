@@ -31,7 +31,7 @@ public class SearchScript : MonoBehaviour
 
     public GameObject loading;
 
-    string rootURL = "https://erinjktruesdell.com/";
+    string rootURL = "egs01.westphal.drexel.edu/";
 
     public Transform gridObj;
 

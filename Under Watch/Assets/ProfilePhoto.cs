@@ -16,7 +16,7 @@ public class ProfilePhoto : MonoBehaviour
 
     WebCamTexture webcam;
 
-    public string uploadURL = "https://erinjktruesdell.com/uploadImage.php";
+    public string uploadURL = "egs01.westphal.drexel.edu/uploadImage.php";
 
     public MeshRenderer camMesh;
     WaitForEndOfFrame frameEnd = new WaitForEndOfFrame();

@@ -10,7 +10,7 @@ using static SC_LoginSystem;
 public class UploadImage : MonoBehaviour
 {
 
-    public string uploadURL = "https://erinjktruesdell.com/uploadImage.php";
+    public string uploadURL = "egs01.westphal.drexel.edu/uploadImage.php";
     public SC_LoginSystem loginSystem;
 
     // Start is called before the first frame update

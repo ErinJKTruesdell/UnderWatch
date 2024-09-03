@@ -9,7 +9,7 @@ using static OnlineMapsGPXObject;
 public class GameManager : MonoBehaviour
 {
 
-    string rootURL = "https://erinjktruesdell.com/";
+    string rootURL = "egs01.westphal.drexel.edu/";
 
     public DateTime loginTime;
     public DateTime openSocialFeedTime;

@@ -52,7 +52,7 @@ public class SC_LoginSystem : MonoBehaviour
     public string userName = "";
     string userEmail = "";
 
-    string rootURL = "https://erinjktruesdell.com/"; //Path where php files are located
+    string rootURL = "egs01.westphal.drexel.edu/"; //Path where php files are located
 
 
     public event TargetHandler Target;
