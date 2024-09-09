@@ -490,7 +490,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 357721150}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2136051674}
+        m_TargetAssemblyTypeName: SelfieCam, Assembly-CSharp
+        m_MethodName: CloseBlockerPanel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &357721150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1696,8 +1708,8 @@ Transform:
   m_GameObject: {fileID: 1307293568}
   serializedVersion: 2
   m_LocalRotation: {x: 0.5, y: -0.5, z: 0.5, w: -0.5}
-  m_LocalPosition: {x: 0, y: 1.15, z: 0}
-  m_LocalScale: {x: 1.169253, y: 1.0657542, z: 0.64886826}
+  m_LocalPosition: {x: -0.0198, y: -0.0541, z: 0}
+  m_LocalScale: {x: 1.0197152, y: 1, z: 0.75}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1990,7 +2002,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -362}
+  m_AnchoredPosition: {x: 0, y: 254}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1637209449
@@ -2190,9 +2202,9 @@ RectTransform:
   - {fileID: 1024886296}
   - {fileID: 1609809885}
   - {fileID: 1857271064}
-  - {fileID: 1637209448}
   - {fileID: 150155048}
   - {fileID: 1091300758}
+  - {fileID: 1637209448}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

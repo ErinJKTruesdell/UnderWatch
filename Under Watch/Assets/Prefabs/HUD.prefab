@@ -146,6 +146,81 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneName: PlayerProfile
+--- !u!1 &627475908936815370
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 334758802770918111}
+  - component: {fileID: 2701044226282806735}
+  - component: {fileID: 1177006063465815696}
+  m_Layer: 5
+  m_Name: bg
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &334758802770918111
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 627475908936815370}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6957741590075762876}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &2701044226282806735
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 627475908936815370}
+  m_CullTransparentMesh: 1
+--- !u!114 &1177006063465815696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 627475908936815370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.6}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &910540974736458952
 GameObject:
   m_ObjectHideFlags: 0
@@ -211,7 +286,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Title
+  m_text: 'BREAKING: Nothing To Worry About'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -220,8 +295,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -238,7 +313,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 44.75
+  m_fontSize: 32.8
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -274,7 +349,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: -202.08463, y: 0, z: -203.1059, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -635,7 +710,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2017405865122262050}
         m_TargetAssemblyTypeName: NewsButton, Assembly-CSharp
-        m_MethodName: CloseNews
+        m_MethodName: OpenNews
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -738,6 +813,8 @@ MonoBehaviour:
   newsPopup: {fileID: 7297577307636412595}
   iconNotif: {fileID: 4590239107584438043}
   hasSeenNews: 0
+  buttonPos: {x: 0, y: 0}
+  popupPos: {x: 0, y: 0}
 --- !u!114 &1888904772784833655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1393,8 +1470,9 @@ GameObject:
   - component: {fileID: 3323032359203365699}
   - component: {fileID: 9107095382910287700}
   - component: {fileID: 1290468661410081004}
+  - component: {fileID: 2084285551315938923}
   m_Layer: 5
-  m_Name: body
+  m_Name: Content
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1407,18 +1485,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5834309052072338587}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6957741590075762876}
+  m_Father: {fileID: 4330030393409598607}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -100}
-  m_SizeDelta: {x: -100, y: -240}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 889.8867}
+  m_SizeDelta: {x: 0, y: 5049.98}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &9107095382910287700
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1447,7 +1525,57 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: body
+  m_text: "Hey, we're SnapGram - you can trust us to do the right thing! \nthere
+    is no way a bee\r\nshould be able to fly.\r\n :\r\nIts wings are too small to
+    get\r\nits fat little body off the ground.\r\n :\r\nThe bee, of course, flies
+    anyway\r\n :\r\nbecause bees don't care\r\nwhat humans think is impossible.\r\nBARRY
+    BENSON:\r\n(Barry is picking out a shirt)\r\nYellow, black. Yellow, black.\r\nYellow,
+    black. Yellow, black.\r\n :\r\nOoh, black and yellow!\r\nLet's shake it up a
+    little.\r\nJANET BENSON:\r\nBarry! Breakfast is ready!\r\nBARRY:\r\nComing!\r\n
+    :\r\nHang on a second.\r\n(Barry uses his antenna like a phone)\r\n :\r\nHello?\r\nADAM
+    FLAYMAN:\r\n\r\n(Through phone)\r\n- Barry?\r\nBARRY:\r\n- Adam?\r\nADAM:\r\n-
+    Can you believe this is happening?\r\nBARRY:\r\n- I can't. I'll pick you up.\r\n(Barry
+    flies down the stairs)\r\n :\r\nMARTIN BENSON:\r\nLooking sharp.\r\nJANET:\r\nUse
+    the stairs. Your father\r\npaid good money for those.\r\nBARRY:\r\nSorry. I'm
+    excited.\r\nMARTIN:\r\nHere's the graduate.\r\nWe're very proud of you, son.\r\n
+    :\r\nA perfect report card, all B's.\r\nJANET:\r\nVery proud.\r\n(Rubs Barry's
+    hair)\r\nBARRY=\r\nMa! I got a thing going here.\r\nJANET:\r\n- You got lint
+    on your fuzz.\r\nBARRY:\r\n- Ow! That's me!\r\n\r\nJANET:\r\n- Wave to us! We'll
+    be in row 118,000.\r\n- Bye!\r\n(Barry flies out the door)\r\nJANET:\r\nBarry,
+    I told you,\r\nstop flying in the house!\r\n(Barry drives through the hive,and
+    is waved at by Adam who is reading a\r\nnewspaper)\r\nBARRY==\r\n- Hey, Adam.\r\nADAM:\r\n-
+    Hey, Barry.\r\n(Adam gets in Barry's car)\r\n :\r\n- Is that fuzz gel?\r\nBARRY:\r\n-
+    A little. Special day, graduation.\r\nADAM:\r\nNever thought I'd make it.\r\n(Barry
+    pulls away from the house and continues driving)\r\nBARRY:\r\nThree days grade
+    school,\r\nthree days high school...\r\nADAM:\r\nThose were awkward.\r\nBARRY:\r\nThree
+    days college. I'm glad I took\r\na day and hitchhiked around the hive.\r\nADAM==\r\nYou
+    did come back different.\r\n(Barry and Adam pass by Artie, who is jogging)\r\nARTIE:\r\n-
+    Hi, Barry!\r\n\r\nBARRY:\r\n- Artie, growing a mustache? Looks good.\r\nADAM:\r\n-
+    Hear about Frankie?\r\nBARRY:\r\n- Yeah.\r\nADAM==\r\n- You going to the funeral?\r\nBARRY:\r\n-
+    No, I'm not going to his funeral.\r\n :\r\nEverybody knows,\r\nsting someone,
+    you die.\r\n :\r\nDon't waste it on a squirrel.\r\nSuch a hothead.\r\nADAM:\r\nI
+    guess he could have\r\njust gotten out of the way.\r\n(The car does a barrel
+    roll on the loop-shaped bridge and lands on the\r\nhighway)\r\n :\r\nI love this
+    incorporating\r\nan amusement park into our regular day.\r\nBARRY:\r\nI guess
+    that's why they say we don't need vacations.\r\n(Barry parallel parks the car
+    and together they fly over the graduating\r\nstudents)\r\nBoy, quite a bit of
+    pomp...\r\nunder the circumstances.\r\n(Barry and Adam sit down and put on their
+    hats)\r\n :\r\n- Well, Adam, today we are men.\r\n\r\nADAM:\r\n- We are!\r\nBARRY=\r\n-
+    Bee-men.\r\n=ADAM=\r\n- Amen!\r\nBARRY AND ADAM:\r\nHallelujah!\r\n(Barry and
+    Adam both have a happy spasm)\r\nANNOUNCER:\r\nStudents, faculty, distinguished
+    bees,\r\n :\r\nplease welcome Dean Buzzwell.\r\nDEAN BUZZWELL:\r\nWelcome, New
+    Hive Oity\r\ngraduating class of...\r\n :\r\n...9:\r\n :\r\nThat concludes our
+    ceremonies.\r\n :\r\nAnd begins your career\r\nat Honex Industries!\r\nADAM:\r\nWill
+    we pick our job today?\r\n(Adam and Barry get into a tour bus)\r\nBARRY=\r\nI
+    heard it's just orientation.\r\n(Tour buses rise out of the ground and the students
+    are automatically\r\nloaded into the buses)\r\nTOUR GUIDE:\r\nHeads up! Here
+    we go.\r\n\r\nANNOUNCER:\r\nKeep your hands and antennas\r\ninside the tram at
+    all times.\r\nBARRY:\r\n- Wonder what it'll be like?\r\nADAM:\r\n- A little scary.\r\nTOUR
+    GUIDE==\r\nWelcome to Honex,\r\na division of Honesco\r\n :\r\nand a part of
+    the Hexagon Group.\r\nBarry:\r\nThis is it!\r\nBARRY AND ADAM:\r\nWow.\r\nBARRY:\r\nWow.\r\n(The
+    bus drives down a road an on either side are the Bee's massive\r\ncomplicated
+    Honey-making machines)\r\nTOUR GUIDE:\r\nWe know that you, as a bee,\r\nhave
+    worked your whole life\r\n :"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1456,8 +1584,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1474,8 +1602,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 25
+  m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1490,7 +1618,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
@@ -1510,12 +1638,26 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0.000030517578, y: -131.62886, z: -0.000061035156, w: -77.22221}
+  m_margin: {x: 20, y: 15, z: 20, w: 20}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &2084285551315938923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5834309052072338587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
 --- !u!1 &6178588364563303151
 GameObject:
   m_ObjectHideFlags: 0
@@ -1782,6 +1924,41 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &6929542297481637228
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7919686435298151976}
+  m_Layer: 5
+  m_Name: Content
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &7919686435298151976
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6929542297481637228}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8269613804018859258}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 8.5, y: 60.70733}
+  m_SizeDelta: {x: -17, y: 300}
+  m_Pivot: {x: 0, y: 1}
 --- !u!1 &7297577307636412595
 GameObject:
   m_ObjectHideFlags: 0
@@ -1792,14 +1969,13 @@ GameObject:
   m_Component:
   - component: {fileID: 6957741590075762876}
   - component: {fileID: 2297032827837387592}
-  - component: {fileID: 6546212940697070227}
   m_Layer: 5
   m_Name: NewsPopup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6957741590075762876
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1812,8 +1988,9 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 334758802770918111}
+  - {fileID: 8269613804018859258}
   - {fileID: 5688863206259194775}
-  - {fileID: 3323032359203365699}
   - {fileID: 3521573521551333169}
   m_Father: {fileID: 6426694562040935267}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1830,20 +2007,68 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7297577307636412595}
   m_CullTransparentMesh: 1
---- !u!114 &6546212940697070227
+--- !u!1 &7322890424625575705
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8269613804018859258}
+  - component: {fileID: 2801563066643128190}
+  - component: {fileID: 7330809045345083805}
+  - component: {fileID: 2844974653962022689}
+  m_Layer: 5
+  m_Name: Scroll View
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8269613804018859258
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7322890424625575705}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4330030393409598607}
+  - {fileID: 7919686435298151976}
+  m_Father: {fileID: 6957741590075762876}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -15}
+  m_SizeDelta: {x: -30, y: -90}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &2801563066643128190
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7322890424625575705}
+  m_CullTransparentMesh: 1
+--- !u!114 &7330809045345083805
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7297577307636412595}
+  m_GameObject: {fileID: 7322890424625575705}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.3018868, g: 0.28309008, b: 0.29669857, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1860,6 +2085,36 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2844974653962022689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7322890424625575705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Content: {fileID: 3323032359203365699}
+  m_Horizontal: 0
+  m_Vertical: 1
+  m_MovementType: 1
+  m_Elasticity: 0.1
+  m_Inertia: 1
+  m_DecelerationRate: 0.2
+  m_ScrollSensitivity: 2000
+  m_Viewport: {fileID: 4330030393409598607}
+  m_HorizontalScrollbar: {fileID: 0}
+  m_VerticalScrollbar: {fileID: 0}
+  m_HorizontalScrollbarVisibility: 2
+  m_VerticalScrollbarVisibility: 2
+  m_HorizontalScrollbarSpacing: -3
+  m_VerticalScrollbarSpacing: -3
+  m_OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7554526601472849608
 GameObject:
   m_ObjectHideFlags: 0
@@ -2006,6 +2261,96 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneName: SocialFeed
+--- !u!1 &7893309637025840584
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4330030393409598607}
+  - component: {fileID: 3583394216248067087}
+  - component: {fileID: 6011135397973931941}
+  - component: {fileID: 5011126429717034969}
+  m_Layer: 5
+  m_Name: ViewPort
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &4330030393409598607
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7893309637025840584}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3323032359203365699}
+  m_Father: {fileID: 8269613804018859258}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: -17, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &3583394216248067087
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7893309637025840584}
+  m_CullTransparentMesh: 1
+--- !u!114 &6011135397973931941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7893309637025840584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 0, b: 0.61723757, a: 0.6}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5011126429717034969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7893309637025840584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShowMaskGraphic: 1
 --- !u!1 &8069749265862640739
 GameObject:
   m_ObjectHideFlags: 0

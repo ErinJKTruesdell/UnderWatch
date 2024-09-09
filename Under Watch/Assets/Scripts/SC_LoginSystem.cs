@@ -64,6 +64,9 @@ public class SC_LoginSystem : MonoBehaviour
         LoginButton.transform.DOLocalMoveY(-1000, .7f).From().SetEase(Ease.OutQuad);
         RegisterButton.transform.DOLocalMoveY((-1000 - 138f), .7f).From().SetEase(Ease.OutQuad);
         logo.transform.DOLocalMoveY(1000, .7f).From().SetEase(Ease.OutQuad);
+
+        Application.targetFrameRate = 60; // Or Application.targetFrameRate = Screen.currentResolution.refreshRate;
+
     }
 
 

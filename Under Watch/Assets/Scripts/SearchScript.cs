@@ -31,6 +31,8 @@ public class SearchScript : MonoBehaviour
 
     public GameObject loading;
 
+    public GameObject searchIcon;
+
     string rootURL = "egs01.westphal.drexel.edu/";
 
     public Transform gridObj;
@@ -168,7 +170,31 @@ public class SearchScript : MonoBehaviour
 
     }
 
-    public void Search()
+    public void SearchOnChange()
+    {
+        string SearchText = SearchBar.GetComponent<TMP_InputField>().text;
+
+        SearchText.Trim();
+        SearchText.ToLower();
+
+        if (SearchText != "")
+        {
+            foreach (GameObject ele in Element)
+            {
+                if (ele.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text.ToLower().Contains(SearchText))
+                {
+                    ele.SetActive(true);
+                }
+                else
+                {
+                    ele.SetActive(false);
+                }
+            }
+        }
+    }
+
+    //old search algo
+    /*public void Search()
     {
         string SearchText = SearchBar.GetComponent<TMP_InputField>().text;
         int searchTxtLength = SearchText.Length;
@@ -198,6 +224,6 @@ public class SearchScript : MonoBehaviour
                 }
             }      
         }
-    }
-    
+    }*/
+
 }

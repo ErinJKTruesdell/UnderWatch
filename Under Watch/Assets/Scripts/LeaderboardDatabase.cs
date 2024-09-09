@@ -49,17 +49,16 @@ public class LeaderboardDatabase : MonoBehaviour
     {
         // get data from server
         WWWForm form = new WWWForm();
-        form.AddField("s", "s"); //dummy data
+        form.AddField("d", "d"); //dummy data
 
         List<pointsData> allPoints = new List<pointsData>();
 
-        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "/get-next-leaderboard.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post("https://egs01.westphal.drexel.edu/get-next-leaderboard.php", form))
         {
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
             {
-                //yay show the picture
                 //errorMessage = www.error;
                 string errorMessage = www.error;
                 Debug.Log(errorMessage);

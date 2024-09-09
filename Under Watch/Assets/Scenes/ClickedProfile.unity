@@ -928,6 +928,14 @@ PrefabInstance:
       propertyPath: m_AnchorMin.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5940570737484184536, guid: 31ac6f51e44c37649b794f7f7616487b, type: 3}
+      propertyPath: m_Inertia
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5940570737484184536, guid: 31ac6f51e44c37649b794f7f7616487b, type: 3}
+      propertyPath: m_DecelerationRate
+      value: 0.225
+      objectReference: {fileID: 0}
     - target: {fileID: 5978707609242161756, guid: 31ac6f51e44c37649b794f7f7616487b, type: 3}
       propertyPath: m_IsActive
       value: 0

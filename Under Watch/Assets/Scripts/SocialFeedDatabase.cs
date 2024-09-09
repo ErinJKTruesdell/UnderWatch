@@ -65,6 +65,9 @@ public class SocialFeedDatabase : MonoBehaviour
         {
             postUIHandling = new PostUIHandling();
         }
+
+        Application.targetFrameRate = 60; // Or Application.targetFrameRate = Screen.currentResolution.refreshRate;
+
     }
 
     public string getLocationCoords()
