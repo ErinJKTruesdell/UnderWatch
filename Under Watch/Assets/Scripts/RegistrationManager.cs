@@ -345,7 +345,8 @@ public class RegistrationManager : MonoBehaviour
             if (responseText.StartsWith("Success"))
             {
                 activityStarter.setAlarms();
-                StartCoroutine(loginSystem.doTargetAssignment(username.text, 1));
+                StartCoroutine(loginSystem.doTargetAssignment(username.text, 100));
+
                 //store registration information - em
                 loginSystem.SetLoginPrefs(email.text, password.text, cacheCheckToggle.isOn);
 

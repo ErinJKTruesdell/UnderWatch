@@ -8,15 +8,15 @@ using static OnlineMapsGPXObject;
 
 public class GameManager : MonoBehaviour
 {
-
     string rootURL = "egs01.westphal.drexel.edu/";
 
     public DateTime loginTime;
     public DateTime openSocialFeedTime;
 
-
     public SC_LoginSystem scls;
     public TouchScreenKeyboard keyboard;
+    public AchieveMonitor ach;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -108,6 +108,8 @@ public class GameManager : MonoBehaviour
 
     IEnumerator sendSocialTimeToDatabase(double minutes, string username)
     {
+        ach.addMinutes(minutes);
+
         Debug.Log("Social feed closed by " + username + " after " + minutes + " minutes.");
         WWWForm form = new WWWForm();
         form.AddField("username", username);
@@ -155,4 +157,6 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+    //add achievement handling here
 }

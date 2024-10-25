@@ -177,7 +177,6 @@ public class SC_LoginSystem : MonoBehaviour
                 if (responseText.StartsWith("Success"))
                 {
                     returnText = responseText;
-                    Debug.Log("hiihi");
                 }
                 else
                 {
