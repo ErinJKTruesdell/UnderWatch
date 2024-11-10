@@ -68,7 +68,16 @@ public class SelfieCam : MonoBehaviour
         }
         scls = gm.scls;
 
-        scls.Target += new SC_LoginSystem.TargetHandler(showNewTarget);
+        if (scls != null)
+        {
+            scls.Target += new SC_LoginSystem.TargetHandler(showNewTarget);
+        }
+        else
+        {
+            responseText.color = Color.red;
+            responseText.text = "No target found!";
+        }
+
     }
 
     public void showNewTarget(string s, EventArgs e)
@@ -81,99 +90,100 @@ public class SelfieCam : MonoBehaviour
     public IEnumerator takeSnap()
     {
         yield return frameEnd;
-
-        scls.doTargetAssignment(scls.getUsername(), 100);
-
-        Vector3[] corners = new Vector3[4];
-        rear.rectTransform.GetWorldCorners(corners);
-        Vector3 topLeft = corners[0];
-
-        var width = (int)(corners[3].x - corners[0].x); //.rect.width;
-        var height = (int)(corners[1].y - corners[0].y);
-        var tex = new Texture2D(width, height, TextureFormat.RGB24, false);
-        // Rescale the size appropriately based on the current Canvas scale
-        Vector2 scaledSize = new Vector2(width, height);
-
-
-
-        tex.ReadPixels(new Rect(topLeft, scaledSize), 0, 0);
-        tex.Apply();
-
-        byte[] bytes = tex.EncodeToPNG();
-        string filename = gm.scls.getUsername() + "-" + DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day + "-" + DateTime.Now.Hour + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Second + ".png";
-        string path = Application.persistentDataPath + filename;
-        Debug.Log("--------------------------------------SAVING TO PATH--------------------------------------");
-        Debug.Log(path);
-        Debug.Log("------------------------------------------------------------------------------------------");
-        System.IO.File.WriteAllBytes(path, bytes);
-
-
-        //get last location
-        Input.location.Start();
-
-        // Waits until the location service initializes
-        int maxWait = 20;
-        while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
+        if (scls != null)
         {
-            yield return new WaitForSeconds(1);
-            maxWait--;
-        }
 
-        float latitude = Input.location.lastData.latitude;
-        float longitude = Input.location.lastData.longitude;
 
-        //upload to server
-        Debug.Log("Getting logged in user...");
-        string loggedInUser = gm.scls.getUsername();
+            Vector3[] corners = new Vector3[4];
+            rear.rectTransform.GetWorldCorners(corners);
+            Vector3 topLeft = corners[0];
 
-        Debug.Log("File Upload Coroutine");
-        if (gm.scls != null && gm.scls.getIsLoggedIn())
-        {
+            var width = (int)(corners[3].x - corners[0].x); //.rect.width;
+            var height = (int)(corners[1].y - corners[0].y);
+            var tex = new Texture2D(width, height, TextureFormat.RGB24, false);
+            // Rescale the size appropriately based on the current Canvas scale
+            Vector2 scaledSize = new Vector2(width, height);
+
+
+
+            tex.ReadPixels(new Rect(topLeft, scaledSize), 0, 0);
+            tex.Apply();
+
+            byte[] bytes = tex.EncodeToPNG();
+            string filename = gm.scls.getUsername() + "-" + DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day + "-" + DateTime.Now.Hour + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Second + ".png";
+            string path = Application.persistentDataPath + filename;
+            Debug.Log("--------------------------------------SAVING TO PATH--------------------------------------");
             Debug.Log(path);
+            Debug.Log("------------------------------------------------------------------------------------------");
+            System.IO.File.WriteAllBytes(path, bytes);
 
-            responseText.text = "Verifying Image...";
-            StartCoroutine(ShowProcessingAnimation());
-            blockingPanel.SetActive(true);
 
-            if (File.Exists(path))
+            //get last location
+            Input.location.Start();
+
+            // Waits until the location service initializes
+            int maxWait = 20;
+            while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
             {
-                Debug.Log("File exists! Uploading Form...");
-                WWWForm form = new WWWForm();
-                string[] imageNames = path.Split("/");
-                string imageName = imageNames[imageNames.Length - 1];
-                form.AddBinaryData("file", File.ReadAllBytes(path), imageName);
-                form.AddField("username", scls.getUsername());
-                form.AddField("latitude", latitude.ToString());
-                form.AddField("longitude", longitude.ToString());
+                yield return new WaitForSeconds(1);
+                maxWait--;
+            }
 
-                UnityWebRequest www = UnityWebRequest.Post(uploadURL, form);
-                Debug.Log("Sending web request...");
+            float latitude = Input.location.lastData.latitude;
+            float longitude = Input.location.lastData.longitude;
 
-                yield return www.SendWebRequest();
+            //upload to server
+            Debug.Log("Getting logged in user...");
+            string loggedInUser = gm.scls.getUsername();
 
-                if (www.isNetworkError || www.isHttpError)
+            Debug.Log("File Upload Coroutine");
+            if (gm.scls != null && gm.scls.getIsLoggedIn())
+            {
+                Debug.Log(path);
+
+                responseText.text = "Verifying Image...";
+                StartCoroutine(ShowProcessingAnimation());
+                blockingPanel.SetActive(true);
+
+                if (File.Exists(path))
                 {
-                    responseText.text = "Error: " + www.error;
+                    Debug.Log("File exists! Uploading Form...");
+                    WWWForm form = new WWWForm();
+                    string[] imageNames = path.Split("/");
+                    string imageName = imageNames[imageNames.Length - 1];
+                    form.AddBinaryData("file", File.ReadAllBytes(path), imageName);
+                    form.AddField("username", scls.getUsername());
+                    form.AddField("latitude", latitude.ToString());
+                    form.AddField("longitude", longitude.ToString());
 
-                    Debug.Log(www.error);
-                    StopAllCoroutines(); // Stop the processing animation
-                    closeButton.SetActive(true);
+                    UnityWebRequest www = UnityWebRequest.Post(uploadURL, form);
+                    Debug.Log("Sending web request...");
+
+                    yield return www.SendWebRequest();
+
+                    if (www.isNetworkError || www.isHttpError)
+                    {
+                        responseText.text = "Error: " + www.error;
+
+                        Debug.Log(www.error);
+                        StopAllCoroutines(); // Stop the processing animation
+                        closeButton.SetActive(true);
+                    }
+                    else
+                    {
+                        Debug.Log("Form upload complete! " + System.Text.Encoding.ASCII.GetString(www.downloadHandler.data));
+                        HandleServerResponse(www.downloadHandler.text);
+                        closeButton.SetActive(true);
+
+                    }
                 }
                 else
                 {
-                    Debug.Log("Form upload complete! " + System.Text.Encoding.ASCII.GetString(www.downloadHandler.data));
-                    HandleServerResponse(www.downloadHandler.text);
-                    closeButton.SetActive(true);
-
+                    Debug.Log("File does not exist");
                 }
-            }
-            else
-            {
-                Debug.Log("File does not exist");
-            }
 
+            }
         }
-
     }
 
     public void capturePhoto()
@@ -221,6 +231,9 @@ public class SelfieCam : MonoBehaviour
         if (jsonResponse.Contains("Selfie Approved"))
         {
             responseText.text = "Verification successful";
+
+            //moved this line from the top of TakeSnap(), if anything breaks
+            scls.doTargetAssignment(scls.getUsername(), 100);
         }
         else if (jsonResponse.Contains("Selfie Not Approved"))
         {

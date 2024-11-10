@@ -439,6 +439,7 @@ public class SC_LoginSystem : MonoBehaviour
                 {
                     errorMessage = responseText;
                     errorText.text = errorMessage;
+                    Debug.Log(errorMessage);
                 }
             }
         }

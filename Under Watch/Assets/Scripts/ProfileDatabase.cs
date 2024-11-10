@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ProfileDatabase : MonoBehaviour
@@ -22,6 +23,11 @@ public class ProfileDatabase : MonoBehaviour
     public TMP_Text fullNameText;
 
     // Update is called once per frame
+
+    public void GoToAchievements()
+    {
+        SceneManager.LoadScene("Achievements");
+    }
     public void DeleteLogin()
     {
         PlayerPrefs.DeleteAll();

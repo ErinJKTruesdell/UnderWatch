@@ -30,11 +30,6 @@ public class LeaderboardDatabase : MonoBehaviour
 
     public Transform gridObj;
 
-    public void GoToAchievements()
-    {
-        SceneManager.LoadScene("Achievements");
-    }
-
     private void Awake()
     {
         if (leaderboardloading != null)
