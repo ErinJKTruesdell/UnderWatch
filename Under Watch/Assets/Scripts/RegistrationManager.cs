@@ -39,7 +39,7 @@ public class RegistrationManager : MonoBehaviour
     //public NativeGallery.MediaPickCallback ngmpc = new NativeGallery.MediaPickCallback(handleNewPicture);
 
     bool isWorking = false;
-    string rootURL = "egs01.westphal.drexel.edu/";
+    string rootURL = "https://egs01.westphal.drexel.edu/";
 
     bool profImageSet = false;
     public Toggle cacheCheckToggle;
@@ -368,6 +368,8 @@ public class RegistrationManager : MonoBehaviour
 
         using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "register.php", form))
         {
+            //www.uploadHandler = (UploadHandler)new UploadHandlerRaw(File.ReadAllBytes(pfpPath));
+
             yield return www.SendWebRequest();
 
             loadingAnim.SetActive(true);
@@ -383,7 +385,7 @@ public class RegistrationManager : MonoBehaviour
                 regButton.SetActive(true);
                 pfpImage.SetActive(true);
 
-                Debug.Log("hiu" + www.error);
+                Debug.Log("web result error" + www.error + www.result);
             }
             //else
             // {
