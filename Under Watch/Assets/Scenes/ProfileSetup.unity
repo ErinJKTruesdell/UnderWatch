@@ -915,6 +915,7 @@ MonoBehaviour:
   errorText: {fileID: 652218226}
   profPic: {fileID: 171679029}
   profPicOverlay: {fileID: 158842886}
+  defaultPfp: {fileID: 2800000, guid: e52209048afb38c4a99e97ec379b4844, type: 3}
   loginSystem: {fileID: 0}
   activityStarter: {fileID: 101250685}
   gm: {fileID: 0}
@@ -929,7 +930,7 @@ MonoBehaviour:
   canvasElement: {fileID: 1161088183}
   bg: {fileID: 1944680223}
   camMeshObj: {fileID: 527317860}
-  cacheToggle: {fileID: 0}
+  cacheToggle: {fileID: 1119123163}
   rear: {fileID: 1674709392}
   camMesh: {fileID: 527317864}
   testBox: {fileID: 1129152745}
@@ -2751,6 +2752,7 @@ GameObject:
   - component: {fileID: 778508918}
   - component: {fileID: 778508917}
   - component: {fileID: 778508916}
+  - component: {fileID: 778508920}
   m_Layer: 5
   m_Name: LastName
   m_TagString: Untagged
@@ -2914,6 +2916,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 778508914}
   m_CullTransparentMesh: 1
+--- !u!114 &778508920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 778508914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2edfa40255e77404ebfd2bdd16815c03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CustomFont: default
+  KeyboardLanguage: default
+  BackgroundColor: {r: 1, g: 1, b: 1, a: 1}
+  IsManualHideControl: 0
+  IsWithDoneButton: 0
+  IsWithClearButton: 0
+  ReturnKey: 0
+  OnReturnPressedEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &826251806
 GameObject:
   m_ObjectHideFlags: 0

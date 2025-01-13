@@ -76,3 +76,7 @@ Under Watch/Library/StateCache/SceneView/8c/8cd7c613bf844de3b80696e27a479d5e.jso
 Under Watch/UserSettings/Layouts/default-2022.dwlt
 /UnderWatch-GMConsole/Library
 /UnderWatch-GMConsole/Temp
+
+# SQL Server files
+*.mdf
+*.ldf

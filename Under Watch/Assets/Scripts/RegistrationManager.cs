@@ -13,6 +13,7 @@ using UnityEditor;
 using System;
 using UnityEngine.AI;
 using DG.Tweening;
+using static System.Net.Mime.MediaTypeNames;
 
 
 public class RegistrationManager : MonoBehaviour
@@ -27,6 +28,7 @@ public class RegistrationManager : MonoBehaviour
 
     public RawImage profPic;
     public RawImage profPicOverlay;
+    public Texture2D defaultPfp;
 
     public SC_LoginSystem loginSystem;
     public ActivityStarter activityStarter;
@@ -57,6 +59,7 @@ public class RegistrationManager : MonoBehaviour
 
     public RawImage rear;
     WebCamDevice[] devices;
+    bool camAvailable;
 
     WebCamTexture webcam;
     public MeshRenderer camMesh;
@@ -95,16 +98,31 @@ public class RegistrationManager : MonoBehaviour
                 if (devices[i].isFrontFacing)
                 {
                     frontCamera = devices[i];
+                    camAvailable = true;
                     break;
                 }
             }
             if (devices[1].name != " ")
             {
-                webcam = new WebCamTexture(devices[1].name);
+                webcam = new WebCamTexture(devices[0].name);
+            }
+            else
+            {
+                responseText.color = Color.red;
+                responseText.text = "Your camera isn't valid";
             }
 
-            webcam.Play();
-            camMesh.material.SetTexture("_MainTex", webcam);
+            if (webcam != null)
+            {
+                webcam.Play();
+                camMesh.material.SetTexture("_MainTex", webcam);
+            }
+            else
+            {
+                responseText.color = Color.red;
+                responseText.text = "Your camera is detected as null";
+            }
+
         }
         else
         {
@@ -146,10 +164,20 @@ public class RegistrationManager : MonoBehaviour
             camUI.transform.DOLocalMoveX(0, .5f).SetEase(Ease.OutQuad)
                 .OnComplete(() => setCameraActive(true));
             camMeshObj.transform.DOLocalMoveX(0, .5f).SetEase(Ease.OutQuad);
+            if (camAvailable)
+            {
+                webcam.Play();
+                camMesh.material.SetTexture("_MainTex", webcam);
+                pfpPath = "";
+            }
+            else
+            {
+                responseText.color = Color.red;
+                responseText.text = "Your camera is detected, but has no output";
 
-            webcam.Play();
-            camMesh.material.SetTexture("_MainTex", webcam);
-            pfpPath = "";
+                pfpPath = "";
+            }
+
         }
         else
         {
@@ -166,7 +194,7 @@ public class RegistrationManager : MonoBehaviour
         {
             errorText.text = "Missing one or more fields.";
         }
-        else
+        else if (camAvailable)
         {
             webcam.Play();
             camMesh.material.SetTexture("_MainTex", webcam);
@@ -180,6 +208,22 @@ public class RegistrationManager : MonoBehaviour
             camUI.transform.DOLocalMoveX(0, .5f).SetEase(Ease.OutQuad)
                 .OnComplete(() => setCameraActive(true));
             camMeshObj.transform.DOLocalMoveX(0, .5f).SetEase(Ease.OutQuad);
+        }
+        else
+        {
+            responseText.color = Color.red;
+            responseText.text = "Your camera isn't available, using default profile";
+
+            pfpPath = "";
+
+            regTextFields.transform.DOLocalMoveX(-1400f, .5f).SetEase(Ease.OutQuad)
+                .OnComplete(() => regTextFields.SetActive(false));
+            nextButton.transform.DOLocalMoveX(-1400f, .5f).SetEase(Ease.OutQuad)
+                .OnComplete(() => nextButton.SetActive(false));
+            camUI.transform.DOLocalMoveX(0, .5f).SetEase(Ease.OutQuad)
+                .OnComplete(() => setCameraActive(true));
+            camMeshObj.transform.DOLocalMoveX(0, .5f).SetEase(Ease.OutQuad);
+
         }
     }
 
@@ -300,9 +344,12 @@ public class RegistrationManager : MonoBehaviour
 
         WWWForm form = new WWWForm();
 
+        Debug.Log(pfpPath);
+
         if (File.Exists(pfpPath))
         {
             string[] imageNames = pfpPath.Split("/");
+            //string imageName = "testingPic.png";
             string imageName = imageNames[imageNames.Length - 1];
             form.AddBinaryData("file", File.ReadAllBytes(pfpPath), imageName);
         }
@@ -336,16 +383,17 @@ public class RegistrationManager : MonoBehaviour
                 regButton.SetActive(true);
                 pfpImage.SetActive(true);
 
+                Debug.Log("hiu" + www.error);
             }
             //else
             // {
             string responseText = www.downloadHandler.text;
             Debug.Log("response" + responseText);
             Debug.Log(username.text);
-            if (responseText.StartsWith("Success"))
+            if (responseText.Contains("Success"))
             {
                 activityStarter.setAlarms();
-                StartCoroutine(loginSystem.doTargetAssignment(username.text, 100));
+                StartCoroutine(loginSystem.doTargetAssignment(username.text, -100));
 
                 //store registration information - em
                 loginSystem.SetLoginPrefs(email.text, password.text, cacheCheckToggle.isOn);
@@ -390,7 +438,6 @@ public class RegistrationManager : MonoBehaviour
             snap.SetPixels(webcam.GetPixels());
             snap.Apply();
             camMesh.material.SetTexture("_MainTex", snap);
-            //byte[] bytes = snap.EncodeToPNG();
             webcam.Stop();
 
             Vector3[] corners = new Vector3[4];
@@ -407,38 +454,45 @@ public class RegistrationManager : MonoBehaviour
 
             tex.ReadPixels(new Rect(topLeft, scaledSize), 0, 0);
             tex.Apply();
+            EncodePic(tex, username.text + "profPic.png");
 
-            byte[] bytes = tex.EncodeToPNG();
-            string filename = username.text + "profPic.png";
-            pfpPath = Application.persistentDataPath + filename;
-            Debug.Log("--------------------------------------SAVING TO PATH--------------------------------------");
-            Debug.Log("PATH: " + pfpPath);
-            Debug.Log("------------------------------------------------------------------------------------------");
-            System.IO.File.WriteAllBytes(pfpPath, bytes);
-
-            regTextFields.SetActive(true);
-            nextButton.SetActive(false);
-            regButton.SetActive(true);
-            pfpImage.SetActive(true);
-
-            regTextFields.transform.localPosition = new Vector2(1400, originalPos[0].y - goDownByValue);
-            regButton.transform.localPosition = new Vector2(1400, originalPos[1].y - goDownByValue);
-            pfpImage.transform.localPosition = new Vector2(1400, pfpImage.transform.localPosition.y);
-
-            regTextFields.transform.DOLocalMoveX(originalPos[0].x, .5f).SetEase(Ease.OutQuad);
-            regButton.transform.DOLocalMoveX(originalPos[1].x, .5f).SetEase(Ease.OutQuad);
-            pfpImage.transform.DOLocalMoveX(0, .5f).SetEase(Ease.OutQuad);
-
-            camUI.transform.DOLocalMoveX(-1400f, .5f).SetEase(Ease.OutQuad)
-                .OnComplete(() => setCameraActive(false));
-            camMeshObj.transform.DOLocalMoveX(-1400, .5f).SetEase(Ease.OutQuad);
-
-            StartCoroutine(GetTex(pfpPath));
         }
         else
         {
             responseText.color = Color.red;
-            responseText.text = "No camera detected";
+            responseText.text = "No camera detected, using default photo";
+
+            EncodePic(defaultPfp);
         }
+    }
+
+    void EncodePic(Texture2D tex, string filename = "defaultpfoPic.png")
+    {
+
+        byte[] bytes = tex.EncodeToPNG();
+        pfpPath = UnityEngine.Application.persistentDataPath + filename;
+        Debug.Log("--------------------------------------SAVING TO PATH--------------------------------------");
+        Debug.Log("PATH: " + pfpPath);
+        Debug.Log("------------------------------------------------------------------------------------------");
+        System.IO.File.WriteAllBytes(pfpPath, bytes);
+
+        regTextFields.SetActive(true);
+        nextButton.SetActive(false);
+        regButton.SetActive(true);
+        pfpImage.SetActive(true);
+
+        regTextFields.transform.localPosition = new Vector2(1400, originalPos[0].y - goDownByValue);
+        regButton.transform.localPosition = new Vector2(1400, originalPos[1].y - goDownByValue);
+        pfpImage.transform.localPosition = new Vector2(1400, pfpImage.transform.localPosition.y);
+
+        regTextFields.transform.DOLocalMoveX(originalPos[0].x, .5f).SetEase(Ease.OutQuad);
+        regButton.transform.DOLocalMoveX(originalPos[1].x, .5f).SetEase(Ease.OutQuad);
+        pfpImage.transform.DOLocalMoveX(0, .5f).SetEase(Ease.OutQuad);
+
+        camUI.transform.DOLocalMoveX(-1400f, .5f).SetEase(Ease.OutQuad)
+            .OnComplete(() => setCameraActive(false));
+        camMeshObj.transform.DOLocalMoveX(-1400, .5f).SetEase(Ease.OutQuad);
+
+        StartCoroutine(GetTex(pfpPath));
     }
 }

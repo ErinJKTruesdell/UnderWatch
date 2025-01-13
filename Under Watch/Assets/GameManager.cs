@@ -29,8 +29,8 @@ public class GameManager : MonoBehaviour
         scls.gm = this;
 
         DontDestroyOnLoad(this);
-    }
 
+    }
     public void saveLoginTime()
     {
         loginTime = DateTime.Now;

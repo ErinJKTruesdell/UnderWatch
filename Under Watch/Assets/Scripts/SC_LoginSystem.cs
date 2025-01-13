@@ -52,7 +52,7 @@ public class SC_LoginSystem : MonoBehaviour
     public string userName = "";
     string userEmail = "";
 
-    string rootURL = "egs01.westphal.drexel.edu/"; //Path where php files are located
+    string rootURL = "egs01.westphal.drexel.edu/";
 
 
     public event TargetHandler Target;
@@ -244,6 +244,15 @@ public class SC_LoginSystem : MonoBehaviour
             PlayerPrefs.DeleteAll();
             Debug.Log("User login data cleared");
         }
+
+        /*if (Input.GetKeyDown(KeyCode.M))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1 );
+        }*/
     }
 
     void OnGUI()
