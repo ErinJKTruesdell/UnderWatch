@@ -53,7 +53,7 @@ public class SeflieUI : MonoBehaviour
              // {
              string responseText = www.downloadHandler.text;
              Debug.Log(responseText);
-             if (responseText.StartsWith("Success"))
+             if (responseText.Contains("Success"))
              {
                  string[] dataChunks = responseText.Split('|');
 

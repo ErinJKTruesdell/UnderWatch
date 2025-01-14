@@ -165,7 +165,7 @@ public class ProfileUpdateManager : MonoBehaviour
             // {
             string responseText = www.downloadHandler.text;
             Debug.Log(responseText);
-            if (responseText.StartsWith("Success"))
+            if (responseText.Contains("Success"))
             {
                 SceneManager.LoadScene("PlayerProfile");
             }

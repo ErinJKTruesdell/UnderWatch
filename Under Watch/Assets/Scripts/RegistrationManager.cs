@@ -77,6 +77,9 @@ public class RegistrationManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        loginSystem.RequestExactAlarmPermission();
+
         regTextFields.transform.DOLocalMoveX(1400f, .5f).From().SetEase(Ease.OutQuad)
             .OnComplete(() => originalPos.Add(regTextFields.transform.localPosition)); 
         nextButton.transform.DOLocalMoveX(1400f, .5f).From().SetEase(Ease.OutQuad)
@@ -196,6 +199,8 @@ public class RegistrationManager : MonoBehaviour
         }
         else if (camAvailable)
         {
+
+            activityStarter.setAlarms();
             webcam.Play();
             camMesh.material.SetTexture("_MainTex", webcam);
             pfpPath = "";
@@ -394,7 +399,6 @@ public class RegistrationManager : MonoBehaviour
             Debug.Log(username.text);
             if (responseText.Contains("Success"))
             {
-                activityStarter.setAlarms();
                 StartCoroutine(loginSystem.doTargetAssignment(username.text, -100));
 
                 //store registration information - em

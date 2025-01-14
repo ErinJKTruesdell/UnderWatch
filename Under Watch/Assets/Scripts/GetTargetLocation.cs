@@ -86,7 +86,7 @@ public class GetTargetLocation : MonoBehaviour
             // {
             string responseText = www.downloadHandler.text;
             Debug.Log("response: " + responseText);
-            if (responseText.StartsWith("Success"))
+            if (responseText.Contains("Success"))
             {
                 string[] dataChunks = responseText.Split('|');
 

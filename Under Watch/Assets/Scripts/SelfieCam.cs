@@ -82,7 +82,7 @@ public class SelfieCam : MonoBehaviour
 
     public void showNewTarget(string s, EventArgs e)
     {
-        if (s.StartsWith("Success"))
+        if (s.Contains("Success"))
         {
             testBox.SetActive(true);
         }
