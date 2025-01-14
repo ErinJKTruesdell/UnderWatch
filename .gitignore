@@ -29,6 +29,7 @@
 
 # Gradle cache directory
 .gradle/
+caches/
 
 # Android Studio
 *.iml
