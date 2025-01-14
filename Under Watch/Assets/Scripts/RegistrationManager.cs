@@ -30,9 +30,9 @@ public class RegistrationManager : MonoBehaviour
     public RawImage profPicOverlay;
     public Texture2D defaultPfp;
 
-    public SC_LoginSystem loginSystem;
+    public static SC_LoginSystem loginSystem;
     public ActivityStarter activityStarter;
-    public GameManager gm;
+    public static GameManager gm;
 
     public int socialFeedIndex;
 
@@ -75,10 +75,10 @@ public class RegistrationManager : MonoBehaviour
     int goDownByValue = 150;
 
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
 
-        loginSystem.RequestExactAlarmPermission();
+        gm.RequestExactAlarmPermission();
 
         regTextFields.transform.DOLocalMoveX(1400f, .5f).From().SetEase(Ease.OutQuad)
             .OnComplete(() => originalPos.Add(regTextFields.transform.localPosition)); 
@@ -107,7 +107,7 @@ public class RegistrationManager : MonoBehaviour
             }
             if (devices[1].name != " ")
             {
-                webcam = new WebCamTexture(devices[0].name);
+                webcam = new WebCamTexture(devices[1].name);
             }
             else
             {
@@ -136,6 +136,7 @@ public class RegistrationManager : MonoBehaviour
         gm = FindObjectOfType<GameManager>();
         if (gm == null)
         {
+            Debug.Log("hell???");
             gm = new GameManager();
         }
     }

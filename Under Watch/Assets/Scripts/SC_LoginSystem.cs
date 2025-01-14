@@ -68,7 +68,7 @@ public class SC_LoginSystem : MonoBehaviour
         Application.targetFrameRate = 60; // Or Application.targetFrameRate = Screen.currentResolution.refreshRate;
 
 
-        RequestExactAlarmPermission();
+        gm.RequestExactAlarmPermission();
     }
 
 
@@ -199,6 +199,7 @@ public class SC_LoginSystem : MonoBehaviour
     {
 
         DontDestroyOnLoad(this);
+        RegistrationManager.loginSystem = this;
         // attempt login with any saved information
         if (PlayerPrefs.GetString("savedUsername", "") != "" || PlayerPrefs.GetString("savedPassword", "") != "")
         {
@@ -626,51 +627,5 @@ public class SC_LoginSystem : MonoBehaviour
         registerPassword1 = "";
         registerPassword2 = "";
         registerUsername = "";
-    }
-    public void RequestExactAlarmPermission()
-    {
-        if (UnityEngine.Application.platform == RuntimePlatform.Android)
-        {
-            using (AndroidJavaObject activity = GetUnityActivity())
-            {
-                using (AndroidJavaObject alarmManager = GetAlarmManager(activity))
-                {
-                    bool canScheduleExactAlarms = alarmManager.Call<bool>("canScheduleExactAlarms");
-                    if (!canScheduleExactAlarms)
-                    {
-                        // Request permission by opening the settings screen
-                        using (AndroidJavaClass settings = new AndroidJavaClass("android.provider.Settings"))
-                        {
-                            string action = settings.GetStatic<string>("ACTION_REQUEST_SCHEDULE_EXACT_ALARM");
-                            using (AndroidJavaObject intent = new AndroidJavaObject("android.content.Intent", action))
-                            {
-                                activity.Call("startActivity", intent);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Debug.Log("Exact Alarm permission already granted.");
-                    }
-                }
-            }
-        }
-        else
-        {
-            Debug.LogWarning("Platform is not Android. Exact Alarm permission request is skipped.");
-        }
-    }
-
-    private AndroidJavaObject GetUnityActivity()
-    {
-        using (AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
-        {
-            return unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
-        }
-    }
-
-    private AndroidJavaObject GetAlarmManager(AndroidJavaObject activity)
-    {
-        return activity.Call<AndroidJavaObject>("getSystemService", "alarm");
     }
 }
