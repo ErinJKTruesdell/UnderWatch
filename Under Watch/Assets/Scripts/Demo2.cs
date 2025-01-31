@@ -37,6 +37,8 @@ public class Demo2 : MonoBehaviour
             _list.Add(i);
         }
         Scroll.InitData(_list.Count);
+
+
         if (sfd == null)
         {
             sfd = FindObjectOfType<SocialFeedDatabase>();

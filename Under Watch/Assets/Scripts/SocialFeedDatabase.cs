@@ -96,7 +96,6 @@ public class SocialFeedDatabase : MonoBehaviour
         }
     }
 
-
     IEnumerator GetRequest(RawImage image, RawImage profImage, TMP_Text usernameText)
     {
         Debug.Log("Starting Request: " + currentPhotoTimestamp);
