@@ -11,16 +11,19 @@ public class GetNextImageCommand
 {
     public RawImage profileImage { get; set; }
     public RawImage pictureImage { get; set; }
-
     public TMP_Text username_text { get; set; }
 
-    public GetNextImageCommand( RawImage profImage, RawImage pictureImage, TMP_Text un)
+    public TMP_Text location_text { get; set; }
+    public TMP_Text postID_text { get; set; }
+
+    public GetNextImageCommand(RawImage profImage, RawImage pictureImage, TMP_Text un, TMP_Text loc, TMP_Text postID)
     {
         this.profileImage = profImage;
         this.pictureImage = pictureImage;
         this.username_text = un;
+        this.location_text = loc;
+        this.postID_text = postID;
     }
-
 }
 
 public class SocialFeedDatabase : MonoBehaviour
@@ -32,7 +35,7 @@ public class SocialFeedDatabase : MonoBehaviour
     string currentPhotoProfileURL;
 
     public string Lat;
-    string Long;
+    public string Long;
 
     public string currentProfileUsername;
 
@@ -75,12 +78,12 @@ public class SocialFeedDatabase : MonoBehaviour
         Debug.Log(Lat);
         return Lat + "°N" + Long + "°W";
     }
-    public void getNextPost(RawImage image, RawImage image2, TMP_Text username)
+    public void getNextPost(RawImage image, RawImage image2, TMP_Text username, TMP_Text location, TMP_Text postID)
     {
         //if (loginSystem != null)
         //{
         Debug.Log("Queueing New Command");
-        queue.Enqueue(new GetNextImageCommand(image2, image, username));
+        queue.Enqueue(new GetNextImageCommand(image2, image, username, location, postID));
         //StartCoroutine(GetRequest(image, text));
 
     }
@@ -91,13 +94,13 @@ public class SocialFeedDatabase : MonoBehaviour
         {
             GetNextImageCommand command = queue.Dequeue();
             Debug.Log("Starting New Command");
-            StartCoroutine(GetRequest(command.pictureImage, command.profileImage, command.username_text));
+            StartCoroutine(GetRequest(command.pictureImage, command.profileImage, command.username_text, command.location_text, command.postID_text));
             isWorking = true;
         }
     }
 
 
-    IEnumerator GetRequest(RawImage image, RawImage profImage, TMP_Text usernameText)
+    IEnumerator GetRequest(RawImage image, RawImage profImage, TMP_Text usernameText, TMP_Text locationText, TMP_Text postIDText)
     {
         Debug.Log("Starting Request: " + currentPhotoTimestamp);
         WWWForm form = new WWWForm();
@@ -153,6 +156,8 @@ public class SocialFeedDatabase : MonoBehaviour
                         postID = datachunks[^1];
                         //Debug.Log("loaded post ID: " + postID);
                         usernameText.text = currentProfileUsername.Trim();
+                        postIDText.text = postID.Trim();
+                        locationText.text = Lat.Trim() + "," + Long.Trim();
 
                         string[] reactChunks = partition[1].Split("%");
                         //hey at least its sorta readable

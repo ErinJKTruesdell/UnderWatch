@@ -52,7 +52,7 @@ public class SC_LoginSystem : MonoBehaviour
     public string userName = "";
     string userEmail = "";
 
-    string rootURL = "egs01.westphal.drexel.edu/";
+    public string rootURL = "egs01.westphal.drexel.edu/";
 
 
     public event TargetHandler Target;

@@ -27,12 +27,7 @@ public class ListItem : MonoBehaviour
             sfd = FindObjectOfType<SocialFeedDatabase>();
         }
 
-        //how expensive is doing this rather than just putting the script in the scene?
         scls = new SC_LoginSystem();
-
-        unText.text = sfd.currentProfileUsername;
-        locText.text = sfd.Lat;
-
 
         if (sfd.isAd)
         {
