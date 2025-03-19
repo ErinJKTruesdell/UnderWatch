@@ -111,7 +111,7 @@ public class SearchScript : MonoBehaviour
                 {
                     if (UNData[j].Length > 2) // trim off that last empty bit
                     {
-                        //Debug.Log(PFPData[j]);
+                        Debug.Log("fsdhj" + PFPData[j]);
                         userNames.Add(new userData(UNData[j], PFPData[j]));
                     }
                 }
@@ -140,6 +140,7 @@ public class SearchScript : MonoBehaviour
 
 
                     //downlaod prof img
+
                     StartCoroutine(downloadImageFromURL(i.profUrl, li.profilePic));
                 }
 

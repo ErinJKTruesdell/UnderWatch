@@ -57,6 +57,18 @@ public class GetTargetLocation : MonoBehaviour
         StartCoroutine(LocateTarget(sclogin.getUsername()));
         Debug.Log(sclogin.getUsername());
 
+        //turn lolcation on
+        infiniteScrollViewport.SetActive(false);
+        mapOverlay.SetActive(true);
+        mapObj.SetActive(true);
+        showMapButton.SetActive(false);
+
+        //set lat and long
+        map.SetPosition(39.952f, -75.15f); //39.952f, -75.15f
+        map.markerManager.Add(new OnlineMapsMarker());
+        map.markerManager[0].SetPosition(39.952f, -75.15f);
+        map.markerManager[0].scale = 0.12f;
+
     }
 
     public void reCenter()

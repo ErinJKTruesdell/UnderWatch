@@ -25,7 +25,7 @@ namespace Mopsicus.InfiniteScroll {
 		static public Color32 pinkCol;
 		static public Color32 redCol;
 
-		public PostUIHandling postUIHandling;
+        public PostUIHandling postUIHandling;
 
         /// <summary>
         /// Period for no-update list, if very fast add
@@ -88,7 +88,7 @@ namespace Mopsicus.InfiniteScroll {
 		/// </summary>
 		public GameObject Prefab;
 
-		[Header ("Padding")]
+        [Header ("Padding")]
 		/// <summary>
 		/// Top padding
 		/// </summary>
@@ -690,14 +690,18 @@ namespace Mopsicus.InfiniteScroll {
 				x += ItemSpacing + _widths[i];
 				_views[i].name = i.ToString ();
 				OnFill (i, _views[i]);
-			}
-		}
+            }
+            Demo2.OnPullItem(Direction.Bottom);
+            ApplyDataTo(Demo2._list.Count, Demo2.PullCount, Direction.Bottom);
 
-		/// <summary>
-		/// Calc all items height and positions
-		/// </summary>
-		/// <returns>Common content height</returns>
-		float CalcSizesPositions (int count) {
+
+        }
+
+        /// <summary>
+        /// Calc all items height and positions
+        /// </summary>
+        /// <returns>Common content height</returns>
+        float CalcSizesPositions (int count) {
 			return (Type == 0) ? CalcSizesPositionsVertical (count) : CalcSizesPositionsHorizontal (count);
 		}
 

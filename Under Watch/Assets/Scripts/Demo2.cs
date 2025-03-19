@@ -14,9 +14,9 @@ public class Demo2 : MonoBehaviour
     private int Count = 7;
 
     [SerializeField]
-    private int PullCount = 7;
+    public static int PullCount = 7;
 
-    private List<int> _list = new List<int>();
+    public static List<int> _list = new List<int>();
 
     public Texture sampleTex;
 
@@ -60,7 +60,7 @@ public class Demo2 : MonoBehaviour
         return 509;
     }
 
-    void OnPullItem(InfiniteScroll.Direction direction)
+    public static void OnPullItem(InfiniteScroll.Direction direction)
     {
         int index = _list.Count;
         if (direction == InfiniteScroll.Direction.Top)
@@ -79,7 +79,7 @@ public class Demo2 : MonoBehaviour
                 index++;
             }
         }
-        Scroll.ApplyDataTo(_list.Count, PullCount, direction);
+        //Scroll.ApplyDataTo(_list.Count, PullCount, direction);
     }
 
     public void SceneLoad(int index)

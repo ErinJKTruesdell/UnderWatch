@@ -94,12 +94,15 @@ public class RegistrationManager : MonoBehaviour
         
         devices = WebCamTexture.devices;
         WebCamDevice frontCamera;
+        Debug.Log(devices.Length);
         if (devices.Length > 1)
         {
             for (int i = 1; i < devices.Length; i++)
             {
                 if (devices[i].isFrontFacing)
                 {
+                    Debug.Log(devices[i].name + i);
+
                     frontCamera = devices[i];
                     camAvailable = true;
                     break;
@@ -107,7 +110,10 @@ public class RegistrationManager : MonoBehaviour
             }
             if (devices[1].name != " ")
             {
-                webcam = new WebCamTexture(devices[1].name);
+                if (UnityEngine.Application.platform == RuntimePlatform.Android)
+                    webcam = new WebCamTexture(devices[1].name);
+                else
+                    webcam = new WebCamTexture(devices[0].name);
             }
             else
             {
@@ -400,7 +406,7 @@ public class RegistrationManager : MonoBehaviour
             Debug.Log(username.text);
             if (responseText.Contains("Success"))
             {
-                StartCoroutine(loginSystem.doTargetAssignment(username.text, -100));
+                StartCoroutine(loginSystem.doTargetAssignment(username.text, 100));
 
                 //store registration information - em
                 loginSystem.SetLoginPrefs(email.text, password.text, cacheCheckToggle.isOn);
@@ -408,7 +414,7 @@ public class RegistrationManager : MonoBehaviour
                 bg.transform.DOLocalMoveY(Screen.height * 3, .7f).SetEase(Ease.OutQuad);
                 canvasElement.transform.DOLocalMoveY(Screen.height * 3, .7f).SetEase(Ease.OutQuad).OnComplete(() => gm.ProgressToScene("SocialFeed"));
                 loadingAnim.SetActive(false);
-                Debug.Log("success");
+                Debug.Log("successRegister");
             }
             else
             {
@@ -449,7 +455,6 @@ public class RegistrationManager : MonoBehaviour
 
             Vector3[] corners = new Vector3[4];
             rear.rectTransform.GetWorldCorners(corners);
-            Debug.Log(corners);
             Vector3 topLeft = corners[0];
 
             var width = (int)(corners[3].x - corners[0].x); //.rect.width;

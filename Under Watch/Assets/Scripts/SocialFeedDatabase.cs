@@ -228,13 +228,11 @@ public class SocialFeedDatabase : MonoBehaviour
 
         if (request.isNetworkError || request.isHttpError)
         {
-
             Debug.Log(request.error);
         }
         else
         {
             currentPhoto = ((DownloadHandlerTexture)request.downloadHandler).texture;
-
         }
         image.texture = currentPhoto;
     }

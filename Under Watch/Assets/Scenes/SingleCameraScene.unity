@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 63606660}
   - component: {fileID: 63606659}
   m_Layer: 5
-  m_Name: UserPhoto (1)
+  m_Name: SelfUserPhoto (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -934,7 +934,7 @@ GameObject:
   - component: {fileID: 803212990}
   - component: {fileID: 803212989}
   m_Layer: 5
-  m_Name: UserPhoto (1)
+  m_Name: TargetUserPhoto (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2822,7 +2822,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rear: {fileID: 1980748268}
-  uploadURL: https://erinjktruesdell.com/uploadImage.php
+  rootURL: https://egs01.westphal.drexel.edu/
   camMesh: {fileID: 1307293570}
   gm: {fileID: 0}
   scls: {fileID: 0}
@@ -2830,6 +2830,10 @@ MonoBehaviour:
   responseText: {fileID: 1637209449}
   blockingPanel: {fileID: 1091300757}
   closeButton: {fileID: 357721147}
+  unText: {fileID: 2059434374}
+  targetUNText: {fileID: 703119833}
+  unPfpImage: {fileID: 63606659}
+  targetPfpImage: {fileID: 803212989}
 --- !u!4 &2136051675
 Transform:
   m_ObjectHideFlags: 0

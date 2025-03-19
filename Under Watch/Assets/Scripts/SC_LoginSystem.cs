@@ -161,7 +161,6 @@ public class SC_LoginSystem : MonoBehaviour
             form.AddField("username", username);
             form.AddField("points", pointsToAdd);
 
-
             using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "assignTarget.php", form))
             {
                 yield return www.SendWebRequest();
@@ -169,6 +168,7 @@ public class SC_LoginSystem : MonoBehaviour
                 if (www.result != UnityWebRequest.Result.Success)
                 {
                     errorMessage = www.error;
+                    Debug.Log("unsuccessful assignment!" + errorMessage);
                 }
                 //else
                 // {
@@ -179,10 +179,13 @@ public class SC_LoginSystem : MonoBehaviour
                 if (responseText.Contains("Success"))
                 {
                     returnText = responseText;
+                    Debug.Log("successful assignment!" + returnText);
                 }
                 else
                 {
                     returnText = responseText;
+                    Debug.Log("successful assignment!" + returnText);
+
                 }
                 //}
                 if (Target != null)

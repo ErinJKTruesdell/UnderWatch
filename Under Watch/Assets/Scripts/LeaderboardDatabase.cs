@@ -24,7 +24,7 @@ public class LeaderboardDatabase : MonoBehaviour
 
     public GameObject leaderboardloading;
 
-    string rootURL = "egs01.westphal.drexel.edu/";
+    string rootURL = "https://egs01.westphal.drexel.edu/";
 
     bool isWorking;
 
@@ -47,7 +47,7 @@ public class LeaderboardDatabase : MonoBehaviour
 
         List<pointsData> allPoints = new List<pointsData>();
 
-        using (UnityWebRequest www = UnityWebRequest.Post("https://egs01.westphal.drexel.edu/get-next-leaderboard.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "get-next-leaderboard.php", form))
         {
             yield return www.SendWebRequest();
 
