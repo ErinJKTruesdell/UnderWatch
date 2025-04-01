@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 224987539535312474}
   - component: {fileID: 222212662094385272}
   - component: {fileID: 114215457755591672}
-  - component: {fileID: 4215650531072586836}
+  - component: {fileID: 8627064627920679986}
   m_Layer: 5
   m_Name: ListItem
   m_TagString: Untagged
@@ -83,7 +83,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4215650531072586836
+--- !u!114 &8627064627920679986
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -92,24 +92,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1213794582161676}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81afdd1ddb5e8f1428ca608d37d1fe3d, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a926f6f127eb4f43a668a55e2daed26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  photoImg: {fileID: 3744718155922125907}
-  profImage: {fileID: 8576007353430526066}
   unText: {fileID: 7280085827402185253}
   locText: {fileID: 2116949133480844400}
   postIDText: {fileID: 6253250607497769026}
-  scls: {fileID: 0}
-  sfd: {fileID: 0}
-  unsponsoredObjs:
-  - {fileID: 3922395856254633451}
-  - {fileID: 7913467978473319774}
-  - {fileID: 8560904359132767140}
-  - {fileID: 3039276745721245227}
-  - {fileID: 1299509882893604799}
-  - {fileID: 2352733835441620091}
-  sponsoredObjs: []
+  postImage: {fileID: 3744718155922125907}
+  pfpImage: {fileID: 8576007353430526066}
 --- !u!1 &824106078746731889
 GameObject:
   m_ObjectHideFlags: 0
@@ -487,7 +477,7 @@ GameObject:
   - component: {fileID: 7822940085057490620}
   - component: {fileID: 3744718155922125907}
   m_Layer: 5
-  m_Name: UserPhoto
+  m_Name: PostPhoto
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -559,7 +549,7 @@ GameObject:
   - component: {fileID: 7089603693355588539}
   - component: {fileID: 8576007353430526066}
   m_Layer: 5
-  m_Name: UserPhoto (1)
+  m_Name: pfpPhoto
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2037,7 +2027,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4215650531072586836}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ListItem, Assembly-CSharp
         m_MethodName: ClickOnProfile
         m_Mode: 1
@@ -2354,7 +2344,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4215650531072586836}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ListItem, Assembly-CSharp
         m_MethodName: ClickOnProfile
         m_Mode: 1

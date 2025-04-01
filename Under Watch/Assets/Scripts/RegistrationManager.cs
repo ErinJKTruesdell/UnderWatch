@@ -31,7 +31,9 @@ public class RegistrationManager : MonoBehaviour
     public Texture2D defaultPfp;
 
     public static SC_LoginSystem loginSystem;
+#if UNITY_ANDROID
     public ActivityStarter activityStarter;
+#endif
     public static GameManager gm;
 
     public int socialFeedIndex;
@@ -206,8 +208,9 @@ public class RegistrationManager : MonoBehaviour
         }
         else if (camAvailable)
         {
-
+#if UNITY_ANDROID
             activityStarter.setAlarms();
+#endif
             webcam.Play();
             camMesh.material.SetTexture("_MainTex", webcam);
             pfpPath = "";
