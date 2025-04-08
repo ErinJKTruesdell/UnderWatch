@@ -12,17 +12,18 @@ using UnityEngine.SceneManagement;
 public class SF_Cell : MonoBehaviour, ICell
 {
     //UI
-    public TMP_Text unText;
-    public TMP_Text locText;
-    public TMP_Text postIDText;
+    public TextMeshProUGUI unText;
+    public TextMeshProUGUI locText;
+    public TextMeshProUGUI postIDText;
 
     public RawImage postImage;
     public RawImage pfpImage;
 
-    //Model
+    //Model - is this taking up significant memory?
     private SFPostItem _postItem;
     private int _cellIndex;
 
+    //called every time this cell comes back into view. Consider moving image loading here to reduce memory impact
     public void ConfigureCell(SFPostItem postItem, int cellIndex)
     {
         _cellIndex = cellIndex;
@@ -32,9 +33,22 @@ public class SF_Cell : MonoBehaviour, ICell
         locText.text = postItem.location;
         postIDText.text = postItem.postID;
 
+        if (postItem.postPhoto == null) Debug.Log("post null");
+        if (postItem.pfpPhoto == null) Debug.Log("pfp null");
+
         postImage.texture = postItem.postPhoto;
         pfpImage.texture = postItem.pfpPhoto;
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+
+        }
+    }
+
+
 
     public void ClickOnProfile()
     {

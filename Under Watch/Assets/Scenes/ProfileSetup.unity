@@ -916,7 +916,6 @@ MonoBehaviour:
   profPic: {fileID: 171679029}
   profPicOverlay: {fileID: 158842886}
   defaultPfp: {fileID: 2800000, guid: e52209048afb38c4a99e97ec379b4844, type: 3}
-  activityStarter: {fileID: 101250685}
   socialFeedIndex: 2
   rootURL: egs01.westphal.drexel.edu/
   cacheCheckToggle: {fileID: 1119123165}
@@ -3265,7 +3264,7 @@ VideoPlayer:
   m_RenderMode: 1
   m_AspectRatio: 0
   m_DataSource: 0
-  m_TimeUpdateMode: 2
+  m_TimeUpdateMode: 1
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 0
   m_TargetAudioSources:

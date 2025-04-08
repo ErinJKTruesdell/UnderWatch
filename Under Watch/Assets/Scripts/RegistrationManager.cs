@@ -75,6 +75,7 @@ public class RegistrationManager : MonoBehaviour
     new List<Vector2> originalPos = new List<Vector2>();
     //hopefully this value prevents anything from going off the screen
     int goDownByValue = 150;
+    public int pointsStart = 100;
 
     // Start is called before the first frame update
     public void Start()
@@ -115,7 +116,7 @@ public class RegistrationManager : MonoBehaviour
                 if (UnityEngine.Application.platform == RuntimePlatform.Android)
                     webcam = new WebCamTexture(devices[1].name);
                 else
-                    webcam = new WebCamTexture(devices[0].name);
+                    webcam = new WebCamTexture(devices[1].name);
             }
             else
             {
@@ -409,13 +410,14 @@ public class RegistrationManager : MonoBehaviour
             Debug.Log(username.text);
             if (responseText.Contains("Success"))
             {
-                StartCoroutine(loginSystem.doTargetAssignment(username.text, 100));
+                loginSystem.loginUponRegister(username.text, email.text, pointsStart);
 
                 //store registration information - em
                 loginSystem.SetLoginPrefs(email.text, password.text, cacheCheckToggle.isOn);
 
                 bg.transform.DOLocalMoveY(Screen.height * 3, .7f).SetEase(Ease.OutQuad);
                 canvasElement.transform.DOLocalMoveY(Screen.height * 3, .7f).SetEase(Ease.OutQuad).OnComplete(() => gm.ProgressToScene("SocialFeed"));
+
                 loadingAnim.SetActive(false);
                 Debug.Log("successRegister");
             }
@@ -433,9 +435,6 @@ public class RegistrationManager : MonoBehaviour
             }
             //}
         }
-
-        loginSystem.loginUponRegister(username.text, email.text);
-
         isWorking = false;
     }
 

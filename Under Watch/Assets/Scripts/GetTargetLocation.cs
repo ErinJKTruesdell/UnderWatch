@@ -101,10 +101,7 @@ public class GetTargetLocation : MonoBehaviour
             if (responseText.Contains("Success"))
             {
                 string[] dataChunks = responseText.Split('|');
-
                 targetText.text = "@" + dataChunks[1];
-                targetLat = float.Parse(dataChunks[2]);
-                targetLong = float.Parse(dataChunks[3]);
                 string targetTimestamp = dataChunks[4];
 
                 //turn lolcation on
@@ -113,17 +110,30 @@ public class GetTargetLocation : MonoBehaviour
                 mapObj.SetActive(true);
                 showMapButton.SetActive(false);
 
-                //set lat and long
-                map.SetPosition(targetLong, targetLat); //2.35, 48.87
-                map.markerManager.Add(new OnlineMapsMarker());
-                map.markerManager[0].SetPosition(targetLong, targetLat);
-                map.markerManager[0].scale = 0.12f;
+                if (dataChunks[2] != "" && dataChunks[3] != "")
+                {
+                    targetLat = float.Parse(dataChunks[2]);
+                    targetLong = float.Parse(dataChunks[3]);
 
+                    //set lat and long
+                    map.SetPosition(targetLong, targetLat); //2.35, 48.87
+                    map.markerManager.Add(new OnlineMapsMarker());
+                    map.markerManager[0].SetPosition(targetLong, targetLat);
+                    map.markerManager[0].scale = 0.12f;
+                }
+                else
+                {
+                    map.SetPosition(0, 0); //2.35, 48.87
+                    map.markerManager.Add(new OnlineMapsMarker());
+                    map.markerManager[0].SetPosition(0, 0);
+                    map.markerManager[0].scale = 0.12f;
+                }
                 //get target's profile pic
                 string profUrl;
-                if (dataChunks[5] != "")
+                if (dataChunks[8] != "")
                 {
-                    profUrl = rootURL + dataChunks[7];
+                    profUrl = rootURL + dataChunks[8];
+                    Debug.Log("prof: " + rootURL + profUrl);
                     StartCoroutine(downloadImageFromURL(profUrl, targetProf));
                 }
             }

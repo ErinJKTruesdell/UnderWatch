@@ -100,6 +100,7 @@ MonoBehaviour:
   postIDText: {fileID: 6253250607497769026}
   postImage: {fileID: 3744718155922125907}
   pfpImage: {fileID: 8576007353430526066}
+  tempTex: {fileID: 0}
 --- !u!1 &824106078746731889
 GameObject:
   m_ObjectHideFlags: 0
@@ -530,7 +531,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 0}
+  m_Texture: {fileID: 2800000, guid: 86fc385f383321449b999c971072afd7, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0

@@ -82,11 +82,15 @@ public class SC_LoginSystem : MonoBehaviour
         return userName;
     }
 
-    public void loginUponRegister(string username, string email)
+    public void loginUponRegister(string username, string email, int points)
     {
+        Debug.Log("logging in on register");
         userName = username;
         userEmail = email;
         isLoggedIn = true;
+
+        StartCoroutine(doTargetAssignment(username, points));
+
     }
 
     public void showLoginFields()
@@ -155,6 +159,8 @@ public class SC_LoginSystem : MonoBehaviour
         isWorking = true;
         if (isLoggedIn)
         {
+            Debug.Log("isLoggedIn");
+
             string errorMessage = "";
 
             WWWForm form = new WWWForm();
@@ -176,7 +182,7 @@ public class SC_LoginSystem : MonoBehaviour
 
                 string returnText = "";
 
-                if (responseText.Contains("Success"))
+                if (responseText.Contains("New Target"))
                 {
                     returnText = responseText;
                     Debug.Log("successful assignment!" + returnText);
@@ -184,7 +190,7 @@ public class SC_LoginSystem : MonoBehaviour
                 else
                 {
                     returnText = responseText;
-                    Debug.Log("successful assignment!" + returnText);
+                    Debug.Log("unsuccessful assignment!" + returnText);
 
                 }
                 //}
@@ -195,6 +201,10 @@ public class SC_LoginSystem : MonoBehaviour
             }
 
             isWorking = false;
+        }
+        else
+        {
+            Debug.Log("not logged in!");
         }
     }
 

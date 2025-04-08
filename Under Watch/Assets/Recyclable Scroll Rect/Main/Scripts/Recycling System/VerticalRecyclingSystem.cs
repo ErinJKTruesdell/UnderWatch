@@ -216,7 +216,7 @@ namespace PolyAndCode.UI
         private Vector2 RecycleTopToBottom()
         {
             _recycling = true;
-
+            SF_Manager.isScrollEnd = true;
             int n = 0;
             float posY = IsGrid ? _cellPool[bottomMostCellIndex].anchoredPosition.y : 0;
             float posX = 0;
@@ -289,6 +289,7 @@ namespace PolyAndCode.UI
         private Vector2 RecycleBottomToTop()
         {
             _recycling = true;
+            Debug.Log("scrolling!");
 
             int n = 0;
             float posY = IsGrid ? _cellPool[topMostCellIndex].anchoredPosition.y : 0;
