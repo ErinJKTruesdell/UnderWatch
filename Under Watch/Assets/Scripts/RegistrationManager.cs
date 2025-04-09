@@ -29,7 +29,7 @@ public class RegistrationManager : MonoBehaviour
     public RawImage profPicOverlay;
 
     public SC_LoginSystem loginSystem;
-    public ActivityStarter activityStarter;
+    //public ActivityStarter activityStarter;
     public GameManager gm;
 
     public int socialFeedIndex;
@@ -344,7 +344,7 @@ public class RegistrationManager : MonoBehaviour
             Debug.Log(username.text);
             if (responseText.StartsWith("Success"))
             {
-                activityStarter.setAlarms();
+                //activityStarter.setAlarms();
                 StartCoroutine(loginSystem.doTargetAssignment(username.text, 100));
 
                 //store registration information - em
