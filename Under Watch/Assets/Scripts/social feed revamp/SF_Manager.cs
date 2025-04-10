@@ -31,8 +31,6 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
 
     private List<SFPostItem> postList = new();
 
-    private float timeSinceLastCycle = 0;
-    public float cycleWaitTime = 2f;
     public static bool isScrollEnd = false;
 
     public RecyclableScrollRect scrollRect;
@@ -40,6 +38,7 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
     //webrequest
     public string rootURL = "egs01.westphal.drexel.edu/";
     string currentPhotoTimestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+    int previousPostId;
 
     //Recyclable scroll rect's data source must be assigned in Awake.
     private void Awake()
@@ -53,7 +52,6 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
         {
             Debug.Log("scrolling!");
         }
-
     }
     private void Start()
     {
@@ -67,7 +65,6 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
             Debug.Log("scrolling at end!");
             InitData();
             SF_Manager.isScrollEnd = false;
-
         }
     }
     //Initialising postList with dummy data 
@@ -80,7 +77,7 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
     }
     IEnumerator GetRequestAndAdd()
     {
-        SFPostItem obj = new SFPostItem();
+        SFPostItem obj = new();
         postList.Add(obj);
 
         yield return StartCoroutine(GetRequest(obj));  // Waits for download to finish
@@ -107,6 +104,7 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
         Debug.Log("Starting Request: " + currentPhotoTimestamp);
 
         WWWForm form = new WWWForm();
+        //form.AddField("previousDate", currentPhotoTimestamp);
         form.AddField("previousDate", currentPhotoTimestamp);
         //placeholder username
         form.AddField("username", "baksdf");
@@ -154,7 +152,7 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
                         latStr = datachunks[5].Split('%')[0];
                         longStr = datachunks[5].Split('%')[1];
                         postIDStr = datachunks[^1];
-
+                        previousPostId = Convert.ToInt32(datachunks[^1]);
                         /*Debug.Log("pfp:" + pfpImageURl);
                         Debug.Log("post: " + postImageURL);
                         Debug.Log("time: " + currentPhotoTimestamp);
