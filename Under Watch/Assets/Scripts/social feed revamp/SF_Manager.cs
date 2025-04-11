@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using PolyAndCode.UI;
 using System;
-using TMPro;
 using UnityEngine.Networking;
-using UnityEngine.UI;
-using Unity.VisualScripting;
 public class SFPostItem
 {
     //use TextMeshProUGUI instead of TMP_Text because it is a concrete component, not abstract base class
@@ -38,12 +35,15 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
     //webrequest
     public string rootURL = "egs01.westphal.drexel.edu/";
     string currentPhotoTimestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-    int previousPostId;
+
+    Queue<SFPostItem> emptyItemsQueue = new();
+    bool isFirstLoad = false;
 
     //Recyclable scroll rect's data source must be assigned in Awake.
     private void Awake()
     {
         InitData();
+        isFirstLoad = true;
         _recyclableScrollRect.DataSource = this;
     }
     private void Update()
@@ -70,21 +70,34 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
     //Initialising postList with dummy data 
     public void InitData()
     {
-        for (int i = 0; i < _dataLength; i++)
-        {
-            StartCoroutine(GetRequestAndAdd());
-        }
+        StartCoroutine(GetRequestAndAdd());
     }
     IEnumerator GetRequestAndAdd()
     {
-        SFPostItem obj = new();
-        postList.Add(obj);
+        for (int i = 0; i < _dataLength; i++)
+        {
+            SFPostItem obj = new();
+            postList.Add(obj);
+            emptyItemsQueue.Enqueue(obj);
+        }
 
-        yield return StartCoroutine(GetRequest(obj));  // Waits for download to finish
-        Debug.Log("added post: " + obj.postPhoto + " added pfp: " + obj.pfpPhoto);
         SF_Manager.isScrollEnd = false;
+        string debugStr = "";
+        foreach (SFPostItem itm in emptyItemsQueue)
+        {
+            debugStr += itm.username + ", ";
+        }
+        Debug.Log(debugStr);
+        while (emptyItemsQueue.Count > 0)
+        {
+            SFPostItem emptyObj = emptyItemsQueue.Dequeue();
+            yield return StartCoroutine(GetRequest(emptyObj));  // Waits for download to finish
+            Debug.Log("added post: " + emptyObj.postPhoto + " added pfp: " + emptyObj.pfpPhoto);
+        }
+        if (isFirstLoad)
+            _recyclableScrollRect.ReloadData();  // Notify scroll list that data is ready
+            isFirstLoad = false;
 
-        //_recyclableScrollRect.ReloadData();  // Notify scroll list that data is ready
     }
 
 
@@ -152,7 +165,7 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
                         latStr = datachunks[5].Split('%')[0];
                         longStr = datachunks[5].Split('%')[1];
                         postIDStr = datachunks[^1];
-                        previousPostId = Convert.ToInt32(datachunks[^1]);
+                        //previousPostId = Convert.ToInt32(datachunks[^1]);
                         /*Debug.Log("pfp:" + pfpImageURl);
                         Debug.Log("post: " + postImageURL);
                         Debug.Log("time: " + currentPhotoTimestamp);
@@ -167,6 +180,7 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
                         string[] reactChunks = partition[1].Split("%");
 
                         Debug.Log("Starting Download");
+                        //possibly don't make this wait for the download image to complete? as is seems fastest, but it shouldn't be!
                         yield return StartCoroutine(downloadImageFromURL(rootURL + postImageURL, rootURL + pfpImageURl, SFitem));
                     }
                 }

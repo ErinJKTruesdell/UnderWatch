@@ -289,7 +289,6 @@ namespace PolyAndCode.UI
         private Vector2 RecycleBottomToTop()
         {
             _recycling = true;
-            Debug.Log("scrolling!");
 
             int n = 0;
             float posY = IsGrid ? _cellPool[topMostCellIndex].anchoredPosition.y : 0;
