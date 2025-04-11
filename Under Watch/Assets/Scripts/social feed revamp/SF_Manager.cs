@@ -97,7 +97,6 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
         if (isFirstLoad)
             _recyclableScrollRect.ReloadData();  // Notify scroll list that data is ready
             isFirstLoad = false;
-
     }
 
 

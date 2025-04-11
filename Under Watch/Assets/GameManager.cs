@@ -8,7 +8,7 @@ using static OnlineMapsGPXObject;
 
 public class GameManager : MonoBehaviour
 {
-    string rootURL = "egs01.westphal.drexel.edu/";
+    public static string rootURL = "egs01.westphal.drexel.edu/";
 
     public DateTime loginTime;
     public DateTime openSocialFeedTime;
@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour
     public TouchScreenKeyboard keyboard;
     public AchieveMonitor ach;
 
+    static public Color32 blueCol = new(99, 202, 225, 255);
+    static public Color32 pinkCol = new(237, 30, 121, 255);
+    static public Color32 redCol = new(180, 17, 75, 255);
 
     private void Awake()
     {
