@@ -210,7 +210,8 @@ public class RegistrationManager : MonoBehaviour
         else if (camAvailable)
         {
 #if UNITY_ANDROID
-            activityStarter.setAlarms();
+            if (UnityEngine.Application.platform == RuntimePlatform.Android)
+                activityStarter.setAlarms();
 #endif
             webcam.Play();
             camMesh.material.SetTexture("_MainTex", webcam);

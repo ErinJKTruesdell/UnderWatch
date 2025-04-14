@@ -15,6 +15,8 @@ public class SFPostItem
     //images are assigned in the downloadImages func
     public Texture postPhoto;
     public Texture pfpPhoto;
+
+
 }
 
 public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
