@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 
 public class SeflieUI : MonoBehaviour
 {
-    /* string rootURL = "egs01.westphal.drexel.edu/";
+    /* 
 
      public TextMeshProUGUI playerUN;
      public TextMeshProUGUI targetUN;
@@ -41,7 +41,7 @@ public class SeflieUI : MonoBehaviour
 
          string errorMessage = "";
 
-         using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "get-target-location.php", form))
+         using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "get-target-location.php", form))
          {
              yield return www.SendWebRequest();
 

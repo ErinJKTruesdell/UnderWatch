@@ -43,7 +43,6 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
     public SC_LoginSystem scls;
 
     //webrequest
-    public string rootURL = "egs01.westphal.drexel.edu/";
     string currentPhotoTimestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
     Queue<SFPostItem> emptyItemsQueue = new();
@@ -130,7 +129,7 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
         form.AddField("username", "asfdasdf");
         form.AddField("loggedInUser", scls.getUsername());
 
-        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "/get-next-photo.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "/get-next-photo.php", form))
         {
             yield return www.SendWebRequest();
 
@@ -159,7 +158,7 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
                         currentPhotoTimestamp = datachunks[2];
                         postImageURL = datachunks[1];
                         isAd = true;
-                        yield return StartCoroutine(downloadAdImageFromURL(rootURL + postImageURL, SFitem));
+                        yield return StartCoroutine(downloadAdImageFromURL(GameManager.rootURL + postImageURL, SFitem));
                     }
 
                     else
@@ -182,7 +181,8 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
                         ParseReacts(reactChunks, SFitem);
                         Debug.Log("Starting Download");
                         //possibly make this a yield return to wait until post is fully loaded - faster as is, but less stable?
-                        StartCoroutine(downloadImageFromURL(rootURL + postImageURL, rootURL + pfpImageURl, SFitem));
+                        StartCoroutine(downloadPostimage(GameManager.rootURL + postImageURL, SFitem));
+                        StartCoroutine(downloadPfpImage(GameManager.rootURL + pfpImageURl, SFitem));
                     }
                 }
                 else
@@ -209,10 +209,11 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
 
             debugList += postItem.ReactNumDict[key];
         }
+
        // Debug.Log("reacts: " + debugList);
     }
 
-    IEnumerator downloadImageFromURL(string url1, string url2, SFPostItem item)
+    IEnumerator downloadPostimage(string url1, SFPostItem item)
     {
         Debug.Log("Starting Download Request");
 
@@ -232,7 +233,9 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
 
             item.postPhoto = image1Download;
         }
-
+    }
+    IEnumerator downloadPfpImage(string url2, SFPostItem item)
+    {
         UnityWebRequest request2 = UnityWebRequestTexture.GetTexture(url2);
         yield return request2.SendWebRequest();
         if (request2.isNetworkError || request2.isHttpError)
@@ -249,8 +252,6 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
 
             item.pfpPhoto = image2Download;
         }
-
-        Debug.Log("Download complete");
     }
 
     IEnumerator downloadAdImageFromURL(string url, SFPostItem item)

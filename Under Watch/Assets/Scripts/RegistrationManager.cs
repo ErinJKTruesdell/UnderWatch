@@ -41,7 +41,6 @@ public class RegistrationManager : MonoBehaviour
     //public NativeGallery.MediaPickCallback ngmpc = new NativeGallery.MediaPickCallback(handleNewPicture);
 
     bool isWorking = false;
-    public string rootURL = "egs01.westphal.drexel.edu/";
 
     bool profImageSet = false;
     public Toggle cacheCheckToggle;
@@ -383,7 +382,7 @@ public class RegistrationManager : MonoBehaviour
         form.AddField("password1", password.text);
         form.AddField("submit", "submit");
 
-        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "register.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "register.php", form))
         {
             //www.uploadHandler = (UploadHandler)new UploadHandlerRaw(File.ReadAllBytes(pfpPath));
 

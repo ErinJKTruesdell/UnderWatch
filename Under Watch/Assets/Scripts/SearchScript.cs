@@ -33,8 +33,6 @@ public class SearchScript : MonoBehaviour
 
     public GameObject searchIcon;
 
-    string rootURL = "egs01.westphal.drexel.edu/";
-
     public Transform gridObj;
 
     public List<GameObject> Element = new();
@@ -84,7 +82,7 @@ public class SearchScript : MonoBehaviour
 
         List<userData> userNames = new List<userData>();
 
-        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "get-usernames.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "get-usernames.php", form))
         {
             yield return www.SendWebRequest();
 

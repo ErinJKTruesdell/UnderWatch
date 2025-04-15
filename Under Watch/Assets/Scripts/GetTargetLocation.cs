@@ -21,8 +21,6 @@ public class GetTargetLocation : MonoBehaviour
 
     SC_LoginSystem sclogin;
 
-    string rootURL = "egs01.westphal.drexel.edu/";
-
     public TMP_Text targetText;
     public RawImage targetProf;
 
@@ -86,7 +84,7 @@ public class GetTargetLocation : MonoBehaviour
 
         string errorMessage = "";
 
-        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "get-target-location.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "get-target-location.php", form))
         {
             yield return www.SendWebRequest();
 
@@ -132,8 +130,8 @@ public class GetTargetLocation : MonoBehaviour
                 string profUrl;
                 if (dataChunks[8] != "")
                 {
-                    profUrl = rootURL + dataChunks[8];
-                    Debug.Log("prof: " + rootURL + profUrl);
+                    profUrl = GameManager.rootURL + dataChunks[8];
+                    Debug.Log("prof: " + GameManager.rootURL + profUrl);
                     StartCoroutine(downloadImageFromURL(profUrl, targetProf));
                 }
             }

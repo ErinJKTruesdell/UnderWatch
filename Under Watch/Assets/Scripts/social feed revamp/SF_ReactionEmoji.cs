@@ -30,7 +30,6 @@ public class SF_ReactionEmoji : MonoBehaviour
     bool userClicked = false;
 
     public string reactName = "";
-    string rootURL = "egs01.westphal.drexel.edu/";
     private void Awake()
     {
         parentCell = GetComponentInParent<SF_Cell>();
@@ -159,7 +158,7 @@ public class SF_ReactionEmoji : MonoBehaviour
 
         //I dont think the like count is getting incremented
 
-        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "toggle_reaction.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "toggle_reaction.php", form))
         {
             yield return www.SendWebRequest();
 

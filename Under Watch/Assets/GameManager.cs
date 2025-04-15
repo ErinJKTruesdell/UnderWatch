@@ -97,15 +97,27 @@ public class GameManager : MonoBehaviour
     public void ProgressToScene(string sceneName)
     {
 
-        if(SceneManager.GetActiveScene().name == "SocialFeed")
+        if(SceneManager.GetActiveScene().name == "SocialFeed" &&  SceneManager.loadedSceneCount == 1)
         {
             onSocialFeedClosed();
+            SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
         }
-        if(sceneName == "SocialFeed")
+        else
+        {
+            SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+        }
+        if (sceneName == "SocialFeed")
         {
             saveSocialFeedTime();
         }
-        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+    }
+
+    public void LogOut()
+    {
+        PlayerPrefs.DeleteAll();
+        ProgressToScene("LoginScene");
+
+        Debug.Log("User login data cleared");
     }
 
     public void ForgotPassword()

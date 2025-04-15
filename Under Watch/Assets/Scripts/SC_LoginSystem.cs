@@ -52,9 +52,6 @@ public class SC_LoginSystem : MonoBehaviour
     public string userName = "";
     string userEmail = "";
 
-    public string rootURL = "egs01.westphal.drexel.edu/";
-
-
     public event TargetHandler Target;
     public EventArgs e = null;
     public delegate void TargetHandler(string m, EventArgs e);
@@ -167,7 +164,7 @@ public class SC_LoginSystem : MonoBehaviour
             form.AddField("username", username);
             form.AddField("points", pointsToAdd);
 
-            using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "assignTarget.php", form))
+            using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "assignTarget.php", form))
             {
                 yield return www.SendWebRequest();
 
@@ -395,7 +392,7 @@ public class SC_LoginSystem : MonoBehaviour
         form.AddField("password1", registerPassword1);
         form.AddField("password2", registerPassword2);
 
-        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "register.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "register.php", form))
         {
             yield return www.SendWebRequest();
 
@@ -432,7 +429,7 @@ public class SC_LoginSystem : MonoBehaviour
         form.AddField("email", email);
         form.AddField("password", password);
 
-        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "login.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "login.php", form))
         {
             yield return www.SendWebRequest();
             if (www.result != UnityWebRequest.Result.Success)
@@ -489,7 +486,7 @@ public class SC_LoginSystem : MonoBehaviour
         WWWForm form = new WWWForm();
         form.AddField("email", email);
 
-        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "pwd_reset_query.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "pwd_reset_query.php", form))
         {
             yield return www.SendWebRequest();
 
@@ -526,7 +523,7 @@ public class SC_LoginSystem : MonoBehaviour
 
         form.AddField("reset_code", code);
 
-        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "pwd_reset_action.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "pwd_reset_action.php", form))
         {
             yield return www.SendWebRequest();
 
@@ -609,7 +606,7 @@ public class SC_LoginSystem : MonoBehaviour
             form.AddField("lat", lat);
             form.AddField("long", longi);
 
-            using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "recordLocation.php", form))
+            using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "recordLocation.php", form))
             {
                 yield return www.SendWebRequest();
 

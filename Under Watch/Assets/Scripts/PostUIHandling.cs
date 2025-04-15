@@ -151,7 +151,7 @@ public class PostUIHandling : MonoBehaviour
 
         //I dont think the like count is getting incremented
 
-        using (UnityWebRequest www = UnityWebRequest.Post(sfd.rootURL + "toggle_reaction.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "toggle_reaction.php", form))
         {
             yield return www.SendWebRequest();
 

@@ -16,8 +16,6 @@ public class SelfieCam : MonoBehaviour
 
     WebCamTexture webcam;
 
-    public string rootURL = "https://egs01.westphal.drexel.edu/";
-
     public MeshRenderer camMesh;
     WaitForEndOfFrame frameEnd = new WaitForEndOfFrame();
 
@@ -164,7 +162,7 @@ public class SelfieCam : MonoBehaviour
                     form.AddField("latitude", latitude.ToString());
                     form.AddField("longitude", longitude.ToString());
 
-                    UnityWebRequest www = UnityWebRequest.Post(rootURL + "uploadImage.php", form);
+                    UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "uploadImage.php", form);
                     Debug.Log("Sending web request...");
 
                     yield return www.SendWebRequest();
@@ -211,9 +209,9 @@ public class SelfieCam : MonoBehaviour
 
         string[] dataPartition = responseText.Split("|");
         string unData = dataPartition[1].Trim();
-        string unPfp = rootURL + dataPartition[2].Trim();
+        string unPfp = GameManager.rootURL + dataPartition[2].Trim();
         string targetUN = dataPartition[3].Trim();
-        string targetPfp = rootURL + dataPartition[4].Trim();
+        string targetPfp = GameManager.rootURL + dataPartition[4].Trim();
 
         Debug.Log("target url: " + targetPfp);
         Debug.Log("self url: " + unPfp);

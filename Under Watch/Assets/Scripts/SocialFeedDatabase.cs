@@ -50,8 +50,6 @@ public class SocialFeedDatabase : MonoBehaviour
     bool isWorking = false;
     public bool isAd = false;
 
-    public string rootURL = "egs01.westphal.drexel.edu/";
-
     Queue<GetNextImageCommand> queue;
 
     private void Awake()
@@ -108,7 +106,7 @@ public class SocialFeedDatabase : MonoBehaviour
         //placeholder username
         form.AddField("username", "baksdf");
 
-        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "/get-next-photo.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "/get-next-photo.php", form))
         {
             yield return www.SendWebRequest();
 
@@ -140,7 +138,7 @@ public class SocialFeedDatabase : MonoBehaviour
                         currentPhotoTimestamp = datachunks[2];
                         currentPhotoURL = datachunks[1];
                         isAd = true;
-                        StartCoroutine(downloadAdImageFromURL(rootURL + currentPhotoURL, image));
+                        StartCoroutine(downloadAdImageFromURL(GameManager.rootURL + currentPhotoURL, image));
                     }
 
                     else
@@ -180,7 +178,7 @@ public class SocialFeedDatabase : MonoBehaviour
                         //postUIHandling.OnPostLoad();
 
                         Debug.Log("Starting Download");
-                        StartCoroutine(downloadImageFromURL(rootURL + currentPhotoURL, image, rootURL + currentPhotoProfileURL, profImage));
+                        StartCoroutine(downloadImageFromURL(GameManager.rootURL + currentPhotoURL, image, GameManager.rootURL + currentPhotoProfileURL, profImage));
                     }
                 }
                 else

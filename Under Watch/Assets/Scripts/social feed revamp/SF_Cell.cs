@@ -28,6 +28,9 @@ public class SF_Cell : MonoBehaviour, ICell
     private int _cellIndex;
     public SC_LoginSystem scls;
 
+    bool hasLoadedPost = false;
+    bool hasLoadedPfp = false;
+
     //ensure that these are added in order from smile -> gator
     public List<SF_ReactionEmoji> reacts = new();
     private List<string> allReactNames = new()
@@ -73,11 +76,15 @@ public class SF_Cell : MonoBehaviour, ICell
         postIDText.text = postItem.postID;
         postID = postItem.postID;
 
-        if (postItem.postPhoto == null) Debug.Log("post null");
-        if (postItem.pfpPhoto == null) Debug.Log("pfp null");
-
-        postImage.texture = postItem.postPhoto;
-        pfpImage.texture = postItem.pfpPhoto;
+        if (postItem.postPhoto == null || postItem.pfpPhoto == null)
+        {
+            StartCoroutine(LoadPostImages());
+        }
+        else
+        {
+            postImage.texture = postItem.postPhoto;
+            pfpImage.texture = postItem.pfpPhoto;
+        }
 
         _postItem.ReactNumDict = postItem.ReactNumDict;
 
@@ -86,7 +93,19 @@ public class SF_Cell : MonoBehaviour, ICell
             react.LoadReacts();
         }
     }
-
+    IEnumerator LoadPostImages()
+    {
+        while (_postItem.postPhoto == null)
+        {
+            yield return new WaitForSeconds(.1f);
+        }
+        postImage.texture = _postItem.postPhoto;
+        while (_postItem.pfpPhoto == null)
+        {
+            yield return new WaitForSeconds(.1f);
+        }
+        pfpImage.texture = _postItem.pfpPhoto;
+    }
     private void SetCellColor(int index)
     {
         index %= 3;

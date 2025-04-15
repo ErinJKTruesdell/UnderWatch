@@ -11,7 +11,6 @@ public class ApiClient : MonoBehaviour
    // public Button selectButton;
     //public Button uploadButton;
     public TextMeshProUGUI responseText;
-    public string rootURL = "egs01.westphal.drexel.edu/";
     public GameObject blockingPanel;
     public GameObject closeButton;
 
@@ -75,7 +74,7 @@ public class ApiClient : MonoBehaviour
 
         Debug.Log("Uploading image to server");
 
-        using (UnityWebRequest webRequest = UnityWebRequest.Post(rootURL + "/uploadImage.php", form)) // Adjust URL as necessary
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(GameManager.rootURL + "/uploadImage.php", form)) // Adjust URL as necessary
         {
             yield return webRequest.SendWebRequest();
 
