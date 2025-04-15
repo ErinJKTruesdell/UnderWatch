@@ -11,6 +11,8 @@ using UnityEngine.SceneManagement;
 
 public class SF_Cell : MonoBehaviour, ICell
 {
+    public string postID;
+
     //UI
     public TextMeshProUGUI unText;
     public TextMeshProUGUI locText;
@@ -22,8 +24,21 @@ public class SF_Cell : MonoBehaviour, ICell
     public Image colorFrame;
 
     //Model - is this taking up significant memory?
-    private SFPostItem _postItem;
+    public SFPostItem _postItem;
     private int _cellIndex;
+    public SC_LoginSystem scls;
+
+    //ensure that these are added in order from smile -> gator
+    public List<SF_ReactionEmoji> reacts = new();
+    private List<string> allReactNames = new()
+    {
+        "smile",
+        "thumb",
+        "gator",
+        "eye",
+        "fire",
+    };
+
     public enum CellColor
     {
         Red,
@@ -31,6 +46,19 @@ public class SF_Cell : MonoBehaviour, ICell
         Pink
     }
     public CellColor currentCellColor;
+
+    private void Start()
+    {
+        scls = GameObject.FindObjectOfType<SC_LoginSystem>();
+
+        //assign each react's value to the correct name\
+        int i = 0;
+        foreach (SF_ReactionEmoji react in reacts)
+        {
+            react.reactName = allReactNames[i];
+            i++;
+        }
+    }
 
     //called every time this cell comes back into view. Consider moving image loading here to reduce memory impact
     public void ConfigureCell(SFPostItem postItem, int cellIndex)
@@ -43,12 +71,20 @@ public class SF_Cell : MonoBehaviour, ICell
         unText.text = postItem.username;
         locText.text = postItem.location;
         postIDText.text = postItem.postID;
+        postID = postItem.postID;
 
         if (postItem.postPhoto == null) Debug.Log("post null");
         if (postItem.pfpPhoto == null) Debug.Log("pfp null");
 
         postImage.texture = postItem.postPhoto;
         pfpImage.texture = postItem.pfpPhoto;
+
+        _postItem.ReactNumDict = postItem.ReactNumDict;
+
+        foreach (SF_ReactionEmoji react in reacts)
+        {
+            react.LoadReacts();
+        }
     }
 
     private void SetCellColor(int index)
@@ -70,6 +106,8 @@ public class SF_Cell : MonoBehaviour, ICell
                 break;
         }
     }
+
+
     public void ClickOnProfile()
     {
         ShowClickedProfile.userName = unText.text;

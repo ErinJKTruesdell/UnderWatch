@@ -15,8 +15,15 @@ public class SFPostItem
     //images are assigned in the downloadImages func
     public Texture postPhoto;
     public Texture pfpPhoto;
-
-
+    //reacts
+    public Dictionary<string, (int, bool)> ReactNumDict = new()
+    {
+        {"smile" , (0, false)},
+        {"thumb", (0, false) },
+        {"gator", (0, false) },
+        {"eye", (0, false) },
+        {"fire", (0, false) },
+    };
 }
 
 public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
@@ -33,6 +40,7 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
     public static bool isScrollEnd = false;
 
     public RecyclableScrollRect scrollRect;
+    public SC_LoginSystem scls;
 
     //webrequest
     public string rootURL = "egs01.westphal.drexel.edu/";
@@ -44,9 +52,10 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
     //Recyclable scroll rect's data source must be assigned in Awake.
     private void Awake()
     {
-        InitData();
         isFirstLoad = true;
         _recyclableScrollRect.DataSource = this;
+        scls = GameObject.FindObjectOfType<SC_LoginSystem>();
+
     }
     private void Update()
     {
@@ -57,6 +66,8 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
     }
     private void Start()
     {
+        InitData();
+
         scrollRect.onValueChanged.AddListener(ListenerMethod);
     }
     public void ListenerMethod(Vector2 value)
@@ -84,12 +95,7 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
         }
 
         SF_Manager.isScrollEnd = false;
-        string debugStr = "";
-        foreach (SFPostItem itm in emptyItemsQueue)
-        {
-            debugStr += itm.username + ", ";
-        }
-        Debug.Log(debugStr);
+
         while (emptyItemsQueue.Count > 0)
         {
             SFPostItem emptyObj = emptyItemsQueue.Dequeue();
@@ -120,8 +126,9 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
         WWWForm form = new WWWForm();
         //form.AddField("previousDate", currentPhotoTimestamp);
         form.AddField("previousDate", currentPhotoTimestamp);
-        //placeholder username
-        form.AddField("username", "baksdf");
+        // was originally a placeholder username "asfdasdf"
+        form.AddField("username", "asfdasdf");
+        form.AddField("loggedInUser", scls.getUsername());
 
         using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "/get-next-photo.php", form))
         {
@@ -166,23 +173,16 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
                         latStr = datachunks[5].Split('%')[0];
                         longStr = datachunks[5].Split('%')[1];
                         postIDStr = datachunks[^1];
-                        //previousPostId = Convert.ToInt32(datachunks[^1]);
-                        /*Debug.Log("pfp:" + pfpImageURl);
-                        Debug.Log("post: " + postImageURL);
-                        Debug.Log("time: " + currentPhotoTimestamp);
-                        Debug.Log("un: " + usernameStr);
-                        Debug.Log("loc: " + latStr + longStr);
-                        Debug.Log("id: " + postIDStr);*/
 
                         SFitem.username = usernameStr.Trim();
                         SFitem.postID = postIDStr.Trim();
                         SFitem.location = latStr.Trim() + "," + longStr.Trim();
 
                         string[] reactChunks = partition[1].Split("%");
-
+                        ParseReacts(reactChunks, SFitem);
                         Debug.Log("Starting Download");
-                        //possibly don't make this wait for the download image to complete? as is seems fastest, but it shouldn't be!
-                        yield return StartCoroutine(downloadImageFromURL(rootURL + postImageURL, rootURL + pfpImageURl, SFitem));
+                        //possibly make this a yield return to wait until post is fully loaded - faster as is, but less stable?
+                        StartCoroutine(downloadImageFromURL(rootURL + postImageURL, rootURL + pfpImageURl, SFitem));
                     }
                 }
                 else
@@ -191,6 +191,25 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
                 }
             }
         }
+    }
+
+    void ParseReacts(string[] reactChunks, SFPostItem postItem)
+    {
+        int i = 0;
+        List<string> listOfKeys = new(postItem.ReactNumDict.Keys);
+        string debugList = "";
+
+        foreach (string key in listOfKeys)
+        {
+            int likes = Convert.ToInt32(reactChunks[i].Split(":")[1].Split("|")[0]);
+            bool isUserLiked = Convert.ToBoolean(reactChunks[i].Split("|")[1]);
+
+            postItem.ReactNumDict[key] = (likes, isUserLiked);
+            i++;
+
+            debugList += postItem.ReactNumDict[key];
+        }
+       // Debug.Log("reacts: " + debugList);
     }
 
     IEnumerator downloadImageFromURL(string url1, string url2, SFPostItem item)
