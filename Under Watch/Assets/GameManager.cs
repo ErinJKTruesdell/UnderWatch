@@ -8,7 +8,7 @@ using static OnlineMapsGPXObject;
 
 public class GameManager : MonoBehaviour
 {
-    string rootURL = "egs01.westphal.drexel.edu/";
+    public static string rootURL = "egs01.westphal.drexel.edu/";
 
     public DateTime loginTime;
     public DateTime openSocialFeedTime;
@@ -17,7 +17,14 @@ public class GameManager : MonoBehaviour
     public TouchScreenKeyboard keyboard;
     public AchieveMonitor ach;
 
-    // Start is called before the first frame update
+    static public Color32 blueCol = new(99, 202, 225, 255);
+    static public Color32 pinkCol = new(237, 30, 121, 255);
+    static public Color32 redCol = new(180, 17, 75, 255);
+
+    private void Awake()
+    {
+        RegistrationManager.gm = this;
+    }
     void Start()
     {
         scls = GameObject.FindObjectOfType<SC_LoginSystem>();
@@ -29,8 +36,8 @@ public class GameManager : MonoBehaviour
         scls.gm = this;
 
         DontDestroyOnLoad(this);
-    }
 
+    }
     public void saveLoginTime()
     {
         loginTime = DateTime.Now;
@@ -90,15 +97,27 @@ public class GameManager : MonoBehaviour
     public void ProgressToScene(string sceneName)
     {
 
-        if(SceneManager.GetActiveScene().name == "SocialFeed")
+        if(SceneManager.GetActiveScene().name == "SocialFeed" &&  SceneManager.loadedSceneCount == 1)
         {
             onSocialFeedClosed();
+            SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
         }
-        if(sceneName == "SocialFeed")
+        else
+        {
+            SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+        }
+        if (sceneName == "SocialFeed")
         {
             saveSocialFeedTime();
         }
-        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+    }
+
+    public void LogOut()
+    {
+        PlayerPrefs.DeleteAll();
+        ProgressToScene("LoginScene");
+
+        Debug.Log("User login data cleared");
     }
 
     public void ForgotPassword()
@@ -157,6 +176,50 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+    public void RequestExactAlarmPermission()
+    {
+        if (UnityEngine.Application.platform == RuntimePlatform.Android)
+        {
+            using (AndroidJavaObject activity = GetUnityActivity())
+            {
+                using (AndroidJavaObject alarmManager = GetAlarmManager(activity))
+                {
+                    bool canScheduleExactAlarms = alarmManager.Call<bool>("canScheduleExactAlarms");
+                    if (!canScheduleExactAlarms)
+                    {
+                        // Request permission by opening the settings screen
+                        using (AndroidJavaClass settings = new AndroidJavaClass("android.provider.Settings"))
+                        {
+                            string action = settings.GetStatic<string>("ACTION_REQUEST_SCHEDULE_EXACT_ALARM");
+                            using (AndroidJavaObject intent = new AndroidJavaObject("android.content.Intent", action))
+                            {
+                                activity.Call("startActivity", intent);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log("Exact Alarm permission already granted.");
+                    }
+                }
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Platform is not Android. Exact Alarm permission request is skipped.");
+        }
+    }
 
-    //add achievement handling here
+    private AndroidJavaObject GetUnityActivity()
+    {
+        using (AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+        {
+            return unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+        }
+    }
+
+    private AndroidJavaObject GetAlarmManager(AndroidJavaObject activity)
+    {
+        return activity.Call<AndroidJavaObject>("getSystemService", "alarm");
+    }
 }

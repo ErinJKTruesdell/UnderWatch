@@ -33,8 +33,6 @@ public class SearchScript : MonoBehaviour
 
     public GameObject searchIcon;
 
-    string rootURL = "egs01.westphal.drexel.edu/";
-
     public Transform gridObj;
 
     public List<GameObject> Element = new();
@@ -84,7 +82,7 @@ public class SearchScript : MonoBehaviour
 
         List<userData> userNames = new List<userData>();
 
-        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "get-usernames.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "get-usernames.php", form))
         {
             yield return www.SendWebRequest();
 
@@ -111,7 +109,7 @@ public class SearchScript : MonoBehaviour
                 {
                     if (UNData[j].Length > 2) // trim off that last empty bit
                     {
-                        //Debug.Log(PFPData[j]);
+                        Debug.Log("fsdhj" + PFPData[j]);
                         userNames.Add(new userData(UNData[j], PFPData[j]));
                     }
                 }
@@ -140,6 +138,7 @@ public class SearchScript : MonoBehaviour
 
 
                     //downlaod prof img
+
                     StartCoroutine(downloadImageFromURL(i.profUrl, li.profilePic));
                 }
 

@@ -17,22 +17,22 @@ public class ProfileDatabase : MonoBehaviour
     public GameObject photoPrefab; // has RawImage component that holds actual image
     public Transform contentTransform;
 
-    string rootURL = "egs01.westphal.drexel.edu/";
-
     public TMP_Text usernameText;
     public TMP_Text fullNameText;
 
-    // Update is called once per frame
+    public GameManager gm;
 
+    private void Start()
+    {
+        gm = GameObject.FindObjectOfType<GameManager>();
+    }
     public void GoToAchievements()
     {
-        SceneManager.LoadScene("Achievements");
+        gm.ProgressToScene("Achievements");
     }
-    public void DeleteLogin()
+    public void PfDLogOut()
     {
-        PlayerPrefs.DeleteAll();
-        Debug.Log("User login data cleared");
-
+        gm.LogOut();
     }
 
     public void fillCanvas(string username, string fullName)
@@ -49,7 +49,7 @@ public class ProfileDatabase : MonoBehaviour
         usernameText.text = "@" + username;
         usernameText.gameObject.SetActive(true);
 
-        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "/get-all-user-photos.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "/get-all-user-photos.php", form))
         {
             yield return www.SendWebRequest();
 
@@ -79,7 +79,7 @@ public class ProfileDatabase : MonoBehaviour
 
                     string profUrl = "/" + userChunks[1];
                     Debug.Log(profUrl);
-                    StartCoroutine(downloadImageFromURL(rootURL + profUrl, profileImage));
+                    StartCoroutine(downloadImageFromURL(GameManager.rootURL + profUrl, profileImage));
 
                     //create prefab and load images
                     for (int s = 1; s < userChunks.Length; s++)
@@ -94,7 +94,7 @@ public class ProfileDatabase : MonoBehaviour
                             ppp.zoomedImage = zoomedImage;
                             ppp.zoomedImageObj = zoomedImageObject;
                             //downlaod prof img
-                            StartCoroutine(downloadImageFromURL(rootURL + i, ppp.thisImage));
+                            StartCoroutine(downloadImageFromURL(GameManager.rootURL + i, ppp.thisImage));
                         }
                     }
 

@@ -16,8 +16,6 @@ public class SelfieCam : MonoBehaviour
 
     WebCamTexture webcam;
 
-    public string uploadURL = "egs01.westphal.drexel.edu/uploadImage.php";
-
     public MeshRenderer camMesh;
     WaitForEndOfFrame frameEnd = new WaitForEndOfFrame();
 
@@ -30,11 +28,15 @@ public class SelfieCam : MonoBehaviour
     public GameObject blockingPanel;
     public GameObject closeButton;
 
+    public TextMeshProUGUI unText;
+    public TextMeshProUGUI targetUNText;
+    public RawImage unPfpImage;
+    public RawImage targetPfpImage;
+
     Vector3 currentLocalEurlerAngles = Vector3.zero;
     // Start is called before the first frame update
     void Start()
     {
-
         devices = WebCamTexture.devices;
         WebCamDevice frontCamera;
         if (devices.Length > 1)
@@ -49,7 +51,11 @@ public class SelfieCam : MonoBehaviour
             }
             if (devices[1].name != " ")
             {
-                webcam = new WebCamTexture(devices[1].name);
+                if (UnityEngine.Application.platform == RuntimePlatform.Android)
+                    webcam = new WebCamTexture(devices[1].name);
+                else
+                    webcam = new WebCamTexture(devices[1].name);
+                    Debug.Log("cam: " + devices[1].name);
             }
 
             webcam.Play();
@@ -82,7 +88,7 @@ public class SelfieCam : MonoBehaviour
 
     public void showNewTarget(string s, EventArgs e)
     {
-        if (s.StartsWith("Success"))
+        if (s.Contains("Success"))
         {
             testBox.SetActive(true);
         }
@@ -156,12 +162,12 @@ public class SelfieCam : MonoBehaviour
                     form.AddField("latitude", latitude.ToString());
                     form.AddField("longitude", longitude.ToString());
 
-                    UnityWebRequest www = UnityWebRequest.Post(uploadURL, form);
+                    UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "uploadImage.php", form);
                     Debug.Log("Sending web request...");
 
                     yield return www.SendWebRequest();
 
-                    if (www.isNetworkError || www.isHttpError)
+                    if (www.result != UnityWebRequest.Result.Success)
                     {
                         responseText.text = "Error: " + www.error;
 
@@ -171,19 +177,50 @@ public class SelfieCam : MonoBehaviour
                     }
                     else
                     {
+                        Debug.Log("result: " + www.result);
+
+                        Debug.Log("response: " + www.downloadHandler.text);
+
                         Debug.Log("Form upload complete! " + System.Text.Encoding.ASCII.GetString(www.downloadHandler.data));
                         HandleServerResponse(www.downloadHandler.text);
+                        HandleStartingUIResponse(www.downloadHandler.text);
                         closeButton.SetActive(true);
-
                     }
                 }
                 else
                 {
                     Debug.Log("File does not exist");
                 }
-
             }
         }
+    }
+
+    public void HandleStartingUIResponse(string responseText)
+    {
+        //this may be a unity bug, but if you try to start a void method that starts a coroutine inside another coroutine, that started coroutine is quietly killed
+        //this function is necessary to avoid that bug ~~
+        HandleUIServerResponse(responseText);
+    }
+
+    public void HandleUIServerResponse(string responseText)
+    {
+        //APPROVAL: Selfie Not Approved|uploads/67b803a642475733731280.png|uploads/67a6a54aa534c078768223.png|ezkhunter|101
+        //Approval. "|" . $username . "|" . $user_prof_url . "|" . $target_id . "|" . $target_prof_url
+
+        string[] dataPartition = responseText.Split("|");
+        string unData = dataPartition[1].Trim();
+        string unPfp = GameManager.rootURL + dataPartition[2].Trim();
+        string targetUN = dataPartition[3].Trim();
+        string targetPfp = GameManager.rootURL + dataPartition[4].Trim();
+
+        Debug.Log("target url: " + targetPfp);
+        Debug.Log("self url: " + unPfp);
+
+        unText.text = unData;
+        targetUNText.text = targetUN;
+
+        StartCoroutine(downloadImageFromURL(unPfp, unPfpImage));
+        StartCoroutine(downloadImageFromURL(targetPfp, targetPfpImage));
     }
 
     public void capturePhoto()
@@ -210,6 +247,10 @@ public class SelfieCam : MonoBehaviour
     {
         blockingPanel.SetActive(false);
         responseText.text = "";
+
+        webcam.Play();
+        camMesh.material.SetTexture("_MainTex", webcam);
+
     }
 
     IEnumerator ShowProcessingAnimation()
@@ -266,6 +307,23 @@ public class SelfieCam : MonoBehaviour
         {
             responseText.text = "Verification failed, re-upload or try a different image.";
         }*/
+    }
+
+    IEnumerator downloadImageFromURL(string url1, RawImage image1)
+    {
+        Debug.Log("Starting image Download Request");
+        UnityWebRequest request = UnityWebRequestTexture.GetTexture(url1);
+        yield return request.SendWebRequest();
+        if (request.result != UnityWebRequest.Result.Success)
+        {
+            Debug.Log("hello?");
+            Debug.Log(request.error);
+        }
+        else
+        {
+            image1.texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
+        }
+
     }
 
     [System.Serializable]

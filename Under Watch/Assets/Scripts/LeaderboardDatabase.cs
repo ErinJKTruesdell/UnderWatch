@@ -24,8 +24,6 @@ public class LeaderboardDatabase : MonoBehaviour
 
     public GameObject leaderboardloading;
 
-    string rootURL = "egs01.westphal.drexel.edu/";
-
     bool isWorking;
 
     public Transform gridObj;
@@ -47,7 +45,7 @@ public class LeaderboardDatabase : MonoBehaviour
 
         List<pointsData> allPoints = new List<pointsData>();
 
-        using (UnityWebRequest www = UnityWebRequest.Post("https://egs01.westphal.drexel.edu/get-next-leaderboard.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "get-next-leaderboard.php", form))
         {
             yield return www.SendWebRequest();
 
@@ -97,7 +95,7 @@ public class LeaderboardDatabase : MonoBehaviour
                     li.pointsText.text = i.points.ToString() + " points";
 
                     //downlaod prof img
-                    StartCoroutine(downloadImageFromURL(rootURL + i.profUrl, li.profilePic));
+                    StartCoroutine(downloadImageFromURL(GameManager.rootURL + i.profUrl, li.profilePic));
                 }
 
             }

@@ -21,8 +21,6 @@ public class GetTargetLocation : MonoBehaviour
 
     SC_LoginSystem sclogin;
 
-    string rootURL = "egs01.westphal.drexel.edu/";
-
     public TMP_Text targetText;
     public RawImage targetProf;
 
@@ -57,6 +55,18 @@ public class GetTargetLocation : MonoBehaviour
         StartCoroutine(LocateTarget(sclogin.getUsername()));
         Debug.Log(sclogin.getUsername());
 
+        //turn lolcation on
+        infiniteScrollViewport.SetActive(false);
+        mapOverlay.SetActive(true);
+        mapObj.SetActive(true);
+        showMapButton.SetActive(false);
+
+        //set lat and long
+        map.SetPosition(39.952f, -75.15f); //39.952f, -75.15f
+        map.markerManager.Add(new OnlineMapsMarker());
+        map.markerManager[0].SetPosition(39.952f, -75.15f);
+        map.markerManager[0].scale = 0.12f;
+
     }
 
     public void reCenter()
@@ -74,7 +84,7 @@ public class GetTargetLocation : MonoBehaviour
 
         string errorMessage = "";
 
-        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "get-target-location.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "get-target-location.php", form))
         {
             yield return www.SendWebRequest();
 
@@ -86,13 +96,10 @@ public class GetTargetLocation : MonoBehaviour
             // {
             string responseText = www.downloadHandler.text;
             Debug.Log("response: " + responseText);
-            if (responseText.StartsWith("Success"))
+            if (responseText.Contains("Success"))
             {
                 string[] dataChunks = responseText.Split('|');
-
                 targetText.text = "@" + dataChunks[1];
-                targetLat = float.Parse(dataChunks[2]);
-                targetLong = float.Parse(dataChunks[3]);
                 string targetTimestamp = dataChunks[4];
 
                 //turn lolcation on
@@ -101,17 +108,30 @@ public class GetTargetLocation : MonoBehaviour
                 mapObj.SetActive(true);
                 showMapButton.SetActive(false);
 
-                //set lat and long
-                map.SetPosition(targetLong, targetLat); //2.35, 48.87
-                map.markerManager.Add(new OnlineMapsMarker());
-                map.markerManager[0].SetPosition(targetLong, targetLat);
-                map.markerManager[0].scale = 0.12f;
+                if (dataChunks[2] != "" && dataChunks[3] != "")
+                {
+                    targetLat = float.Parse(dataChunks[2]);
+                    targetLong = float.Parse(dataChunks[3]);
 
+                    //set lat and long
+                    map.SetPosition(targetLong, targetLat); //2.35, 48.87
+                    map.markerManager.Add(new OnlineMapsMarker());
+                    map.markerManager[0].SetPosition(targetLong, targetLat);
+                    map.markerManager[0].scale = 0.12f;
+                }
+                else
+                {
+                    map.SetPosition(0, 0); //2.35, 48.87
+                    map.markerManager.Add(new OnlineMapsMarker());
+                    map.markerManager[0].SetPosition(0, 0);
+                    map.markerManager[0].scale = 0.12f;
+                }
                 //get target's profile pic
                 string profUrl;
-                if (dataChunks[5] != "")
+                if (dataChunks[8] != "")
                 {
-                    profUrl = rootURL + dataChunks[7];
+                    profUrl = GameManager.rootURL + dataChunks[8];
+                    Debug.Log("prof: " + GameManager.rootURL + profUrl);
                     StartCoroutine(downloadImageFromURL(profUrl, targetProf));
                 }
             }

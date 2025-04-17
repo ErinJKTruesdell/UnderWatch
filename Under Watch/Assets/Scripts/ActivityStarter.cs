@@ -27,6 +27,7 @@ public class ActivityStarter : MonoBehaviour
 
             Permission.RequestUserPermission("android.permission.ACCESS_BACKGROUND_LOCATION");
             Permission.RequestUserPermission("android.permission.WAKE_LOCK");
+
             //Replace with your full package name
             sendActivityReference("com.example.alarmlibrary.AlarmServiceStarter");
 

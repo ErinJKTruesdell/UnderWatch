@@ -52,9 +52,6 @@ public class SC_LoginSystem : MonoBehaviour
     public string userName = "";
     string userEmail = "";
 
-    string rootURL = "egs01.westphal.drexel.edu/"; //Path where php files are located
-
-
     public event TargetHandler Target;
     public EventArgs e = null;
     public delegate void TargetHandler(string m, EventArgs e);
@@ -67,6 +64,8 @@ public class SC_LoginSystem : MonoBehaviour
 
         Application.targetFrameRate = 60; // Or Application.targetFrameRate = Screen.currentResolution.refreshRate;
 
+
+        gm.RequestExactAlarmPermission();
     }
 
 
@@ -80,11 +79,15 @@ public class SC_LoginSystem : MonoBehaviour
         return userName;
     }
 
-    public void loginUponRegister(string username, string email)
+    public void loginUponRegister(string username, string email, int points)
     {
+        Debug.Log("logging in on register");
         userName = username;
         userEmail = email;
         isLoggedIn = true;
+
+        StartCoroutine(doTargetAssignment(username, points));
+
     }
 
     public void showLoginFields()
@@ -153,20 +156,22 @@ public class SC_LoginSystem : MonoBehaviour
         isWorking = true;
         if (isLoggedIn)
         {
+            Debug.Log("isLoggedIn");
+
             string errorMessage = "";
 
             WWWForm form = new WWWForm();
             form.AddField("username", username);
             form.AddField("points", pointsToAdd);
 
-
-            using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "assignTarget.php", form))
+            using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "assignTarget.php", form))
             {
                 yield return www.SendWebRequest();
 
                 if (www.result != UnityWebRequest.Result.Success)
                 {
                     errorMessage = www.error;
+                    Debug.Log("unsuccessful assignment!" + errorMessage);
                 }
                 //else
                 // {
@@ -174,13 +179,16 @@ public class SC_LoginSystem : MonoBehaviour
 
                 string returnText = "";
 
-                if (responseText.StartsWith("Success"))
+                if (responseText.Contains("New Target"))
                 {
                     returnText = responseText;
+                    Debug.Log("successful assignment!" + returnText);
                 }
                 else
                 {
                     returnText = responseText;
+                    Debug.Log("unsuccessful assignment!" + returnText);
+
                 }
                 //}
                 if (Target != null)
@@ -191,12 +199,17 @@ public class SC_LoginSystem : MonoBehaviour
 
             isWorking = false;
         }
+        else
+        {
+            Debug.Log("not logged in!");
+        }
     }
 
     private void Awake()
     {
 
         DontDestroyOnLoad(this);
+        RegistrationManager.loginSystem = this;
         // attempt login with any saved information
         if (PlayerPrefs.GetString("savedUsername", "") != "" || PlayerPrefs.GetString("savedPassword", "") != "")
         {
@@ -244,6 +257,15 @@ public class SC_LoginSystem : MonoBehaviour
             PlayerPrefs.DeleteAll();
             Debug.Log("User login data cleared");
         }
+
+        /*if (Input.GetKeyDown(KeyCode.M))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1 );
+        }*/
     }
 
     void OnGUI()
@@ -370,7 +392,7 @@ public class SC_LoginSystem : MonoBehaviour
         form.AddField("password1", registerPassword1);
         form.AddField("password2", registerPassword2);
 
-        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "register.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "register.php", form))
         {
             yield return www.SendWebRequest();
 
@@ -382,7 +404,7 @@ public class SC_LoginSystem : MonoBehaviour
             {
                 string responseText = www.downloadHandler.text;
 
-                if (responseText.StartsWith("Success"))
+                if (responseText.Contains("Success"))
                 {
                     ResetValues();
                     registrationCompleted = true;
@@ -407,7 +429,7 @@ public class SC_LoginSystem : MonoBehaviour
         form.AddField("email", email);
         form.AddField("password", password);
 
-        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "login.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "login.php", form))
         {
             yield return www.SendWebRequest();
             if (www.result != UnityWebRequest.Result.Success)
@@ -418,7 +440,7 @@ public class SC_LoginSystem : MonoBehaviour
             else
             {
                 string responseText = www.downloadHandler.text;
-                if (responseText.StartsWith("Success"))
+                if (responseText.Contains("Success"))
                 {
                     string[] dataChunks = responseText.Split('|');
                     userName = dataChunks[1];
@@ -464,7 +486,7 @@ public class SC_LoginSystem : MonoBehaviour
         WWWForm form = new WWWForm();
         form.AddField("email", email);
 
-        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "pwd_reset_query.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "pwd_reset_query.php", form))
         {
             yield return www.SendWebRequest();
 
@@ -501,7 +523,7 @@ public class SC_LoginSystem : MonoBehaviour
 
         form.AddField("reset_code", code);
 
-        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "pwd_reset_action.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "pwd_reset_action.php", form))
         {
             yield return www.SendWebRequest();
 
@@ -584,7 +606,7 @@ public class SC_LoginSystem : MonoBehaviour
             form.AddField("lat", lat);
             form.AddField("long", longi);
 
-            using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "recordLocation.php", form))
+            using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "recordLocation.php", form))
             {
                 yield return www.SendWebRequest();
 

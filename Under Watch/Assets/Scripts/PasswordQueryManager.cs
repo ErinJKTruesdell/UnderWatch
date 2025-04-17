@@ -35,7 +35,7 @@ public class PasswordQueryManager : MonoBehaviour
 
     public void receiveQueryResponse(string response)
     {
-        if (response.StartsWith("Success"))
+        if (response.Contains("Success"))
         {
             requestButton.SetActive(false);
             resetButtonItems.SetActive(true);
@@ -50,7 +50,7 @@ public class PasswordQueryManager : MonoBehaviour
 
     public void receiveResetResponse(string response)
     {
-        if (response.StartsWith("Success"))
+        if (response.Contains("Success"))
         {
             //log the user in and move on
             StartCoroutine(gm.scls.LoginEnumerator(currentEmail, newPw));

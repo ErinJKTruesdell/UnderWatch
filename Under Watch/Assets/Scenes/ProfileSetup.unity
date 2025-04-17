@@ -915,10 +915,9 @@ MonoBehaviour:
   errorText: {fileID: 652218226}
   profPic: {fileID: 171679029}
   profPicOverlay: {fileID: 158842886}
-  loginSystem: {fileID: 0}
-  activityStarter: {fileID: 101250685}
-  gm: {fileID: 0}
+  defaultPfp: {fileID: 2800000, guid: e52209048afb38c4a99e97ec379b4844, type: 3}
   socialFeedIndex: 2
+  rootURL: egs01.westphal.drexel.edu/
   cacheCheckToggle: {fileID: 1119123165}
   camUI: {fileID: 1866659806}
   regTextFields: {fileID: 568298185}
@@ -929,7 +928,7 @@ MonoBehaviour:
   canvasElement: {fileID: 1161088183}
   bg: {fileID: 1944680223}
   camMeshObj: {fileID: 527317860}
-  cacheToggle: {fileID: 0}
+  cacheToggle: {fileID: 1119123163}
   rear: {fileID: 1674709392}
   camMesh: {fileID: 527317864}
   testBox: {fileID: 1129152745}
@@ -1468,6 +1467,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1866659807}
   - {fileID: 1161088184}
   m_Father: {fileID: 1842103409}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1845,7 +1845,7 @@ Transform:
   m_GameObject: {fileID: 527317860}
   serializedVersion: 2
   m_LocalRotation: {x: 0.5, y: -0.5, z: 0.5, w: -0.5}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0, z: 0}
   m_LocalScale: {x: 1.019715, y: 1, z: 0.75}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2751,6 +2751,7 @@ GameObject:
   - component: {fileID: 778508918}
   - component: {fileID: 778508917}
   - component: {fileID: 778508916}
+  - component: {fileID: 778508920}
   m_Layer: 5
   m_Name: LastName
   m_TagString: Untagged
@@ -2914,6 +2915,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 778508914}
   m_CullTransparentMesh: 1
+--- !u!114 &778508920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 778508914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2edfa40255e77404ebfd2bdd16815c03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CustomFont: default
+  KeyboardLanguage: default
+  BackgroundColor: {r: 1, g: 1, b: 1, a: 1}
+  IsManualHideControl: 0
+  IsWithDoneButton: 0
+  IsWithClearButton: 0
+  ReturnKey: 0
+  OnReturnPressedEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &826251806
 GameObject:
   m_ObjectHideFlags: 0
@@ -3241,7 +3264,7 @@ VideoPlayer:
   m_RenderMode: 1
   m_AspectRatio: 0
   m_DataSource: 0
-  m_TimeUpdateMode: 2
+  m_TimeUpdateMode: 1
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 0
   m_TargetAudioSources:
@@ -5223,7 +5246,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 348719275}
-  - {fileID: 1866659807}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -5507,12 +5529,12 @@ RectTransform:
   - {fileID: 756750586}
   - {fileID: 626870459}
   - {fileID: 472351056}
-  m_Father: {fileID: 1842103409}
+  m_Father: {fileID: 348719275}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 2.2199707, y: 4.2165527}
+  m_SizeDelta: {x: 702.22, y: 1506.2166}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1886312885
 GameObject:

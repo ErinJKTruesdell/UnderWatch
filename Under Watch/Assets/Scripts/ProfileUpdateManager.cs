@@ -21,7 +21,6 @@ public class ProfileUpdateManager : MonoBehaviour
     public NativeGallery.MediaPickCallback ngmpc = new NativeGallery.MediaPickCallback(handleNewPicture);
 
     bool isWorking = false;
-    string rootURL = "egs01.westphal.drexel.edu/";
 
     bool profImageSet = false;
 
@@ -153,7 +152,7 @@ public class ProfileUpdateManager : MonoBehaviour
         }
 
 
-        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "profPic.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "profPic.php", form))
         {
             yield return www.SendWebRequest();
 
@@ -165,7 +164,7 @@ public class ProfileUpdateManager : MonoBehaviour
             // {
             string responseText = www.downloadHandler.text;
             Debug.Log(responseText);
-            if (responseText.StartsWith("Success"))
+            if (responseText.Contains("Success"))
             {
                 SceneManager.LoadScene("PlayerProfile");
             }
