@@ -15,7 +15,7 @@ public class LoginManager : MonoBehaviour
     private string loggedInUser { get; set; }
 
 
-    string rootURL = "https://erinjktruesdell.com/";
+    string rootURL = "egs01.westphal.drexel.edu/";
 
     // Start is called before the first frame update
     private void Start()

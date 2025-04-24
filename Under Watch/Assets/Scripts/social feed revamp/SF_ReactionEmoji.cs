@@ -34,6 +34,8 @@ public class SF_ReactionEmoji : MonoBehaviour
     public Color darkGrey;
 
     public string reactName = "";
+
+    public bool isAd = false;
     private void Awake()
     {
         parentCell = GetComponentInParent<SF_Cell>();
@@ -69,7 +71,6 @@ public class SF_ReactionEmoji : MonoBehaviour
 
             colorEmoji.SetActive(false);
             bannerObj.SetActive(false);
-
         }
         else
         {
@@ -92,6 +93,7 @@ public class SF_ReactionEmoji : MonoBehaviour
         //if the user hasn't clicked before
         else
         {
+            userClicked = true;
             LikeSetup();
             FillLikeData();
             ColorizeBanner();
@@ -130,7 +132,8 @@ public class SF_ReactionEmoji : MonoBehaviour
         bannerObj.SetActive(false);
 
         //on the php server, if the like from user already is true, then it will toggle the like off.
-        StartCoroutine(SendLikeDataToServer());
+        if (!isAd)
+            StartCoroutine(SendLikeDataToServer());
     }
     void FillLikeData()
     {
@@ -139,7 +142,10 @@ public class SF_ReactionEmoji : MonoBehaviour
         reactNum++;
         reactNumText.text = reactNum.ToString();
 
-        StartCoroutine(SendLikeDataToServer());
+        if (!isAd)
+            StartCoroutine(SendLikeDataToServer());
+        else
+            parentCell._postItem.ReactNumDict[reactName] = (reactNum, true);
     }
     void LikeSetup()
     {
@@ -147,7 +153,6 @@ public class SF_ReactionEmoji : MonoBehaviour
         reactNumText.fontSize = 20;
         colorEmoji.SetActive(true);
         bannerObj.SetActive(true);
-
     }
     void LikeAnims()
     {

@@ -19,7 +19,7 @@ public class GetTargetLocation : MonoBehaviour
 
     public PlayerViewTab pvt;
 
-    string rootURL = "https://erinjktruesdell.com/";
+    string rootURL = "egs01.westphal.drexel.edu/";
 
     public TMP_Text targetText;
 

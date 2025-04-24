@@ -26,9 +26,8 @@ public class AdUploadManager : MonoBehaviour
 
     public TMP_Text numadstext;
 
-    string rootURL = "https://erinjktruesdell.com/";
+    string rootURL = "egs01.westphal.drexel.edu/";
 
-    public Button multiAdButton;
     string multiAdUN = "Sponsored";
 
 
@@ -238,6 +237,7 @@ public class AdUploadManager : MonoBehaviour
             form.AddField("username", uid);
             form.AddField("month", monthDay.Item1.ToString());
             form.AddField("day", monthDay.Item2.ToString());
+            form.AddField("priority", 1);
 
             byte[] FileUpload = null;
             bool isError = false;
@@ -322,10 +322,27 @@ public class AdUploadManager : MonoBehaviour
         string imageName = imageNames[imageNames.Length - 1];
         form.AddBinaryData("file", File.ReadAllBytes(filePath), imageName);
         form.AddField("username", loggedInUser);
-        Tuple<int, int, int> time = confUploader.cts.selectedTimestamp();
-        form.AddField("month", time.Item1);
-        form.AddField("day", time.Item2);
-        form.AddField("hour", time.Item3);
+        //Tuple<int, int, int> time = confUploader.cts.selectedTimestamp();
+        Tuple<int, int> monthDay = atm.selectedTimestamp();
+
+        string month = monthDay.Item1.ToString();
+        string day = monthDay.Item2.ToString();
+
+        //padding with zeroes
+        if (month.Length < 2)
+        {
+            month = "0" + month;
+        }
+        if (day.Length < 2)
+        {
+            day = "0" + day;
+        }
+
+        isWorking = true;
+        string errorMessage = "";
+
+        form.AddField("month", monthDay.Item1.ToString());
+        form.AddField("day", monthDay.Item2.ToString());
 
         UnityWebRequest www = UnityWebRequest.Post(rootURL + "uploadImage.php", form);
         Debug.Log("Sending web request...");
@@ -344,7 +361,6 @@ public class AdUploadManager : MonoBehaviour
             errorText.color = Color.white;
             errorText.text = ("Succsessfully uploaded ads to all players");
             filepaths = new string[0];
-            multiAdButton.interactable = false;
         }
     }
 }

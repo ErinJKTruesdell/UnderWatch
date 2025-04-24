@@ -15,6 +15,8 @@ public class SFPostItem
     //images are assigned in the downloadImages func
     public Texture postPhoto;
     public Texture pfpPhoto;
+
+    public bool isAd = false;
     //reacts
     public Dictionary<string, (int, bool)> ReactNumDict = new()
     {
@@ -47,6 +49,7 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
 
     Queue<SFPostItem> emptyItemsQueue = new();
     bool isFirstLoad = false;
+    bool isWorking = false;
 
     //Recyclable scroll rect's data source must be assigned in Awake.
     private void Awake()
@@ -55,13 +58,6 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
         _recyclableScrollRect.DataSource = this;
         scls = GameObject.FindObjectOfType<SC_LoginSystem>();
 
-    }
-    private void Update()
-    {
-        if (isScrollEnd)
-        {
-            Debug.Log("scrolling!");
-        }
     }
     private void Start()
     {
@@ -72,7 +68,7 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
     public void ListenerMethod(Vector2 value)
     {
         //if scrolled near end
-        if (isScrollEnd)
+        if (isScrollEnd && !isWorking)
         {
             Debug.Log("scrolling at end!");
             InitData();
@@ -86,6 +82,7 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
     }
     IEnumerator GetRequestAndAdd()
     {
+        isWorking = true;
         for (int i = 0; i < _dataLength; i++)
         {
             SFPostItem obj = new();
@@ -95,23 +92,25 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
 
         SF_Manager.isScrollEnd = false;
 
+        string localTimestamp = currentPhotoTimestamp;
         while (emptyItemsQueue.Count > 0)
         {
             SFPostItem emptyObj = emptyItemsQueue.Dequeue();
-            yield return StartCoroutine(GetRequest(emptyObj));  // Waits for download to finish
+            yield return StartCoroutine(GetRequest(emptyObj, localTimestamp));  // Waits for download to finish
+            localTimestamp = currentPhotoTimestamp; // currentPhotoTimestamp is updated in GetRequest
+
             Debug.Log("added post: " + emptyObj.postPhoto + " added pfp: " + emptyObj.pfpPhoto);
         }
         if (isFirstLoad)
             _recyclableScrollRect.ReloadData();  // Notify scroll list that data is ready
             isFirstLoad = false;
+        isWorking = false;
     }
 
 
     #region WEB-REQUESTS
-    IEnumerator GetRequest(SFPostItem SFitem)
+    IEnumerator GetRequest(SFPostItem SFitem, string timestamp)
     {
-        bool isAd = false;
-
         string usernameStr;
         string latStr;
         string longStr;
@@ -120,11 +119,11 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
         string postImageURL;
         string pfpImageURl;
 
-        Debug.Log("Starting Request: " + currentPhotoTimestamp);
+        Debug.Log("Starting Request: " + timestamp);
 
         WWWForm form = new WWWForm();
         //form.AddField("previousDate", currentPhotoTimestamp);
-        form.AddField("previousDate", currentPhotoTimestamp);
+        form.AddField("previousDate", timestamp);
         // was originally a placeholder username "asfdasdf"
         form.AddField("username", "asfdasdf");
         form.AddField("loggedInUser", scls.getUsername());
@@ -153,11 +152,14 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
                 {
                     string[] datachunks = partition[0].Split("|");
 
-                    if (datachunks[3] == "Sponsored")
+                    string newTimeStamp = datachunks[2];
+                    currentPhotoTimestamp = newTimeStamp;
+                    if (datachunks[0].Contains("Spon"))
                     {
-                        currentPhotoTimestamp = datachunks[2];
+                        //Sponsored|uploads/6802b70799fa1456967581.png|2024-10-18 00:00:00
                         postImageURL = datachunks[1];
-                        isAd = true;
+
+                        SFitem.isAd = true;
                         yield return StartCoroutine(downloadAdImageFromURL(GameManager.rootURL + postImageURL, SFitem));
                     }
 
@@ -165,7 +167,6 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
                     {
                         pfpImageURl = datachunks[0];
                         postImageURL = datachunks[1];
-                        currentPhotoTimestamp = datachunks[2];
                         pfpImageURl = pfpImageURl.Replace("\n", "");
                         usernameStr = datachunks[3];
                         //[4] needs to be split by % for lat/long

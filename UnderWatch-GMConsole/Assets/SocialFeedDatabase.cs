@@ -44,7 +44,7 @@ public class SocialFeedDatabase : MonoBehaviour
     bool isWorking = false;
 
 
-    string rootURL = "https://erinjktruesdell.com/";
+    string rootURL = "egs01.westphal.drexel.edu/";
 
     Queue<GetNextImageCommand> queue;
 

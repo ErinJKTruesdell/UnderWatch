@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine.UI;
 using System.Xml;
 using UnityEngine.SceneManagement;
+using System;
 
 //The configuration of a cell is done through the DataSource SetCellData method.
 
@@ -28,9 +29,11 @@ public class SF_Cell : MonoBehaviour, ICell
     private int _cellIndex;
     public SC_LoginSystem scls;
 
-    bool hasLoadedPost = false;
-    bool hasLoadedPfp = false;
+    //ad handling
+    public Button adButton;
+    public Button pfpButton;
 
+    List<int> loadedPosts = new();
     //ensure that these are added in order from smile -> gator
     public List<SF_ReactionEmoji> reacts = new();
     private List<string> allReactNames = new()
@@ -66,45 +69,71 @@ public class SF_Cell : MonoBehaviour, ICell
     //called every time this cell comes back into view. Consider moving image loading here to reduce memory impact
     public void ConfigureCell(SFPostItem postItem, int cellIndex)
     {
+        Debug.Log("AD: " + postItem.isAd);
+
         SetCellColor(cellIndex);
 
         _cellIndex = cellIndex;
         _postItem = postItem;
 
-        unText.text = postItem.username;
-        locText.text = postItem.location;
-        postIDText.text = postItem.postID;
         postID = postItem.postID;
+        postIDText.text = postID;
 
-        if (postItem.postPhoto == null || postItem.pfpPhoto == null)
+        if (postItem.isAd)
         {
-            StartCoroutine(LoadPostImages());
+            adButton.enabled = true;
+            unText.text = postItem.username;
+            locText.text = "Sponsored Post";
+            StartCoroutine(LoadPostImages(true));
+
+            if (!loadedPosts.Contains(cellIndex))
+            {
+                PopulateAdReacts(postItem);
+                loadedPosts.Add(cellIndex);
+
+                foreach (SF_ReactionEmoji react in reacts)
+                {
+                    react.isAd = true;
+                }
+            }
         }
         else
         {
-            postImage.texture = postItem.postPhoto;
-            pfpImage.texture = postItem.pfpPhoto;
+            unText.text = postItem.username;
+            locText.text = postItem.location;
+
+            if (postItem.postPhoto == null || postItem.pfpPhoto == null)
+            {
+                StartCoroutine(LoadPostImages(false));
+            }
+            else
+            {
+                postImage.texture = postItem.postPhoto;
+                pfpImage.texture = postItem.pfpPhoto;
+            }
         }
 
         _postItem.ReactNumDict = postItem.ReactNumDict;
-
         foreach (SF_ReactionEmoji react in reacts)
         {
             react.LoadReacts();
         }
     }
-    IEnumerator LoadPostImages()
+    IEnumerator LoadPostImages(bool isAd)
     {
         while (_postItem.postPhoto == null)
         {
             yield return new WaitForSeconds(.1f);
         }
         postImage.texture = _postItem.postPhoto;
-        while (_postItem.pfpPhoto == null)
+        if (!isAd)
         {
-            yield return new WaitForSeconds(.1f);
+            while (_postItem.pfpPhoto == null)
+            {
+                yield return new WaitForSeconds(.1f);
+            }
+            pfpImage.texture = _postItem.pfpPhoto;
         }
-        pfpImage.texture = _postItem.pfpPhoto;
     }
     private void SetCellColor(int index)
     {
@@ -126,6 +155,22 @@ public class SF_Cell : MonoBehaviour, ICell
         }
     }
 
+    void PopulateAdReacts(SFPostItem postItem)
+    {
+        //{ "smile" , (0, false)},
+
+        int i = 0;
+        List<string> listOfKeys = new(postItem.ReactNumDict.Keys);
+
+        foreach (string key in listOfKeys)
+        {
+            int likes = UnityEngine.Random.Range(10, 100);
+            bool isUserLiked = false;
+
+            postItem.ReactNumDict[key] = (likes, isUserLiked);
+            i++;
+        }
+    }
 
     public void ClickOnProfile()
     {
@@ -133,6 +178,11 @@ public class SF_Cell : MonoBehaviour, ICell
         ShowClickedProfile.sceneCameFrom = SceneManager.GetActiveScene().name;
 
         SceneManager.LoadScene("ClickedProfile");
+    }
+
+    public void AdClick()
+    {
+        Debug.Log("ad clicked");
     }
 
 
