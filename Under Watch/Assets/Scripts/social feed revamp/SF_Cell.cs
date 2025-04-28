@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using System.Xml;
 using UnityEngine.SceneManagement;
 using System;
+using UnityEngine.UIElements;
 
 //The configuration of a cell is done through the DataSource SetCellData method.
 
@@ -14,24 +15,27 @@ public class SF_Cell : MonoBehaviour, ICell
 {
     public string postID;
 
+    public AchieveMonitor achMon;
+    public SC_LoginSystem scls;
+
     //UI
     public TextMeshProUGUI unText;
     public TextMeshProUGUI locText;
     public TextMeshProUGUI postIDText;
+    public string adLink;
 
     public RawImage postImage;
     public RawImage pfpImage;
 
-    public Image colorFrame;
+    public UnityEngine.UI.Image colorFrame;
 
     //Model - is this taking up significant memory?
     public SFPostItem _postItem;
     private int _cellIndex;
-    public SC_LoginSystem scls;
 
     //ad handling
-    public Button adButton;
-    public Button pfpButton;
+    public UnityEngine.UI.Button adButton;
+    public UnityEngine.UI.Button pfpButton;
 
     List<int> loadedPosts = new();
     //ensure that these are added in order from smile -> gator
@@ -56,6 +60,7 @@ public class SF_Cell : MonoBehaviour, ICell
     private void Start()
     {
         scls = GameObject.FindObjectOfType<SC_LoginSystem>();
+        achMon = GameObject.FindObjectOfType<AchieveMonitor>();
 
         //assign each react's value to the correct name\
         int i = 0;
@@ -69,8 +74,6 @@ public class SF_Cell : MonoBehaviour, ICell
     //called every time this cell comes back into view. Consider moving image loading here to reduce memory impact
     public void ConfigureCell(SFPostItem postItem, int cellIndex)
     {
-        Debug.Log("AD: " + postItem.isAd);
-
         SetCellColor(cellIndex);
 
         _cellIndex = cellIndex;
@@ -78,11 +81,12 @@ public class SF_Cell : MonoBehaviour, ICell
 
         postID = postItem.postID;
         postIDText.text = postID;
+        unText.text = postItem.username;
 
         if (postItem.isAd)
         {
             adButton.enabled = true;
-            unText.text = postItem.username;
+            adLink = postItem.adLink;
             locText.text = "Sponsored Post";
             StartCoroutine(LoadPostImages(true));
 
@@ -99,8 +103,8 @@ public class SF_Cell : MonoBehaviour, ICell
         }
         else
         {
-            unText.text = postItem.username;
             locText.text = postItem.location;
+            adButton.enabled = false;
 
             if (postItem.postPhoto == null || postItem.pfpPhoto == null)
             {
@@ -183,6 +187,9 @@ public class SF_Cell : MonoBehaviour, ICell
     public void AdClick()
     {
         Debug.Log("ad clicked");
+        if (adLink != "")
+            Application.OpenURL(adLink);
+        achMon.addAdClick();
     }
 
 

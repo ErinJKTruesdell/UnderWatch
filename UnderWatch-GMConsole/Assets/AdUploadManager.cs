@@ -30,6 +30,8 @@ public class AdUploadManager : MonoBehaviour
 
     string multiAdUN = "Sponsored";
 
+    public TMP_InputField adLinkInput;
+    public TMP_InputField advertiserNameInput;
 
     // Start is called before the first frame update
     void Start()
@@ -230,14 +232,18 @@ public class AdUploadManager : MonoBehaviour
                 day = "0" + day;
             }
 
+            string adLink = adLinkInput.text;
+            string adName = advertiserNameInput.text;
             isWorking = true;
             string errorMessage = "";
-
+            
             WWWForm form = new WWWForm();
             form.AddField("username", uid);
             form.AddField("month", monthDay.Item1.ToString());
             form.AddField("day", monthDay.Item2.ToString());
             form.AddField("priority", 1);
+            form.AddField("link", adLink);
+            form.AddField("advertiser", adName);
 
             byte[] FileUpload = null;
             bool isError = false;

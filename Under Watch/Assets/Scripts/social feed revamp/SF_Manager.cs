@@ -11,7 +11,7 @@ public class SFPostItem
     public string username;
     public string location;
     public string postID;
-
+    public string adLink;
     //images are assigned in the downloadImages func
     public Texture postPhoto;
     public Texture pfpPhoto;
@@ -158,6 +158,12 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
                     {
                         //Sponsored|uploads/6802b70799fa1456967581.png|2024-10-18 00:00:00
                         postImageURL = datachunks[1];
+                        if (datachunks[3] != "")
+                            SFitem.adLink = datachunks[3];
+                        if (datachunks[4] != "")
+                            SFitem.username = datachunks[4];
+                        else
+                            SFitem.username = "SnapGram Advertiser";
 
                         SFitem.isAd = true;
                         yield return StartCoroutine(downloadAdImageFromURL(GameManager.rootURL + postImageURL, SFitem));
