@@ -319,6 +319,7 @@ MonoBehaviour:
   popupPanel: {fileID: 803394941}
   gm: {fileID: 0}
   scls: {fileID: 0}
+  getTargetLoc: {fileID: 459863531}
 --- !u!1 &108601716
 GameObject:
   m_ObjectHideFlags: 0

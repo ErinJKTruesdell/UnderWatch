@@ -316,7 +316,6 @@ public class SelfieCam : MonoBehaviour
         yield return request.SendWebRequest();
         if (request.result != UnityWebRequest.Result.Success)
         {
-            Debug.Log("hello?");
             Debug.Log(request.error);
         }
         else

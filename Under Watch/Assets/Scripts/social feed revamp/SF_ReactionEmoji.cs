@@ -21,6 +21,7 @@ public class SF_ReactionEmoji : MonoBehaviour
 
     public GameObject colorEmoji;
     public GameObject bannerObj;
+    public Image greyBanner;
     public Image banner;
     public Image border;
     public Image greyEmoji;
@@ -29,15 +30,16 @@ public class SF_ReactionEmoji : MonoBehaviour
     public int reactNum;
     bool userClicked = false;
 
+    public Color neutralGrey = new(204, 204, 204, 255);
+    public Color darkGrey;
+
     public string reactName = "";
+
+    public bool isAd = false;
     private void Awake()
     {
         parentCell = GetComponentInParent<SF_Cell>();
         emojiAnim = colorEmoji.GetComponent<Animator>();
-        bannerObj = transform.GetChild(0).gameObject;
-
-        colorEmoji.SetActive(false);
-        bannerObj.SetActive(false);
     }
 
     //called when sf_cell's configuration finisihes
@@ -50,71 +52,88 @@ public class SF_ReactionEmoji : MonoBehaviour
         //if user has liked this reaction before
         if (parentCell._postItem.ReactNumDict[reactName].Item2 == true)
         {
-            LikeSetup();
-            ColorizeBorder();
-            userClicked = true;
-        }
-        //if this reaction has been liked by any user
-        else if (parentCell._postItem.ReactNumDict[reactName].Item1 > 0)
-        {
             colorEmoji.SetActive(true);
             bannerObj.SetActive(true);
-            border.color *= 0;
+            userClicked = true;
+
             LikeSetup();
+            ColorizeBanner();
         }
-        else
+        //if this reaction has been liked by any user
+        else if (reactNum > 0)
         {
+            LikeSetup();
+            greyBanner.color = neutralGrey;
             greyEmoji.color = Color.white;
+
+            reactNumText.fontSize = 15;
+            reactNumText.color = Color.white;
 
             colorEmoji.SetActive(false);
             bannerObj.SetActive(false);
         }
-    }   
-    
+        else
+        {
+            ResetText();
+            greyEmoji.color = Color.white;
+            colorEmoji.SetActive(false);
+            bannerObj.SetActive(false);
+            greyBanner.color *= 0;
+        }
+
+    }
+
     IEnumerator Like()
     {
-        //if the user has clicked the button
+        //if the user has already clicked the button
         if (userClicked == true)
         {
             StartCoroutine(Unlike());
         }
-        //if the user hasnt clicked the button, but the emoji's banner is active
-        else if (colorEmoji.activeSelf)
-        {
-            FillLikeData();
-        }
-        //if the emoji's banner isnt active
+        //if the user hasn't clicked before
         else
         {
+            userClicked = true;
             LikeSetup();
-            LikeAnims();
             FillLikeData();
+            ColorizeBanner();
+            LikeAnims();
         }
         yield return null;
     }
-
+    void ResetText()
+    {
+        reactNumText.fontSize = 15;
+        reactNumText.text = reactNum.ToString();
+        reactNumText.color = darkGrey;
+    }
     IEnumerator Unlike()
     {
         reactNum--;
-        reactNumText.text = reactNum.ToString();
+        ResetText();
         userClicked = false;
-        border.color *= 0;
 
-        //if this reaction doesn't have any clicks from other users, fully deactivate it
-        if (reactNum <= 0)
+        bannerSlide.Play("bannerReverse");
+        emojiAnim.Play("emojiReverse");
+
+        yield return new WaitForSeconds(.15f);
+        //if other users have reacted
+        if (reactNum > 0)
         {
-            greyEmoji.color = Color.white;
-            bannerSlide.Play("bannerReverse");
-            emojiAnim.Play("emojiReverse");
-
-            yield return new WaitForSeconds(.15f);
-
-            colorEmoji.SetActive(false);
-            bannerObj.SetActive(false);
+            greyBanner.color = neutralGrey;
+            reactNumText.color = Color.white;
+            reactNumText.fontSize = 15;
         }
+        else
+        {
+            greyBanner.color *= 0;
+        }
+        colorEmoji.SetActive(false);
+        bannerObj.SetActive(false);
 
         //on the php server, if the like from user already is true, then it will toggle the like off.
-        StartCoroutine(SendLikeDataToServer());
+        if (!isAd)
+            StartCoroutine(SendLikeDataToServer());
     }
     void FillLikeData()
     {
@@ -123,16 +142,17 @@ public class SF_ReactionEmoji : MonoBehaviour
         reactNum++;
         reactNumText.text = reactNum.ToString();
 
-        ColorizeBorder();
-
-        StartCoroutine(SendLikeDataToServer());
+        if (!isAd)
+            StartCoroutine(SendLikeDataToServer());
+        else
+            parentCell._postItem.ReactNumDict[reactName] = (reactNum, true);
     }
     void LikeSetup()
     {
+        reactNumText.color = neutralGrey;
+        reactNumText.fontSize = 20;
         colorEmoji.SetActive(true);
         bannerObj.SetActive(true);
-
-        ColorizeBanner();
     }
     void LikeAnims()
     {
@@ -195,6 +215,8 @@ public class SF_ReactionEmoji : MonoBehaviour
                 banner.color = GameManager.redCol;
                 break;
         }
+        reactNumText.color = Color.white;
+        ColorizeBorder();
     }
     void ColorizeBorder()
     {

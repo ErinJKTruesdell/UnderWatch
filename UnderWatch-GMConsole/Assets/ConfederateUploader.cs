@@ -12,7 +12,7 @@ public class ConfederateUploader : MonoBehaviour
 {
 
 
-    public string uploadURL = "https://erinjktruesdell.com/uploadImage.php";
+    public string uploadURL = "egs01.westphal.drexel.edu/uploadImage.php";
     public string confederateUN = "rickastley69420";
 
     public TMP_Text statustext;

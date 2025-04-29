@@ -6,6 +6,8 @@ using TMPro;
 using UnityEngine.UI;
 using System.Xml;
 using UnityEngine.SceneManagement;
+using System;
+using UnityEngine.UIElements;
 
 //The configuration of a cell is done through the DataSource SetCellData method.
 
@@ -13,24 +15,31 @@ public class SF_Cell : MonoBehaviour, ICell
 {
     public string postID;
 
+    public AchieveMonitor achMon;
+    public SC_LoginSystem scls;
+
     //UI
     public TextMeshProUGUI unText;
     public TextMeshProUGUI locText;
     public TextMeshProUGUI postIDText;
+    public string adLink;
 
     public RawImage postImage;
     public RawImage pfpImage;
 
-    public Image colorFrame;
+    public UnityEngine.UI.Image colorFrame;
 
     //Model - is this taking up significant memory?
     public SFPostItem _postItem;
     private int _cellIndex;
-    public SC_LoginSystem scls;
 
-    bool hasLoadedPost = false;
-    bool hasLoadedPfp = false;
+    //ad handling
+    public UnityEngine.UI.Button adButton;
+    public UnityEngine.UI.Button pfpButton;
 
+    List<int> loadedPosts = new();
+
+    bool adHasClicked = false;
     //ensure that these are added in order from smile -> gator
     public List<SF_ReactionEmoji> reacts = new();
     private List<string> allReactNames = new()
@@ -53,6 +62,7 @@ public class SF_Cell : MonoBehaviour, ICell
     private void Start()
     {
         scls = GameObject.FindObjectOfType<SC_LoginSystem>();
+        achMon = GameObject.FindObjectOfType<AchieveMonitor>();
 
         //assign each react's value to the correct name\
         int i = 0;
@@ -71,40 +81,65 @@ public class SF_Cell : MonoBehaviour, ICell
         _cellIndex = cellIndex;
         _postItem = postItem;
 
-        unText.text = postItem.username;
-        locText.text = postItem.location;
-        postIDText.text = postItem.postID;
         postID = postItem.postID;
+        postIDText.text = postID;
+        unText.text = postItem.username;
 
-        if (postItem.postPhoto == null || postItem.pfpPhoto == null)
+        if (postItem.isAd)
         {
-            StartCoroutine(LoadPostImages());
+            adButton.enabled = true;
+            adLink = postItem.adLink;
+            locText.text = "Sponsored Post";
+            StartCoroutine(LoadPostImages(true));
+
+            if (!loadedPosts.Contains(cellIndex))
+            {
+                PopulateAdReacts(postItem);
+                loadedPosts.Add(cellIndex);
+
+                foreach (SF_ReactionEmoji react in reacts)
+                {
+                    react.isAd = true;
+                }
+            }
         }
         else
         {
-            postImage.texture = postItem.postPhoto;
-            pfpImage.texture = postItem.pfpPhoto;
+            locText.text = postItem.location;
+            adButton.enabled = false;
+
+            if (postItem.postPhoto == null || postItem.pfpPhoto == null)
+            {
+                StartCoroutine(LoadPostImages(false));
+            }
+            else
+            {
+                postImage.texture = postItem.postPhoto;
+                pfpImage.texture = postItem.pfpPhoto;
+            }
         }
 
         _postItem.ReactNumDict = postItem.ReactNumDict;
-
         foreach (SF_ReactionEmoji react in reacts)
         {
             react.LoadReacts();
         }
     }
-    IEnumerator LoadPostImages()
+    IEnumerator LoadPostImages(bool isAd)
     {
         while (_postItem.postPhoto == null)
         {
             yield return new WaitForSeconds(.1f);
         }
         postImage.texture = _postItem.postPhoto;
-        while (_postItem.pfpPhoto == null)
+        if (!isAd)
         {
-            yield return new WaitForSeconds(.1f);
+            while (_postItem.pfpPhoto == null)
+            {
+                yield return new WaitForSeconds(.1f);
+            }
+            pfpImage.texture = _postItem.pfpPhoto;
         }
-        pfpImage.texture = _postItem.pfpPhoto;
     }
     private void SetCellColor(int index)
     {
@@ -126,6 +161,22 @@ public class SF_Cell : MonoBehaviour, ICell
         }
     }
 
+    void PopulateAdReacts(SFPostItem postItem)
+    {
+        //{ "smile" , (0, false)},
+
+        int i = 0;
+        List<string> listOfKeys = new(postItem.ReactNumDict.Keys);
+
+        foreach (string key in listOfKeys)
+        {
+            int likes = UnityEngine.Random.Range(10, 100);
+            bool isUserLiked = false;
+
+            postItem.ReactNumDict[key] = (likes, isUserLiked);
+            i++;
+        }
+    }
 
     public void ClickOnProfile()
     {
@@ -133,6 +184,20 @@ public class SF_Cell : MonoBehaviour, ICell
         ShowClickedProfile.sceneCameFrom = SceneManager.GetActiveScene().name;
 
         SceneManager.LoadScene("ClickedProfile");
+    }
+
+    public void AdClick()
+    {
+        Debug.Log("ad clicked");
+        if (adLink != "")
+        {
+            Application.OpenURL(adLink);
+            if (!adHasClicked)
+            {
+                adHasClicked = true;
+                achMon.addAdClick();
+            }
+        }
     }
 
 

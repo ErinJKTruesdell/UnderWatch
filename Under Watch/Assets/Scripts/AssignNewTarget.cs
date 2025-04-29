@@ -8,7 +8,7 @@ public class AssignNewTarget : MonoBehaviour
 
     public GameManager gm;
     public SC_LoginSystem scls;
-
+    public GetTargetLocation getTargetLoc;
     private void Start()
     {
         gm = FindObjectOfType<GameManager>();
@@ -30,7 +30,15 @@ public class AssignNewTarget : MonoBehaviour
 
     public void ChangeTarget()
     {
-        scls.doTargetAssignment(scls.getUsername(), -25);
+        StartCoroutine(ChangeTargetRoutine());
+    }
+
+    IEnumerator ChangeTargetRoutine()
+    {
+        string username = scls.getUsername();
+        yield return StartCoroutine(scls.doTargetAssignment(username, -25));
+        StartCoroutine(getTargetLoc.LocateTarget(username));
+
         ClickedClosePopup();
     }
 

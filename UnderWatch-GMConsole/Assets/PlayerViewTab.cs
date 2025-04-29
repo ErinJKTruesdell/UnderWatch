@@ -19,7 +19,7 @@ public class PlayerViewTab : MonoBehaviour
 
     List<string> allUsers;
 
-    string rootURL = "https://erinjktruesdell.com/";
+    string rootURL = "egs01.westphal.drexel.edu/";
     private void Awake()
     {
         updatePlayerList();

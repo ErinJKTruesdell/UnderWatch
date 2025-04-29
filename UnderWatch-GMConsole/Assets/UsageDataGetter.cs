@@ -24,7 +24,7 @@ public class UsageDataGetter : MonoBehaviour
     public GameObject leaderboardItemPrefab;
     public List<GameObject> usageItems = new List<GameObject>();
 
-    string rootURL = "https://erinjktruesdell.com/";
+    string rootURL = "egs01.westphal.drexel.edu/";
 
     public TMP_Text avgTotalText;
     public TMP_Text avgSocialText;

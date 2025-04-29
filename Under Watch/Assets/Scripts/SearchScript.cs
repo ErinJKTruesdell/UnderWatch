@@ -107,9 +107,8 @@ public class SearchScript : MonoBehaviour
 
                 for (int j = 0; j < UNData.Length; j++)
                 {
-                    if (UNData[j].Length > 2) // trim off that last empty bit
+                    if (UNData[j].Length > 2 && !UNData[j].Contains("Sponsored")) // trim off that last empty bit
                     {
-                        Debug.Log("fsdhj" + PFPData[j]);
                         userNames.Add(new userData(UNData[j], PFPData[j]));
                     }
                 }
