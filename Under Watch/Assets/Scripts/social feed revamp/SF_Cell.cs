@@ -38,6 +38,8 @@ public class SF_Cell : MonoBehaviour, ICell
     public UnityEngine.UI.Button pfpButton;
 
     List<int> loadedPosts = new();
+
+    bool adHasClicked = false;
     //ensure that these are added in order from smile -> gator
     public List<SF_ReactionEmoji> reacts = new();
     private List<string> allReactNames = new()
@@ -188,8 +190,14 @@ public class SF_Cell : MonoBehaviour, ICell
     {
         Debug.Log("ad clicked");
         if (adLink != "")
+        {
             Application.OpenURL(adLink);
-        achMon.addAdClick();
+            if (!adHasClicked)
+            {
+                adHasClicked = true;
+                achMon.addAdClick();
+            }
+        }
     }
 
 
