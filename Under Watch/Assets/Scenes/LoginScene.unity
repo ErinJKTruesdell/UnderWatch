@@ -1937,6 +1937,7 @@ GameObject:
   m_Component:
   - component: {fileID: 872406428}
   - component: {fileID: 872406427}
+  - component: {fileID: 872406429}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1958,9 +1959,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scls: {fileID: 386920554}
   ach: {fileID: 2042832731}
-  completedDayTasks:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!4 &872406428
 Transform:
   m_ObjectHideFlags: 0
@@ -1976,6 +1974,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &872406429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 872406426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84dde658221d6884ea7024c16ebeda24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  completedAllDayTasks:
+    m_PersistentCalls:
+      m_Calls: []
+  completedATask:
+    m_PersistentCalls:
+      m_Calls: []
+  gm: {fileID: 872406427}
 --- !u!1 &956658168
 GameObject:
   m_ObjectHideFlags: 0

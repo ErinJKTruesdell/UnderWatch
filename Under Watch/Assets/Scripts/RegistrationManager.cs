@@ -103,10 +103,7 @@ public class RegistrationManager : MonoBehaviour
             {
                 if (devices[i].isFrontFacing)
                 {
-                    Debug.Log(devices[i].name + i);
-
                     frontCamera = devices[i];
-                    camAvailable = true;
                     break;
                 }
             }
@@ -116,6 +113,7 @@ public class RegistrationManager : MonoBehaviour
                     webcam = new WebCamTexture(devices[1].name);
                 else
                     webcam = new WebCamTexture(devices[1].name);
+                    Debug.Log("cam: " + devices[1].name);
             }
             else
             {

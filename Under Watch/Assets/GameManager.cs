@@ -22,15 +22,10 @@ public class GameManager : MonoBehaviour
     static public Color32 pinkCol = new(237, 30, 121, 255);
     static public Color32 redCol = new(180, 17, 75, 255);
 
-    public static bool dayCompleted = false;
-    public static int currentDay { get; private set; }
-    public UnityEvent completedDayTasks;
-
     private void Awake()
     {
         RegistrationManager.gm = this;
 
-        completedDayTasks.AddListener(FulfilledDayReq);
     }
     void Start()
     {
@@ -43,22 +38,6 @@ public class GameManager : MonoBehaviour
         scls.gm = this;
 
         DontDestroyOnLoad(this);
-    }
-
-    public void FulfilledDayReq()
-    {
-        dayCompleted = true;
-    }
-
-    public void GoToNextDay()
-    {
-        ProgressToScene("SocialFeed");
-    }
-
-    public void GoToEndDay()
-    {
-        dayCompleted = false;
-        ProgressToScene("SocialFeed");
     }
     public void saveLoginTime()
     {
