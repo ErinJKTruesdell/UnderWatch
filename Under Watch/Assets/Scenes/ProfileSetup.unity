@@ -916,8 +916,8 @@ MonoBehaviour:
   profPic: {fileID: 171679029}
   profPicOverlay: {fileID: 158842886}
   defaultPfp: {fileID: 2800000, guid: e52209048afb38c4a99e97ec379b4844, type: 3}
+  activityStarter: {fileID: 0}
   socialFeedIndex: 2
-  rootURL: egs01.westphal.drexel.edu/
   cacheCheckToggle: {fileID: 1119123165}
   camUI: {fileID: 1866659806}
   regTextFields: {fileID: 568298185}
@@ -934,6 +934,7 @@ MonoBehaviour:
   testBox: {fileID: 1129152745}
   responseText: {fileID: 1069254349}
   pfpPath: 
+  pointsStart: 100
 --- !u!1 &158842884
 GameObject:
   m_ObjectHideFlags: 0
@@ -1846,7 +1847,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.5, y: -0.5, z: 0.5, w: -0.5}
   m_LocalPosition: {x: 0, y: -0, z: 0}
-  m_LocalScale: {x: 1.019715, y: 1, z: 0.75}
+  m_LocalScale: {x: 1.019715, y: 1, z: -0.75}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
