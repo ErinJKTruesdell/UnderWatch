@@ -2,13 +2,13 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
-/Under Watch/[Ll]ibrary/
-/Under Watch/[Tt]emp/
-/Under Watch/[Oo]bj/
-/Under Watch/[Bb]uild/
-/Under Watch/[Bb]uilds/
-/Under Watch/[Ll]ogs/
-/Under Watch/[Uu]ser[Ss]ettings/
+/Under Watch/Library/
+/Under Watch/Temp/
+/Under Watch/Obj/
+/Under Watch/Build/
+/Under Watch/Builds/
+/Under Watch/Logs/
+/Under Watch/UserSettings/
 
 
 # MemoryCaptures can get excessive in size.
@@ -129,3 +129,5 @@ Under Watch/UserSettings/Layouts/default-2022.dwlt
 ehthumbs.db
 Thumbs.db
 
+/Under Watch/Library
+/Under Watch/Library
