@@ -6,6 +6,7 @@ using Unity.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Networking;
 
 public class DayManager : MonoBehaviour
 {
@@ -31,6 +32,7 @@ public class DayManager : MonoBehaviour
 
     private void Start()
     {
+        StartCoroutine(SendLevelData(currentDay));
         FulFillReq("register new account", true);
     }
     public void SetActiveReqs(int dayNum)
@@ -70,6 +72,7 @@ public class DayManager : MonoBehaviour
     public void GoToNextDay()
     {
         currentDay++;
+        StartCoroutine(SendLevelData(currentDay));
         SetActiveReqs(currentDay);
         gm.ProgressToScene("SocialFeed");
     }
@@ -220,6 +223,34 @@ public class DayManager : MonoBehaviour
             "total 100 minutes app interaction",
             "click 20 ads"
         });
+    }
+
+    IEnumerator SendLevelData(int currentLevel)
+    {
+        WWWForm form = new WWWForm();
+
+        form.AddField("username", gm.scls.getUsername());
+        form.AddField("level", currentLevel);
+
+        //I dont think the like count is getting incremented
+
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "level_update.php", form))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                string errorMessage = www.error;
+                Debug.Log(errorMessage);
+                Debug.Log("level data send error, releasing queue");
+            }
+            else
+            {
+                string responseText = www.downloadHandler.text;
+                Debug.Log("level send: " + responseText);
+            }
+        }
+
     }
 }
 

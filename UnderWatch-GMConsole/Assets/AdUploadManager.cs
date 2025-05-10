@@ -33,6 +33,8 @@ public class AdUploadManager : MonoBehaviour
     public TMP_InputField adLinkInput;
     public TMP_InputField advertiserNameInput;
 
+    public bool isForAllUsers = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -73,6 +75,12 @@ public class AdUploadManager : MonoBehaviour
     public void OnAdUploadActivated(TabButton t, EventArgs e)
     {
         refreshAdRate();
+    }
+
+    public void AllUsersAdUpload()
+    {
+        isForAllUsers = true;
+        startUpload();
     }
 
     public void startUpload()
@@ -213,7 +221,15 @@ public class AdUploadManager : MonoBehaviour
 
 
             string[] filenameImageParts = filename.Split("-");
-            string uid = filenameImageParts[filenameImageParts.Length - 1].Split(".")[0];//the username is in this string
+            string uid;
+            if (isForAllUsers)
+            {
+                uid = "all";
+            }
+            else
+            {
+                uid = filenameImageParts[filenameImageParts.Length - 1].Split(".")[0];//the username is in this string
+            }
 
             //create WWform with username and image to upload, plus set timestamp (month/day) year can be appended automatically
 
