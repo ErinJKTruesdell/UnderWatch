@@ -9,7 +9,7 @@ using UnityEngine.Events;
 
 public class DayManager : MonoBehaviour
 {
-    private Dictionary<int, DayRequirements> allDays = new();
+    public Dictionary<int, DayRequirements> allDays = new();
     private DayRequirements currentDayReqs;
 
     public static bool dayCompleted = false;
@@ -25,13 +25,13 @@ public class DayManager : MonoBehaviour
         gm = FindObjectOfType<GameManager>();
 
         completedAllDayTasks.AddListener(AllDayReqsFulfilled);
-
+        AddAllRequirements();
         SetActiveReqs(currentDay);
     }
 
     private void Start()
     {
-        AddAllRequirements();
+        FulFillReq("register new account", true);
     }
     public void SetActiveReqs(int dayNum)
     {
@@ -39,6 +39,10 @@ public class DayManager : MonoBehaviour
         if (allDays.TryGetValue(dayNum, out var day))
         {
             currentDayReqs = day;
+        }
+        else
+        {
+            Debug.Log("Day does not exist!");
         }
     }
 
@@ -49,9 +53,9 @@ public class DayManager : MonoBehaviour
             currentDayReqs.requirements[reqName] = value;
             completedATask.Invoke();
         }
-        Debug.Log("Requirement: " + reqName + "fulfilled!! Put a popup here");
+        Debug.Log("Requirement: " + reqName + " fulfilled!! Put a popup here");
 
-        CheckIfAllReqsFilled();
+        CheckIfAllReqsFilled(currentDayReqs);
     }
 
     public void AllDayReqsFulfilled()
@@ -78,6 +82,7 @@ public class DayManager : MonoBehaviour
         {
             reqDict.Add(req, false);
         }
+
         //adds a new DayReq object, with the day's requirements and number and adds that to AddToDay
         AddToDay(dayNum, new DayRequirements(dayNum, reqDict));
     }
@@ -86,10 +91,11 @@ public class DayManager : MonoBehaviour
         allDays.Add(dayNum, DayReqs);
     }
 
-    void CheckIfAllReqsFilled()
+    void CheckIfAllReqsFilled(DayRequirements currentReqs)
     {
         bool allReqsFilled = true;
-        foreach (KeyValuePair<string, bool> kvp in currentDayReqs.requirements)
+        Debug.Log(currentReqs.requirements);
+        foreach (KeyValuePair<string, bool> kvp in currentReqs.requirements)
         {
             if (kvp.Value == false)
             {
