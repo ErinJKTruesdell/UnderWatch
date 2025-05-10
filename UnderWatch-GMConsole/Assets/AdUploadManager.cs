@@ -12,7 +12,6 @@ using UnityEngine.UI;
 
 public class AdUploadManager : MonoBehaviour
 {
-
     public TabButton adUploadTab;
     public ConfederateUploader confUploader;
 
@@ -32,6 +31,9 @@ public class AdUploadManager : MonoBehaviour
 
     public TMP_InputField adLinkInput;
     public TMP_InputField advertiserNameInput;
+
+    public TMP_Dropdown minDayDrop;
+    public TMP_Dropdown maxDayDrop;
 
     public bool isForAllUsers = false;
 
@@ -188,9 +190,6 @@ public class AdUploadManager : MonoBehaviour
                 string responseText = www.downloadHandler.text;
                 Debug.Log("Response: " + responseText);
                 selectedAdRate = int.Parse(responseText);
-
-
-
             }
         }
 
@@ -248,6 +247,9 @@ public class AdUploadManager : MonoBehaviour
                 day = "0" + day;
             }
 
+            int minDay = minDayDrop.value;
+            int maxDay = maxDayDrop.value;
+
             string adLink = adLinkInput.text;
             string adName = advertiserNameInput.text;
             isWorking = true;
@@ -260,6 +262,8 @@ public class AdUploadManager : MonoBehaviour
             form.AddField("priority", 1);
             form.AddField("link", adLink);
             form.AddField("advertiser", adName);
+            form.AddField("min_level", minDay);
+            form.AddField("max_level", maxDay);
 
             byte[] FileUpload = null;
             bool isError = false;

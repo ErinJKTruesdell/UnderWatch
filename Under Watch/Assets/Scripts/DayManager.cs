@@ -69,6 +69,14 @@ public class DayManager : MonoBehaviour
         dayCompleted = false;
         gm.ProgressToScene("SocialFeed");
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            GoToNextDay();
+        }
+    }
     public void GoToNextDay()
     {
         currentDay++;
