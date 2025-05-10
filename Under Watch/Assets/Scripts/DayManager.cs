@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using Unity.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -67,12 +70,20 @@ public class DayManager : MonoBehaviour
         gm.ProgressToScene("SocialFeed");
     }
 
-    private void AddNewRequirement(int day, string reqName)
+    private void AddNewRequirement(int dayNum, List<string> reqNames)
     {
-        allDays.Add(day, new DayRequirements(day, new Dictionary<string, bool>()
+        //fills a dict with all the requirements for one day
+        Dictionary<string, bool> reqDict = new();
+        foreach (string req in reqNames)
         {
-            {reqName, false }
-        }));
+            reqDict.Add(req, false);
+        }
+        //adds a new DayReq object, with the day's requirements and number and adds that to AddToDay
+        AddToDay(dayNum, new DayRequirements(dayNum, reqDict));
+    }
+    private void AddToDay(int dayNum, DayRequirements DayReqs)
+    {
+        allDays.Add(dayNum, DayReqs);
     }
 
     void CheckIfAllReqsFilled()
@@ -97,84 +108,114 @@ public class DayManager : MonoBehaviour
     public void AddAllRequirements()
     {
         //0 is tutorial
-        AddNewRequirement(0, "register new account");
-        AddNewRequirement(0, "take profile picture");
-        AddNewRequirement(0, "accept privacy policy");
+        AddNewRequirement(0, new List<string>()
+        {
+            "register new account",
+            "take profile picture",
+            "accept privacy policy"
+        });
 
         //ad frequency 0, snapgram announcement
-        AddNewRequirement(1, "post 1 selfie");
-        AddNewRequirement(1, "react to 3 posts");
-        AddNewRequirement(1, "check announcement box");
+        AddNewRequirement(1, new List<string>()
+        {
+            "post 1 selfie",
+            "react to 3 posts",
+            "check announcement box"
+        });
 
-        AddNewRequirement(2, "post 1 selfie");
-        AddNewRequirement(2, "total 3 favorited accounts");
-        AddNewRequirement(2, "check engagement inbox");
+        AddNewRequirement(2, new List<string>()
+        {
+            "post 1 selfie",
+            "total 3 favorited accounts",
+            "check engagement inbox",
+        });
 
         //privacy policy update
-        AddNewRequirement(3, "accept privacy policy");
-        AddNewRequirement(3, "react to 5 posts");
-        AddNewRequirement(3, "total 5 minutes app interaction");
+        AddNewRequirement(3, new List<string>()
+        {
+            "accept privacy policy",
+            "react to 5 posts",
+            "total 5 minutes app interaction"
+        });
 
         //ad frequency 6, snapgram announcement
-        AddNewRequirement(4, "post 2 selfies");
-        AddNewRequirement(4, "post 1 selfie with another person");
-        AddNewRequirement(4, "total 5 favorited accounts");
-        AddNewRequirement(4, "check engagement inbox");
+        AddNewRequirement(4, new List<string>()
+        {
+            "post 2 selfies",
+            "post 1 selfie with another person",
+            "total 5 favorited accounts",
+            "check engagement inbox"
+        });
 
-        AddNewRequirement(5, "post 2 selfies");
-        AddNewRequirement(5, "post 1 selfie at location: Drexel Dragon");
-        AddNewRequirement(5, "react to 10 posts");
-        AddNewRequirement(5, "total 10 minutes app interaction");
-        AddNewRequirement(5, "click 3 ads");
+        AddNewRequirement(5, new List<string>()
+        {
+            "post 2 selfies",
+            "post 1 selfie at location: Drexel Dragon",
+            "react to 10 posts",
+            "total 10 minutes app interaction",
+            "click 3 ads"
+        });
 
         //ad frequency 5
-        AddNewRequirement(6, "post 2 selfies");
-        AddNewRequirement(6, "post 1 selfie with 2 other people");
-        AddNewRequirement(6, "post 1 selfie from front angle");
-        AddNewRequirement(6, "total 15 minutes app interaction");
-        AddNewRequirement(6, "check engagement inbox");
+        AddNewRequirement(6, new List<string>()
+        {
+            "post 2 selfies",
+            "post 1 selfie with 2 other people",
+            "post 1 selfie from front angle",
+            "total 15 minutes app interaction",
+            "check engagement inbox"
+        });
 
         //ad frequecy 4, whistleblower: SG data leak (is this worht it?)
-        AddNewRequirement(7, "post 3 selifes");
-        AddNewRequirement(7, "post 1 selfie at location: Lancaster Walk");
-        AddNewRequirement(7, "post 1 selfie from front left angle");
-        AddNewRequirement(7, "react to 15 posts");
-        AddNewRequirement(7, "total 10 favorited accounts");
-        AddNewRequirement(7, "click 5 ads");
+        AddNewRequirement(7, new List<string>()
+        {
+            "post 3 selifes",
+            "post 1 selfie at location: Lancaster Walk",
+            "post 1 selfie from front left angle",
+            "react to 15 posts",
+            "total 10 favorited accounts",
+            "click 5 ads"
+        });
 
         //privacy policy update
         //ad frequecy 3, snapgram announcement
-        AddNewRequirement(8, "accept privacy policy");
-        AddNewRequirement(8, "post 3 selifes");
-        AddNewRequirement(8, "post 1 selfie with 3 other people");
-        AddNewRequirement(8, "post 1 selfie from front right angle");
-        AddNewRequirement(8, "total 45 minutes app interaction");
-        AddNewRequirement(8, "click 10 ads");
-        AddNewRequirement(8, "check announcement box");
+        AddNewRequirement(8, new List<string>()
+        {
+            "accept privacy policy",
+            "post 3 selifes",
+            "post 1 selfie with 3 other people",
+            "post 1 selfie from front right angle",
+            "total 45 minutes app interaction",
+            "click 10 ads",
+            "check announcement box"
+        });
 
         //ad frequency 2
-        AddNewRequirement(9, "post 4 selfies");
-        AddNewRequirement(9, "post 1 selfie at location: Your Favorite Food Cart");
-        AddNewRequirement(9, "post 1 selfie w/ target user");
-        AddNewRequirement(9, "post 1 selfie from front right angle");
-        AddNewRequirement(9, "post 1 selfie from left angle");
-        AddNewRequirement(9, "react to 25 posts");
-        AddNewRequirement(9, "total 15 favorited accounts");
-        AddNewRequirement(9, "total 60 minutes app interaction");
-        AddNewRequirement(9, "click 15 ads");
+        AddNewRequirement(9, new List<string>()
+        {
+            "post 4 selfies",
+            "post 1 selfie at location: Your Favorite Food Cart",
+            "post 1 selfie w/ target user",
+            "post 1 selfie from left angle",
+            "react to 25 posts",
+            "total 15 favorited accounts",
+            "total 60 minutes app interaction",
+            "click 15 ads"
+        });
 
         //ad frequency 1
-        AddNewRequirement(10, "post 4 selfies");
-        AddNewRequirement(10, "post 1 selfie with 4 other people");
-        AddNewRequirement(10, "post 1 selfie at location: Billboard");
-        AddNewRequirement(10, "post 1 selfie from right");
-        AddNewRequirement(10, "react to 50 posts");
-        AddNewRequirement(10, "total 100 minutes app interaction");
-        AddNewRequirement(10, "click 20 ads");
-        //end game
+        AddNewRequirement(10, new List<string>()
+        {
+            "post 4 selfies",
+            "post 1 selfie with 4 other people",
+            "post 1 selfie at location: Billboard",
+            "post 1 selfie from right",
+            "react to 50 posts",
+            "total 100 minutes app interaction",
+            "click 20 ads"
+        });
     }
 }
-
 
 public class DayRequirements
 {
