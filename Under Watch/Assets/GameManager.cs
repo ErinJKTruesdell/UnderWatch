@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     static public Color32 pinkCol = new(237, 30, 121, 255);
     static public Color32 redCol = new(180, 17, 75, 255);
 
+    private float sessionTimer = 0f;
     private void Awake()
     {
         RegistrationManager.gm = this;
@@ -77,6 +78,28 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        RequirementTimeTracker();
+    }
+    public void RequirementTimeTracker()
+    {
+        sessionTimer += Time.deltaTime;
+        //saves every minute
+        if (sessionTimer >= 60f)
+        {
+            float totalTime = PlayerPrefs.GetFloat("TotalTimePlayed", 0f);
+            totalTime += sessionTimer;
+
+            int intTime = Mathf.RoundToInt(totalTime);
+            RequirementEventHandler.InvokeAddToReq(intTime, DayManager.ObjTypes.minutes);
+
+            PlayerPrefs.SetFloat("TotalTimePlayed", totalTime);
+            PlayerPrefs.Save();
+            sessionTimer = 0f;
+        }
+    }
+
     private void OnApplicationPause(bool pause)
     {
         if (pause)
@@ -91,7 +114,6 @@ public class GameManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-
         saveAppTime();
     }
 

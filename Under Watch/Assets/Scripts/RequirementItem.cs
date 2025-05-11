@@ -14,8 +14,8 @@ public class RequirementItem : MonoBehaviour
     public void ConfigureItem(RequirementObject reqObj)
     {
         titleText.text = "\u2022<indent=1em>" + reqObj.titleText;
-        int progress = reqObj.completionTuple.Item1;
-        int total = reqObj.completionTuple.Item2;
+        int progress = reqObj.completionTuple.progress;
+        int total = reqObj.completionTuple.total;
 
         if (progress >= total)
         {

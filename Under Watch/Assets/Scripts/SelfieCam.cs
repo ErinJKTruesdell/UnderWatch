@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using System.IO;
 using TMPro;
 using System.Net;
+using DG.Tweening.Plugins.Core.PathCore;
 
 public class SelfieCam : MonoBehaviour
 {
@@ -98,100 +99,108 @@ public class SelfieCam : MonoBehaviour
         yield return frameEnd;
         if (scls != null)
         {
-
-
-            Vector3[] corners = new Vector3[4];
-            rear.rectTransform.GetWorldCorners(corners);
-            Vector3 topLeft = corners[0];
-
-            var width = (int)(corners[3].x - corners[0].x); //.rect.width;
-            var height = (int)(corners[1].y - corners[0].y);
-            var tex = new Texture2D(width, height, TextureFormat.RGB24, false);
-            // Rescale the size appropriately based on the current Canvas scale
-            Vector2 scaledSize = new Vector2(width, height);
-
-
-
-            tex.ReadPixels(new Rect(topLeft, scaledSize), 0, 0);
-            tex.Apply();
-
-            byte[] bytes = tex.EncodeToPNG();
-            string filename = gm.scls.getUsername() + "-" + DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day + "-" + DateTime.Now.Hour + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Second + ".png";
-            string path = Application.persistentDataPath + filename;
-            Debug.Log("--------------------------------------SAVING TO PATH--------------------------------------");
-            Debug.Log(path);
-            Debug.Log("------------------------------------------------------------------------------------------");
-            System.IO.File.WriteAllBytes(path, bytes);
-
-
-            //get last location
-            Input.location.Start();
-
-            // Waits until the location service initializes
-            int maxWait = 20;
-            while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
-            {
-                yield return new WaitForSeconds(1);
-                maxWait--;
-            }
-
-            float latitude = Input.location.lastData.latitude;
-            float longitude = Input.location.lastData.longitude;
-
-            //upload to server
-            Debug.Log("Getting logged in user...");
+            byte[] bytes = EncodePhoto().EncodeToPNG();
             string loggedInUser = gm.scls.getUsername();
+
+            string filename = loggedInUser + "-" + DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day + "-" + DateTime.Now.Hour + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Second + ".png";
+            string path = Application.persistentDataPath + filename;
+            System.IO.File.WriteAllBytes(path, bytes);
 
             Debug.Log("File Upload Coroutine");
             if (gm.scls != null && gm.scls.getIsLoggedIn())
             {
-                Debug.Log(path);
-
                 responseText.text = "Verifying Image...";
                 StartCoroutine(ShowProcessingAnimation());
                 blockingPanel.SetActive(true);
 
-                if (File.Exists(path))
-                {
-                    Debug.Log("File exists! Uploading Form...");
-                    WWWForm form = new WWWForm();
-                    string[] imageNames = path.Split("/");
-                    string imageName = imageNames[imageNames.Length - 1];
-                    form.AddBinaryData("file", File.ReadAllBytes(path), imageName);
-                    form.AddField("username", scls.getUsername());
-                    form.AddField("latitude", latitude.ToString());
-                    form.AddField("longitude", longitude.ToString());
-
-                    UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "uploadImage.php", form);
-                    Debug.Log("Sending web request...");
-
-                    yield return www.SendWebRequest();
-
-                    if (www.result != UnityWebRequest.Result.Success)
-                    {
-                        responseText.text = "Error: " + www.error;
-
-                        Debug.Log(www.error);
-                        StopAllCoroutines(); // Stop the processing animation
-                        closeButton.SetActive(true);
-                    }
-                    else
-                    {
-                        Debug.Log("result: " + www.result);
-
-                        Debug.Log("response: " + www.downloadHandler.text);
-
-                        Debug.Log("Form upload complete! " + System.Text.Encoding.ASCII.GetString(www.downloadHandler.data));
-                        HandleServerResponse(www.downloadHandler.text);
-                        HandleStartingUIResponse(www.downloadHandler.text);
-                        closeButton.SetActive(true);
-                    }
-                }
-                else
-                {
-                    Debug.Log("File does not exist");
-                }
+                StartCoroutine(SelfieUpload(path));
             }
+        }
+    }
+
+    IEnumerator SelfieUpload(string path)
+    {
+        //if ()
+
+        StartCoroutine(GetLocation());
+        float latitude = Input.location.lastData.latitude;
+        float longitude = Input.location.lastData.longitude;
+
+        if (File.Exists(path))
+        {
+            Debug.Log("File exists! Uploading Form...");
+
+            WWWForm form = new WWWForm();
+
+            string[] imageNames = path.Split("/");
+            string imageName = imageNames[imageNames.Length - 1];
+            form.AddBinaryData("file", File.ReadAllBytes(path), imageName);
+
+            form.AddField("username", scls.getUsername());
+            form.AddField("preapproved", "true");
+
+            //always send location
+            form.AddField("latitude", latitude.ToString());
+            form.AddField("longitude", longitude.ToString());
+
+            UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "uploadImage.php", form);
+            Debug.Log("Sending web request...");
+
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                responseText.text = "Error: " + www.error;
+
+                Debug.Log(www.error);
+                StopAllCoroutines(); // Stop the processing animation
+                closeButton.SetActive(true);
+            }
+            else
+            {
+                Debug.Log("result: " + www.result);
+                Debug.Log("response: " + www.downloadHandler.text);
+
+                //Debug.Log("Form upload complete! " + System.Text.Encoding.ASCII.GetString(www.downloadHandler.data));
+                HandleServerResponse(www.downloadHandler.text);
+                HandleStartingUIResponse(www.downloadHandler.text);
+                closeButton.SetActive(true);
+            }
+        }
+        else
+        {
+            Debug.Log("File does not exist");
+        }
+    }
+
+    private Texture2D EncodePhoto()
+    {
+        Vector3[] corners = new Vector3[4];
+        rear.rectTransform.GetWorldCorners(corners);
+        Vector3 topLeft = corners[0];
+
+        var width = (int)(corners[3].x - corners[0].x); //.rect.width;
+        var height = (int)(corners[1].y - corners[0].y);
+        var tex = new Texture2D(width, height, TextureFormat.RGB24, false);
+        // Rescale the size appropriately based on the current Canvas scale
+        Vector2 scaledSize = new Vector2(width, height);
+
+        tex.ReadPixels(new Rect(topLeft, scaledSize), 0, 0);
+        tex.Apply();
+        return tex;
+    }
+
+    IEnumerator GetLocation()
+    {
+        //get last location
+        Input.location.Start();
+
+        // Waits until the location service initializes
+        int maxWait = 20;
+        while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
+        {
+            yield return new WaitForSeconds(1);
+            maxWait--;
         }
     }
 
@@ -205,7 +214,7 @@ public class SelfieCam : MonoBehaviour
     public void HandleUIServerResponse(string responseText)
     {
         //APPROVAL: Selfie Not Approved|uploads/67b803a642475733731280.png|uploads/67a6a54aa534c078768223.png|ezkhunter|101
-        //Approval. "|" . $username . "|" . $user_prof_url . "|" . $target_id . "|" . $target_prof_url
+        //Approval. "|" . $username . "|" . $user_prof_url . "|" . $target_id . "|" . $target_prof_url . "|" . $faceCount;
 
         string[] dataPartition = responseText.Split("|");
         string unData = dataPartition[1].Trim();
@@ -213,14 +222,13 @@ public class SelfieCam : MonoBehaviour
         string targetUN = dataPartition[3].Trim();
         string targetPfp = GameManager.rootURL + dataPartition[4].Trim();
 
-        Debug.Log("target url: " + targetPfp);
-        Debug.Log("self url: " + unPfp);
+        int faceCount = Convert.ToInt32(dataPartition[5].Trim());
 
         unText.text = unData;
         targetUNText.text = targetUN;
 
-        StartCoroutine(downloadImageFromURL(unPfp, unPfpImage));
-        StartCoroutine(downloadImageFromURL(targetPfp, targetPfpImage));
+        //StartCoroutine(downloadImageFromURL(unPfp, unPfpImage));
+        //StartCoroutine(downloadImageFromURL(targetPfp, targetPfpImage));
     }
 
     public void capturePhoto()

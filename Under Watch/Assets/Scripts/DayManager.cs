@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using Unity.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,11 +10,33 @@ using UnityEngine.Networking;
 
 public class DayManager : MonoBehaviour
 {
+    public enum ObjTypes
+    {
+        other,
+        privacyPolicy,
+        selfie,
+        selfieOthers,
+        selfieLocation,
+        selfieAngle,
+        selfieTarget,
+        react,
+        announcements,
+        minutes,
+        adClicks,
+        profilePic,
+        register,
+        engagementInbox,
+        favorites,
+    }
+
     public Dictionary<int, DayRequirements> allDays = new();
-    private DayRequirements currentDayReqs;
+    public static DayRequirements currentDayReqs;
 
     public static bool dayCompleted = false;
     public static int currentDay { get; private set; }
+
+    //some objective types are reused constantly - this dict provides a list scripts can check if they should perform objective logic based on current day
+    public static Dictionary<int, List<ObjTypes>> dayReqTypeList = new();
 
     public Queue<string> achievementsQueue = new();
     bool isWorking = false;
@@ -21,37 +44,38 @@ public class DayManager : MonoBehaviour
     //refs
     public GameManager gm;
     public AchievementsManager achMan;
+
+    public static List<string> reactedPostIDs;
     private void Awake()
     {
         DontDestroyOnLoad(this);
         gm = FindObjectOfType<GameManager>();
 
-
+        InitDayReqTypeList();
         AddAllRequirements();
         SetActiveReqs(currentDay);
     }
-
     private void Start()
     {
         StartCoroutine(SendLevelData(currentDay));
 
-        RequirementEventHandler.InvokeReqCompleted("accept privacy policy", 1);
+        RequirementEventHandler.InvokeAddToReq(1, ObjTypes.privacyPolicy);
     }
-    public void UpdateReq(string reqName, int value)
+    public void UpdateReq(ObjTypes reqName, int value)
     {
         if (currentDayReqs != null && currentDayReqs.requirements.ContainsKey(reqName))
         {
-            Tuple<int, int> reqData = currentDayReqs.requirements[reqName];
+            (string name, int progress, int total) reqData = currentDayReqs.requirements[reqName];
 
-            //add the value int to the tracker number (item 1) of the req
-            reqData = new Tuple<int, int>(reqData.Item1 + value, reqData.Item2);
+            //add the value int to the progress number (item 2) of the req
+            reqData = (reqData.name, reqData.progress + value, reqData.total);
             currentDayReqs.requirements[reqName] = reqData;
-            Debug.Log("requirement " + reqName + "is at: " + reqData.Item1 + "/" + reqData.Item2);
+            //Debug.Log("requirement " + reqName + "is at: " + reqData.Item1 + "/" + reqData.Item2);
 
-            if (reqData.Item1 >= reqData.Item2)
+            if (reqData.progress >= reqData.total)
             {
                 //this requirement is fulfilled, popup and check if day is done
-                achievementsQueue.Enqueue(reqName);
+                achievementsQueue.Enqueue(reqData.name);
                 if (!isWorking)
                     StartCoroutine(DequeueAchievements());
 
@@ -62,13 +86,6 @@ public class DayManager : MonoBehaviour
         else
             Debug.Log("currentDayReqs doesn't contain that key!");
 
-    }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            GoToNextDay();
-        }
     }
     public void AllDayReqsFulfilled()
     {
@@ -86,127 +103,127 @@ public class DayManager : MonoBehaviour
         SetActiveReqs(currentDay);
         gm.ProgressToScene("SocialFeed");
     }
-    public Dictionary<string, Tuple<int, int>> GetCurrentRequirements()
+    public Dictionary<ObjTypes, (string name, int progress, int total)> GetCurrentRequirements()
     {
         return currentDayReqs?.requirements;
     }
     public void AddAllRequirements()
     {
         //0 is tutorial
-        AddNewRequirement(0, new List<(string, int, int)>()
+        AddNewRequirement(0, new List<(ObjTypes, string, int, int)>()
         {
-            ("register new account", 0, 1), //
-            ("take profile picture", 0, 1), //
-            ("accept privacy policy", 0, 1)
+            (ObjTypes.register, "register new account", 0, 1), //
+            (ObjTypes.profilePic, "take profile picture", 0, 1), //
+            (ObjTypes.privacyPolicy, "accept privacy policy", 0, 1)
         });
 
         //ad frequency 0, snapgram announcement
-        AddNewRequirement(1, new List<(string, int, int)>()
+        AddNewRequirement(1, new List<(ObjTypes, string, int, int)>()
         {
-            ("post 1 selfie", 0, 1), //
-            ("react to 3 posts", 0, 3),
-            ("check announcement box", 0, 1)
+            (ObjTypes.selfie, "post 1 selfie", 0, 1), 
+            (ObjTypes.react, "react to 3 posts", 0, 3), //
+            (ObjTypes.announcements, "check announcement box", 0, 1)
         });
 
-        AddNewRequirement(2, new List<(string, int, int)>()
+        AddNewRequirement(2, new List<(ObjTypes, string, int, int)>()
         {
-            ("post 1 selfie", 0, 5),
-            ("total 3 favorited accounts", 0, 3),
-            ("check engagement inbox", 0, 1)
+            (ObjTypes.selfie, "post 1 selfie", 0, 5),
+            (ObjTypes.favorites, "total 3 favorited accounts", 0, 3),
+            (ObjTypes.engagementInbox, "check engagement inbox", 0, 1)
         });
 
         //privacy policy update
-        AddNewRequirement(3, new List<(string, int, int)>()
+        AddNewRequirement(3, new List<(ObjTypes, string, int, int)>()
         {
-            ("accept privacy policy", 0, 1),
-            ("react to 5 posts", 0, 5),
-            ("total 5 minutes app interaction", 0, 5)
+            (ObjTypes.privacyPolicy, "accept privacy policy", 0, 1),
+            (ObjTypes.react, "react to 5 posts", 0, 5), //
+            (ObjTypes.minutes, "total 5 minutes app interaction", 0, 5)
         });
 
         //ad frequency 6, snapgram announcement
-        AddNewRequirement(4, new List<(string, int, int)>()
+        AddNewRequirement(4, new List<(ObjTypes, string, int, int)>()
         {
-            ("post 2 selfies", 0, 2),
-            ("post 1 selfie with another person", 0, 1),
-            ("total 5 favorited accounts", 0, 5),
-            ("check engagement inbox", 0 ,1)
+            (ObjTypes.selfie, "post 2 selfies", 0, 2),
+            (ObjTypes.selfieOthers, "post 1 selfie with another person", 0, 1),
+            (ObjTypes.favorites, "total 5 favorited accounts", 0, 5),
+            (ObjTypes.engagementInbox, "check engagement inbox", 0 ,1)
         });
 
-        AddNewRequirement(5, new List<(string, int, int)>()
+        AddNewRequirement(5, new List<(ObjTypes, string, int, int)>()
         {
-            ("post 2 selfies", 0, 2),
-            ("post 1 selfie at location: Drexel Dragon", 0, 1),
-            ("react to 10 posts", 0, 10),
-            ("total 10 minutes app interaction", 0, 10),
-            ("click 3 ads", 0, 3)
+            (ObjTypes.selfie, "post 2 selfies", 0, 2),
+            (ObjTypes.selfieLocation, "post 1 selfie at location: Drexel Dragon", 0, 1),
+            (ObjTypes.react, "react to 10 posts", 0, 10), //
+            (ObjTypes.minutes,"total 10 minutes app interaction", 0, 10),
+            (ObjTypes.adClicks, "click 3 ads", 0, 3)
         });
 
         //ad frequency 5
-        AddNewRequirement(6, new List<(string, int, int)>()
+        AddNewRequirement(6, new List<(ObjTypes, string, int, int)>()
         {
-            ("post 2 selfies", 0, 2),
-            ("post 1 selfie with 2 other people", 0, 1),
-            ("post 1 selfie from front angle", 0, 1),
-            ("total 15 minutes app interaction", 0, 15),
-            ("check engagement inbox", 0, 1)
+            (ObjTypes.selfie, "post 2 selfies", 0, 2),
+            (ObjTypes.selfieOthers, "post 1 selfie with 2 other people", 0, 1),
+            (ObjTypes.selfieAngle, "post 1 selfie from front angle", 0, 1),
+            (ObjTypes.minutes, "total 15 minutes app interaction", 0, 15),
+            (ObjTypes.engagementInbox, "check engagement inbox", 0, 1)
         });
 
         //ad frequecy 4, whistleblower: SG data leak (is this worht it?)
-        AddNewRequirement(7, new List<(string, int, int)>()
+        AddNewRequirement(7, new List<(ObjTypes, string, int, int)>()
         {
-            ("post 3 selifes", 0, 3),
-            ("post 1 selfie at location: Lancaster Walk", 0, 1),
-            ("post 1 selfie from front left angle", 0, 1),
-            ("react to 15 posts", 0, 15),
-            ("total 10 favorited accounts", 0, 10),
-            ("click 5 ads", 0, 5)
+            (ObjTypes.selfie, "post 3 selifes", 0, 3),
+            (ObjTypes.selfieLocation, "post 1 selfie at location: Lancaster Walk", 0, 1),
+            (ObjTypes.selfieAngle, "post 1 selfie from front left angle", 0, 1),
+            (ObjTypes.react, "react to 15 posts", 0, 15), //
+            (ObjTypes.favorites, "total 10 favorited accounts", 0, 10),
+            (ObjTypes.adClicks, "click 5 ads", 0, 5)
         });
 
         //privacy policy update
         //ad frequecy 3, snapgram announcement
-        AddNewRequirement(8, new List<(string, int, int)>()
+        AddNewRequirement(8, new List<(ObjTypes, string, int, int)>()
         {
-            ("accept privacy policy", 0, 1),
-            ("post 3 selifes", 0, 3),
-            ("post 1 selfie with 3 other people", 0, 1),
-            ("post 1 selfie from front right angle", 0, 1),
-            ("total 45 minutes app interaction", 0, 45),
-            ("click 10 ads", 0, 10),
-            ("check announcement box", 0, 1)
+            (ObjTypes.privacyPolicy, "accept privacy policy", 0, 1),
+            (ObjTypes.selfie, "post 3 selifes", 0, 3),
+            (ObjTypes.selfieOthers, "post 1 selfie with 3 other people", 0, 1),
+            (ObjTypes.selfieAngle, "post 1 selfie from front right angle", 0, 1),
+            (ObjTypes.minutes, "total 45 minutes app interaction", 0, 45),
+            (ObjTypes.adClicks, "click 10 ads", 0, 10),
+            (ObjTypes.announcements, "check announcement box", 0, 1)
         });
 
         //ad frequency 2
-        AddNewRequirement(9, new List<(string, int, int)>()
+        AddNewRequirement(9, new List<(ObjTypes, string, int, int)>()
         {
-            ("post 4 selfies", 0, 4),
-            ("post 1 selfie at location: Your Favorite Food Cart", 0, 1),
-            ("post 1 selfie w/ target user", 0, 1),
-            ("post 1 selfie from left angle", 0, 1),
-            ("react to 25 posts", 0, 25),
-            ("total 15 favorited accounts", 0, 15),
-            ("total 60 minutes app interaction", 0, 60),
-            ("click 15 ads", 0, 15)
+            (ObjTypes.selfie, "post 4 selfies", 0, 4),
+            (ObjTypes.selfieLocation, "post 1 selfie at location: Your Favorite Food Cart", 0, 1),
+            (ObjTypes.selfieTarget, "post 1 selfie w/ target user", 0, 1),
+            (ObjTypes.selfieAngle, "post 1 selfie from left angle", 0, 1),
+            (ObjTypes.react, "react to 25 posts", 0, 25), //
+            (ObjTypes.favorites, "total 15 favorited accounts", 0, 15),
+            (ObjTypes.minutes, "total 60 minutes app interaction", 0, 60),
+            (ObjTypes.adClicks, "click 15 ads", 0, 15)
         });
 
         //ad frequency 1
-        AddNewRequirement(10, new List<(string, int, int)>()
+        AddNewRequirement(10, new List<(ObjTypes, string, int, int)>()
         {
-            ("post 4 selfies", 0, 4),
-            ("post 1 selfie with 4 other people", 0, 1),
-            ("post 1 selfie at location: Billboard", 0, 1),
-            ("post 1 selfie from right", 0, 1),
-            ("react to 50 posts", 0, 50),
-            ("total 100 minutes app interaction", 0, 100),
-            ("click 20 ads", 0, 20)
+            (ObjTypes.selfie, "post 4 selfies", 0, 4),
+            (ObjTypes.selfieOthers, "post 1 selfie with 4 other people", 0, 1),
+            (ObjTypes.selfieLocation, "post 1 selfie at location: Billboard", 0, 1),
+            (ObjTypes.selfieAngle, "post 1 selfie from right", 0, 1),
+            (ObjTypes.react, "react to 50 posts", 0, 50), //
+            (ObjTypes.minutes, "total 100 minutes app interaction", 0, 100),
+            (ObjTypes.adClicks, "click 20 ads", 0, 20)
         });
     }
-    private void AddNewRequirement(int dayNum, List<(string, int, int)> reqData)
+    private void AddNewRequirement(int dayNum, List<(ObjTypes, string, int, int)> reqData)
     {
         //fills a dict with all the requirements for one day
-        Dictionary<string, Tuple<int, int>> reqDict = new();
+        Dictionary<ObjTypes, (string name, int progress, int total)> reqDict = new();
         foreach (var req in reqData)
         {
-            reqDict.Add(req.Item1, new Tuple<int, int>(req.Item2, req.Item3));
+            reqDict.Add(req.Item1, (req.Item2, req.Item3, req.Item4));
         }
 
         //adds a new DayReq object, with the day's requirements and number and adds that to AddToDay
@@ -221,9 +238,9 @@ public class DayManager : MonoBehaviour
     {
         bool allReqsFilled = true;
         Debug.Log(currentReqs.requirements);
-        foreach (KeyValuePair<string, Tuple<int, int>> kvp in currentReqs.requirements)
+        foreach (KeyValuePair<ObjTypes, (string name, int progress, int total)> kvp in currentReqs.requirements)
         {
-            if (kvp.Value.Item1 != kvp.Value.Item2)
+            if (kvp.Value.progress != kvp.Value.total)
             {
                 allReqsFilled = false;
                 break;
@@ -254,6 +271,44 @@ public class DayManager : MonoBehaviour
             yield return StartCoroutine(achMan.notificationPopup(reqName + " completed!"));
         }
         isWorking = false;
+    }
+    void InitDayReqTypeList()
+    {
+        dayReqTypeList.Add(0, new List<ObjTypes> { ObjTypes.privacyPolicy });
+        dayReqTypeList.Add(2, new List<ObjTypes> { ObjTypes.selfie });
+        dayReqTypeList.Add(3, new List<ObjTypes> { ObjTypes.privacyPolicy, ObjTypes.selfie, ObjTypes.react, ObjTypes.minutes });
+        dayReqTypeList.Add(4, new List<ObjTypes> { ObjTypes.selfie, ObjTypes.selfieOthers, ObjTypes.react });
+        dayReqTypeList.Add(5, new List<ObjTypes> { ObjTypes.selfie, ObjTypes.selfieLocation, ObjTypes.react, ObjTypes.minutes, ObjTypes.adClicks });
+        dayReqTypeList.Add(6, new List<ObjTypes> { ObjTypes.selfie, ObjTypes.selfieOthers, ObjTypes.minutes });
+        dayReqTypeList.Add(7, new List<ObjTypes> { ObjTypes.selfie, ObjTypes.selfieLocation, ObjTypes.selfieAngle, ObjTypes.react, ObjTypes.adClicks });
+        dayReqTypeList.Add(8, new List<ObjTypes> { ObjTypes.privacyPolicy, ObjTypes.selfie, ObjTypes.selfieOthers, ObjTypes.minutes, ObjTypes.selfieAngle, ObjTypes.react, ObjTypes.adClicks, ObjTypes.announcements });
+        dayReqTypeList.Add(9, new List<ObjTypes> { ObjTypes.selfie, ObjTypes.selfieLocation, ObjTypes.selfieTarget, ObjTypes.minutes, ObjTypes.selfieAngle, ObjTypes.react, ObjTypes.adClicks });
+        dayReqTypeList.Add(10, new List<ObjTypes> { ObjTypes.selfie, ObjTypes.selfieLocation, ObjTypes.selfieLocation, ObjTypes.minutes, ObjTypes.selfieAngle, ObjTypes.react, ObjTypes.adClicks });
+    }
+
+    public static bool DoesDayContainObjective(ObjTypes objective)
+    {
+        List<ObjTypes> currDayReqs = dayReqTypeList[currentDay];
+
+        if (currDayReqs.Contains(objective))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public static int RequirementProgress(ObjTypes reqName)
+    {
+        int reqProg = currentDayReqs.requirements[reqName].progress;
+        return reqProg;
+    }
+    public static int RequirementTotal(ObjTypes reqName)
+    {
+        int reqProg = currentDayReqs.requirements[reqName].total;
+        return reqProg;
     }
     IEnumerator SendLevelData(int currentLevel)
     {
@@ -295,9 +350,10 @@ public class DayManager : MonoBehaviour
 public class DayRequirements
 {
     public int dayNum;
-    public Dictionary<string, Tuple<int, int>> requirements;
 
-    public DayRequirements(int day, Dictionary<string, Tuple<int, int>> reqs)
+    public Dictionary<DayManager.ObjTypes, (string name, int progress, int total)> requirements;
+    //type of objective - progress int, total int, display name
+    public DayRequirements(int day, Dictionary<DayManager.ObjTypes, (string name, int progress, int total)> reqs)
     {
         dayNum = day;
         requirements = reqs;

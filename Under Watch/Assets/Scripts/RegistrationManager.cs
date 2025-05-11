@@ -345,7 +345,7 @@ public class RegistrationManager : MonoBehaviour
         else if (!isWorking)
         {
             errorText.text = "";
-            RequirementEventHandler.InvokeReqCompleted("register new account", 1);
+            RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.register);
             StartCoroutine(doRegistration());
         }
     }
@@ -439,7 +439,7 @@ public class RegistrationManager : MonoBehaviour
 
     public void startPhotoCoroutine()
     {
-        RequirementEventHandler.InvokeReqCompleted("take profile picture", 1);
+        RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.profilePic);
         StartCoroutine(capturePhoto());
     }
 
