@@ -18,6 +18,7 @@ public class VLGFiddler : MonoBehaviour
 
     public static void RebuildVLGLayout()
     {
+
         LayoutRebuilder.ForceRebuildLayoutImmediate(vlg);
         Debug.Log("rebuilt");
     }

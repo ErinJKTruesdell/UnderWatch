@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,9 +19,11 @@ public class AchievementsManager : MonoBehaviour
     public Color32 redCol = new(180, 17, 75, 255);
 
     public GameObject notif;
+    public RectTransform notifRect;
     public TextMeshProUGUI notifDesc;
 
     public AchieveMonitor ach;
+    public GameManager gm;
 
     //super supporter, social butterfly, ispymaster
     public List<GameObject> achievements = new();
@@ -30,8 +33,13 @@ public class AchievementsManager : MonoBehaviour
     public int[] socialButterflyTiers = { 5, 15, 30, 50 };
     public int[] iSpyMasterTiers = { 5, 15, 30, 50 };
 
+    private Vector3 notifStartPos;
+
     public void Start()
     {
+        notifStartPos = notif.transform.localPosition;
+        notifRect = notif.GetComponent<RectTransform>();
+
         ach = GameObject.FindObjectOfType<AchieveMonitor>();
         if (ach == null)
         {
@@ -46,7 +54,6 @@ public class AchievementsManager : MonoBehaviour
         UpdateAchievement(title: "Super Supporter", tierThresholds: superSupporterTiers, counterVar: ach.adClicks, achIndex: 0, descStart: "click on", descEnd: "ads", winDesc: "you've clicked all the ads!");
         UpdateAchievement(title: "Social Butterfly", tierThresholds: socialButterflyTiers, counterVar: ach.favorites, achIndex: 1, descStart: "favorite", descEnd: "player profiles", winDesc: "you're a real buttefly!");
         UpdateAchievement(title: "I Spy Master", tierThresholds: iSpyMasterTiers, counterVar: ach.minutes, achIndex: 1, descStart: "interact with the feed for", descEnd: "minutes", winDesc: "you're practically [INSERT COPYRIGHT FREE SPY NAME]!");
-
     }
     public void UpdateAchievement(int counterVar, int[] tierThresholds, int achIndex, string descStart, string descEnd, string winDesc, string title)
     {
@@ -77,36 +84,45 @@ public class AchievementsManager : MonoBehaviour
         {
             if (counterVar >= tierThresholds[3] && tierThresholds[3] != -1)
             {
-                StartCoroutine(notificationPopup());
-                notifDesc.text = $"You just achieved the final star of {title}!";
+                StartCoroutine(notificationPopup($"You just achieved the final star of {title}!"));
                 tierThresholds[3] = -1;
             }
             else if (counterVar >= tierThresholds[2] && tierThresholds[2] != -1)
             {
-                StartCoroutine(notificationPopup());
-                notifDesc.text = $"You just achieved the third star of {title}!";
+                StartCoroutine(notificationPopup($"You just achieved the third star of {title}!"));
                 tierThresholds[2] = -1;
             }
             else if (counterVar >= tierThresholds[1] && tierThresholds[1] != -1)
             {
-                StartCoroutine(notificationPopup());
-                notifDesc.text = $"You just achieved the second star of {title}!";
+                StartCoroutine(notificationPopup($"You just achieved the second star of {title}!"));
                 tierThresholds[1] = -1;
             }
             else if (counterVar >= tierThresholds[0] && tierThresholds[0] != -1)
             {
-                StartCoroutine(notificationPopup());
-                notifDesc.text = $"You just achieved the first star of {title}!";
+                StartCoroutine(notificationPopup($"You just achieved the first star of {title}!"));
                 tierThresholds[0] = -1;
             }
         }  
     }
 
-    private IEnumerator notificationPopup()
+    public IEnumerator notificationPopup(string textToShow)
     {
-        notif.SetActive(true);
-        yield return new WaitForSeconds(5);
-        notif.SetActive(false);
+        notifRect.anchoredPosition = new Vector2(0, Screen.height + 5);
+        while (SceneManager.GetActiveScene().name == "LoginScene")
+        {
+            yield return new WaitForSeconds(1);
+        }
+        notifDesc.text = textToShow;
+        yield return notifRect.DOAnchorPosY(0, 0.5f).SetEase(Ease.OutQuad).WaitForCompletion();
+
+        yield return new WaitForSeconds(3f);
+
+        yield return notifRect.DOAnchorPosY(Screen.height + 5, 0.4f).SetEase(Ease.InQuad).WaitForCompletion();
+    }
+    public void GoToAchivements()
+    {
+        gm.ProgressToScene("Achievements");
+        notif.transform.DOLocalMoveY(500, .3f).OnComplete(() => notif.SetActive(false));
     }
     public void AddStar(GameObject parentAch, int stars, string descMessage)
     {
@@ -141,7 +157,7 @@ public class AchievementsManager : MonoBehaviour
 
     public void BackToLeaderBoard()
     {
-        SceneManager.LoadScene("leaderboard");
+        SceneManager.LoadScene("Achievements");
     }
 }
 
