@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -80,7 +81,6 @@ public class SF_ReactionEmoji : MonoBehaviour
             bannerObj.SetActive(false);
             greyBanner.color *= 0;
         }
-
     }
 
     IEnumerator Like()
@@ -94,12 +94,26 @@ public class SF_ReactionEmoji : MonoBehaviour
         else
         {
             userClicked = true;
+            HandleLevelRequirements();
             LikeSetup();
             FillLikeData();
             ColorizeBanner();
             LikeAnims();
         }
         yield return null;
+    }
+
+    void HandleLevelRequirements()
+    {
+        int currDay = DayManager.currentDay;
+        if (DayManager.DoesDayContainObjective(DayManager.ObjTypes.react))
+        {
+            if (!DayManager.reactedPostIDs.Contains(parentCell.postID))
+            {
+                DayManager.reactedPostIDs.Add(parentCell.postID);
+                RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.react);
+            }
+        }
     }
     void ResetText()
     {

@@ -1,34 +1,253 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using Unity.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Networking;
 
 public class DayManager : MonoBehaviour
 {
-    private Dictionary<int, DayRequirements> allDays = new();
-    private DayRequirements currentDayReqs;
+    public enum ObjTypes
+    {
+        other,
+        privacyPolicy,
+        selfie,
+        selfieOthers,
+        selfieLocation,
+        selfieAngle,
+        selfieTarget,
+        react,
+        announcements,
+        minutes,
+        adClicks,
+        profilePic,
+        register,
+        engagementInbox,
+        favorites,
+    }
+
+    public Dictionary<int, DayRequirements> allDays = new();
+    public static DayRequirements currentDayReqs;
 
     public static bool dayCompleted = false;
     public static int currentDay { get; private set; }
-    public UnityEvent completedAllDayTasks;
-    public UnityEvent completedATask;
+
+    //some objective types are reused constantly - this dict provides a list scripts can check if they should perform objective logic based on current day
+    public static Dictionary<int, List<ObjTypes>> dayReqTypeList = new();
+
+    public Queue<string> achievementsQueue = new();
+    bool isWorking = false;
 
     //refs
     public GameManager gm;
+    public AchievementsManager achMan;
+
+    public static List<string> reactedPostIDs;
     private void Awake()
     {
         DontDestroyOnLoad(this);
         gm = FindObjectOfType<GameManager>();
 
-        completedAllDayTasks.AddListener(AllDayReqsFulfilled);
-
+        InitDayReqTypeList();
+        AddAllRequirements();
         SetActiveReqs(currentDay);
     }
-
     private void Start()
     {
-        AddAllRequirements();
+        StartCoroutine(SendLevelData(currentDay));
+
+        RequirementEventHandler.InvokeAddToReq(1, ObjTypes.privacyPolicy);
+    }
+    public void UpdateReq(ObjTypes reqName, int value)
+    {
+        if (currentDayReqs != null && currentDayReqs.requirements.ContainsKey(reqName))
+        {
+            (string name, int progress, int total) reqData = currentDayReqs.requirements[reqName];
+
+            //add the value int to the progress number (item 2) of the req
+            reqData = (reqData.name, reqData.progress + value, reqData.total);
+            currentDayReqs.requirements[reqName] = reqData;
+            //Debug.Log("requirement " + reqName + "is at: " + reqData.Item1 + "/" + reqData.Item2);
+
+            if (reqData.progress >= reqData.total)
+            {
+                //this requirement is fulfilled, popup and check if day is done
+                achievementsQueue.Enqueue(reqData.name);
+                if (!isWorking)
+                    StartCoroutine(DequeueAchievements());
+
+                Debug.Log("Requirement: " + reqName + " fulfilled!! Put a popup here");
+                CheckIfAllReqsFilled(currentDayReqs);
+            }
+        }
+        else
+            Debug.Log("currentDayReqs doesn't contain that key!");
+
+    }
+    public void AllDayReqsFulfilled()
+    {
+        dayCompleted = true;
+    }
+    public void GoToEndDay()
+    {
+        dayCompleted = false;
+        gm.ProgressToScene("EndOfDay");
+    }
+    public void GoToNextDay()
+    {
+        currentDay++;
+        StartCoroutine(SendLevelData(currentDay));
+        SetActiveReqs(currentDay);
+        gm.ProgressToScene("SocialFeed");
+    }
+    public Dictionary<ObjTypes, (string name, int progress, int total)> GetCurrentRequirements()
+    {
+        return currentDayReqs?.requirements;
+    }
+    public void AddAllRequirements()
+    {
+        //0 is tutorial
+        AddNewRequirement(0, new List<(ObjTypes, string, int, int)>()
+        {
+            (ObjTypes.register, "register new account", 0, 1), //
+            (ObjTypes.profilePic, "take profile picture", 0, 1), //
+            (ObjTypes.privacyPolicy, "accept privacy policy", 0, 1)
+        });
+
+        //ad frequency 0, snapgram announcement
+        AddNewRequirement(1, new List<(ObjTypes, string, int, int)>()
+        {
+            (ObjTypes.selfie, "post 1 selfie", 0, 1), 
+            (ObjTypes.react, "react to 3 posts", 0, 3), //
+            (ObjTypes.announcements, "check announcement box", 0, 1)
+        });
+
+        AddNewRequirement(2, new List<(ObjTypes, string, int, int)>()
+        {
+            (ObjTypes.selfie, "post 1 selfie", 0, 5),
+            (ObjTypes.favorites, "total 3 favorited accounts", 0, 3),
+            (ObjTypes.engagementInbox, "check engagement inbox", 0, 1)
+        });
+
+        //privacy policy update
+        AddNewRequirement(3, new List<(ObjTypes, string, int, int)>()
+        {
+            (ObjTypes.privacyPolicy, "accept privacy policy", 0, 1),
+            (ObjTypes.react, "react to 5 posts", 0, 5), //
+            (ObjTypes.minutes, "total 5 minutes app interaction", 0, 5)
+        });
+
+        //ad frequency 6, snapgram announcement
+        AddNewRequirement(4, new List<(ObjTypes, string, int, int)>()
+        {
+            (ObjTypes.selfie, "post 2 selfies", 0, 2),
+            (ObjTypes.selfieOthers, "post 1 selfie with another person", 0, 1),
+            (ObjTypes.favorites, "total 5 favorited accounts", 0, 5),
+            (ObjTypes.engagementInbox, "check engagement inbox", 0 ,1)
+        });
+
+        AddNewRequirement(5, new List<(ObjTypes, string, int, int)>()
+        {
+            (ObjTypes.selfie, "post 2 selfies", 0, 2),
+            (ObjTypes.selfieLocation, "post 1 selfie at location: Drexel Dragon", 0, 1),
+            (ObjTypes.react, "react to 10 posts", 0, 10), //
+            (ObjTypes.minutes,"total 10 minutes app interaction", 0, 10),
+            (ObjTypes.adClicks, "click 3 ads", 0, 3)
+        });
+
+        //ad frequency 5
+        AddNewRequirement(6, new List<(ObjTypes, string, int, int)>()
+        {
+            (ObjTypes.selfie, "post 2 selfies", 0, 2),
+            (ObjTypes.selfieOthers, "post 1 selfie with 2 other people", 0, 1),
+            (ObjTypes.selfieAngle, "post 1 selfie from front angle", 0, 1),
+            (ObjTypes.minutes, "total 15 minutes app interaction", 0, 15),
+            (ObjTypes.engagementInbox, "check engagement inbox", 0, 1)
+        });
+
+        //ad frequecy 4, whistleblower: SG data leak (is this worht it?)
+        AddNewRequirement(7, new List<(ObjTypes, string, int, int)>()
+        {
+            (ObjTypes.selfie, "post 3 selifes", 0, 3),
+            (ObjTypes.selfieLocation, "post 1 selfie at location: Lancaster Walk", 0, 1),
+            (ObjTypes.selfieAngle, "post 1 selfie from front left angle", 0, 1),
+            (ObjTypes.react, "react to 15 posts", 0, 15), //
+            (ObjTypes.favorites, "total 10 favorited accounts", 0, 10),
+            (ObjTypes.adClicks, "click 5 ads", 0, 5)
+        });
+
+        //privacy policy update
+        //ad frequecy 3, snapgram announcement
+        AddNewRequirement(8, new List<(ObjTypes, string, int, int)>()
+        {
+            (ObjTypes.privacyPolicy, "accept privacy policy", 0, 1),
+            (ObjTypes.selfie, "post 3 selifes", 0, 3),
+            (ObjTypes.selfieOthers, "post 1 selfie with 3 other people", 0, 1),
+            (ObjTypes.selfieAngle, "post 1 selfie from front right angle", 0, 1),
+            (ObjTypes.minutes, "total 45 minutes app interaction", 0, 45),
+            (ObjTypes.adClicks, "click 10 ads", 0, 10),
+            (ObjTypes.announcements, "check announcement box", 0, 1)
+        });
+
+        //ad frequency 2
+        AddNewRequirement(9, new List<(ObjTypes, string, int, int)>()
+        {
+            (ObjTypes.selfie, "post 4 selfies", 0, 4),
+            (ObjTypes.selfieLocation, "post 1 selfie at location: Your Favorite Food Cart", 0, 1),
+            (ObjTypes.selfieTarget, "post 1 selfie w/ target user", 0, 1),
+            (ObjTypes.selfieAngle, "post 1 selfie from left angle", 0, 1),
+            (ObjTypes.react, "react to 25 posts", 0, 25), //
+            (ObjTypes.favorites, "total 15 favorited accounts", 0, 15),
+            (ObjTypes.minutes, "total 60 minutes app interaction", 0, 60),
+            (ObjTypes.adClicks, "click 15 ads", 0, 15)
+        });
+
+        //ad frequency 1
+        AddNewRequirement(10, new List<(ObjTypes, string, int, int)>()
+        {
+            (ObjTypes.selfie, "post 4 selfies", 0, 4),
+            (ObjTypes.selfieOthers, "post 1 selfie with 4 other people", 0, 1),
+            (ObjTypes.selfieLocation, "post 1 selfie at location: Billboard", 0, 1),
+            (ObjTypes.selfieAngle, "post 1 selfie from right", 0, 1),
+            (ObjTypes.react, "react to 50 posts", 0, 50), //
+            (ObjTypes.minutes, "total 100 minutes app interaction", 0, 100),
+            (ObjTypes.adClicks, "click 20 ads", 0, 20)
+        });
+    }
+    private void AddNewRequirement(int dayNum, List<(ObjTypes, string, int, int)> reqData)
+    {
+        //fills a dict with all the requirements for one day
+        Dictionary<ObjTypes, (string name, int progress, int total)> reqDict = new();
+        foreach (var req in reqData)
+        {
+            reqDict.Add(req.Item1, (req.Item2, req.Item3, req.Item4));
+        }
+
+        //adds a new DayReq object, with the day's requirements and number and adds that to AddToDay
+        AddToDay(dayNum, new DayRequirements(dayNum, reqDict));
+    }
+    private void AddToDay(int dayNum, DayRequirements DayReqs)
+    {
+        allDays.Add(dayNum, DayReqs);
+    }
+
+    void CheckIfAllReqsFilled(DayRequirements currentReqs)
+    {
+        bool allReqsFilled = true;
+        Debug.Log(currentReqs.requirements);
+        foreach (KeyValuePair<ObjTypes, (string name, int progress, int total)> kvp in currentReqs.requirements)
+        {
+            if (kvp.Value.progress != kvp.Value.total)
+            {
+                allReqsFilled = false;
+                break;
+            }
+        }
+        if (allReqsFilled)
+            RequirementEventHandler.InvokeAllReqsComplete();
     }
     public void SetActiveReqs(int dayNum)
     {
@@ -37,151 +256,104 @@ public class DayManager : MonoBehaviour
         {
             currentDayReqs = day;
         }
-    }
-
-    public void FulFillReq(string reqName, bool value)
-    {
-        if (currentDayReqs != null && currentDayReqs.requirements.ContainsKey(reqName))
+        else
         {
-            currentDayReqs.requirements[reqName] = value;
-            completedATask.Invoke();
+            Debug.Log("Day does not exist!");
         }
-        Debug.Log("Requirement: " + reqName + "fulfilled!! Put a popup here");
-
-        CheckIfAllReqsFilled();
-    }
-
-    public void AllDayReqsFulfilled()
+    }   
+    IEnumerator DequeueAchievements()
     {
-        dayCompleted = true;
-    }
-    public void GoToEndDay()
-    {
-        dayCompleted = false;
-        gm.ProgressToScene("SocialFeed");
-    }
-    public void GoToNextDay()
-    {
-        currentDay++;
-        SetActiveReqs(currentDay);
-        gm.ProgressToScene("SocialFeed");
-    }
-
-    private void AddNewRequirement(int day, string reqName)
-    {
-        allDays.Add(day, new DayRequirements(day, new Dictionary<string, bool>()
+        isWorking = true;
+        Debug.Log("count: " + achievementsQueue.Count);
+        while (achievementsQueue.Count > 0)
         {
-            {reqName, false }
-        }));
+            string reqName = achievementsQueue.Dequeue();
+            yield return StartCoroutine(achMan.notificationPopup(reqName + " completed!"));
+        }
+        isWorking = false;
+    }
+    void InitDayReqTypeList()
+    {
+        dayReqTypeList.Add(0, new List<ObjTypes> { ObjTypes.privacyPolicy });
+        dayReqTypeList.Add(2, new List<ObjTypes> { ObjTypes.selfie });
+        dayReqTypeList.Add(3, new List<ObjTypes> { ObjTypes.privacyPolicy, ObjTypes.selfie, ObjTypes.react, ObjTypes.minutes });
+        dayReqTypeList.Add(4, new List<ObjTypes> { ObjTypes.selfie, ObjTypes.selfieOthers, ObjTypes.react });
+        dayReqTypeList.Add(5, new List<ObjTypes> { ObjTypes.selfie, ObjTypes.selfieLocation, ObjTypes.react, ObjTypes.minutes, ObjTypes.adClicks });
+        dayReqTypeList.Add(6, new List<ObjTypes> { ObjTypes.selfie, ObjTypes.selfieOthers, ObjTypes.minutes });
+        dayReqTypeList.Add(7, new List<ObjTypes> { ObjTypes.selfie, ObjTypes.selfieLocation, ObjTypes.selfieAngle, ObjTypes.react, ObjTypes.adClicks });
+        dayReqTypeList.Add(8, new List<ObjTypes> { ObjTypes.privacyPolicy, ObjTypes.selfie, ObjTypes.selfieOthers, ObjTypes.minutes, ObjTypes.selfieAngle, ObjTypes.react, ObjTypes.adClicks, ObjTypes.announcements });
+        dayReqTypeList.Add(9, new List<ObjTypes> { ObjTypes.selfie, ObjTypes.selfieLocation, ObjTypes.selfieTarget, ObjTypes.minutes, ObjTypes.selfieAngle, ObjTypes.react, ObjTypes.adClicks });
+        dayReqTypeList.Add(10, new List<ObjTypes> { ObjTypes.selfie, ObjTypes.selfieLocation, ObjTypes.selfieLocation, ObjTypes.minutes, ObjTypes.selfieAngle, ObjTypes.react, ObjTypes.adClicks });
     }
 
-    void CheckIfAllReqsFilled()
+    public static bool DoesDayContainObjective(ObjTypes objective)
     {
-        bool allReqsFilled = true;
-        foreach (KeyValuePair<string, bool> kvp in currentDayReqs.requirements)
+        List<ObjTypes> currDayReqs = dayReqTypeList[currentDay];
+
+        if (currDayReqs.Contains(objective))
         {
-            if (kvp.Value == false)
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public static int RequirementProgress(ObjTypes reqName)
+    {
+        int reqProg = currentDayReqs.requirements[reqName].progress;
+        return reqProg;
+    }
+    public static int RequirementTotal(ObjTypes reqName)
+    {
+        int reqProg = currentDayReqs.requirements[reqName].total;
+        return reqProg;
+    }
+    IEnumerator SendLevelData(int currentLevel)
+    {
+        WWWForm form = new WWWForm();
+
+        form.AddField("username", gm.scls.getUsername());
+        form.AddField("level", currentLevel);
+
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "level_update.php", form))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
             {
-                allReqsFilled = false;
-                break;
+                string errorMessage = www.error;
+                Debug.Log(errorMessage);
+                Debug.Log("level data send error, releasing queue");
+            }
+            else
+            {
+                string responseText = www.downloadHandler.text;
+                Debug.Log("level send: " + responseText);
             }
         }
-        if (allReqsFilled)
-            AllDayReqsFulfilled();
-    }
-    public Dictionary<string, bool> GetCurrentRequirements()
-    {
-        return currentDayReqs?.requirements;
     }
 
-    public void AddAllRequirements()
+    private void OnEnable()
     {
-        //0 is tutorial
-        AddNewRequirement(0, "register new account");
-        AddNewRequirement(0, "take profile picture");
-        AddNewRequirement(0, "accept privacy policy");
-
-        //ad frequency 0, snapgram announcement
-        AddNewRequirement(1, "post 1 selfie");
-        AddNewRequirement(1, "react to 3 posts");
-        AddNewRequirement(1, "check announcement box");
-
-        AddNewRequirement(2, "post 1 selfie");
-        AddNewRequirement(2, "total 3 favorited accounts");
-        AddNewRequirement(2, "check engagement inbox");
-
-        //privacy policy update
-        AddNewRequirement(3, "accept privacy policy");
-        AddNewRequirement(3, "react to 5 posts");
-        AddNewRequirement(3, "total 5 minutes app interaction");
-
-        //ad frequency 6, snapgram announcement
-        AddNewRequirement(4, "post 2 selfies");
-        AddNewRequirement(4, "post 1 selfie with another person");
-        AddNewRequirement(4, "total 5 favorited accounts");
-        AddNewRequirement(4, "check engagement inbox");
-
-        AddNewRequirement(5, "post 2 selfies");
-        AddNewRequirement(5, "post 1 selfie at location: Drexel Dragon");
-        AddNewRequirement(5, "react to 10 posts");
-        AddNewRequirement(5, "total 10 minutes app interaction");
-        AddNewRequirement(5, "click 3 ads");
-
-        //ad frequency 5
-        AddNewRequirement(6, "post 2 selfies");
-        AddNewRequirement(6, "post 1 selfie with 2 other people");
-        AddNewRequirement(6, "post 1 selfie from front angle");
-        AddNewRequirement(6, "total 15 minutes app interaction");
-        AddNewRequirement(6, "check engagement inbox");
-
-        //ad frequecy 4, whistleblower: SG data leak (is this worht it?)
-        AddNewRequirement(7, "post 3 selifes");
-        AddNewRequirement(7, "post 1 selfie at location: Lancaster Walk");
-        AddNewRequirement(7, "post 1 selfie from front left angle");
-        AddNewRequirement(7, "react to 15 posts");
-        AddNewRequirement(7, "total 10 favorited accounts");
-        AddNewRequirement(7, "click 5 ads");
-
-        //privacy policy update
-        //ad frequecy 3, snapgram announcement
-        AddNewRequirement(8, "accept privacy policy");
-        AddNewRequirement(8, "post 3 selifes");
-        AddNewRequirement(8, "post 1 selfie with 3 other people");
-        AddNewRequirement(8, "post 1 selfie from front right angle");
-        AddNewRequirement(8, "total 45 minutes app interaction");
-        AddNewRequirement(8, "click 10 ads");
-        AddNewRequirement(8, "check announcement box");
-
-        //ad frequency 2
-        AddNewRequirement(9, "post 4 selfies");
-        AddNewRequirement(9, "post 1 selfie at location: Your Favorite Food Cart");
-        AddNewRequirement(9, "post 1 selfie w/ target user");
-        AddNewRequirement(9, "post 1 selfie from front right angle");
-        AddNewRequirement(9, "post 1 selfie from left angle");
-        AddNewRequirement(9, "react to 25 posts");
-        AddNewRequirement(9, "total 15 favorited accounts");
-        AddNewRequirement(9, "total 60 minutes app interaction");
-        AddNewRequirement(9, "click 15 ads");
-
-        //ad frequency 1
-        AddNewRequirement(10, "post 4 selfies");
-        AddNewRequirement(10, "post 1 selfie with 4 other people");
-        AddNewRequirement(10, "post 1 selfie at location: Billboard");
-        AddNewRequirement(10, "post 1 selfie from right");
-        AddNewRequirement(10, "react to 50 posts");
-        AddNewRequirement(10, "total 100 minutes app interaction");
-        AddNewRequirement(10, "click 20 ads");
-        //end game
+        RequirementEventHandler.OnCompletedAllDayReqs += AllDayReqsFulfilled;
+        RequirementEventHandler.OnCompletedAReq += UpdateReq;
+    }
+    private void OnDisable()
+    {
+        RequirementEventHandler.OnCompletedAllDayReqs -= AllDayReqsFulfilled;
+        RequirementEventHandler.OnCompletedAReq -= UpdateReq;
     }
 }
-
 
 public class DayRequirements
 {
     public int dayNum;
-    public Dictionary<string, bool> requirements;
 
-    public DayRequirements(int day, Dictionary<string, bool> reqs)
+    public Dictionary<DayManager.ObjTypes, (string name, int progress, int total)> requirements;
+    //type of objective - progress int, total int, display name
+    public DayRequirements(int day, Dictionary<DayManager.ObjTypes, (string name, int progress, int total)> reqs)
     {
         dayNum = day;
         requirements = reqs;

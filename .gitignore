@@ -10,13 +10,22 @@
 /Under Watch/Logs/
 /Under Watch/UserSettings/
 
+/UnderWatch-GMConsole/Library/
+/UnderWatch-GMConsole/Temp/
+/UnderWatch-GMConsole/Obj/
+/UnderWatch-GMConsole/Build/
+/UnderWatch-GMConsole/Builds/
+/UnderWatch-GMConsole/Logs/
+/UnderWatch-GMConsole/UserSettings/
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
 /Under Watch/[Mm]emoryCaptures/
+/UnderWatch-GMConsole/[Mm]emoryCaptures/
 
 # Recordings can get excessive in size
 /Under Watch/[Rr]ecordings/
+/UnderWatch-GMConsole/[Rr]ecordings/
 
 # Uncomment this line if you wish to ignore the asset store tools plugin
 # /[Aa]ssets/AssetStoreTools*
@@ -112,8 +121,12 @@ com_crashlytics_export_strings.xml
 Under Watch/Library/StateCache/MainStageHierarchy/4d/4d2a36d9faf65734f0bbefb3ee623532.json
 Under Watch/Library/StateCache/SceneView/8c/8cd7c613bf844de3b80696e27a479d5e.json
 Under Watch/UserSettings/Layouts/default-2022.dwlt
-/UnderWatch-GMConsole/Library
-/UnderWatch-GMConsole/Temp
+
+/UnderWatch-GMConsole/[Aa]ssets/[Ss]treamingAssets/aa.meta
+/UnderWatch-GMConsole/[Aa]ssets/[Ss]treamingAssets/aa/*
+UnderWatch-GMConsole/Library/StateCache/MainStageHierarchy/4d/4d2a36d9faf65734f0bbefb3ee623532.json
+UnderWatch-GMConsole/Library/StateCache/SceneView/8c/8cd7c613bf844de3b80696e27a479d5e.json
+UnderWatch-GMConsole/UserSettings/Layouts/default-2022.dwlt
 
 # SQL Server files
 *.mdf
@@ -128,6 +141,3 @@ Under Watch/UserSettings/Layouts/default-2022.dwlt
 .Trashes
 ehthumbs.db
 Thumbs.db
-
-/Under Watch/Library
-/Under Watch/Library
