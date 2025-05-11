@@ -108,7 +108,7 @@ public class AchievementsManager : MonoBehaviour
     public IEnumerator notificationPopup(string textToShow)
     {
         notifRect.anchoredPosition = new Vector2(0, Screen.height + 5);
-        while (SceneManager.GetActiveScene().name == "LoginScene")
+        while (SceneManager.GetActiveScene().name == "LoginScene" && !SceneManager.GetActiveScene().isLoaded)
         {
             yield return new WaitForSeconds(1);
         }

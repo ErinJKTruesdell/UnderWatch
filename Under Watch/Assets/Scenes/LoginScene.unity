@@ -2043,12 +2043,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84dde658221d6884ea7024c16ebeda24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  completedAllDayTasks:
-    m_PersistentCalls:
-      m_Calls: []
-  completedATask:
-    m_PersistentCalls:
-      m_Calls: []
   gm: {fileID: 872406427}
   achMan: {fileID: 2042832732}
 --- !u!1 &956658168

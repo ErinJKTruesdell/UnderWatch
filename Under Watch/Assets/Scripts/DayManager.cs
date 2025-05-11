@@ -14,8 +14,6 @@ public class DayManager : MonoBehaviour
 
     public static bool dayCompleted = false;
     public static int currentDay { get; private set; }
-    public UnityEvent completedAllDayTasks;
-    public UnityEvent completedATask;
 
     public Queue<string> achievementsQueue = new();
     bool isWorking = false;
@@ -28,7 +26,7 @@ public class DayManager : MonoBehaviour
         DontDestroyOnLoad(this);
         gm = FindObjectOfType<GameManager>();
 
-        completedAllDayTasks.AddListener(AllDayReqsFulfilled);
+
         AddAllRequirements();
         SetActiveReqs(currentDay);
     }
@@ -36,31 +34,34 @@ public class DayManager : MonoBehaviour
     private void Start()
     {
         StartCoroutine(SendLevelData(currentDay));
-        UpdateReq("register new account", 1);
-        UpdateReq("take profile picture", 1);
-        UpdateReq("accept privacy policy", 1);
+
+        RequirementEventHandler.InvokeReqCompleted("accept privacy policy", 1);
     }
     public void UpdateReq(string reqName, int value)
     {
-        Tuple<int, int> reqData = currentDayReqs.requirements[reqName];
-
         if (currentDayReqs != null && currentDayReqs.requirements.ContainsKey(reqName))
         {
+            Tuple<int, int> reqData = currentDayReqs.requirements[reqName];
+
             //add the value int to the tracker number (item 1) of the req
-            reqData = new Tuple<int, int> (reqData.Item1 + value, reqData.Item2);
+            reqData = new Tuple<int, int>(reqData.Item1 + value, reqData.Item2);
             currentDayReqs.requirements[reqName] = reqData;
             Debug.Log("requirement " + reqName + "is at: " + reqData.Item1 + "/" + reqData.Item2);
-        }
-        if (reqData.Item1 >= reqData.Item2)
-        {
-            completedATask.Invoke();
-            achievementsQueue.Enqueue(reqName);
-            if (!isWorking)
-                StartCoroutine(DequeueAchievements());
 
-            Debug.Log("Requirement: " + reqName + " fulfilled!! Put a popup here");
+            if (reqData.Item1 >= reqData.Item2)
+            {
+                //this requirement is fulfilled, popup and check if day is done
+                achievementsQueue.Enqueue(reqName);
+                if (!isWorking)
+                    StartCoroutine(DequeueAchievements());
+
+                Debug.Log("Requirement: " + reqName + " fulfilled!! Put a popup here");
+                CheckIfAllReqsFilled(currentDayReqs);
+            }
         }
-        CheckIfAllReqsFilled(currentDayReqs);
+        else
+            Debug.Log("currentDayReqs doesn't contain that key!");
+
     }
     private void Update()
     {
@@ -94,15 +95,15 @@ public class DayManager : MonoBehaviour
         //0 is tutorial
         AddNewRequirement(0, new List<(string, int, int)>()
         {
-            ("register new account", 0, 1),
-            ("take profile picture", 0, 1),
+            ("register new account", 0, 1), //
+            ("take profile picture", 0, 1), //
             ("accept privacy policy", 0, 1)
         });
 
         //ad frequency 0, snapgram announcement
         AddNewRequirement(1, new List<(string, int, int)>()
         {
-            ("post 1 selfie", 0, 1),
+            ("post 1 selfie", 0, 1), //
             ("react to 3 posts", 0, 3),
             ("check announcement box", 0, 1)
         });
@@ -229,7 +230,7 @@ public class DayManager : MonoBehaviour
             }
         }
         if (allReqsFilled)
-            completedAllDayTasks.Invoke();
+            RequirementEventHandler.InvokeAllReqsComplete();
     }
     public void SetActiveReqs(int dayNum)
     {
@@ -277,6 +278,17 @@ public class DayManager : MonoBehaviour
                 Debug.Log("level send: " + responseText);
             }
         }
+    }
+
+    private void OnEnable()
+    {
+        RequirementEventHandler.OnCompletedAllDayReqs += AllDayReqsFulfilled;
+        RequirementEventHandler.OnCompletedAReq += UpdateReq;
+    }
+    private void OnDisable()
+    {
+        RequirementEventHandler.OnCompletedAllDayReqs -= AllDayReqsFulfilled;
+        RequirementEventHandler.OnCompletedAReq -= UpdateReq;
     }
 }
 
