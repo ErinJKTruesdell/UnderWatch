@@ -24,6 +24,8 @@ public class LocalRequirementManager : MonoBehaviour
 
     //req data
     public GameObject requirementPrefab;
+    private Queue<IEnumerator> updateQueue = new();
+    private bool isProcessingQueue = false;
 
     //references
     public DayManager dayMan;
@@ -40,12 +42,9 @@ public class LocalRequirementManager : MonoBehaviour
     private void OnEnable()
     {
         RequirementEventHandler.OnCompletedAReq += LocalUpdateReqs;
+        RequirementEventHandler.LogSubscribers();
         LocalUpdateReqs(DayManager.ObjTypes.other, 0);
 
-        if (DayManager.dayCompleted)
-            NextDayAvailable();
-        else
-            goNextButton.SetActive(false);
         //the daynum update has to go after updateReqs
         dayNum = DayManager.currentDay;
         dayText.text = "Day " + dayNum;
@@ -63,12 +62,16 @@ public class LocalRequirementManager : MonoBehaviour
         dayMan.GoToEndDay();
     }
     void LocalUpdateReqs(DayManager.ObjTypes objTypes, int valueToAdd)
-    {
+    {        
         //we don't do anything with the arguments' data
-        StartCoroutine(UpdateReqs(objTypes, valueToAdd));
+        updateQueue.Enqueue(UpdateReqs(objTypes, valueToAdd));
+        if (!isProcessingQueue)
+            StartCoroutine(ProcessUpdateQueue());
     }
     IEnumerator UpdateReqs(DayManager.ObjTypes objTypes, int valueToAdd)
     {
+        Debug.Log($"UpdateReqs started for: {objTypes} (Frame: {Time.frameCount})");
+
         yield return StartCoroutine(ClearCurrentReqs());
 
         localReqDict = dayMan.GetCurrentRequirements();
@@ -76,7 +79,7 @@ public class LocalRequirementManager : MonoBehaviour
         foreach (KeyValuePair<DayManager.ObjTypes, (string name, int progress, int total)> kvp in localReqDict)
         {
             GameObject reqItem = Instantiate(requirementPrefab) as GameObject;
-            reqItem.transform.parent = gridObj;
+            reqItem.transform.SetParent(gridObj);
             reqItem.transform.localScale = new Vector3(1, 1, 1);
 
             RequirementItem reqDataObject = reqItem.GetComponent<RequirementItem>();
@@ -86,27 +89,36 @@ public class LocalRequirementManager : MonoBehaviour
             reqDataObject.ConfigureItem(new RequirementObject(kvp.Value.name, progressTuple));
         }
         //these must be IEnumerators to avoid race condition and force rebuild to be called last
+        if (DayManager.dayCompleted)
+            NextDayAvailable();
+        else
+            goNextButton.SetActive(false);
+
         VLGFiddler.RebuildVLGLayout();
     }
-
     IEnumerator ClearCurrentReqs()
     {
-        //if we are a day behind, clear the previous day
-        if (dayNum != DayManager.currentDay || DayManager.currentDay == 0)
+        Debug.Log("Clearing Req Display");
+        //loop backwards to avoid indexing issues
+        for (int i = gridObj.childCount - 1; i >= 0; i--)
         {
-            Debug.Log("Clearing Req Display");
-            //loop backwards to avoid indexing issues
-            for (int i = gridObj.childCount - 1; i >= 0; i--)
-            {
-                Transform child = gridObj.GetChild(i);
-                GameObject.Destroy(child.gameObject);
-            }
+            Transform child = gridObj.GetChild(i);
+            GameObject.Destroy(child.gameObject);
         }
         yield return null;
 
         Debug.Log("Clear completed. Count after: " + gridObj.childCount);
     }
-
+    private IEnumerator ProcessUpdateQueue()
+    {
+        isProcessingQueue = true;
+        while (updateQueue.Count > 0)
+        {
+            IEnumerator nextReq = updateQueue.Dequeue();
+            yield return StartCoroutine(nextReq);
+        }
+        isProcessingQueue = false;
+    }
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.D))

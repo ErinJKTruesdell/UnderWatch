@@ -35,9 +35,6 @@ public class DayManager : MonoBehaviour
     public static bool dayCompleted = false;
     public static int currentDay { get; private set; }
 
-    //some objective types are reused constantly - this dict provides a list scripts can check if they should perform objective logic based on current day
-    public static Dictionary<int, List<ObjTypes>> dayReqTypeList = new();
-
     public Queue<string> achievementsQueue = new();
     bool isWorking = false;
 
@@ -45,13 +42,12 @@ public class DayManager : MonoBehaviour
     public GameManager gm;
     public AchievementsManager achMan;
 
-    public static List<string> reactedPostIDs;
+    public static List<string> reactedPostIDs = new();
     private void Awake()
     {
         DontDestroyOnLoad(this);
         gm = FindObjectOfType<GameManager>();
 
-        InitDayReqTypeList();
         AddAllRequirements();
         SetActiveReqs(currentDay);
     }
@@ -137,7 +133,7 @@ public class DayManager : MonoBehaviour
         {
             (ObjTypes.privacyPolicy, "accept privacy policy", 0, 1),
             (ObjTypes.react, "react to 5 posts", 0, 5), //
-            (ObjTypes.minutes, "total 5 minutes app interaction", 0, 5)
+            (ObjTypes.minutes, "total 5 minutes app interaction", 0, 5) //
         });
 
         //ad frequency 6, snapgram announcement
@@ -154,7 +150,7 @@ public class DayManager : MonoBehaviour
             (ObjTypes.selfie, "post 2 selfies", 0, 2),
             (ObjTypes.selfieLocation, "post 1 selfie at location: Drexel Dragon", 0, 1),
             (ObjTypes.react, "react to 10 posts", 0, 10), //
-            (ObjTypes.minutes,"total 10 minutes app interaction", 0, 10),
+            (ObjTypes.minutes,"total 10 minutes app interaction", 0, 10), //
             (ObjTypes.adClicks, "click 3 ads", 0, 3)
         });
 
@@ -164,7 +160,7 @@ public class DayManager : MonoBehaviour
             (ObjTypes.selfie, "post 2 selfies", 0, 2),
             (ObjTypes.selfieOthers, "post 1 selfie with 2 other people", 0, 1),
             (ObjTypes.selfieAngle, "post 1 selfie from front angle", 0, 1),
-            (ObjTypes.minutes, "total 15 minutes app interaction", 0, 15),
+            (ObjTypes.minutes, "total 15 minutes app interaction", 0, 15), //
             (ObjTypes.engagementInbox, "check engagement inbox", 0, 1)
         });
 
@@ -187,7 +183,7 @@ public class DayManager : MonoBehaviour
             (ObjTypes.selfie, "post 3 selifes", 0, 3),
             (ObjTypes.selfieOthers, "post 1 selfie with 3 other people", 0, 1),
             (ObjTypes.selfieAngle, "post 1 selfie from front right angle", 0, 1),
-            (ObjTypes.minutes, "total 45 minutes app interaction", 0, 45),
+            (ObjTypes.minutes, "total 45 minutes app interaction", 0, 45), //
             (ObjTypes.adClicks, "click 10 ads", 0, 10),
             (ObjTypes.announcements, "check announcement box", 0, 1)
         });
@@ -201,7 +197,7 @@ public class DayManager : MonoBehaviour
             (ObjTypes.selfieAngle, "post 1 selfie from left angle", 0, 1),
             (ObjTypes.react, "react to 25 posts", 0, 25), //
             (ObjTypes.favorites, "total 15 favorited accounts", 0, 15),
-            (ObjTypes.minutes, "total 60 minutes app interaction", 0, 60),
+            (ObjTypes.minutes, "total 60 minutes app interaction", 0, 60), //
             (ObjTypes.adClicks, "click 15 ads", 0, 15)
         });
 
@@ -213,7 +209,7 @@ public class DayManager : MonoBehaviour
             (ObjTypes.selfieLocation, "post 1 selfie at location: Billboard", 0, 1),
             (ObjTypes.selfieAngle, "post 1 selfie from right", 0, 1),
             (ObjTypes.react, "react to 50 posts", 0, 50), //
-            (ObjTypes.minutes, "total 100 minutes app interaction", 0, 100),
+            (ObjTypes.minutes, "total 100 minutes app interaction", 0, 100), //
             (ObjTypes.adClicks, "click 20 ads", 0, 20)
         });
     }
@@ -272,25 +268,11 @@ public class DayManager : MonoBehaviour
         }
         isWorking = false;
     }
-    void InitDayReqTypeList()
-    {
-        dayReqTypeList.Add(0, new List<ObjTypes> { ObjTypes.privacyPolicy });
-        dayReqTypeList.Add(2, new List<ObjTypes> { ObjTypes.selfie });
-        dayReqTypeList.Add(3, new List<ObjTypes> { ObjTypes.privacyPolicy, ObjTypes.selfie, ObjTypes.react, ObjTypes.minutes });
-        dayReqTypeList.Add(4, new List<ObjTypes> { ObjTypes.selfie, ObjTypes.selfieOthers, ObjTypes.react });
-        dayReqTypeList.Add(5, new List<ObjTypes> { ObjTypes.selfie, ObjTypes.selfieLocation, ObjTypes.react, ObjTypes.minutes, ObjTypes.adClicks });
-        dayReqTypeList.Add(6, new List<ObjTypes> { ObjTypes.selfie, ObjTypes.selfieOthers, ObjTypes.minutes });
-        dayReqTypeList.Add(7, new List<ObjTypes> { ObjTypes.selfie, ObjTypes.selfieLocation, ObjTypes.selfieAngle, ObjTypes.react, ObjTypes.adClicks });
-        dayReqTypeList.Add(8, new List<ObjTypes> { ObjTypes.privacyPolicy, ObjTypes.selfie, ObjTypes.selfieOthers, ObjTypes.minutes, ObjTypes.selfieAngle, ObjTypes.react, ObjTypes.adClicks, ObjTypes.announcements });
-        dayReqTypeList.Add(9, new List<ObjTypes> { ObjTypes.selfie, ObjTypes.selfieLocation, ObjTypes.selfieTarget, ObjTypes.minutes, ObjTypes.selfieAngle, ObjTypes.react, ObjTypes.adClicks });
-        dayReqTypeList.Add(10, new List<ObjTypes> { ObjTypes.selfie, ObjTypes.selfieLocation, ObjTypes.selfieLocation, ObjTypes.minutes, ObjTypes.selfieAngle, ObjTypes.react, ObjTypes.adClicks });
-    }
-
     public static bool DoesDayContainObjective(ObjTypes objective)
     {
-        List<ObjTypes> currDayReqs = dayReqTypeList[currentDay];
+        List<ObjTypes> currDayReqTypes = new(currentDayReqs.requirements.Keys);
 
-        if (currDayReqs.Contains(objective))
+        if (currDayReqTypes.Contains(objective))
         {
             return true;
         }
@@ -334,7 +316,6 @@ public class DayManager : MonoBehaviour
             }
         }
     }
-
     private void OnEnable()
     {
         RequirementEventHandler.OnCompletedAllDayReqs += AllDayReqsFulfilled;

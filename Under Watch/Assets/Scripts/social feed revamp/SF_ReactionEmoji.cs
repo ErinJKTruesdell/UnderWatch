@@ -105,7 +105,6 @@ public class SF_ReactionEmoji : MonoBehaviour
 
     void HandleLevelRequirements()
     {
-        int currDay = DayManager.currentDay;
         if (DayManager.DoesDayContainObjective(DayManager.ObjTypes.react))
         {
             if (!DayManager.reactedPostIDs.Contains(parentCell.postID))

@@ -16,6 +16,24 @@ public static class RequirementEventHandler
     {
         OnCompletedAllDayReqs?.Invoke();
     }
+
+    public static void LogSubscribers()
+    {
+        if (OnCompletedAReq == null)
+        {
+            Debug.Log("No subscribers to OnCompletedAReq.");
+            return;
+        }
+
+        var subscribers = OnCompletedAReq.GetInvocationList();
+        Debug.Log($"Total subscribers: {subscribers.Length}");
+
+        foreach (var d in subscribers)
+        {
+            Debug.Log($"Method: {d.Method.Name}, Target: {d.Target}");
+        }
+    }
+
     //RequirementEventHandler.InvokeTaskCompleted("register", 1);
     //RequirementEventHandler.OnCompletedATask += UpdateReq;
 
