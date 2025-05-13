@@ -11,7 +11,6 @@ using DG.Tweening.Plugins.Core.PathCore;
 
 public class SelfieCam : MonoBehaviour
 {
-
     public RawImage rear;
     WebCamDevice[] devices;
 
@@ -31,12 +30,43 @@ public class SelfieCam : MonoBehaviour
 
     public TextMeshProUGUI unText;
     public TextMeshProUGUI targetUNText;
-    public RawImage unPfpImage;
     public RawImage targetPfpImage;
 
+    public RawImage unPfpImage;
+
+
+    private bool isOtherSelfie = false;
+    public int facesExpected = 1;
+    private bool isAngleSelfie = false;
+    private bool isLocSelfie = false;
+
+    bool approval = false;
+
     Vector3 currentLocalEurlerAngles = Vector3.zero;
-    // Start is called before the first frame update
-    void Start()
+
+    void OnEnable()
+    {
+        InitWebcam();
+
+        gm = FindObjectOfType<GameManager>();
+        if (gm == null)
+        {
+            gm = new GameManager();
+        }
+        scls = gm.scls;
+
+        if (scls != null)
+        {
+            scls.Target += new SC_LoginSystem.TargetHandler(showNewTarget);
+        }
+        else
+        {
+            //responseText.color = Color.red;
+            //responseText.text = "No target found!";
+        }
+    }
+
+    void InitWebcam()
     {
         devices = WebCamTexture.devices;
         WebCamDevice frontCamera;
@@ -56,7 +86,7 @@ public class SelfieCam : MonoBehaviour
                     webcam = new WebCamTexture(devices[1].name);
                 else
                     webcam = new WebCamTexture(devices[1].name);
-                    Debug.Log("cam: " + devices[1].name);
+                Debug.Log("cam: " + devices[1].name);
             }
 
             webcam.Play();
@@ -64,25 +94,8 @@ public class SelfieCam : MonoBehaviour
         }
         else
         {
-            responseText.color = Color.red; 
-            responseText.text = "No camera detected";
-        }
-
-        gm = FindObjectOfType<GameManager>();
-        if (gm == null)
-        {
-            gm = new GameManager();
-        }
-        scls = gm.scls;
-
-        if (scls != null)
-        {
-            scls.Target += new SC_LoginSystem.TargetHandler(showNewTarget);
-        }
-        else
-        {
             responseText.color = Color.red;
-            responseText.text = "No target found!";
+            responseText.text = "No camera detected";
         }
 
     }
@@ -120,8 +133,7 @@ public class SelfieCam : MonoBehaviour
 
     IEnumerator SelfieUpload(string path)
     {
-        //if ()
-
+        DetermineObjectives();
         StartCoroutine(GetLocation());
         float latitude = Input.location.lastData.latitude;
         float longitude = Input.location.lastData.longitude;
@@ -137,11 +149,15 @@ public class SelfieCam : MonoBehaviour
             form.AddBinaryData("file", File.ReadAllBytes(path), imageName);
 
             form.AddField("username", scls.getUsername());
-            form.AddField("preapproved", "true");
 
             //always send location
             form.AddField("latitude", latitude.ToString());
             form.AddField("longitude", longitude.ToString());
+
+            form.AddField("angle_selfie", isAngleSelfie.ToString());
+            form.AddField("others_selfie", isOtherSelfie.ToString());
+            form.AddField("loc_selfie", isLocSelfie.ToString());
+            form.AddField("faces_expected", facesExpected);
 
             UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "uploadImage.php", form);
             Debug.Log("Sending web request...");
@@ -150,6 +166,7 @@ public class SelfieCam : MonoBehaviour
 
             if (www.result != UnityWebRequest.Result.Success)
             {
+                approval = false;
                 responseText.text = "Error: " + www.error;
 
                 Debug.Log(www.error);
@@ -170,6 +187,77 @@ public class SelfieCam : MonoBehaviour
         else
         {
             Debug.Log("File does not exist");
+        }
+    }
+
+    void DetermineObjectives()
+    {
+        isOtherSelfie = false;
+        facesExpected = 1;
+        isAngleSelfie = false;
+        isLocSelfie = false;
+
+        if (DayManager.DoesDayContainObjective(DayManager.ObjTypes.selfieAngle))
+        {
+            isAngleSelfie = true;
+        }
+        else if (DayManager.DoesDayContainObjective(DayManager.ObjTypes.selfieOthers))
+        {
+            isOtherSelfie = true;
+            //determine # others expected
+            facesExpected = 2;
+        }
+        else if (DayManager.DoesDayContainObjective(DayManager.ObjTypes.selfieLocation))
+        {
+            isLocSelfie = true;
+        }
+    }
+
+    void HandleResponseForObjectives(string response, bool approval)
+    {
+        string[] dataPartition = response.Split("|");
+        string faceCount = dataPartition[5];
+
+        if (isAngleSelfie)
+        {
+            RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.selfieAngle);
+            RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.selfie);
+        }
+        else if (isOtherSelfie)
+        {
+            if (approval)
+            {
+                responseText.text = faceCount + " people detected in selfie!";
+                RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.selfieAngle);
+            }
+            else
+            {
+                responseText.text = faceCount += " people detected in selfie. Please try again.";
+            }
+        }
+        else if (isLocSelfie)
+        {
+            if (approval)
+            {
+                responseText.text = "Correct location detected!";
+                RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.selfieLocation);
+            }
+            else
+            {
+                responseText.text += " Incorrect location detected. Please try again.";
+            }
+        }
+        else
+        {
+            if (approval)
+            {
+                responseText.text = "Your face was detected!";
+                RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.selfie);
+            }
+            else
+            {
+                responseText.text += "Your face was not detected! Please try again.";
+            }
         }
     }
 
@@ -218,16 +306,14 @@ public class SelfieCam : MonoBehaviour
 
         string[] dataPartition = responseText.Split("|");
         string unData = dataPartition[1].Trim();
-        string unPfp = GameManager.rootURL + dataPartition[2].Trim();
+        string unPfp = GameManager.rootURL + dataPartition[3].Trim();
         string targetUN = dataPartition[3].Trim();
         string targetPfp = GameManager.rootURL + dataPartition[4].Trim();
 
-        int faceCount = Convert.ToInt32(dataPartition[5].Trim());
-
-        unText.text = unData;
+        unText.text = scls.getUsername();
         targetUNText.text = targetUN;
 
-        //StartCoroutine(downloadImageFromURL(unPfp, unPfpImage));
+        StartCoroutine(downloadImageFromURL(unPfp, unPfpImage));
         //StartCoroutine(downloadImageFromURL(targetPfp, targetPfpImage));
     }
 
@@ -256,9 +342,7 @@ public class SelfieCam : MonoBehaviour
         blockingPanel.SetActive(false);
         responseText.text = "";
 
-        webcam.Play();
-        camMesh.material.SetTexture("_MainTex", webcam);
-
+        InitWebcam();    
     }
 
     IEnumerator ShowProcessingAnimation()
@@ -280,6 +364,7 @@ public class SelfieCam : MonoBehaviour
         if (jsonResponse.Contains("Selfie Approved"))
         {
             responseText.text = "Verification successful";
+            approval = true;
 
             //moved this line from the top of TakeSnap(), if anything breaks
             scls.doTargetAssignment(scls.getUsername(), 100);
@@ -287,11 +372,16 @@ public class SelfieCam : MonoBehaviour
         else if (jsonResponse.Contains("Selfie Not Approved"))
         {
             responseText.text = "Verification failed, re-upload or try a different image.";
+            approval = false;
+
         }
         else
         {
             responseText.text = "Error parsing server response.";
+            approval = false;
         }
+        HandleResponseForObjectives(jsonResponse, approval);
+
 
         /*bool match = false;
 

@@ -211,6 +211,7 @@ public class AdUploadManager : MonoBehaviour
 
     public IEnumerator uploadAllAds()
     {
+
         errorText.text = "";
         int errorCount = 0;
         foreach (string s in filepaths)
@@ -272,6 +273,8 @@ public class AdUploadManager : MonoBehaviour
                 yield return www.SendWebRequest();
                 if (www.isNetworkError || www.isHttpError)
                 {
+                    errorMessage = www.error;
+
                     errorText.text += "\nError opening file " + filename + ": " + errorMessage;
                     isError = true;
                 }
@@ -296,7 +299,7 @@ public class AdUploadManager : MonoBehaviour
                     //else
                     // {
                     string responseText = www.downloadHandler.text;
-                    Debug.Log(responseText);
+                    Debug.Log("REPLY: " + responseText);
                     if (responseText.StartsWith("Error"))
                     {
                         errorCount += 1;
@@ -319,9 +322,9 @@ public class AdUploadManager : MonoBehaviour
             {
                 errorText.color = Color.white;
                 errorText.text = "Ads successfully uploaded.";
+
                 filepaths = new string[0];
                 numadstext.text = "0 ad files selected.";
-
             }
 
             //if error, add to  error text, but keep going
