@@ -55,7 +55,7 @@ public class LocalRequirementManager : MonoBehaviour
     }
     public void NextDayAvailable()
     {
-        goNextButton.SetActive(true);
+        //goNextButton.SetActive(true);
     }
     public void EndDay()
     {
@@ -92,7 +92,7 @@ public class LocalRequirementManager : MonoBehaviour
         if (DayManager.dayCompleted)
             NextDayAvailable();
         else
-            goNextButton.SetActive(false);
+            //goNextButton.SetActive(false);
 
         VLGFiddler.RebuildVLGLayout();
     }

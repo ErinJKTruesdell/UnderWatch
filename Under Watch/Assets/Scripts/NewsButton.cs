@@ -13,7 +13,7 @@ public class NewsButton : MonoBehaviour
 
     public Vector2 buttonPos;
     public Vector2 popupPos;
-    void Start()
+    void OnEnable()
     {
         //otherwise, it is inactive
         if (PlayerPrefs.GetInt("hasSeenNews") == 0)
@@ -23,11 +23,11 @@ public class NewsButton : MonoBehaviour
 
         //buttonPos = new Vector2(this.transform.position.x, this.transform.position.y);
 
-      buttonPos = new Vector3(300, 700, 0);
-      popupPos = new Vector2(0, 0);
+          buttonPos = new Vector3(300, 700, 0);
+          popupPos = new Vector2(0, 0);
 
-}
-public void OpenNews()
+    }
+    public void OpenNews()
     {
         if (newsPopup.activeSelf)
         {
@@ -37,6 +37,7 @@ public void OpenNews()
         }
         else
         {
+            RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.announcements);
             newsPopup.SetActive(true);
             newsPopup.transform.localScale = new Vector3(0, 0, 0);
             newsPopup.transform.position = buttonPos;

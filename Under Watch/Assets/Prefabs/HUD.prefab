@@ -1,5 +1,525 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &16059932578055722
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5660934685059986117}
+  - component: {fileID: 4415353237395490300}
+  - component: {fileID: 6087477480751585879}
+  - component: {fileID: 8130799308658041090}
+  m_Layer: 5
+  m_Name: Desc
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &5660934685059986117
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 16059932578055722}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4310552043123833601}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0.0008239746}
+  m_SizeDelta: {x: 0, y: 41042.516}
+  m_Pivot: {x: 0.5, y: 1}
+--- !u!222 &4415353237395490300
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 16059932578055722}
+  m_CullTransparentMesh: 1
+--- !u!114 &6087477480751585879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 16059932578055722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: "> This notice is a fictional device displayed for the sake of our research
+    study. Please rest assured that the SnapGram application is a closed system accessible
+    only to our research team and your fellow participants, and that your data and
+    privacy rights remain protected. If you have further concerns, feel free to reach
+    out to Vivian at vt387@drexel.edu.\r\n> \r\n\r\n## PRIVACY NOTICE\r\n\r\n**Last
+    updated\_August 28, 2024**\r\n\r\nThis Privacy Notice for\_SnapGram Inc.\_(\"**we**,\"
+    \"**us**,\" or \"**our**\"), describes how and why we might access, collect,
+    store, use, and/or share (\"**process**\") your personal information when you
+    use our services (\"**Services**\"), including when you:\r\n\r\n- Download and
+    use\_our mobile application\_(SnapGram),\_or any other application of ours that
+    links to this Privacy Notice\r\n- Engage with us in other related ways, including
+    any sales, marketing, or events\r\n\r\n**Questions or concerns?**\_Reading this
+    Privacy Notice will help you understand your privacy rights and choices. We are
+    responsible for making decisions about how your personal information is processed.
+    If you do not agree with our policies and practices, please do not use our Services.\_If
+    you still have any questions or concerns, please contact us at\_[vt387@drexel.edu](mailto:vt387@drexel.edu).\r\n\r\n###
+    SUMMARY OF KEY POINTS\r\n\r\n***This summary provides key points from our Privacy
+    Notice, but you can find out more details about any of these topics by clicking
+    the link following each key point or by using our***\_[[table of contents]]\_***below
+    to find the section you are looking for.***\r\n\r\n**What personal information
+    do we process?**\_When you visit, use, or navigate our Services, we may process
+    personal information depending on how you interact with us and the Services,
+    the choices you make, and the products and features you use. Learn more about\_[[personal
+    information you disclose to us]].\r\n\r\n**Do we process any sensitive personal
+    information?**\_Some of the information may be considered\_\"special\" or \"sensitive\"\_in
+    certain jurisdictions, for example your biometric data, location data, or image
+    and likeness.\_We may process sensitive personal information when necessary with
+    your consent or as otherwise permitted by applicable law. Learn more about\_[[sensitive
+    information we process]].\r\n\r\n**Do we collect any information from third parties?**\_We
+    do not collect any information from third parties.\r\n\r\n**How do we process
+    your information?**\_We process your information to provide, improve, and administer
+    our Services, communicate with you, for security and fraud prevention, and to
+    comply with law. We may also process your information for other purposes with
+    your consent. We process your information only when we have a valid legal reason
+    to do so. Learn more about\_[[how we process your information]].\r\n\r\n**In
+    what situations and with which\_parties do we share personal information?**\_We
+    may share information in specific situations and with specific\_third parties.
+    Learn more about\_[[when and with whom we share your personal information]].\r\n\r\n**How
+    do we keep your information safe?**\_We have adequate\_organizational\_and technical
+    processes and procedures in place to protect your personal information. However,
+    no electronic transmission over the internet or information storage technology
+    can be guaranteed to be 100% secure, so we cannot promise or guarantee that hackers,
+    cybercriminals, or other\_unauthorized\_third parties will not be able to defeat
+    our security and improperly collect, access, steal, or modify your information.
+    Learn more about\_[[how we keep your information safe]].\r\n\r\n**What are your
+    rights?**\_Depending on where you are located geographically, the applicable
+    privacy law may mean you have certain rights regarding your personal information.
+    Learn more about\_[[your privacy rights]].\r\n\r\n**How do you exercise your
+    rights?**\_The easiest way to exercise your rights is by contacting us at [vt387@drexel.edu](mailto:vt387@drexel.edu).
+    We will consider and act upon any request in accordance with applicable data
+    protection laws.\r\n\r\nWe recommend that you print a copy of this notice for
+    your records.\r\n\r\n### TABLE OF CONTENTS\r\n\r\n[[1. WHAT INFORMATION DO WE
+    COLLECT?]]\r\n\r\n[[2. HOW DO WE PROCESS YOUR INFORMATION?]]\r\n\r\n[[3. WHEN
+    AND WITH WHOM DO WE SHARE YOUR PERSONAL INFORMATION?]]\r\n\r\n[[4. WHAT IS OUR
+    STANCE ON THIRD-PARTY WEBSITES?]]\r\n\r\n[[5. DO WE OFFER ARTIFICIAL INTELLIGENCE-BASED
+    PRODUCTS?]]\r\n\r\n[[6. HOW LONG DO WE KEEP YOUR INFORMATION?]]\r\n\r\n[[7. HOW
+    DO WE KEEP YOUR INFORMATION SAFE?]]\r\n\r\n[[8. DO WE COLLECT INFORMATION FROM
+    MINORS?]]\r\n\r\n[[9. WHAT ARE YOUR PRIVACY RIGHTS?]]\r\n\r\n[[10. CONTROLS FOR
+    DO-NOT-TRACK FEATURES]]\r\n\r\n[[11. DO UNITED STATES RESIDENTS HAVE SPECIFIC
+    PRIVACY RIGHTS?]]\r\n\r\n[[12. DO WE MAKE UPDATES TO THIS NOTICE?]]\r\n\r\n[[13.
+    HOW CAN YOU CONTACT US ABOUT THIS NOTICE?]]\r\n\r\n[[14. HOW CAN YOU REVIEW,
+    UPDATE, OR DELETE THE DATA WE COLLECT FROM YOU?]]\r\n\r\n### 1. WHAT INFORMATION
+    DO WE COLLECT?\r\n\r\n### Personal information you disclose to us\r\n\r\n***In
+    Short:***\_*We collect personal information that you provide to us.*\r\n\r\nWe
+    collect personal information that you voluntarily provide to us when you\_register
+    on the Services,\_express an interest in obtaining information about us or our
+    products and Services, when you participate in activities on the Services, or
+    otherwise when you contact us.\r\n\r\n**Personal Information Provided by You.**\_The
+    personal information that we collect depends on the context of your interactions
+    with us and the Services, the choices you make, and the products and features
+    you use. The personal information we collect may include the following:\r\n\r\n-
+    names\r\n- email addresses\r\n- usernames\r\n- passwords\r\n\r\n**Sensitive Information.**\_When
+    necessary, with your consent or as otherwise permitted by applicable law, we
+    process the following categories of sensitive information:\r\n\r\n- biometric
+    data\r\n- location data\r\n- image and likeness\r\n\r\n**Application Data.**\_If
+    you use our application(s), we also may collect the following information if
+    you choose to provide us with access or permission:\r\n\r\n- *Geolocation Information.*\_We
+    may request access or permission to track location-based information from your
+    mobile device, either continuously or while you are using our mobile application(s),
+    to provide certain location-based services. If you wish to change our access
+    or permissions, you may do so in your device's settings.\r\n- *Mobile Device
+    Access.*\_We may request access or permission to certain features from your mobile
+    device, including your mobile device's\_camera,\_and other features. If you wish
+    to change our access or permissions, you may do so in your device's settings.\r\n-
+    *Push Notifications.*\_We may request to send you push notifications regarding
+    your account or certain features of the application(s). If you wish to opt out
+    from receiving these types of communications, you may turn them off in your device's
+    settings.\r\n\r\nThis information is primarily needed to maintain the security
+    and operation of our application(s), for troubleshooting, and for our internal
+    analytics and reporting purposes.\r\n\r\nAll personal information that you provide
+    to us must be true, complete, and accurate, and you must notify us of any changes
+    to such personal information.\r\n\r\n### Information automatically collected\r\n\r\n***In
+    Short:***\_*Some information \u2014 such as your Internet Protocol (IP) address
+    and/or browser and device characteristics \u2014 is collected automatically when
+    you visit our Services.*\r\n\r\nWe automatically collect certain information
+    when you visit, use, or navigate the Services. This information does not reveal
+    your specific identity (like your name or contact information) but may include
+    device and usage information, such as your IP address, browser and device characteristics,
+    operating system, language preferences, referring URLs, device name, country,
+    location, information about how and when you use our Services, and other technical
+    information. This information is primarily needed to maintain the security and
+    operation of our Services, and for our internal analytics and reporting purposes.\r\n\r\nThe
+    information we collect includes:\r\n\r\n- *Location Data.*\_We collect location
+    data such as information about your device's location, which can be either precise
+    or imprecise. How much information we collect depends on the type and settings
+    of the device you use to access the Services. For example, we may use GPS and
+    other technologies to collect geolocation data that tells us your current location
+    (based on your IP address). You can opt out of allowing us to collect this information
+    either by refusing access to the information or by disabling your Location setting
+    on your device. However, if you choose to opt out, you may not be able to use
+    certain aspects of the Services.\r\n\r\n### 2. HOW DO WE PROCESS YOUR INFORMATION?\r\n\r\n***In
+    Short:***\_*We process your information to provide, improve, and administer our
+    Services, communicate with you, for security and fraud prevention, and to comply
+    with law. We may also process your information for other purposes with your consent.*\r\n\r\n**We
+    process your personal information for a variety of reasons, depending on how
+    you interact with our Services, including:**\r\n\r\n- **To facilitate account
+    creation and authentication and otherwise manage user accounts.**\_We may process
+    your information so you can create and log in to your account, as well as keep
+    your account in working order.\r\n- **To deliver and facilitate delivery of services
+    to the user.**\_We may process your information to provide you with the requested
+    service.\r\n- **To respond to user inquiries/offer support to users.**\_We may
+    process your information to respond to your inquiries and solve any potential
+    issues you might have with the requested service.\r\n- **To send administrative
+    information to you.**\_We may process your information to send you details about
+    our products and services, changes to our terms and policies, and other similar
+    information.\r\n- **To evaluate and improve our Services, products, marketing,
+    and your experience.**\_We may process your information when we believe it is
+    necessary to identify usage trends, determine the effectiveness of our promotional
+    campaigns, and to evaluate and improve our Services, products, marketing, and
+    your experience.\r\n- **To comply with our legal obligations.**\_We may process
+    your information to comply with our legal obligations, respond to legal requests,
+    and exercise, establish, or defend our legal rights.\r\n\r\n### 3. WHEN AND WITH
+    WHOM DO WE SHARE YOUR PERSONAL INFORMATION?\r\n\r\n***In Short:***\_*We may share
+    information in specific situations described in this section and/or with the
+    following\_third parties.*\r\n\r\nWe\_may need to share your personal information
+    in the following situations:\r\n\r\n- **Business Transfers.**\_We may share or
+    transfer your information in connection with, or during negotiations of, any
+    merger, sale of company assets, financing, or acquisition of all or a portion
+    of our business to another company.\r\n\r\n### 4. WHAT IS OUR STANCE ON THIRD-PARTY
+    WEBSITES?\r\n\r\n***In Short:***\_*We are not responsible for the safety of any
+    information that you share with third parties that we may link to or who advertise
+    on our Services, but are not affiliated with, our Services.*\r\n\r\nThe Services\_may
+    link to third-party websites, online services, or mobile applications and/or
+    contain advertisements from third parties that are not affiliated with us and
+    which may link to other websites, services, or applications. Accordingly, we
+    do not make any guarantee regarding any such third parties, and we will not be
+    liable for any loss or damage caused by the use of such third-party websites,
+    services, or applications. The inclusion of a link towards a third-party website,
+    service, or application does not imply an endorsement by us. We cannot guarantee
+    the safety and privacy of data you provide to any third-party websites. Any data
+    collected by third parties is not covered by this Privacy Notice. We are not
+    responsible for the content or privacy and security practices and policies of
+    any third parties, including other websites, services, or applications that may
+    be linked to or from the Services. You should review the policies of such third
+    parties and contact them directly to respond to your questions.\r\n\r\n### 5.
+    DO WE OFFER ARTIFICIAL INTELLIGENCE-BASED PRODUCTS?\r\n\r\n***In Short:***\_*We
+    offer products, features, or tools powered by artificial intelligence, machine
+    learning, or similar technologies.*\r\n\r\nAs part of our Services, we offer
+    products, features, or tools powered by artificial intelligence, machine learning,
+    or similar technologies (collectively,\_\"AI Products\"). These tools are designed
+    to enhance your experience and provide you with innovative solutions. The terms
+    in this Privacy Notice govern your use of the AI Products within our Services.\r\n\r\n###
+    Our AI Products\r\n\r\nOur AI Products are designed for the following functions:\r\n\r\n-
+    Image analysis\r\n\r\n### How We Process Your Data Using AI\r\n\r\nAll personal
+    information processed using our AI Products is handled in line with our Privacy
+    Notice and our agreement with third parties. This ensures high security and safeguards
+    your personal information throughout the process, giving you peace of mind about
+    your data's safety.\r\n\r\n### 6. HOW LONG DO WE KEEP YOUR INFORMATION?\r\n\r\n***In
+    Short:***\_*We keep your information for as long as necessary to\_fulfill\_the
+    purposes outlined in this Privacy Notice unless otherwise required by law.*\r\n\r\nWe
+    will only keep your personal information for as long as it is necessary for the
+    purposes set out in this Privacy Notice, unless a longer retention period is
+    required or permitted by law (such as tax, accounting, or other legal requirements).\_No
+    purpose in this notice will require us keeping your personal information for
+    longer than\_the period of time in which users have an account with us.\r\n\r\nWhen
+    we have no ongoing legitimate business need to process your personal information,
+    we will either delete or\_anonymize\_such information, or, if this is not possible
+    (for example, because your personal information has been stored in backup archives),
+    then we will securely store your personal information and isolate it from any
+    further processing until deletion is possible.\r\n\r\n### 7. HOW DO WE KEEP YOUR
+    INFORMATION SAFE?\r\n\r\n***In Short:***\_*We aim to protect your personal information
+    through a system of\_organizational\_and technical security measures.*\r\n\r\nWe
+    have implemented appropriate and reasonable technical and\_organizational\_security
+    measures designed to protect the security of any personal information we process.
+    However, despite our safeguards and efforts to secure your information, no electronic
+    transmission over the Internet or information storage technology can be guaranteed
+    to be 100% secure, so we cannot promise or guarantee that hackers, cybercriminals,
+    or other\_unauthorized\_third parties will not be able to defeat our security
+    and improperly collect, access, steal, or modify your information. Although we
+    will do our best to protect your personal information, transmission of personal
+    information to and from our Services is at your own risk. You should only access
+    the Services within a secure environment.\r\n\r\n### 8. DO WE COLLECT INFORMATION
+    FROM MINORS?\r\n\r\n***In Short:***\_*We do not knowingly collect data from or
+    market to\_children under 18 years of age.*\r\n\r\nWe do not knowingly collect,
+    solicit data from, or market to children under 18 years of age, nor do we knowingly
+    sell such personal information. By using the Services, you represent that you
+    are at least 18 or that you are the parent or guardian of such a minor and consent
+    to such minor dependent\u2019s use of the Services. If we learn that personal
+    information from users less than 18 years of age has been collected, we will
+    deactivate the account and take reasonable measures to promptly delete such data
+    from our records. If you become aware of any data we may have collected from
+    children under age 18, please contact us at\_[vt387@drexel.edu](mailto:vt387@drexel.edu).\r\n\r\n###
+    9. WHAT ARE YOUR PRIVACY RIGHTS?\r\n\r\n***In Short:***\_\_*You may review, change,
+    or terminate your account at any time, depending on your country, province, or
+    state of residence.*\r\n\r\n**Withdrawing your consent:**\_If we are relying
+    on your consent to process your personal information,\_which may be express and/or
+    implied consent depending on the applicable law,\_you have the right to withdraw
+    your consent at any time. You can withdraw your consent at any time by contacting
+    us by using the contact details provided in the section\_\"[[HOW CAN YOU CONTACT
+    US ABOUT THIS NOTICE?]]\"\_below.\r\n\r\nHowever, please note that this will
+    not affect the lawfulness of the processing before its withdrawal nor,\_when
+    applicable law allows,\_will it affect the processing of your personal information
+    conducted in reliance on lawful processing grounds other than consent.\r\n\r\n###
+    Account Information\r\n\r\nIf you would at any time like to review or change
+    the information in your account or terminate your account, you can:\r\n\r\n-
+    Log in to your account settings and update your user account.\r\n- Contact us
+    using the contact information provided.\r\n\r\nUpon your request to terminate
+    your account, we will deactivate or delete your account and information from
+    our active databases. However, we may retain some information in our files to
+    prevent fraud, troubleshoot problems, assist with any investigations, enforce
+    our legal terms and/or comply with applicable legal requirements.\r\n\r\nIf you
+    have questions or comments about your privacy rights, you may email us at\_[vt387@drexel.edu](mailto:vt387@drexel.edu).\r\n\r\n###
+    10. CONTROLS FOR DO-NOT-TRACK FEATURES\r\n\r\nMost web browsers and some mobile
+    operating systems and mobile applications include a Do-Not-Track (\"DNT\") feature
+    or setting you can activate to signal your privacy preference not to have data
+    about your online browsing activities monitored and collected. At this stage,
+    no uniform technology standard for\_recognizing\_and implementing DNT signals
+    has been\_finalized. As such, we do not currently respond to DNT browser signals
+    or any other mechanism that automatically communicates your choice not to be
+    tracked online. If a standard for online tracking is adopted that we must follow
+    in the future, we will inform you about that practice in a revised version of
+    this Privacy Notice.\r\n\r\nCalifornia law requires us to let you know how we
+    respond to web browser DNT signals. Because there currently is not an industry
+    or legal standard for\_recognizing\_or\_honoring\_DNT signals, we do not respond
+    to them at this time.\r\n\r\n### 11. DO UNITED STATES RESIDENTS HAVE SPECIFIC
+    PRIVACY RIGHTS?\r\n\r\n***In Short:***\_*If you are a resident of\_California,
+    Colorado, Connecticut, Delaware, Florida, Indiana, Iowa, Kentucky, Montana, New
+    Hampshire, New Jersey, Oregon, Tennessee, Texas, Utah, or Virginia, you may have
+    the right to request access to and receive details about the personal information
+    we maintain about you and how we have processed it, correct inaccuracies, get
+    a copy of, or delete your personal information. You may also have the right to
+    withdraw your consent to our processing of your personal information. These rights
+    may be limited in some circumstances by applicable law. More information is provided
+    below.*\r\n\r\n### Categories of Personal Information We Collect\r\n\r\nWe have
+    collected the following categories of personal information in the past twelve
+    (12) months:\r\n\r\n| **Category** | **Examples** | **Collected** |\r\n| ---
+    | --- | --- |\r\n| A. Identifiers | Contact details, such as real name, alias,
+    postal address, telephone or mobile contact number, unique personal identifier,
+    online identifier, Internet Protocol address, email address, and account name
+    | YES |\r\n| B. Personal information as defined in the California Customer Records
+    statute | Name, contact information, education, employment, employment history,
+    and financial information | YES |\r\n| C. Protected classification characteristics
+    under state or federal law | Gender, age, date of birth, race and ethnicity,
+    national origin, marital status, and other demographic data | NO |\r\n| D. Commercial
+    information | Transaction information, purchase history, financial details, and
+    payment information | NO |\r\n| E. Biometric information | Fingerprints and voiceprints
+    | YES |\r\n| F. Internet or other similar network activity | Browsing history,
+    search history, online\_behavior, interest data, and interactions with our and
+    other websites, applications, systems, and advertisements | NO |\r\n| G. Geolocation
+    data | Device location | YES |\r\n| H. Audio, electronic, sensory, or similar
+    information | Images and audio, video or call recordings created in connection
+    with our business activities | YES |\r\n| I. Professional or employment-related
+    information | Business contact details in order to provide you our Services at
+    a business level or job title, work history, and professional qualifications
+    if you apply for a job with us | NO |\r\n| J. Education Information | Student
+    records and directory information | NO |\r\n| K. Inferences drawn from collected
+    personal information | Inferences drawn from any of the collected personal information
+    listed above to create a profile or summary about, for example, an individual\u2019s
+    preferences and characteristics | NO |\r\n| L. Sensitive personal Information
+    | Account login information,\_biometric data\_and\_precise geolocation | YES
+    |\r\n\r\nWe only collect sensitive personal information, as defined by applicable
+    privacy laws or the purposes allowed by law or with your consent. Sensitive personal
+    information may be used, or disclosed to a service provider or contractor, for
+    additional, specified purposes. You may have the right to limit the use or disclosure
+    of your sensitive personal information.\_We do not collect or process sensitive
+    personal information for the purpose of inferring characteristics about you.\r\n\r\nWe
+    may also collect other personal information outside of these categories through
+    instances where you interact with us in person, online, or by phone or mail in
+    the context of:\r\n\r\n- Receiving help through our customer support channels;\r\n-
+    Participation in customer surveys or contests; and\r\n- Facilitation in the delivery
+    of our Services and to respond to your inquiries.\r\n\r\nWe will use and retain
+    the collected personal information as needed to provide the Services or for:\r\n\r\n-
+    Category A -\_As long as the user has an account with us\r\n- Category B -\_As
+    long as the user has an account with us\r\n- Category\_E\_-\_As long as the user
+    has an account with us\r\n- Category\_G\_-\_As long as the user has an account
+    with us\r\n- Category\_H\_-\_As long as the user has an account with us\r\n-
+    Category\_L\_-\_As long as the user has an account with us\r\n\r\n### Sources
+    of Personal Information\r\n\r\nLearn more about the sources of personal information
+    we collect in\_\"[[WHAT INFORMATION DO WE COLLECT?]]\".\r\n\r\n### How We Use
+    and Share Personal Information\r\n\r\nLearn about how we use your personal information
+    in the section,\_\"[[HOW DO WE PROCESS YOUR INFORMATION?]]\".\r\n\r\n### Will
+    your information be shared with anyone else?\r\n\r\nWe may disclose your personal
+    information with our service providers pursuant to a written contract between
+    us and each service provider. Learn more about how we disclose personal information
+    to in the section,\_\"[[WHEN AND WITH WHOM DO WE SHARE YOUR PERSONAL INFORMATION?]]\".\r\n\r\nWe
+    may use your personal information for our own business purposes, such as for
+    undertaking internal research for technological development and demonstration.
+    This is not considered to be\_\"selling\"\_of your personal information.\r\n\r\nWe
+    have not disclosed, sold, or shared any personal information to third parties
+    for a business or commercial purpose in the preceding twelve (12) months. We\_will
+    not sell or share personal information in the future belonging to website visitors,
+    users, and other consumers.\r\n\r\n### Your Rights\r\n\r\nYou have rights under
+    certain US state data protection laws. However, these rights are not absolute,
+    and in certain cases, we may decline your request as permitted by law. These
+    rights include:\r\n\r\n- **Right to know**\_whether or not we are processing
+    your personal data\r\n- **Right to access**\_your personal data\r\n- **Right
+    to correct**\_inaccuracies in your personal data\r\n- **Right to request**\_the
+    deletion of your personal data\r\n- **Right to obtain a copy**\_of the personal
+    data you previously shared with us\r\n- **Right to non-discrimination**\_for
+    exercising your rights\r\n- **Right to opt out**\_of the processing of your personal
+    data if it is used for targeted advertising\_(or sharing as defined under California\u2019s
+    privacy law), the sale of personal data, or profiling in furtherance of decisions
+    that produce legal or similarly significant effects (\"profiling\")\r\n\r\nDepending
+    upon the state where you live, you may also have the following rights:\r\n\r\n-
+    Right to obtain a list of the categories of third parties to which we have disclosed
+    personal data (as permitted by applicable law, including\_California's and Delaware's\_privacy
+    law)\r\n- Right to obtain a list of specific third parties to which we have disclosed
+    personal data (as permitted by applicable law, including Oregon\u2019s privacy
+    law)\r\n- Right to limit use and disclosure of sensitive personal data (as permitted
+    by applicable law, including California\u2019s privacy law)\r\n- Right to opt
+    out of the collection of sensitive data and personal data collected through the
+    operation of a voice or facial recognition feature (as permitted by applicable
+    law, including Florida\u2019s privacy law)\r\n\r\n### How to Exercise Your Rights\r\n\r\nTo
+    exercise these rights, you can contact us\_by emailing us at\_[vt387@drexel.edu](mailto:vt387@drexel.edu),\_or
+    by referring to the contact details at the bottom of this document.\r\n\r\nUnder
+    certain US state data protection laws, you can designate an\_authorized\_agent
+    to make a request on your behalf. We may deny a request from an\_authorized\_agent
+    that does not submit proof that they have been validly\_authorized\_to act on
+    your behalf in accordance with applicable laws.\r\n\r\n### Request Verification\r\n\r\nUpon
+    receiving your request, we will need to verify your identity to determine you
+    are the same person about whom we have the information in our system. We will
+    only use personal information provided in your request to verify your identity
+    or authority to make the request. However, if we cannot verify your identity
+    from the information already maintained by us, we may request that you provide
+    additional information for the purposes of verifying your identity and for security
+    or fraud-prevention purposes.\r\n\r\nIf you submit the request through an\_authorized\_agent,
+    we may need to collect additional information to verify your identity before
+    processing your request and the agent will need to provide a written and signed
+    permission from you to submit such request on your behalf.\r\n\r\n### Appeals\r\n\r\nUnder
+    certain US state data protection laws, if we decline to take action regarding
+    your request, you may appeal our decision by emailing us at [vt387@drexel.edu](mailto:vt387@drexel.edu).
+    We will inform you in writing of any action taken or not taken in response to
+    the appeal, including a written explanation of the reasons for the decisions.
+    If your appeal is denied, you may submit a complaint to your state attorney general.\r\n\r\n**California\_\"Shine
+    The Light\"\_Law**\r\n\r\nCalifornia Civil Code Section 1798.83, also known as
+    the\_\"Shine The Light\"\_law, permits our users who are California residents
+    to request and obtain from us, once a year and free of charge, information about
+    categories of personal information (if any) we disclosed to third parties for
+    direct marketing purposes and the names and addresses of all third parties with
+    which we shared personal information in the immediately preceding calendar year.
+    If you are a California resident and would like to make such a request, please
+    submit your request in writing to us by using the contact details provided in
+    the section\_\"[[HOW CAN YOU CONTACT US ABOUT THIS NOTICE?]]\".\r\n\r\n### 12.
+    DO WE MAKE UPDATES TO THIS NOTICE?\r\n\r\n***In Short:**\_Yes, we will update
+    this notice as necessary to stay compliant with relevant laws.*\r\n\r\nWe may
+    update this Privacy Notice from time to time. The updated version will be indicated
+    by an updated\_\"Revised\"\_date at the top of this Privacy Notice. If we make
+    material changes to this Privacy Notice, we may notify you either by prominently
+    posting a notice of such changes or by directly sending you a notification. We
+    encourage you to review this Privacy Notice frequently to be informed of how
+    we are protecting your information.\r\n\r\n### 13. HOW CAN YOU CONTACT US ABOUT
+    THIS NOTICE?\r\n\r\nIf you have questions or comments about this notice, you
+    may\_email us at\_[vt387@drexel.edu](mailto:vt387@drexel.edu) or\_contact us
+    by post at:\r\n\r\nSnapGram Inc.\r\n3401 Market Street\r\nPhiladelphia,\_PA\_19104\r\nUnited
+    States\r\n\r\n### 14. HOW CAN YOU REVIEW, UPDATE, OR DELETE THE DATA WE COLLECT
+    FROM YOU?\r\n\r\nBased on the applicable laws of your country\_or state of residence
+    in the US, you may\_have the right to request access to the personal information
+    we collect from you, details about how we have processed it, correct inaccuracies,
+    or delete your personal information. You may also have the right to\_withdraw
+    your consent to our processing of your personal information. These rights may
+    be limited in some circumstances by applicable law. To request to review, update,
+    or delete your personal information, please\_email us at [vt387@drexel.edu](mailto:vt387@drexel.edu).\r\n\r\nAccept\r\n\r\n---"
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 36
+  m_fontSizeBase: 36
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 1
+  m_VerticalAlignment: 256
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 25, y: 30, z: 25, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &8130799308658041090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 16059932578055722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
 --- !u!1 &127300181589577074
 GameObject:
   m_ObjectHideFlags: 0
@@ -157,6 +677,7 @@ GameObject:
   - component: {fileID: 334758802770918111}
   - component: {fileID: 2701044226282806735}
   - component: {fileID: 1177006063465815696}
+  - component: {fileID: 8650327449565654373}
   m_Layer: 5
   m_Name: bg
   m_TagString: Untagged
@@ -171,16 +692,22 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 627475908936815370}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8269613804018859258}
+  - {fileID: 6777980133581173308}
+  - {fileID: 4344059769917937482}
+  - {fileID: 2363703548734305927}
+  - {fileID: 3521573521551333169}
+  - {fileID: 6357705673386484397}
   m_Father: {fileID: 6957741590075762876}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -0.000061035156}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2701044226282806735
@@ -204,14 +731,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.6}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 33f9492c2fc2c7b4991ccd4ef4586e3f, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -220,7 +747,20 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 2
+--- !u!114 &8650327449565654373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 627475908936815370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShowMaskGraphic: 1
 --- !u!1 &910540974736458952
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,17 +786,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 910540974736458952}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6957741590075762876}
+  m_Father: {fileID: 4344059769917937482}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -40}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -8}
+  m_SizeDelta: {x: 0, y: 67.4771}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7189587587283337189
 CanvasRenderer:
@@ -286,17 +826,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'BREAKING: Nothing To Worry About'
+  m_text: Announcements
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3a128ae401ea84aa29d96dae416a3bac, type: 2}
+  m_sharedMaterial: {fileID: 8172450650342630421, guid: 3a128ae401ea84aa29d96dae416a3bac, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -313,15 +853,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32.8
-  m_fontSizeBase: 36
+  m_fontSize: 42.73
+  m_fontSizeBase: 42.73
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 5
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -349,7 +889,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -202.08463, y: 0, z: -203.1059, w: 0}
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -434,6 +974,114 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &1527779204212401577
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6777980133581173308}
+  - component: {fileID: 8069450527402529886}
+  - component: {fileID: 5908256439072879237}
+  - component: {fileID: 4989358202707465738}
+  m_Layer: 5
+  m_Name: DetailsTextScroll
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &6777980133581173308
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1527779204212401577}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4310552043123833601}
+  - {fileID: 6875692625774364788}
+  m_Father: {fileID: 334758802770918111}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 33.00109}
+  m_SizeDelta: {x: -30, y: -248.58}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8069450527402529886
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1527779204212401577}
+  m_CullTransparentMesh: 1
+--- !u!114 &5908256439072879237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1527779204212401577}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4989358202707465738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1527779204212401577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Content: {fileID: 5660934685059986117}
+  m_Horizontal: 0
+  m_Vertical: 1
+  m_MovementType: 1
+  m_Elasticity: 0.1
+  m_Inertia: 1
+  m_DecelerationRate: 0.2
+  m_ScrollSensitivity: 2000
+  m_Viewport: {fileID: 4310552043123833601}
+  m_HorizontalScrollbar: {fileID: 0}
+  m_VerticalScrollbar: {fileID: 0}
+  m_HorizontalScrollbarVisibility: 2
+  m_VerticalScrollbarVisibility: 0
+  m_HorizontalScrollbarSpacing: -3
+  m_VerticalScrollbarSpacing: -3
+  m_OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1736793240170744607
 GameObject:
   m_ObjectHideFlags: 0
@@ -502,6 +1150,81 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: d51ac5e636ac7e140922f604126bd7f8, type: 3}
   m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!1 &2655556620032373036
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2363703548734305927}
+  - component: {fileID: 6916343998871744250}
+  - component: {fileID: 3555695103185781305}
+  m_Layer: 5
+  m_Name: botBG
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2363703548734305927
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2655556620032373036}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 334758802770918111}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: 0, y: 44.219116}
+  m_SizeDelta: {x: 0, y: 160.0489}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &6916343998871744250
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2655556620032373036}
+  m_CullTransparentMesh: 1
+--- !u!114 &3555695103185781305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2655556620032373036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.9294118, g: 0.10980393, b: 0.47450984, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -617,16 +1340,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3127227679745312234}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6957741590075762876}
+  m_Father: {fileID: 334758802770918111}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 65.00006}
   m_SizeDelta: {x: 70, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2893952343220809960
@@ -650,14 +1373,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.6132076, g: 0.15272339, b: 0.15272339, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 246c5abeabe7b5d4289bd97a7882ca66, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -874,6 +1597,140 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!1 &3462471110052404723
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2669500831160628942}
+  - component: {fileID: 3639921863381526764}
+  - component: {fileID: 2633841168766424138}
+  m_Layer: 5
+  m_Name: Title
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2669500831160628942
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3462471110052404723}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6875692625774364788}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &3639921863381526764
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3462471110052404723}
+  m_CullTransparentMesh: 1
+--- !u!114 &2633841168766424138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3462471110052404723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: Privacy Policy
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: c4275f27d52e7419bb2ba3153a4e0842, type: 2}
+  m_sharedMaterial: {fileID: -7881088334622637832, guid: c4275f27d52e7419bb2ba3153a4e0842, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 35
+  m_fontSizeBase: 35
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &3768845567273995603
 GameObject:
   m_ObjectHideFlags: 0
@@ -911,7 +1768,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 13.5099945, y: -8.199921}
-  m_SizeDelta: {x: 222.4, y: 224}
+  m_SizeDelta: {x: 189.1512, y: 190.512}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8889396341848716816
 CanvasRenderer:
@@ -1391,6 +2248,96 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneName: SingleCameraScene
+--- !u!1 &5466711385037054239
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4310552043123833601}
+  - component: {fileID: 5896849751145238398}
+  - component: {fileID: 3526214426134794509}
+  - component: {fileID: 2532063468940654056}
+  m_Layer: 5
+  m_Name: Viewport
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &4310552043123833601
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5466711385037054239}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5660934685059986117}
+  m_Father: {fileID: 6777980133581173308}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -38.906}
+  m_SizeDelta: {x: 0, y: -77.813}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &5896849751145238398
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5466711385037054239}
+  m_CullTransparentMesh: 1
+--- !u!114 &3526214426134794509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5466711385037054239}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2532063468940654056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5466711385037054239}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShowMaskGraphic: 1
 --- !u!1 &5539543027936509960
 GameObject:
   m_ObjectHideFlags: 0
@@ -1547,8 +2494,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3323032359203365699}
   - component: {fileID: 9107095382910287700}
-  - component: {fileID: 1290468661410081004}
-  - component: {fileID: 2084285551315938923}
+  - component: {fileID: 9081801879641627184}
+  - component: {fileID: 2691059282208813697}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -1572,8 +2519,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 889.8867}
-  m_SizeDelta: {x: 0, y: 5049.98}
+  m_AnchoredPosition: {x: 0, y: 0.000061035156}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &9107095382910287700
 CanvasRenderer:
@@ -1583,7 +2530,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5834309052072338587}
   m_CullTransparentMesh: 1
---- !u!114 &1290468661410081004
+--- !u!114 &9081801879641627184
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1592,87 +2539,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 5834309052072338587}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_text: 'Hey, we''re SnapGram - you can trust us to do the right thing! '
-  m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
-  m_fontMaterial: {fileID: 0}
-  m_fontMaterials: []
-  m_fontColor32:
-    serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
-  m_enableVertexGradient: 0
-  m_colorMode: 3
-  m_fontColorGradient:
-    topLeft: {r: 1, g: 1, b: 1, a: 1}
-    topRight: {r: 1, g: 1, b: 1, a: 1}
-    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-    bottomRight: {r: 1, g: 1, b: 1, a: 1}
-  m_fontColorGradientPreset: {fileID: 0}
-  m_spriteAsset: {fileID: 0}
-  m_tintAllSprites: 0
-  m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: -1183493901
-  m_overrideHtmlColors: 0
-  m_faceColor:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_fontSize: 25
-  m_fontSizeBase: 25
-  m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
-  m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
-  m_textAlignment: 65535
-  m_characterSpacing: 0
-  m_wordSpacing: 0
-  m_lineSpacing: 0
-  m_lineSpacingMax: 0
-  m_paragraphSpacing: 0
-  m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 0
-  m_wordWrappingRatios: 0.4
-  m_overflowMode: 0
-  m_linkedTextComponent: {fileID: 0}
-  parentLinkedComponent: {fileID: 0}
-  m_enableKerning: 1
-  m_enableExtraPadding: 0
-  checkPaddingRequired: 0
-  m_isRichText: 1
-  m_parseCtrlCharacters: 1
-  m_isOrthographic: 1
-  m_isCullingEnabled: 0
-  m_horizontalMapping: 0
-  m_verticalMapping: 0
-  m_uvLineOffset: 0
-  m_geometrySortingOrder: 0
-  m_IsTextObjectScaleStatic: 0
-  m_VertexBufferAutoSizeReduction: 0
-  m_useMaxVisibleDescender: 1
-  m_pageToDisplay: 1
-  m_margin: {x: 20, y: 15, z: 20, w: 20}
-  m_isUsingLegacyAnimationComponent: 0
-  m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
-  m_baseMaterial: {fileID: 0}
-  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &2084285551315938923
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 40
+    m_Bottom: 0
+  m_ChildAlignment: 7
+  m_Spacing: 55
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 1
+--- !u!114 &2691059282208813697
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1947,6 +2831,42 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &6435165791239206202
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5140518586754131107}
+  m_Layer: 5
+  m_Name: NewsDataParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &5140518586754131107
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6435165791239206202}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5618791209803942633}
+  m_Father: {fileID: 6957741590075762876}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6572650566786740057
 GameObject:
   m_ObjectHideFlags: 0
@@ -2099,7 +3019,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!1 &6929542297481637228
+--- !u!1 &6733144937706328650
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2107,33 +3027,74 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7919686435298151976}
+  - component: {fileID: 4344059769917937482}
+  - component: {fileID: 7977585248777047378}
+  - component: {fileID: 8050862272112679895}
   m_Layer: 5
-  m_Name: Content
+  m_Name: topBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &7919686435298151976
+--- !u!224 &4344059769917937482
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6929542297481637228}
+  m_GameObject: {fileID: 6733144937706328650}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8269613804018859258}
+  m_Children:
+  - {fileID: 5688863206259194775}
+  m_Father: {fileID: 334758802770918111}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 8.5, y: 60.70733}
-  m_SizeDelta: {x: -17, y: 300}
-  m_Pivot: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: -44.28711}
+  m_SizeDelta: {x: 0, y: 124.3798}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &7977585248777047378
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6733144937706328650}
+  m_CullTransparentMesh: 1
+--- !u!114 &8050862272112679895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6733144937706328650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.9294118, g: 0.10980393, b: 0.47450984, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &7297577307636412595
 GameObject:
   m_ObjectHideFlags: 0
@@ -2144,6 +3105,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6957741590075762876}
   - component: {fileID: 2297032827837387592}
+  - component: {fileID: 1694422287982258776}
+  - component: {fileID: 1205171690092164358}
+  - component: {fileID: 6216941158765633852}
   m_Layer: 5
   m_Name: NewsPopup
   m_TagString: Untagged
@@ -2164,15 +3128,13 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 334758802770918111}
-  - {fileID: 8269613804018859258}
-  - {fileID: 5688863206259194775}
-  - {fileID: 3521573521551333169}
+  - {fileID: 5140518586754131107}
   m_Father: {fileID: 6426694562040935267}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -100, y: 450}
+  m_AnchoredPosition: {x: 0, y: 3.7609}
+  m_SizeDelta: {x: -80, y: 1288.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2297032827837387592
 CanvasRenderer:
@@ -2182,6 +3144,72 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7297577307636412595}
   m_CullTransparentMesh: 1
+--- !u!114 &1694422287982258776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7297577307636412595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1205171690092164358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7297577307636412595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShowMaskGraphic: 0
+--- !u!114 &6216941158765633852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7297577307636412595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb229f99b531bcc4291126b7bde80c8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickedToDetails:
+    m_PersistentCalls:
+      m_Calls: []
+  contentParent: {fileID: 3323032359203365699}
+  newsPrefab: {fileID: 6210888473969612249, guid: 3b9aa266e6a32e54da0f3b93ada0f9ca, type: 3}
+  detailsWindow: {fileID: 1527779204212401577}
+  detailsCloser: {fileID: 8470432360984005686}
+  detailsTitleText: {fileID: 2633841168766424138}
+  detailsDescText: {fileID: 6087477480751585879}
+  containersParent: {fileID: 5140518586754131107}
+  newsDataContainers: []
 --- !u!1 &7322890424625575705
 GameObject:
   m_ObjectHideFlags: 0
@@ -2195,7 +3223,7 @@ GameObject:
   - component: {fileID: 7330809045345083805}
   - component: {fileID: 2844974653962022689}
   m_Layer: 5
-  m_Name: Scroll View
+  m_Name: PostTitleScroll
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2208,19 +3236,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7322890424625575705}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4330030393409598607}
-  - {fileID: 7919686435298151976}
-  m_Father: {fileID: 6957741590075762876}
+  m_Father: {fileID: 334758802770918111}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -15}
-  m_SizeDelta: {x: -30, y: -90}
+  m_AnchoredPosition: {x: 0, y: 31.997068}
+  m_SizeDelta: {x: -30, y: -246.5726}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2801563066643128190
 CanvasRenderer:
@@ -2237,7 +3264,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7322890424625575705}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -2425,7 +3452,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.37647063, g: 0.37647063, b: 0.37647063, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2571,14 +3598,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0.61723757, a: 0.6}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2752,3 +3779,412 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &8470432360984005686
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6357705673386484397}
+  - component: {fileID: 8607648088851809130}
+  - component: {fileID: 1263802936219487862}
+  - component: {fileID: 8930891962274041311}
+  m_Layer: 5
+  m_Name: DetailsCloseButton (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &6357705673386484397
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8470432360984005686}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 334758802770918111}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 65.00006}
+  m_SizeDelta: {x: 70, y: 70}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8607648088851809130
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8470432360984005686}
+  m_CullTransparentMesh: 1
+--- !u!114 &1263802936219487862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8470432360984005686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 246c5abeabe7b5d4289bd97a7882ca66, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8930891962274041311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8470432360984005686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1263802936219487862}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6216941158765633852}
+        m_TargetAssemblyTypeName: NewsTitleManager, Assembly-CSharp
+        m_MethodName: CloseDetailsWindow
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!1 &8837811308193085314
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6875692625774364788}
+  - component: {fileID: 2586715697165614263}
+  - component: {fileID: 7147961257968419688}
+  - component: {fileID: 8332494360331609576}
+  - component: {fileID: 1462303898912346252}
+  m_Layer: 5
+  m_Name: titleBG
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &6875692625774364788
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8837811308193085314}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2669500831160628942}
+  m_Father: {fileID: 6777980133581173308}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -56}
+  m_SizeDelta: {x: -46.03, y: 61.3892}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &2586715697165614263
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8837811308193085314}
+  m_CullTransparentMesh: 1
+--- !u!114 &7147961257968419688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8837811308193085314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.67058825, g: 0.058823533, b: 0.2784314, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 33f9492c2fc2c7b4991ccd4ef4586e3f, type: 3}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 3
+--- !u!114 &8332494360331609576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8837811308193085314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0.9294118, g: 0.10980393, b: 0.47450984, a: 1}
+  m_EffectDistance: {x: 5, y: -7}
+  m_UseGraphicAlpha: 1
+--- !u!114 &1462303898912346252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8837811308193085314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 7147961257968419688}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6216941158765633852}
+        m_TargetAssemblyTypeName: NewsTitleManager, Assembly-CSharp
+        m_MethodName: CloseDetailsWindow
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!1001 &5857735335877114481
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 5140518586754131107}
+    m_Modifications:
+    - target: {fileID: 1881534070420041712, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: desc
+      value: sdkfjghnsdfjkghsdfkjghdfskjsdfgjkdffdgjkhgsdfhjhjksdfhjksdfkhjldhklsdfhjklfsfhjksdhjkdflfhjklsfhjkshjklsdhjklsdhjklsdhjklsdhjklsdhjkldfkhjldfhjkldfghjkldfghjkdfgkhjdfsgkh
+      objectReference: {fileID: 0}
+    - target: {fileID: 1881534070420041712, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: title
+      value: Privacy Policy
+      objectReference: {fileID: 0}
+    - target: {fileID: 1881534070420041712, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: subtitle
+      value: afsd
+      objectReference: {fileID: 0}
+    - target: {fileID: 2068048972840628376, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2068048972840628376, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2068048972840628376, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2068048972840628376, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2068048972840628376, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2068048972840628376, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2068048972840628376, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 2068048972840628376, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2068048972840628376, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2068048972840628376, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2068048972840628376, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2068048972840628376, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2068048972840628376, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2068048972840628376, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2068048972840628376, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2068048972840628376, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2068048972840628376, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2068048972840628376, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2068048972840628376, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2068048972840628376, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3238209240638340884, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: m_text
+      value: gdfafdgafgdfdg
+      objectReference: {fileID: 0}
+    - target: {fileID: 3238209240638340884, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 16777215
+      objectReference: {fileID: 0}
+    - target: {fileID: 6049631211894637416, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: m_Name
+      value: NewsDataStorage
+      objectReference: {fileID: 0}
+    - target: {fileID: 7122116551874178172, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: m_SortingLayer
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 3238209240638340884, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+    - {fileID: 7122116551874178172, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+--- !u!224 &5618791209803942633 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2068048972840628376, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+  m_PrefabInstance: {fileID: 5857735335877114481}
+  m_PrefabAsset: {fileID: 0}
