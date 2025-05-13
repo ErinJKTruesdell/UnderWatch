@@ -14,6 +14,7 @@ using System;
 using UnityEngine.AI;
 using DG.Tweening;
 using static System.Net.Mime.MediaTypeNames;
+using static OnlineMapsBingMapsElevation;
 
 
 public class RegistrationManager : MonoBehaviour
@@ -58,9 +59,11 @@ public class RegistrationManager : MonoBehaviour
     public GameObject camMeshObj;
     public GameObject cacheToggle;
 
+    public GameObject privacyPolicy;
+
     public RawImage rear;
     WebCamDevice[] devices;
-    bool camAvailable;
+    bool camAvailable = true;
 
     WebCamTexture webcam;
     public MeshRenderer camMesh;
@@ -117,6 +120,7 @@ public class RegistrationManager : MonoBehaviour
             }
             else
             {
+                camAvailable = false;
                 responseText.color = Color.red;
                 responseText.text = "Your camera isn't valid";
             }
@@ -125,6 +129,17 @@ public class RegistrationManager : MonoBehaviour
             {
                 webcam.Play();
                 camMesh.material.SetTexture("_MainTex", webcam);
+
+                if (!webcam.isPlaying || webcam.width <= 16) // width check ensures it's not a dummy/no-access texture
+                {
+                    Debug.LogWarning("Webcam failed to start.");
+                    camAvailable = false;
+                }
+                else
+                {
+                    camAvailable = true;
+                }
+
             }
             else
             {
@@ -142,7 +157,6 @@ public class RegistrationManager : MonoBehaviour
         gm = FindObjectOfType<GameManager>();
         if (gm == null)
         {
-            Debug.Log("hell???");
             gm = new GameManager();
         }
     }
@@ -317,6 +331,7 @@ public class RegistrationManager : MonoBehaviour
                 //shut off overlay
                 profPicOverlay.color = Color.clear;
                 profImageSet = true;
+                RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.profilePic);
 
             }
         }
@@ -344,12 +359,23 @@ public class RegistrationManager : MonoBehaviour
         }
         else if (!isWorking)
         {
-            errorText.text = "";
-            RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.register);
-            StartCoroutine(doRegistration());
+            privacyPolicy.SetActive(true);       
         }
     }
 
+    public void AfterPrivacyPolicyRegister()
+    {
+        //called by agree button on privacy policy obj
+        errorText.text = "";
+        RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.register);
+        StartCoroutine(doRegistration());
+
+        loginSystem.loginUponRegister(username.text, email.text, pointsStart, password.text);
+
+        //store registration information - em
+        loginSystem.SetLoginPrefs(email.text, password.text, cacheCheckToggle.isOn);
+
+    }
     public IEnumerator doRegistration()
     {
         yield return frameEnd;
@@ -409,10 +435,6 @@ public class RegistrationManager : MonoBehaviour
             Debug.Log(username.text);
             if (responseText.Contains("Success"))
             {
-                loginSystem.loginUponRegister(username.text, email.text, pointsStart);
-
-                //store registration information - em
-                loginSystem.SetLoginPrefs(email.text, password.text, cacheCheckToggle.isOn);
 
                 bg.transform.DOLocalMoveY(Screen.height * 3, .7f).SetEase(Ease.OutQuad);
                 canvasElement.transform.DOLocalMoveY(Screen.height * 3, .7f).SetEase(Ease.OutQuad).OnComplete(() => gm.ProgressToScene("SocialFeed"));
@@ -439,7 +461,6 @@ public class RegistrationManager : MonoBehaviour
 
     public void startPhotoCoroutine()
     {
-        RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.profilePic);
         StartCoroutine(capturePhoto());
     }
 
@@ -450,6 +471,7 @@ public class RegistrationManager : MonoBehaviour
             yield return frameEnd;
 
             Texture2D snap = new Texture2D(webcam.width, webcam.height);
+
             snap.SetPixels(webcam.GetPixels());
             snap.Apply();
             camMesh.material.SetTexture("_MainTex", snap);
@@ -461,10 +483,10 @@ public class RegistrationManager : MonoBehaviour
 
             var width = (int)(corners[3].x - corners[0].x); //.rect.width;
             var height = (int)(corners[1].y - corners[0].y);
-            var tex = new Texture2D(width, height, TextureFormat.RGB24, false);
             // Rescale the size appropriately based on the current Canvas scale
             Vector2 scaledSize = new Vector2(width, height);
 
+            var tex = new Texture2D(width, height, TextureFormat.RGB24, false);
 
             tex.ReadPixels(new Rect(topLeft, scaledSize), 0, 0);
             tex.Apply();

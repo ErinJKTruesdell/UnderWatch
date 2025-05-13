@@ -6,10 +6,18 @@ using UnityEngine;
 public class EndScreenHandler : MonoBehaviour
 {
     public DayManager dayMan;
+    public GameManager gm;
     public TMP_Text dayText;
+
+    public GameObject privacyPolicy;
+    private void Awake()
+    {
+        privacyPolicy.SetActive(false);
+    }
     private void Start()
     {
         dayMan = FindObjectOfType<DayManager>();
+        gm = FindObjectOfType<GameManager>();
     }
     private void OnEnable()
     {
@@ -17,6 +25,15 @@ public class EndScreenHandler : MonoBehaviour
     }
     public void GoToNextLevel()
     {
-        dayMan.GoToNextDay();
+        dayMan.ProgressDay();
+
+        if (!DayManager.DoesDayContainObjective(DayManager.ObjTypes.privacyPolicy))
+        {
+            gm.ProgressToScene("SocialFeed");
+        }
+        else
+        {
+            privacyPolicy.SetActive(true);
+        }
     }
 }

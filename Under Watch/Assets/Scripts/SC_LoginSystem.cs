@@ -79,13 +79,12 @@ public class SC_LoginSystem : MonoBehaviour
         return userName;
     }
 
-    public void loginUponRegister(string username, string email, int points)
+    public void loginUponRegister(string username, string email, int points, string password)
     {
-        Debug.Log("logging in on register");
+        Debug.Log("logging in on register: " + username);
         userName = username;
         userEmail = email;
         isLoggedIn = true;
-
         StartCoroutine(doTargetAssignment(username, points));
 
     }
@@ -241,13 +240,15 @@ public class SC_LoginSystem : MonoBehaviour
 
     public void SetLoginPrefs(string email, string password, bool save)
     {
-        Debug.Log(save);
-        if (save == true)
+        Debug.Log("saving");
+       /* if (save == true)
         {
-            PlayerPrefs.SetString("savedUsername", email);
-            PlayerPrefs.SetString("savedPassword", password);
-            Debug.Log("User login data successfully cached");
-        }
+        }*/
+
+        PlayerPrefs.SetString("savedUsername", email);
+        PlayerPrefs.SetString("savedPassword", password);
+        Debug.Log("User login data successfully cached");
+
     }
     //testing code, remove for prod:
     public void Update()
