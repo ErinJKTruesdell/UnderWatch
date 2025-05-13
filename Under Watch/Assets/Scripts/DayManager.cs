@@ -7,7 +7,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
-using UnityEngine.tvOS;
 
 public class DayManager : MonoBehaviour
 {
@@ -35,6 +34,7 @@ public class DayManager : MonoBehaviour
 
     public static bool dayCompleted = false;
     public static int currentDay { get; private set; }
+    public static int maxDays { get; private set; }
 
     public Queue<string> achievementsQueue = new();
     bool isWorking = false;
@@ -55,6 +55,8 @@ public class DayManager : MonoBehaviour
     private void Start()
     {
         StartCoroutine(SendLevelData(currentDay));
+        //we have a day 0, so -1
+        maxDays = allDays.Count -1;
     }
     public void UpdateReq(ObjTypes reqName, int value)
     {
@@ -77,7 +79,7 @@ public class DayManager : MonoBehaviour
                 Debug.Log("Requirement: " + reqName + " fulfilled!! Put a popup here");
                 CheckIfAllReqsFilled(currentDayReqs);
                 //this may be dangerous, but prevents multiple achievemetns in a row
-                currentDayReqs.requirements.Remove(reqName);
+                //currentDayReqs.requirements.Remove(reqName);
             }
         }
         else
@@ -124,7 +126,7 @@ public class DayManager : MonoBehaviour
 
         AddNewRequirement(2, new List<(ObjTypes, string, int, int)>()
         {
-            (ObjTypes.selfie, "post 1 selfie", 0, 5),
+            (ObjTypes.selfie, "post 1 selfie", 0, 1),
            // (ObjTypes.favorites, "total 3 favorited accounts", 0, 3),
            // (ObjTypes.engagementInbox, "check engagement inbox", 0, 1)
         });
@@ -213,6 +215,30 @@ public class DayManager : MonoBehaviour
             (ObjTypes.minutes, "total 100 minutes app interaction", 0, 100), //
             (ObjTypes.adClicks, "click 20 ads", 0, 20) //
         });
+    }
+
+    void UpdateAdRate()
+    {
+        switch (currentDay)
+        {
+            case 0:
+                //0
+                break;
+            case 4:
+                //6
+                break;
+            case 6:
+                
+                break;
+            case 7:
+                break;
+            case 8:
+                break;
+            case 9:
+                break;
+            case 10:
+                break;
+        }
     }
     private void AddNewRequirement(int dayNum, List<(ObjTypes, string, int, int)> reqData)
     {
@@ -316,6 +342,34 @@ public class DayManager : MonoBehaviour
                 Debug.Log("level send: " + responseText);
             }
         }
+    }
+
+    public IEnumerator setAdRate(int adrate)
+    {
+        // get data from server
+        WWWForm form = new WWWForm();
+        Debug.Log("Selected ad rate to upload: " + adrate);
+        form.AddField("adRate", adrate.ToString());
+
+
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "/set_ad_rate.php", form))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                string errorMessage = www.error;
+                Debug.Log(errorMessage);
+            }
+            else
+            {
+                //return null
+                string responseText = www.downloadHandler.text;
+
+                Debug.Log("Response: " + responseText);
+            }
+        }
+
     }
     private void OnEnable()
     {

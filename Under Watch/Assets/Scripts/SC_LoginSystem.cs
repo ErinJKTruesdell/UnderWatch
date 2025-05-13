@@ -206,7 +206,6 @@ public class SC_LoginSystem : MonoBehaviour
 
     private void Awake()
     {
-
         DontDestroyOnLoad(this);
         RegistrationManager.loginSystem = this;
         // attempt login with any saved information
@@ -214,7 +213,7 @@ public class SC_LoginSystem : MonoBehaviour
         {
             isCached = true;
             StartCoroutine(LoginEnumerator(PlayerPrefs.GetString("savedUsername", ""), PlayerPrefs.GetString("savedPassword", "")));
-            Debug.Log("Cached login data used");
+            Debug.Log("Cached login data used" + PlayerPrefs.GetString("savedUsername", "") + PlayerPrefs.GetString("savedPassword", ""));
         }
         else
         {

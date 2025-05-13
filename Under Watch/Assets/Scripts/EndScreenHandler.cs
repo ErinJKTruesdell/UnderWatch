@@ -8,8 +8,15 @@ public class EndScreenHandler : MonoBehaviour
     public DayManager dayMan;
     public GameManager gm;
     public TMP_Text dayText;
+    public TMP_Text dayDescText;
+    public TMP_Text dayCounter;
+
+    [TextArea] public string FinalDayDesc;
 
     public GameObject privacyPolicy;
+    public GameObject loginButton;
+
+    int currentDay;
     private void Awake()
     {
         privacyPolicy.SetActive(false);
@@ -21,7 +28,14 @@ public class EndScreenHandler : MonoBehaviour
     }
     private void OnEnable()
     {
-        dayText.text = "End of Day: " + DayManager.currentDay;
+        currentDay = DayManager.currentDay;
+        dayText.text = "End of Day: " + currentDay;
+        dayCounter.text = currentDay + " / " + DayManager.maxDays;
+
+        if (currentDay >= DayManager.maxDays)
+        {
+            EndGame();
+        }
     }
     public void GoToNextLevel()
     {
@@ -35,5 +49,11 @@ public class EndScreenHandler : MonoBehaviour
         {
             privacyPolicy.SetActive(true);
         }
+    }
+
+    public void EndGame()
+    {
+        dayDescText.text = FinalDayDesc;
+        loginButton.SetActive(false);
     }
 }

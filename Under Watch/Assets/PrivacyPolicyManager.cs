@@ -31,15 +31,18 @@ public class PrivacyPolicyManager : MonoBehaviour
     {
         foreach (PrivacyPolicyData data in dataContainers)
         {
-            detailsTitleText.text = data.title;
-            detailsDescText.text = data.desc;
+            if (data.day == DayManager.currentDay)
+            {
+                detailsTitleText.text = data.title;
+                detailsDescText.text = data.desc;
+                break;
+            }
         }
     }
     public void AgreeToPolicy()
     {
         gm.ProgressToScene("SocialFeed");
         RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.privacyPolicy);
-
     }
 
 
