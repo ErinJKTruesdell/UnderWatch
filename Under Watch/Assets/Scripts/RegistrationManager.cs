@@ -98,7 +98,7 @@ public class RegistrationManager : MonoBehaviour
         }
         
         devices = WebCamTexture.devices;
-        WebCamDevice frontCamera;
+        WebCamDevice frontCamera = new();
         Debug.Log(devices.Length);
         if (devices.Length > 1)
         {
@@ -113,7 +113,7 @@ public class RegistrationManager : MonoBehaviour
             if (devices[1].name != " ")
             {
                 if (UnityEngine.Application.platform == RuntimePlatform.Android)
-                    webcam = new WebCamTexture(devices[1].name);
+                    webcam = new WebCamTexture(frontCamera.name);
                 else
                     webcam = new WebCamTexture(devices[1].name);
                     Debug.Log("cam: " + devices[1].name);
@@ -365,11 +365,17 @@ public class RegistrationManager : MonoBehaviour
 
     public void AfterPrivacyPolicyRegister()
     {
+        StartCoroutine(PrivacyPolicyAcceptCoroutine());
+    }
+
+    IEnumerator PrivacyPolicyAcceptCoroutine()
+    {
         //called by agree button on privacy policy obj
         errorText.text = "";
-        RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.register);
-        StartCoroutine(doRegistration());
 
+        yield return StartCoroutine(doRegistration());
+
+        RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.register);
         loginSystem.loginUponRegister(username.text, email.text, pointsStart, password.text);
 
         //store registration information - em
@@ -378,6 +384,7 @@ public class RegistrationManager : MonoBehaviour
     }
     public IEnumerator doRegistration()
     {
+        Debug.Log("running");
         yield return frameEnd;
 
         isWorking = true;
@@ -405,12 +412,11 @@ public class RegistrationManager : MonoBehaviour
         form.AddField("email", email.text);
         form.AddField("username", username.text);
         form.AddField("password1", password.text);
-        form.AddField("submit", "submit");
 
         using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "register.php", form))
         {
             //www.uploadHandler = (UploadHandler)new UploadHandlerRaw(File.ReadAllBytes(pfpPath));
-
+            Debug.Log("419");
             yield return www.SendWebRequest();
 
             loadingAnim.SetActive(true);
@@ -428,33 +434,31 @@ public class RegistrationManager : MonoBehaviour
 
                 Debug.Log("web result error" + www.error + www.result);
             }
-            //else
-            // {
-            string responseText = www.downloadHandler.text;
-            Debug.Log("response" + responseText);
-            Debug.Log(username.text);
-            if (responseText.Contains("Success"))
-            {
-
-                bg.transform.DOLocalMoveY(Screen.height * 3, .7f).SetEase(Ease.OutQuad);
-                canvasElement.transform.DOLocalMoveY(Screen.height * 3, .7f).SetEase(Ease.OutQuad).OnComplete(() => gm.ProgressToScene("SocialFeed"));
-
-                loadingAnim.SetActive(false);
-                Debug.Log("successRegister");
-            }
             else
             {
-                loadingAnim.SetActive(false);
-                regTextFields.SetActive(true);
-                regButton.SetActive(true);
-                pfpImage.SetActive(true);
+                string responseText = www.downloadHandler.text;
+                Debug.Log("response" + responseText);
+                Debug.Log(username.text);
+                if (responseText.Contains("Success"))
+                {
+                    bg.transform.DOLocalMoveY(Screen.height * 3, .7f).SetEase(Ease.OutQuad);
+                    canvasElement.transform.DOLocalMoveY(Screen.height * 3, .7f).SetEase(Ease.OutQuad).OnComplete(() => gm.ProgressToScene("SocialFeed"));
 
-                errorMessage = responseText;
-                errorText.text = errorMessage;
-                Debug.Log("error: " + errorMessage);
+                    loadingAnim.SetActive(false);
+                    Debug.Log("successRegister");
+                }
+                else
+                {
+                    loadingAnim.SetActive(false);
+                    regTextFields.SetActive(true);
+                    regButton.SetActive(true);
+                    pfpImage.SetActive(true);
 
+                    errorMessage = responseText;
+                    errorText.text = errorMessage;
+                    Debug.Log("error: " + errorMessage);
+                }
             }
-            //}
         }
         isWorking = false;
     }

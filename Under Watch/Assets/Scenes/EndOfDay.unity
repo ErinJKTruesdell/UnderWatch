@@ -1954,6 +1954,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 618837612}
     m_Modifications:
+    - target: {fileID: 2685700887427385010, guid: 3dc9ed0f1daaa924ba096e03499c5af5, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5570701590901914664, guid: 3dc9ed0f1daaa924ba096e03499c5af5, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
@@ -2041,6 +2045,10 @@ PrefabInstance:
     - target: {fileID: 7224016690061188248, guid: 3dc9ed0f1daaa924ba096e03499c5af5, type: 3}
       propertyPath: m_Name
       value: PrivacyPolicyPopup
+      objectReference: {fileID: 0}
+    - target: {fileID: 7224016690061188248, guid: 3dc9ed0f1daaa924ba096e03499c5af5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

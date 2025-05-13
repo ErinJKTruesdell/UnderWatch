@@ -373,7 +373,6 @@ public class SelfieCam : MonoBehaviour
         {
             responseText.text = "Verification failed, re-upload or try a different image.";
             approval = false;
-
         }
         else
         {

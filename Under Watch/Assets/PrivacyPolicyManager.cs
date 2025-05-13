@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PrivacyPolicyManager : MonoBehaviour
 {
@@ -41,8 +42,12 @@ public class PrivacyPolicyManager : MonoBehaviour
     }
     public void AgreeToPolicy()
     {
-        gm.ProgressToScene("SocialFeed");
+        if (SceneManager.GetActiveScene().name == "EndOfDay")
+        {
+            gm.ProgressToScene("SocialFeed");
+        }
         RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.privacyPolicy);
+        RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.profilePic);
     }
 
 

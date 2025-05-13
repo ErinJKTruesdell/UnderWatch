@@ -85,8 +85,7 @@ public class SC_LoginSystem : MonoBehaviour
         userName = username;
         userEmail = email;
         isLoggedIn = true;
-        StartCoroutine(doTargetAssignment(username, points));
-
+        StartCoroutine(doTargetAssignment(userName, points));
     }
 
     public void showLoginFields()
@@ -357,7 +356,8 @@ public class SC_LoginSystem : MonoBehaviour
         GUILayout.Label("Email:");
         registerEmail = GUILayout.TextField(registerEmail, 254);
         GUILayout.Label("Username:");
-        registerUsername = GUILayout.TextField(registerUsername, 20);
+        
+        name = GUILayout.TextField(registerUsername, 20);
         GUILayout.Label("Password:");
         registerPassword1 = GUILayout.PasswordField(registerPassword1, '*', 19);
         GUILayout.Label("Password Again:");
