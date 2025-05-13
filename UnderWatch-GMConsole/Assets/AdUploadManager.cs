@@ -215,8 +215,8 @@ public class AdUploadManager : MonoBehaviour
         int errorCount = 0;
         foreach (string s in filepaths)
         {
-            string[] filenameParts = s.Split("\\");
-            string filename = filenameParts[filenameParts.Length - 1];
+            string filename = Path.GetFileName(s);
+
 
 
             string[] filenameImageParts = filename.Split("-");
