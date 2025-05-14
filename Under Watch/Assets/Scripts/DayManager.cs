@@ -111,22 +111,22 @@ public class DayManager : MonoBehaviour
         //0 is tutorial
         AddNewRequirement(0, new List<(ObjTypes, string, int, int)>()
         {
-            (ObjTypes.register, "register new account", 0, 1), //
-            (ObjTypes.profilePic, "take profile picture", 0, 1), //
-            (ObjTypes.privacyPolicy, "accept privacy policy", 0, 1) //
-        }, 0);
+            (ObjTypes.register, "Make an account!", 0, 1), //
+            (ObjTypes.profilePic, "Snap a profile picture!", 0, 1), //
+            (ObjTypes.privacyPolicy, "Accept our privacy policy!", 0, 1) //
+        });
 
         //ad frequency 0, snapgram announcement
         AddNewRequirement(1, new List<(ObjTypes, string, int, int)>()
         {
-            (ObjTypes.selfie, "post 1 selfie", 0, 1), //
-            (ObjTypes.react, "react to 3 posts", 0, 3), //
-            (ObjTypes.announcements, "check announcement box", 0, 1), //
-        }, 0);
+            (ObjTypes.selfie, "Snap a selfie!", 0, 1), //
+            (ObjTypes.announcements, "Check your inbox!", 0, 1), //
+        });
 
         AddNewRequirement(2, new List<(ObjTypes, string, int, int)>()
         {
-            (ObjTypes.selfie, "post 1 selfie", 0, 1), //
+            (ObjTypes.selfie, "Snap a selfie!", 0, 1), //
+            (ObjTypes.react, "Show your love for 3 posts!", 0, 3), //
            // (ObjTypes.favorites, "total 3 favorited accounts", 0, 3),
            // (ObjTypes.engagementInbox, "check engagement inbox", 0, 1)
         });
@@ -134,75 +134,79 @@ public class DayManager : MonoBehaviour
         //privacy policy update
         AddNewRequirement(3, new List<(ObjTypes, string, int, int)>()
         {
-            (ObjTypes.privacyPolicy, "accept privacy policy", 0, 1), //
-            (ObjTypes.react, "react to 5 posts", 0, 5), //
-            (ObjTypes.minutes, "total 5 minutes app interaction", 0, 5) //
+            (ObjTypes.selfie, "Snap a selfie at the ExCITe Center entrance!", 0, 1), //
+            (ObjTypes.minutes, "Reach 5 minutes on SnapGram!", 0, 5) //
+            (ObjTypes.privacyPolicy, "Accept our updated privacy policy!", 0, 1), //
+            
         });
 
         //ad frequency 6, snapgram announcement
         AddNewRequirement(4, new List<(ObjTypes, string, int, int)>()
         {
-            (ObjTypes.selfie, "post 2 selfies", 0, 2), //
-            (ObjTypes.selfieOthers, "post 1 selfie with another person", 0, 1), //
+            (ObjTypes.selfie, "Snap a selfie in the URBN Center!", 0, 1), //
+            (ObjTypes.react, "Show your love for 5 posts!", 0, 5), //
+            (ObjTypes.announcements, "Check your inbox!", 0, 1), //
            // (ObjTypes.favorites, "total 5 favorited accounts", 0, 5),
           //  (ObjTypes.engagementInbox, "check engagement inbox", 0 ,1)
         });
 
         AddNewRequirement(5, new List<(ObjTypes, string, int, int)>()
         {
-            (ObjTypes.selfie, "post 2 selfies", 0, 2), //
-            (ObjTypes.selfieLocation, "post 1 selfie at location: Drexel Dragon", 0, 1), //
-            (ObjTypes.react, "react to 10 posts", 0, 10), //
-            (ObjTypes.minutes,"total 10 minutes app interaction", 0, 10), //
-            (ObjTypes.adClicks, "click 3 ads", 0, 3) //
-        });
+            (ObjTypes.selfie, "Snap a selfie on Lancaster Walk!", 0, 1), //
+            (ObjTypes.selfieOthers, "Snap a selfie with 2 people in it!", 0, 1), //
+            (ObjTypes.minutes,"Reach 15 minutes on SnapGram!", 0, 15), //
+            (ObjTypes.adClicks, "Engage with 3 sponsored posts!", 0, 3) //
+        }, 2);
 
         //ad frequency 5
         AddNewRequirement(6, new List<(ObjTypes, string, int, int)>()
         {
-            (ObjTypes.selfie, "post 2 selfies", 0, 2), //
-            (ObjTypes.selfieOthers, "post 1 selfie with 2 other people", 0, 1), //
-            (ObjTypes.selfieAngle, "post 1 selfie from front angle", 0, 1), //
-            (ObjTypes.minutes, "total 15 minutes app interaction", 0, 15), //
+            (ObjTypes.selfie, "Snap a selfie with the Drexel Dragon!", 0, 1), //
+            (ObjTypes.selfieOthers, "Snap a selfie with 2 people in it!", 0, 1), //
+            (ObjTypes.react, "Show your love for 10 posts!", 0, 10), //
+            //(ObjTypes.selfieAngle, "post 1 selfie from front angle", 0, 1), //
+            (ObjTypes.minutes, "Reach 20 minutes on SnapGram!", 0, 20), //
            // (ObjTypes.engagementInbox, "check engagement inbox", 0, 1)
-        });
+        }, 2);
 
         //ad frequecy 4, whistleblower: SG data leak (is this worht it?)
         AddNewRequirement(7, new List<(ObjTypes, string, int, int)>()
         {
-            (ObjTypes.selfie, "post 3 selifes", 0, 3), //
-            (ObjTypes.selfieLocation, "post 1 selfie at location: Lancaster Walk", 0, 1),
-            (ObjTypes.selfieAngle, "post 1 selfie from front left angle", 0, 1), //
-            (ObjTypes.react, "react to 15 posts", 0, 15), //
+            (ObjTypes.selfie, "Snap a selfie in the Korman Quad!", 0, 1), //
+            (ObjTypes.selfieOthers, "Snap a selfie with 3 people in it!", 0, 1), //
+            //(ObjTypes.selfieAngle, "post 1 selfie from front left angle", 0, 1), //
+            (ObjTypes.react, "Show your love for 15 posts!", 0, 15), //
         //    (ObjTypes.favorites, "total 10 favorited accounts", 0, 10),
-            (ObjTypes.adClicks, "click 5 ads", 0, 5) //
-        });
+            (ObjTypes.adClicks, "Engage with 5 sponsored posts!", 0, 5) //
+            (ObjTypes.minutes, "Reach 30 minutes on SnapGram!", 0, 30), //
+        }, 3);
 
         //privacy policy update
         //ad frequecy 3, snapgram announcement
         AddNewRequirement(8, new List<(ObjTypes, string, int, int)>()
         {
-            (ObjTypes.privacyPolicy, "accept privacy policy", 0, 1), //
-            (ObjTypes.selfie, "post 3 selifes", 0, 3), //
-            (ObjTypes.selfieOthers, "post 1 selfie with 3 other people", 0, 1), //
-            (ObjTypes.selfieAngle, "post 1 selfie from front right angle", 0, 1), //
-            (ObjTypes.minutes, "total 45 minutes app interaction", 0, 45), //
-            (ObjTypes.adClicks, "click 10 ads", 0, 10), //
-            (ObjTypes.announcements, "check announcement box", 0, 1) //
+            (ObjTypes.selfie, "Snap a selfie in the Main Building!", 0, 1), //
+            //(ObjTypes.selfieOthers, "post 1 selfie with 3 other people", 0, 1), //
+            //(ObjTypes.selfieAngle, "post 1 selfie from front right angle", 0, 1), //
+            (ObjTypes.adClicks, "Engage with 10 sponsored posts!", 0, 10), //
+            (ObjTypes.minutes, "Reach 45 minutes on SnapGram!", 0, 45), //
+            
+            (ObjTypes.privacyPolicy, "Accept our updated privacy policy!", 0, 1), //
+            (ObjTypes.announcements, "Check your inbox!", 0, 1) //
         });
 
         //ad frequency 2
         AddNewRequirement(9, new List<(ObjTypes, string, int, int)>()
         {
-            (ObjTypes.selfie, "post 4 selfies", 0, 4), //
-            (ObjTypes.selfieLocation, "post 1 selfie at location: Your Favorite Food Cart", 0, 1), 
-            (ObjTypes.selfieTarget, "post 1 selfie w/ target user", 0, 1), //
-            (ObjTypes.selfieAngle, "post 1 selfie from left angle", 0, 1), //
-            (ObjTypes.react, "react to 25 posts", 0, 25), //
+            (ObjTypes.selfie, "Snap a selfie with a yummy food cart!", 0, 1), //
+            (ObjTypes.selfieOthers, "Snap a selfie with 4 people in it!", 0, 1), //
+            //(ObjTypes.selfieTarget, "post 1 selfie w/ target user", 0, 1), //
+            //(ObjTypes.selfieAngle, "post 1 selfie from left angle", 0, 1), //
+            (ObjTypes.react, "Show your love for 25 posts!", 0, 25), //
            // (ObjTypes.favorites, "total 15 favorited accounts", 0, 15),
             (ObjTypes.minutes, "total 60 minutes app interaction", 0, 60), //
             (ObjTypes.adClicks, "click 15 ads", 0, 15) //
-        });
+        }, 4);
 
         //ad frequency 1
         AddNewRequirement(10, new List<(ObjTypes, string, int, int)>()
@@ -216,6 +220,7 @@ public class DayManager : MonoBehaviour
             (ObjTypes.adClicks, "click 20 ads", 0, 20) //
         });
     }
+
 
     void UpdateAdRate()
     {
