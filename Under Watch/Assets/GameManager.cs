@@ -91,12 +91,13 @@ public class GameManager : MonoBehaviour
             float totalTime = PlayerPrefs.GetFloat("TotalTimePlayed", 0f);
             totalTime += sessionTimer;
 
-            int intTime = Mathf.RoundToInt(totalTime);
-            RequirementEventHandler.InvokeAddToReq(intTime, DayManager.ObjTypes.minutes);
+            int intTime = Mathf.RoundToInt(totalTime) / 60;
+            //set the override value to the current timer
+            RequirementEventHandler.InvokeAddToReq(0,DayManager.ObjTypes.minutes, intTime);
 
             PlayerPrefs.SetFloat("TotalTimePlayed", totalTime);
             PlayerPrefs.Save();
-            sessionTimer = 0f;
+            sessionTimer -= 60f;
         }
     }
 
@@ -171,8 +172,7 @@ public class GameManager : MonoBehaviour
             {
                 string responseText = www.downloadHandler.text;
                 
-                    Debug.Log(responseText);
-                
+                    Debug.Log(responseText);            
             }
         }
     }

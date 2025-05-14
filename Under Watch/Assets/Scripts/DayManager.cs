@@ -58,17 +58,19 @@ public class DayManager : MonoBehaviour
         //we have a day 0, so -1
         maxDays = allDays.Count -1;
     }
-    public void UpdateReq(ObjTypes reqName, int value)
+    public void UpdateReq(int value, ObjTypes reqName, int overrideValue = -1)
     {
         if (currentDayReqs != null && currentDayReqs.requirements.ContainsKey(reqName))
         {
             (string name, int progress, int total) reqData = currentDayReqs.requirements[reqName];
 
-            //add the value int to the progress number (item 2) of the req
-            reqData = (reqData.name, reqData.progress + value, reqData.total);
-            currentDayReqs.requirements[reqName] = reqData;
-            //Debug.Log("requirement " + reqName + "is at: " + reqData.Item1 + "/" + reqData.Item2);
+            if (overrideValue != -1)
+                reqData = (reqData.name, overrideValue, reqData.total);
+            else
+                //add the value int to the progress number (item 2) of the req
+                reqData = (reqData.name, reqData.progress + value, reqData.total);
 
+            currentDayReqs.requirements[reqName] = reqData;
             if (reqData.progress >= reqData.total)
             {
                 //this requirement is fulfilled, popup and check if day is done

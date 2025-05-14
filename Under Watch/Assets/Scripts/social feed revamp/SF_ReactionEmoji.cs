@@ -48,7 +48,8 @@ public class SF_ReactionEmoji : MonoBehaviour
     {
         //set the number text for the react
         reactNum = parentCell._postItem.ReactNumDict[reactName].Item1;
-        reactNumText.text = reactNum.ToString();
+        if (reactNum > 0) reactNumText.text = reactNum.ToString();
+        else reactNumText.text = "0";
 
         //if user has liked this reaction before
         if (parentCell._postItem.ReactNumDict[reactName].Item2 == true)

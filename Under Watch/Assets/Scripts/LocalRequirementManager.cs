@@ -43,7 +43,7 @@ public class LocalRequirementManager : MonoBehaviour
     {
         RequirementEventHandler.OnCompletedAReq += LocalUpdateReqs;
         RequirementEventHandler.LogSubscribers();
-        LocalUpdateReqs(DayManager.ObjTypes.other, 0);
+        LocalUpdateReqs();
 
         //the daynum update has to go after updateReqs
         dayNum = DayManager.currentDay;
@@ -61,17 +61,15 @@ public class LocalRequirementManager : MonoBehaviour
     {
         dayMan.GoToEndDay();
     }
-    void LocalUpdateReqs(DayManager.ObjTypes objTypes, int valueToAdd)
+    void LocalUpdateReqs(int reqVal = 1, DayManager.ObjTypes type = DayManager.ObjTypes.other, int overrideVal = -1)
     {        
         //we don't do anything with the arguments' data
-        updateQueue.Enqueue(UpdateReqs(objTypes, valueToAdd));
+        updateQueue.Enqueue(UpdateReqs());
         if (!isProcessingQueue)
             StartCoroutine(ProcessUpdateQueue());
     }
-    IEnumerator UpdateReqs(DayManager.ObjTypes objTypes, int valueToAdd)
+    IEnumerator UpdateReqs()
     {
-        Debug.Log($"UpdateReqs started for: {objTypes} (Frame: {Time.frameCount})");
-
         yield return StartCoroutine(ClearCurrentReqs());
 
         localReqDict = dayMan.GetCurrentRequirements();

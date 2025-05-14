@@ -207,7 +207,7 @@ public class SelfieCam : MonoBehaviour
         {
             isOtherSelfie = true;
             //determine # others expected
-            facesExpected = 2;
+            facesExpected = DayManager.currentDayReqs._expectedFaces;
         }
         else if (DayManager.DoesDayContainObjective(DayManager.ObjTypes.selfieLocation))
         {

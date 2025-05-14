@@ -5,12 +5,13 @@ using UnityEngine;
 
 public static class RequirementEventHandler
 {
-    public static event Action<DayManager.ObjTypes, int> OnCompletedAReq;
+    public delegate void CompletedReqHandler(int reqVal = 1, DayManager.ObjTypes type = DayManager.ObjTypes.other, int overrideVal = -1);
+    public static event CompletedReqHandler OnCompletedAReq;
     public static event Action OnCompletedAllDayReqs;
-    public static void InvokeAddToReq(int reqValue, DayManager.ObjTypes reqName = DayManager.ObjTypes.other)
+    public static void InvokeAddToReq(int reqValue = 1, DayManager.ObjTypes reqName = DayManager.ObjTypes.other, int overrideValue = -1)
     {
         //most of the processing is done in DayManager.UpdateReq
-        OnCompletedAReq?.Invoke(reqName, reqValue);
+        OnCompletedAReq?.Invoke(reqValue, reqName, overrideValue);
     }
     public static void InvokeAllReqsComplete()
     {
