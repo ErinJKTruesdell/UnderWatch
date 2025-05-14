@@ -111,22 +111,22 @@ public class DayManager : MonoBehaviour
         //0 is tutorial
         AddNewRequirement(0, new List<(ObjTypes, string, int, int)>()
         {
-            (ObjTypes.register, "Make an account!", 0, 1), //
-            (ObjTypes.profilePic, "Snap a profile picture!", 0, 1), //
-            (ObjTypes.privacyPolicy, "Accept our privacy policy!", 0, 1) //
-        });
+            (ObjTypes.register, "register new account", 0, 1), //
+            (ObjTypes.profilePic, "take profile picture", 0, 1), //
+            (ObjTypes.privacyPolicy, "accept privacy policy", 0, 1) //
+        }, 0);
 
         //ad frequency 0, snapgram announcement
         AddNewRequirement(1, new List<(ObjTypes, string, int, int)>()
         {
-            (ObjTypes.selfie, "Snap a selfie!", 0, 1), //
-            (ObjTypes.announcements, "Check your inbox!", 0, 1), //
-        });
+            (ObjTypes.selfie, "post 1 selfie", 0, 1), //
+            (ObjTypes.react, "react to 3 posts", 0, 3), //
+            (ObjTypes.announcements, "check announcement box", 0, 1), //
+        }, 0);
 
         AddNewRequirement(2, new List<(ObjTypes, string, int, int)>()
         {
-            (ObjTypes.selfie, "Snap a selfie!", 0, 1), //
-            (ObjTypes.react, "Show your love for 3 posts!", 0, 3), //
+            (ObjTypes.selfie, "post 1 selfie", 0, 1), //
            // (ObjTypes.favorites, "total 3 favorited accounts", 0, 3),
            // (ObjTypes.engagementInbox, "check engagement inbox", 0, 1)
         });
@@ -134,64 +134,60 @@ public class DayManager : MonoBehaviour
         //privacy policy update
         AddNewRequirement(3, new List<(ObjTypes, string, int, int)>()
         {
-            (ObjTypes.selfie, "Snap a selfie at the ExCITe Center entrance!", 0, 1), //
-            (ObjTypes.minutes, "Reach 5 minutes on SnapGram!", 0, 5) //
-            (ObjTypes.privacyPolicy, "Accept our privacy policy!", 0, 1), //
-            
+            (ObjTypes.privacyPolicy, "accept privacy policy", 0, 1), //
+            (ObjTypes.react, "react to 5 posts", 0, 5), //
+            (ObjTypes.minutes, "total 5 minutes app interaction", 0, 5) //
         });
 
         //ad frequency 6, snapgram announcement
         AddNewRequirement(4, new List<(ObjTypes, string, int, int)>()
         {
-            (ObjTypes.selfie, "Snap a selfie in the URBN Center!", 0, 1), //
-            (ObjTypes.react, "Show your love for 5 posts!", 0, 5), //
-            (ObjTypes.announcements, "Check your inbox!", 0, 1), //
+            (ObjTypes.selfie, "post 2 selfies", 0, 2), //
+            (ObjTypes.selfieOthers, "post 1 selfie with another person", 0, 1), //
            // (ObjTypes.favorites, "total 5 favorited accounts", 0, 5),
           //  (ObjTypes.engagementInbox, "check engagement inbox", 0 ,1)
         });
 
         AddNewRequirement(5, new List<(ObjTypes, string, int, int)>()
         {
-            (ObjTypes.selfie, "Snap a selfie on Lancaster Walk!", 0, 1), //
-            (ObjTypes.selfieOthers, "Snap a selfie with 2 people in it!", 0, 1), //
-            (ObjTypes.minutes,"Reach 15 minutes on SnapGram!", 0, 15), //
-            (ObjTypes.adClicks, "Engage with 3 sponsored posts!", 0, 3) //
+            (ObjTypes.selfie, "post 2 selfies", 0, 2), //
+            (ObjTypes.selfieLocation, "post 1 selfie at location: Drexel Dragon", 0, 1), //
+            (ObjTypes.react, "react to 10 posts", 0, 10), //
+            (ObjTypes.minutes,"total 10 minutes app interaction", 0, 10), //
+            (ObjTypes.adClicks, "click 3 ads", 0, 3) //
         });
 
         //ad frequency 5
         AddNewRequirement(6, new List<(ObjTypes, string, int, int)>()
         {
-            (ObjTypes.selfie, "Snap a selfie with the Drexel Dragon!", 0, 1), //
-            (ObjTypes.selfieOthers, "Snap a selfie with 2 people in it!", 0, 1), //
-            (ObjTypes.react, "Show your love for 10 posts!", 0, 10), //
-            //(ObjTypes.selfieAngle, "post 1 selfie from front angle", 0, 1), //
-            (ObjTypes.minutes, "Reach 20 minutes on SnapGram!", 0, 20), //
+            (ObjTypes.selfie, "post 2 selfies", 0, 2), //
+            (ObjTypes.selfieOthers, "post 1 selfie with 2 other people", 0, 1), //
+            (ObjTypes.selfieAngle, "post 1 selfie from front angle", 0, 1), //
+            (ObjTypes.minutes, "total 15 minutes app interaction", 0, 15), //
            // (ObjTypes.engagementInbox, "check engagement inbox", 0, 1)
         });
 
         //ad frequecy 4, whistleblower: SG data leak (is this worht it?)
         AddNewRequirement(7, new List<(ObjTypes, string, int, int)>()
         {
-            (ObjTypes.selfie, "Snap a selfie in the Korman Quad!", 0, 1), //
-            (ObjTypes.selfieOthers, "Snap a selfie with 3 people in it!", 0, 1), //
-            //(ObjTypes.selfieAngle, "post 1 selfie from front left angle", 0, 1), //
-            (ObjTypes.react, "Show your love for 15 posts!", 0, 15), //
+            (ObjTypes.selfie, "post 3 selifes", 0, 3), //
+            (ObjTypes.selfieLocation, "post 1 selfie at location: Lancaster Walk", 0, 1),
+            (ObjTypes.selfieAngle, "post 1 selfie from front left angle", 0, 1), //
+            (ObjTypes.react, "react to 15 posts", 0, 15), //
         //    (ObjTypes.favorites, "total 10 favorited accounts", 0, 10),
-            (ObjTypes.adClicks, "Engage with 5 sponsored posts!", 0, 5) //
-            (ObjTypes.minutes, "Reach 30 minutes on SnapGram!", 0, 30), //
+            (ObjTypes.adClicks, "click 5 ads", 0, 5) //
         });
 
         //privacy policy update
         //ad frequecy 3, snapgram announcement
         AddNewRequirement(8, new List<(ObjTypes, string, int, int)>()
         {
-            (ObjTypes.selfie, "Snap a selfie in the Main Building!", 0, 1), //
-            //(ObjTypes.selfieOthers, "post 1 selfie with 3 other people", 0, 1), //
-            //(ObjTypes.selfieAngle, "post 1 selfie from front right angle", 0, 1), //
-            (ObjTypes.adClicks, "click 10 ads", 0, 10), //
-            (ObjTypes.minutes, "total 45 minutes app interaction", 0, 45), //
-            
             (ObjTypes.privacyPolicy, "accept privacy policy", 0, 1), //
+            (ObjTypes.selfie, "post 3 selifes", 0, 3), //
+            (ObjTypes.selfieOthers, "post 1 selfie with 3 other people", 0, 1), //
+            (ObjTypes.selfieAngle, "post 1 selfie from front right angle", 0, 1), //
+            (ObjTypes.minutes, "total 45 minutes app interaction", 0, 45), //
+            (ObjTypes.adClicks, "click 10 ads", 0, 10), //
             (ObjTypes.announcements, "check announcement box", 0, 1) //
         });
 
@@ -244,7 +240,7 @@ public class DayManager : MonoBehaviour
                 break;
         }
     }
-    private void AddNewRequirement(int dayNum, List<(ObjTypes, string, int, int)> reqData)
+    private void AddNewRequirement(int dayNum, List<(ObjTypes, string, int, int)> reqData, int expectedFaces = 2)
     {
         //fills a dict with all the requirements for one day
         Dictionary<ObjTypes, (string name, int progress, int total)> reqDict = new();
@@ -254,7 +250,7 @@ public class DayManager : MonoBehaviour
         }
 
         //adds a new DayReq object, with the day's requirements and number and adds that to AddToDay
-        AddToDay(dayNum, new DayRequirements(dayNum, reqDict));
+        AddToDay(dayNum, new DayRequirements(dayNum, reqDict, expectedFaces));
     }
     private void AddToDay(int dayNum, DayRequirements DayReqs)
     {
@@ -390,12 +386,14 @@ public class DayManager : MonoBehaviour
 public class DayRequirements
 {
     public int dayNum;
+    public int _expectedFaces;
 
     public Dictionary<DayManager.ObjTypes, (string name, int progress, int total)> requirements;
     //type of objective - progress int, total int, display name
-    public DayRequirements(int day, Dictionary<DayManager.ObjTypes, (string name, int progress, int total)> reqs)
+    public DayRequirements(int day, Dictionary<DayManager.ObjTypes, (string name, int progress, int total)> reqs, int expectedFaces = 2)
     {
         dayNum = day;
         requirements = reqs;
+        _expectedFaces = expectedFaces;
     }
 }

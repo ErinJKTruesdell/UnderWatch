@@ -28,6 +28,7 @@ public class SF_Cell : MonoBehaviour, ICell
     public RawImage pfpImage;
 
     public UnityEngine.UI.Image colorFrame;
+    public Texture2D bgTex;
 
     //Model - is this taking up significant memory?
     public SFPostItem _postItem;
@@ -131,6 +132,7 @@ public class SF_Cell : MonoBehaviour, ICell
         while (_postItem.postPhoto == null)
         {
             yield return new WaitForSeconds(.1f);
+            pfpImage.texture = bgTex;
         }
         postImage.texture = _postItem.postPhoto;
         if (!isAd)
@@ -141,6 +143,9 @@ public class SF_Cell : MonoBehaviour, ICell
             }
             pfpImage.texture = _postItem.pfpPhoto;
         }
+        else
+            pfpImage.texture = bgTex;
+
     }
     private void SetCellColor(int index)
     {

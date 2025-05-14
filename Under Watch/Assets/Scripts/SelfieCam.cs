@@ -23,6 +23,7 @@ public class SelfieCam : MonoBehaviour
     public SC_LoginSystem scls;
 
     public GameObject testBox;
+    public GameObject overlay;
 
     public TextMeshProUGUI responseText;
     public GameObject blockingPanel;
@@ -68,6 +69,7 @@ public class SelfieCam : MonoBehaviour
 
     void InitWebcam()
     {
+        overlay.SetActive(true);
         devices = WebCamTexture.devices;
         WebCamDevice frontCamera;
         if (devices.Length > 1)
@@ -321,13 +323,14 @@ public class SelfieCam : MonoBehaviour
     {
         if (devices.Length > 1)
         {
+            overlay.SetActive(false);
+
             Texture2D snap = new Texture2D(webcam.width, webcam.height);
             snap.SetPixels(webcam.GetPixels());
             snap.Apply();
             camMesh.material.SetTexture("_MainTex", snap);
             //byte[] bytes = snap.EncodeToPNG();
             webcam.Stop();
-
             StartCoroutine(takeSnap());
         }
         else

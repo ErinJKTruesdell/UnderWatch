@@ -48,6 +48,7 @@ public class RegistrationManager : MonoBehaviour
 
     //camera stuff:
     public GameObject camUI;
+    public GameObject overlay;
     public GameObject regTextFields;
     public GameObject regButton;
     public GameObject nextButton;
@@ -324,10 +325,6 @@ public class RegistrationManager : MonoBehaviour
                 destTex.SetPixels(pix);
                 destTex.Apply();
 
-                profPic.texture = destTex;
-
-                //set img tex
-
                 //shut off overlay
                 profPicOverlay.color = Color.clear;
                 profImageSet = true;
@@ -470,6 +467,7 @@ public class RegistrationManager : MonoBehaviour
             camMesh.material.SetTexture("_MainTex", snap);
             webcam.Stop();
 
+            overlay.SetActive(false);
             Vector3[] corners = new Vector3[4];
             rear.rectTransform.GetWorldCorners(corners);
             Vector3 topLeft = corners[0];
@@ -483,8 +481,9 @@ public class RegistrationManager : MonoBehaviour
 
             tex.ReadPixels(new Rect(topLeft, scaledSize), 0, 0);
             tex.Apply();
-            EncodePic(tex, username.text + "profPic.png");
 
+            EncodePic(tex, username.text + "profPic.png");
+            overlay.SetActive(true);
         }
         else
         {
@@ -509,6 +508,8 @@ public class RegistrationManager : MonoBehaviour
         nextButton.SetActive(false);
         regButton.SetActive(true);
         pfpImage.SetActive(true);
+
+        profPic.texture = tex;
 
         regTextFields.transform.localPosition = new Vector2(1400, originalPos[0].y - goDownByValue);
         regButton.transform.localPosition = new Vector2(1400, originalPos[1].y - goDownByValue);

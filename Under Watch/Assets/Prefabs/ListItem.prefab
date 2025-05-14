@@ -107,6 +107,7 @@ MonoBehaviour:
   postImage: {fileID: 3744718155922125907}
   pfpImage: {fileID: 8576007353430526066}
   colorFrame: {fileID: 999130512727177240}
+  bgTex: {fileID: 2800000, guid: 86fc385f383321449b999c971072afd7, type: 3}
   adButton: {fileID: 5722899357728616398}
   pfpButton: {fileID: 8692282527625510142}
   reacts:
@@ -895,8 +896,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: -2}
+  m_AnchoredPosition: {x: 0, y: 20}
+  m_SizeDelta: {x: 14.632599, y: -119.369995}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7822940085057490620
 CanvasRenderer:
