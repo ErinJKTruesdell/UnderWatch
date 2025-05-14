@@ -123,7 +123,7 @@ public class SC_LoginSystem : MonoBehaviour
 
     void EnableLoginFields(bool enabling)
     {
-        ForgotPasswordButton.SetActive(enabling);
+//        ForgotPasswordButton.SetActive(enabling);
         backButton.SetActive(enabling);
         loginFields.SetActive(enabling);
     }

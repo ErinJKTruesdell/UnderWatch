@@ -916,7 +916,6 @@ MonoBehaviour:
   profPic: {fileID: 171679029}
   profPicOverlay: {fileID: 158842886}
   defaultPfp: {fileID: 2800000, guid: e52209048afb38c4a99e97ec379b4844, type: 3}
-  activityStarter: {fileID: 101250685}
   socialFeedIndex: 2
   cacheCheckToggle: {fileID: 1119123165}
   camUI: {fileID: 1866659806}
@@ -1932,7 +1931,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6554038163024651530, guid: 3dc9ed0f1daaa924ba096e03499c5af5, type: 3}
       propertyPath: desc
-      value: This is the first privacy policy
+      value: "<size=125%><b>PRIVACY NOTICE</b></size>\n\nLast updated August 28,
+        2024\n\nThis Privacy Notice for SnapGram Inc. (\"we,\" \"us,\" or \"our\"),
+        describes how and why we might access, collect, store, use, and/or share
+        (\"process\") your personal information when you use our services (\"Services\"),
+        including when you:\n\n\u2022 Download and use our mobile application (SnapGram),
+        or any other application of ours that links to this Privacy Notice  \n\u2022
+        Engage with us in other related ways, including any sales, marketing, or
+        events\n\nQuestions or concerns? Reading this Privacy Notice will help you
+        understand your privacy rights and choices. We are responsible for making
+        decisions about how your personal information is processed. If you do not
+        agree with our policies and practices, please do not use our Services. If
+        you still have any questions or concerns, please contact us at <link=\"mailto:vt387@drexel.edu\">vt387@drexel.edu</link>.\n"
       objectReference: {fileID: 0}
     - target: {fileID: 7224016690061188248, guid: 3dc9ed0f1daaa924ba096e03499c5af5, type: 3}
       propertyPath: m_Name
@@ -4182,7 +4192,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1119123164
 RectTransform:
   m_ObjectHideFlags: 0
