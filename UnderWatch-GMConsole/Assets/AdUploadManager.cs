@@ -25,7 +25,7 @@ public class AdUploadManager : MonoBehaviour
 
     public TMP_Text numadstext;
 
-    string rootURL = "egs01.westphal.drexel.edu/";
+    string rootURL = "https://egs01.westphal.drexel.edu/";
 
     string multiAdUN = "Sponsored";
 
@@ -268,22 +268,18 @@ public class AdUploadManager : MonoBehaviour
 
             byte[] FileUpload = null;
             bool isError = false;
-            using (var www = UnityWebRequestTexture.GetTexture(s))
+            // byte[] fileData;
+            try
             {
-                yield return www.SendWebRequest();
-                if (www.isNetworkError || www.isHttpError)
-                {
-                    errorMessage = www.error;
-
-                    errorText.text += "\nError opening file " + filename + ": " + errorMessage;
-                    isError = true;
-                }
-                else
-                {
-                    // file data successfully loaded
-                    FileUpload = www.downloadHandler.data;
-                }
+                FileUpload = File.ReadAllBytes(s);
             }
+            catch (Exception ex)
+            {
+                errorText.text += "\nError opening file " + filename + ": " + ex.Message;
+                continue;
+            }
+            // form.AddBinaryData("file", fileData, filename, "image/png");
+
             if (!isError)
             {
                 form.AddBinaryData("file", FileUpload, "AD-" + "username" + DateTime.Now.ToString() + ".png", "image/png");
@@ -347,8 +343,7 @@ public class AdUploadManager : MonoBehaviour
 
 
         WWWForm form = new WWWForm();
-        string[] imageNames = filePath.Split("/");
-        string imageName = imageNames[imageNames.Length - 1];
+        string imageName = Path.GetFileName(filePath);
         form.AddBinaryData("file", File.ReadAllBytes(filePath), imageName);
         form.AddField("username", loggedInUser);
         //Tuple<int, int, int> time = confUploader.cts.selectedTimestamp();
