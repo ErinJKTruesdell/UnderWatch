@@ -916,6 +916,7 @@ MonoBehaviour:
   profPic: {fileID: 171679029}
   profPicOverlay: {fileID: 158842886}
   defaultPfp: {fileID: 2800000, guid: e52209048afb38c4a99e97ec379b4844, type: 3}
+  activityStarter: {fileID: 0}
   socialFeedIndex: 2
   cacheCheckToggle: {fileID: 1119123165}
   camUI: {fileID: 1866659806}
@@ -1835,7 +1836,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2685700887427385010, guid: 3dc9ed0f1daaa924ba096e03499c5af5, type: 3}
       propertyPath: m_SizeDelta.y
-      value: -979.7323
+      value: -976.7582
       objectReference: {fileID: 0}
     - target: {fileID: 2685700887427385010, guid: 3dc9ed0f1daaa924ba096e03499c5af5, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1950,7 +1951,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7224016690061188248, guid: 3dc9ed0f1daaa924ba096e03499c5af5, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7738411249103649131, guid: 3dc9ed0f1daaa924ba096e03499c5af5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -3373,7 +3374,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &863582128
 MonoBehaviour:
   m_ObjectHideFlags: 0
