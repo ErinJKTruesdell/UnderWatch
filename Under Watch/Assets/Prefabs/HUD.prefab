@@ -556,7 +556,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000030517578, y: -10}
+  m_AnchoredPosition: {x: -4, y: -6}
   m_SizeDelta: {x: 216, y: 214}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &455792889344865167
@@ -1273,7 +1273,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -1, y: 0}
   m_SizeDelta: {x: 800, y: 159}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &1616998708405024514
@@ -1767,7 +1767,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 13.5099945, y: -8.199921}
+  m_AnchoredPosition: {x: 7, y: -4}
   m_SizeDelta: {x: 189.1512, y: 190.512}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8889396341848716816
@@ -2374,7 +2374,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 19.4, y: -27}
+  m_AnchoredPosition: {x: 19.4, y: -15}
   m_SizeDelta: {x: 216, y: 214}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7036981347838676956
@@ -3431,7 +3431,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -19.400002, y: -20}
+  m_AnchoredPosition: {x: -19.400002, y: -8}
   m_SizeDelta: {x: 257.4, y: 231}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8907071576303671149
@@ -3666,7 +3666,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 644.0175, y: -1.0000186}
+  m_AnchoredPosition: {x: 638, y: -1.0000186}
   m_SizeDelta: {x: 217, y: 218}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &3355355340121654129
@@ -4077,15 +4077,57 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1881534070420041712, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
       propertyPath: desc
-      value: oop this is ann day 8!
+      value: "<size=115%><b>[San Francisco, CA \u2013 May 27, 2025]</b></size> \u2014
+        SnapGram, a leading social media platform connecting over <b>1.2 billion
+        users worldwide</b>, acknowledges recent media reports concerning the handling
+        of user data by certain third-party partners. While the reports have sparked
+        conversation and concern, SnapGram remains steadfast in its commitment to
+        maintaining a <b>safe, engaging, and personalized experience</b> for all
+        users.\n\nRecent investigative journalism has drawn attention to data-sharing
+        practices that involved select <b>marketing affiliates</b> and <b>analytics
+        providers</b>. These arrangements, common across the tech industry, were
+        designed to enhance user experiences through better-targeted features and
+        relevant content. While SnapGram recognizes that the reporting has raised
+        valid questions, it is important to clarify that any data shared was done
+        so under <i>broadly accepted operational frameworks</i>.\n\nSnapGram has
+        always prioritized <b>innovation</b> and <b>user-centric design</b>. Our
+        privacy policy, available publicly and agreed to by all users upon sign-up,
+        outlines the scope of data use in accordance with applicable laws. We understand
+        that, in hindsight, some users may have expected greater specificity. We
+        regret any confusion that may have arisen and are reviewing our communications
+        to ensure <b>clearer language</b> in the future.\n\n<i>\u201CWe understand
+        the public\u2019s desire for increased transparency,\u201D</i> said <b>Emery
+        Kaczmarek Johnson</b>, VP of Policy and Trust at SnapGram. <i>\u201CWhile
+        we do not agree with some of the conclusions being drawn, we are actively
+        assessing our internal protocols and third-party relationships. We want to
+        reassure users that their trust is critical to us.\u201D</i>\n\nSnapGram
+        stresses that at no point was any data <b>\u201Csold\u201D</b> in the traditional
+        sense. Rather, selected <b>metadata</b> was utilized within a network of
+        service agreements intended to support <b>app functionality</b> and <b>user
+        engagement</b>. No <b>personally identifiable financial data</b>, <b>direct
+        messages</b>, or <b>private content</b> was disclosed to outside vendors.\n\nThe
+        company has engaged an <b>independent privacy auditor</b> to evaluate past
+        processes and offer recommendations for future enhancements. This initiative
+        reinforces SnapGram\u2019s long-standing belief in evolving its practices
+        to meet the shifting expectations of a global community.\n\nSnapGram is launching
+        a redesigned <b><color=#B4114B>\u201CPrivacy Center\u201D</color></b> within
+        the app that provides users with a simplified overview of how their data
+        is used, with <b>new controls</b> rolling out over the next two months. These
+        changes reflect SnapGram\u2019s <b>proactive posture</b>, rather than any
+        admission of wrongdoing.\n\n<i>\u201CWe see this moment as a chance to listen,
+        reflect, and improve,\u201D</i> said Kaczmarek Johnson. <i>\u201CWe encourage
+        all users to explore the new Privacy Center when it becomes available and
+        to reach out with feedback.\u201D</i>\n\n<b>For media inquiries, please contact:</b> 
+        \n<color=#3366CC>press@snapgram.com</color>\n"
       objectReference: {fileID: 0}
     - target: {fileID: 1881534070420041712, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
       propertyPath: title
-      value: ann day 8
+      value: Press Release
       objectReference: {fileID: 0}
     - target: {fileID: 1881534070420041712, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
       propertyPath: subtitle
-      value: afsd
+      value: SnapGram Addresses Recent User Data Concerns, Reaffirming Our Commitment
+        to Transparency
       objectReference: {fileID: 0}
     - target: {fileID: 2068048972840628376, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
       propertyPath: m_Pivot.x
@@ -4204,16 +4246,32 @@ PrefabInstance:
     m_TransformParent: {fileID: 5140518586754131107}
     m_Modifications:
     - target: {fileID: 1881534070420041712, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: day
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1881534070420041712, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
       propertyPath: desc
-      value: sdkfjghnsdfjkghsdfkjghdfskjsdfgjkdffdgjkhgsdfhjhjksdfhjksdfkhjldhklsdfhjklfsfhjksdhjkdflfhjklsfhjkshjklsdhjklsdhjklsdhjklsdhjklsdhjkldfkhjldfhjkldfghjkldfghjkdfgkhjdfsgkh
+      value: "We\u2019re excited to have you join a vibrant community that thrives
+        on <b>self-expression</b>, <b>friendly competition</b>, and <b>meaningful
+        moments</b>. Whether you're here to share your world, level up your social
+        game, or discover what inspires others, SnapGram is your new digital home.\n\nAs
+        you explore, you\u2019ll <b>earn points</b>, <b>unlock badges</b>, and <b>rise
+        through the ranks</b> \u2014 not just for likes and comments, but for how
+        you support others, spark conversations, and engage with the community.\n\nBut
+        SnapGram is more than a game. It\u2019s a place to <b>be real</b>, <b>stay
+        safe</b>, and <b>grow</b>. You control your experience \u2014 your data,
+        your feed, your voice.\n\nSo start <b>snapping</b>, <b>tagging</b>, and <b>climbing
+        the leaderboard</b>. Join challenges, find your crew, and let your creativity
+        shine.\n\n<size=110%><color=#B4114B><b>Welcome to the SnapGram family \u2014
+        let the game begin!</b></color></size>\n"
       objectReference: {fileID: 0}
     - target: {fileID: 1881534070420041712, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
       propertyPath: title
-      value: Privacy Policy
+      value: Welcome to SnapGram!
       objectReference: {fileID: 0}
     - target: {fileID: 1881534070420041712, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
       propertyPath: subtitle
-      value: afsd
+      value: So excited to have you!
       objectReference: {fileID: 0}
     - target: {fileID: 2068048972840628376, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
       propertyPath: m_Pivot.x
@@ -4333,19 +4391,30 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1881534070420041712, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
       propertyPath: day
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1881534070420041712, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
       propertyPath: desc
-      value: this is ann day 1
+      value: "We\u2019ve rolled out some exciting small updates and new features
+        to make your SnapGram experience smoother, smarter, and more fun!\n\n\u2022
+        New <b>profile customization</b> options: Add emojis, badges, and background
+        themes to your bio.  \n\u2022 Introducing the <b>Daily Streak Tracker</b>:
+        Earn bonus points just for checking in!  \n\u2022 Expanded <b>reaction emojis</b>:
+        Express yourself even more in stories and chats.  \n\u2022 Smarter <b>group
+        challenges</b>: Auto-team matching pairs you instantly with like-minded users. 
+        \n\u2022 Plus: <b>Bug fixes</b>, <b>performance boosts</b>, and <b>cleaner
+        notifications</b>.\n\nAll these tweaks are here to help you connect, create,
+        and climb the leaderboard with ease.\n\n<size=110%><color=#B4114B><b>Update
+        your app today and explore what\u2019s new!</b></color></size>  \n#SnapGramUpdates
+        #StaySnappy\n"
       objectReference: {fileID: 0}
     - target: {fileID: 1881534070420041712, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
       propertyPath: title
-      value: Ann day 1
+      value: SnapGram Update Alert!
       objectReference: {fileID: 0}
     - target: {fileID: 1881534070420041712, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
       propertyPath: subtitle
-      value: sgdffgd
+      value: Read on to find out more!
       objectReference: {fileID: 0}
     - target: {fileID: 2068048972840628376, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
       propertyPath: m_Pivot.x
@@ -4570,6 +4639,10 @@ PrefabInstance:
     - target: {fileID: 6049631211894637416, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
       propertyPath: m_Name
       value: NewsDataStorage (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6049631211894637416, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7122116551874178172, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
       propertyPath: m_SortingLayer

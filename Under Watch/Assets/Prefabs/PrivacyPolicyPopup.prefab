@@ -260,8 +260,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   day: 3
   title: Privacy Policy
-  desc: Example privacy policy this sure does go for a long scroll  is is 11:32 and
-    I have to wake up in a few hours but I sure hope it works!
+  desc: "<size=125%><b>PRIVACY NOTICE UPDATE</b></size>\n\nLast updated May 18, 2025\n\nWe\u2019ve
+    made changes to our <link=\"https://snapgram-inc.github.io/privacy-policy-2.html\"><color=#B4114B><u>Privacy
+    Notice</u></color></link> to reflect how SnapGram integrates with new third-party
+    features.\n\n\u2022 We now collect limited metadata when you use external filters
+    or share content to connected platforms  \n\u2022 More clarity has been added
+    on how these features affect your privacy settings\n\nTo understand how these
+    updates may affect you, please review the full <link=\"https://snapgram-inc.github.io/privacy-policy-2.html\"><color=#B4114B><u>Privacy
+    Notice</u></color></link>. If you have any questions, reach out to us at <link=\"mailto:vt387@drexel.edu\"><u>vt387@drexel.edu</u></link>.\n"
 --- !u!1 &2175286674581289273
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,7 +318,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   day: 8
   title: Privacy Policy
-  desc: Day 8! Nice going hotshot
+  desc: "<size=125%><b>PRIVACY NOTICE UPDATED</b></size>\n\nLast updated May 23,
+    2025\n\nWe\u2019ve revised our <link=\"https://snapgram-inc.github.io/privacy-policy-3.html\"><color=#B4114B><u>Privacy
+    Notice</u></color></link> to make it easier to understand and more transparent.\n\n\u2022
+    Simplified explanations of how we process your personal information  \n\u2022
+    Added examples to better explain your rights and our practices\n\nThese are not
+    changes to what data we collect, but how we explain it. Read the updated <link=\"https://snapgram-inc.github.io/privacy-policy-3.html\"><color=#B4114B><u>Privacy
+    Notice</u></color></link> to stay informed. Questions? Contact us at <link=\"mailto:vt387@drexel.edu\"><u>vt387@drexel.edu</u></link>.\n"
 --- !u!1 &3360667514674120076
 GameObject:
   m_ObjectHideFlags: 0
@@ -493,6 +505,7 @@ GameObject:
   - component: {fileID: 5992120069540102122}
   - component: {fileID: 7749085893042776982}
   - component: {fileID: 6057931050974010502}
+  - component: {fileID: 6390983953071292760}
   m_Layer: 5
   m_Name: Desc
   m_TagString: Untagged
@@ -630,6 +643,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!114 &6390983953071292760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4231468155409005956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9d4ecae7789cbb4595dfac912b85e4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4390406929025819319
 GameObject:
   m_ObjectHideFlags: 0
