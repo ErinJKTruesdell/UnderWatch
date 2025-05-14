@@ -120,13 +120,13 @@ public class DayManager : MonoBehaviour
         AddNewRequirement(1, new List<(ObjTypes, string, int, int)>()
         {
             (ObjTypes.selfie, "Snap a selfie!", 0, 1), //
-            (ObjTypes.announcements, "Check your inbox!", 0, 1), //
+            (ObjTypes.announcements, "Check your inbox!", 0, 1) //
         });
 
         AddNewRequirement(2, new List<(ObjTypes, string, int, int)>()
         {
             (ObjTypes.selfie, "Snap a selfie!", 0, 1), //
-            (ObjTypes.react, "Show your love for 3 posts!", 0, 3), //
+            (ObjTypes.react, "Show your love for 3 posts!", 0, 3) //
            // (ObjTypes.favorites, "total 3 favorited accounts", 0, 3),
            // (ObjTypes.engagementInbox, "check engagement inbox", 0, 1)
         });
@@ -135,8 +135,8 @@ public class DayManager : MonoBehaviour
         AddNewRequirement(3, new List<(ObjTypes, string, int, int)>()
         {
             (ObjTypes.selfie, "Snap a selfie at the ExCITe Center entrance!", 0, 1), //
-            (ObjTypes.minutes, "Reach 5 minutes on SnapGram!", 0, 5) //
-            (ObjTypes.privacyPolicy, "Accept our updated privacy policy!", 0, 1), //
+            (ObjTypes.minutes, "Reach 5 minutes on SnapGram!", 0, 5), //
+            (ObjTypes.privacyPolicy, "Accept our updated privacy policy!", 0, 1) //
             
         });
 
@@ -165,7 +165,7 @@ public class DayManager : MonoBehaviour
             (ObjTypes.selfieOthers, "Snap a selfie with 2 people in it!", 0, 1), //
             (ObjTypes.react, "Show your love for 10 posts!", 0, 10), //
             //(ObjTypes.selfieAngle, "post 1 selfie from front angle", 0, 1), //
-            (ObjTypes.minutes, "Reach 20 minutes on SnapGram!", 0, 20), //
+            (ObjTypes.minutes, "Reach 20 minutes on SnapGram!", 0, 20) //
            // (ObjTypes.engagementInbox, "check engagement inbox", 0, 1)
         }, 2);
 
@@ -177,8 +177,8 @@ public class DayManager : MonoBehaviour
             //(ObjTypes.selfieAngle, "post 1 selfie from front left angle", 0, 1), //
             (ObjTypes.react, "Show your love for 15 posts!", 0, 15), //
         //    (ObjTypes.favorites, "total 10 favorited accounts", 0, 10),
-            (ObjTypes.adClicks, "Engage with 5 sponsored posts!", 0, 5) //
-            (ObjTypes.minutes, "Reach 30 minutes on SnapGram!", 0, 30), //
+            (ObjTypes.adClicks, "Engage with 5 sponsored posts!", 0, 5), //
+            (ObjTypes.minutes, "Reach 30 minutes on SnapGram!", 0, 30) //
         }, 3);
 
         //privacy policy update
@@ -204,21 +204,23 @@ public class DayManager : MonoBehaviour
             //(ObjTypes.selfieAngle, "post 1 selfie from left angle", 0, 1), //
             (ObjTypes.react, "Show your love for 25 posts!", 0, 25), //
            // (ObjTypes.favorites, "total 15 favorited accounts", 0, 15),
-            (ObjTypes.minutes, "total 60 minutes app interaction", 0, 60), //
-            (ObjTypes.adClicks, "click 15 ads", 0, 15) //
+            (ObjTypes.adClicks, "Engage with 15 sponsored posts!", 0, 15), //
+            (ObjTypes.minutes, "Reach 60 minutes on SnapGram!", 0, 60) //
+            
         }, 4);
 
         //ad frequency 1
         AddNewRequirement(10, new List<(ObjTypes, string, int, int)>()
         {
-            (ObjTypes.selfie, "post 4 selfies", 0, 4), //
-            (ObjTypes.selfieOthers, "post 1 selfie with 4 other people", 0, 1), //
-            (ObjTypes.selfieLocation, "post 1 selfie at location: Billboard", 0, 1),
-            (ObjTypes.selfieAngle, "post 1 selfie from right", 0, 1),
-            (ObjTypes.react, "react to 50 posts", 0, 50), //
-            (ObjTypes.minutes, "total 100 minutes app interaction", 0, 100), //
-            (ObjTypes.adClicks, "click 20 ads", 0, 20) //
-        });
+            (ObjTypes.selfie, "Snap a selfie with the billboard at Chestnut & 31st!", 0, 4), //
+            (ObjTypes.selfieOthers, "Snap a selfie with 5 people in it!", 0, 1), //
+            //(ObjTypes.selfieLocation, "post 1 selfie at location: Billboard", 0, 1),
+            //(ObjTypes.selfieAngle, "post 1 selfie from right", 0, 1),
+            (ObjTypes.adClicks, "Engage with 25 sponsored posts!", 0, 25), //
+            (ObjTypes.react, "Show your love for 50 posts!", 0, 50), //
+            (ObjTypes.minutes, "Reach 90 minutes on SnapGram!", 0, 90) //
+            
+        }, 5);
     }
 
 
