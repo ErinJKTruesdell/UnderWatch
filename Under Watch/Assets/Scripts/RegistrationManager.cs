@@ -331,8 +331,6 @@ public class RegistrationManager : MonoBehaviour
                 //shut off overlay
                 profPicOverlay.color = Color.clear;
                 profImageSet = true;
-                RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.profilePic);
-
             }
         }
     }
@@ -359,29 +357,16 @@ public class RegistrationManager : MonoBehaviour
         }
         else if (!isWorking)
         {
-            privacyPolicy.SetActive(true);       
+            StartCoroutine(doRegistration());
+            errorText.text = "";
         }
     }
 
     public void AfterPrivacyPolicyRegister()
     {
-        StartCoroutine(PrivacyPolicyAcceptCoroutine());
-    }
-
-    IEnumerator PrivacyPolicyAcceptCoroutine()
-    {
-        //called by agree button on privacy policy obj
-        errorText.text = "";
-
-        yield return StartCoroutine(doRegistration());
-
         RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.register);
-        loginSystem.loginUponRegister(username.text, email.text, pointsStart, password.text);
-
-        //store registration information - em
-        loginSystem.SetLoginPrefs(email.text, password.text, cacheCheckToggle.isOn);
-
     }
+
     public IEnumerator doRegistration()
     {
         Debug.Log("running");
@@ -442,10 +427,14 @@ public class RegistrationManager : MonoBehaviour
                 if (responseText.Contains("Success"))
                 {
                     bg.transform.DOLocalMoveY(Screen.height * 3, .7f).SetEase(Ease.OutQuad);
-                    canvasElement.transform.DOLocalMoveY(Screen.height * 3, .7f).SetEase(Ease.OutQuad).OnComplete(() => gm.ProgressToScene("SocialFeed"));
+                    canvasElement.transform.DOLocalMoveY(Screen.height * 3, .7f).SetEase(Ease.OutQuad);
 
                     loadingAnim.SetActive(false);
                     Debug.Log("successRegister");
+
+                    loginSystem.loginUponRegister(username.text, email.text, pointsStart, password.text);
+                    loginSystem.SetLoginPrefs(email.text, password.text, cacheCheckToggle.isOn);
+                    privacyPolicy.SetActive(true);
                 }
                 else
                 {

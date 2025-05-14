@@ -42,10 +42,7 @@ public class PrivacyPolicyManager : MonoBehaviour
     }
     public void AgreeToPolicy()
     {
-        if (SceneManager.GetActiveScene().name == "EndOfDay")
-        {
-            gm.ProgressToScene("SocialFeed");
-        }
+        gm.ProgressToScene("SocialFeed");
         RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.privacyPolicy);
         RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.profilePic);
     }
