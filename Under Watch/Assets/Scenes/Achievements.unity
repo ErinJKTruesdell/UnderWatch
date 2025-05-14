@@ -639,7 +639,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 335, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 700, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &146548546
@@ -1096,7 +1096,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1142955968822562402, guid: 689d1568d73a9fd4b87ce8152135cfd0, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 350
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1142955968822562402, guid: 689d1568d73a9fd4b87ce8152135cfd0, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1128,7 +1128,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1415635313967908308, guid: 689d1568d73a9fd4b87ce8152135cfd0, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 203.9925
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1415635313967908308, guid: 689d1568d73a9fd4b87ce8152135cfd0, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1541,7 +1541,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1142955968822562402, guid: 689d1568d73a9fd4b87ce8152135cfd0, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 350
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1142955968822562402, guid: 689d1568d73a9fd4b87ce8152135cfd0, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1573,7 +1573,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1415635313967908308, guid: 689d1568d73a9fd4b87ce8152135cfd0, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 203.9925
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1415635313967908308, guid: 689d1568d73a9fd4b87ce8152135cfd0, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -3111,7 +3111,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1142955968822562402, guid: 689d1568d73a9fd4b87ce8152135cfd0, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 350
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1142955968822562402, guid: 689d1568d73a9fd4b87ce8152135cfd0, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -3143,7 +3143,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1415635313967908308, guid: 689d1568d73a9fd4b87ce8152135cfd0, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 203.9925
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1415635313967908308, guid: 689d1568d73a9fd4b87ce8152135cfd0, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -3932,6 +3932,7 @@ GameObject:
   - component: {fileID: 1426423216}
   - component: {fileID: 1426423218}
   - component: {fileID: 1426423217}
+  - component: {fileID: 1426423219}
   m_Layer: 5
   m_Name: Text (TMP) (1)
   m_TagString: Untagged
@@ -3979,8 +3980,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "Need support? Learn more about counseling services available to Drexel
-    students: \n\u2022 <link=\"https://drexel.edu/counselingandhealth/counseling-center/appointment\">Drexel
-    Counseling Center</link>\n\u2022 <link=\"https://drexel.edu/counselingandhealth/counseling-center/peer-counseling\">Peer
+    students: \n\u2022 <link=\"https://drexel.edu/counselingandhealth/counseling-center/peer-counseling\">Peer
+    Counseling</link>\n\n\u2022 <link=\"https://drexel.edu/counselingandhealth/counseling-center/peer-counseling\">Peer
     Counseling</link>\n\u2022 <link=\"https://drexel.edu/counselingandhealth/counseling-center/students\">Self-Help
     Resources</link>"
   m_isRightToLeft: 0
@@ -4059,6 +4060,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1426423215}
   m_CullTransparentMesh: 1
+--- !u!114 &1426423219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1426423215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9d4ecae7789cbb4595dfac912b85e4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1431436477
 GameObject:
   m_ObjectHideFlags: 0
