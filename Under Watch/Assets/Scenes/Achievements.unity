@@ -639,7 +639,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 335, y: 0}
   m_SizeDelta: {x: 700, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &146548546
@@ -1096,7 +1096,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1142955968822562402, guid: 689d1568d73a9fd4b87ce8152135cfd0, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 350
       objectReference: {fileID: 0}
     - target: {fileID: 1142955968822562402, guid: 689d1568d73a9fd4b87ce8152135cfd0, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1128,7 +1128,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1415635313967908308, guid: 689d1568d73a9fd4b87ce8152135cfd0, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 203.9925
       objectReference: {fileID: 0}
     - target: {fileID: 1415635313967908308, guid: 689d1568d73a9fd4b87ce8152135cfd0, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1541,7 +1541,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1142955968822562402, guid: 689d1568d73a9fd4b87ce8152135cfd0, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 350
       objectReference: {fileID: 0}
     - target: {fileID: 1142955968822562402, guid: 689d1568d73a9fd4b87ce8152135cfd0, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1573,7 +1573,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1415635313967908308, guid: 689d1568d73a9fd4b87ce8152135cfd0, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 203.9925
       objectReference: {fileID: 0}
     - target: {fileID: 1415635313967908308, guid: 689d1568d73a9fd4b87ce8152135cfd0, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -3111,7 +3111,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1142955968822562402, guid: 689d1568d73a9fd4b87ce8152135cfd0, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 350
       objectReference: {fileID: 0}
     - target: {fileID: 1142955968822562402, guid: 689d1568d73a9fd4b87ce8152135cfd0, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -3143,7 +3143,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1415635313967908308, guid: 689d1568d73a9fd4b87ce8152135cfd0, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 203.9925
       objectReference: {fileID: 0}
     - target: {fileID: 1415635313967908308, guid: 689d1568d73a9fd4b87ce8152135cfd0, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -3980,10 +3980,10 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "Need support? Learn more about counseling services available to Drexel
-    students: \n\u2022 <link=\"https://drexel.edu/counselingandhealth/counseling-center/peer-counseling\">Peer
-    Counseling</link>\n\n\u2022 <link=\"https://drexel.edu/counselingandhealth/counseling-center/peer-counseling\">Peer
-    Counseling</link>\n\u2022 <link=\"https://drexel.edu/counselingandhealth/counseling-center/students\">Self-Help
-    Resources</link>"
+    students: \n\u2022 <link=\"https://drexel.edu/counselingandhealth/counseling-center/appointment\"><u>Drexel
+    Counseling Center</u></link>\n\u2022 <link=\"https://drexel.edu/counselingandhealth/counseling-center/peer-counseling\"><u>Peer
+    Counseling</u></link>\n\u2022 <link=\"https://drexel.edu/counselingandhealth/counseling-center/students\"><u>Self-Help
+    Resources</u></link>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c4275f27d52e7419bb2ba3153a4e0842, type: 2}
   m_sharedMaterial: {fileID: -7881088334622637832, guid: c4275f27d52e7419bb2ba3153a4e0842, type: 2}
