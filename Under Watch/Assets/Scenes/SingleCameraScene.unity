@@ -1289,8 +1289,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1980748265}
   - {fileID: 1759434998}
+  - {fileID: 1980748265}
   - {fileID: 96101880}
   - {fileID: 1024886296}
   - {fileID: 1609809885}
@@ -2298,7 +2298,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 68}
+  m_AnchoredPosition: {x: 0, y: -0.00005722}
   m_SizeDelta: {x: 700, y: 1502}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1759434999
@@ -2527,8 +2527,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 148}
-  m_SizeDelta: {x: 750, y: 914}
+  m_AnchoredPosition: {x: 0.000076293945, y: 125}
+  m_SizeDelta: {x: 800, y: 800}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1980748267
 CanvasRenderer:
@@ -2558,7 +2558,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 0}
+  m_Texture: {fileID: 2800000, guid: c84ffc3ccd5d99647a6f92c913bd6ac6, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -2826,6 +2826,7 @@ MonoBehaviour:
   gm: {fileID: 0}
   scls: {fileID: 0}
   testBox: {fileID: 152666544}
+  overlay: {fileID: 1759434997}
   responseText: {fileID: 1637209449}
   blockingPanel: {fileID: 1091300757}
   closeButton: {fileID: 357721147}

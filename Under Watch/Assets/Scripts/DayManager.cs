@@ -114,7 +114,7 @@ public class DayManager : MonoBehaviour
             (ObjTypes.register, "register new account", 0, 1), //
             (ObjTypes.profilePic, "take profile picture", 0, 1), //
             (ObjTypes.privacyPolicy, "accept privacy policy", 0, 1) //
-        });
+        }, 0);
 
         //ad frequency 0, snapgram announcement
         AddNewRequirement(1, new List<(ObjTypes, string, int, int)>()
@@ -122,7 +122,7 @@ public class DayManager : MonoBehaviour
             (ObjTypes.selfie, "post 1 selfie", 0, 1), //
             (ObjTypes.react, "react to 3 posts", 0, 3), //
             (ObjTypes.announcements, "check announcement box", 0, 1), //
-        });
+        }, 0);
 
         AddNewRequirement(2, new List<(ObjTypes, string, int, int)>()
         {
@@ -240,7 +240,7 @@ public class DayManager : MonoBehaviour
                 break;
         }
     }
-    private void AddNewRequirement(int dayNum, List<(ObjTypes, string, int, int)> reqData)
+    private void AddNewRequirement(int dayNum, List<(ObjTypes, string, int, int)> reqData, int expectedFaces = 2)
     {
         //fills a dict with all the requirements for one day
         Dictionary<ObjTypes, (string name, int progress, int total)> reqDict = new();
@@ -250,7 +250,7 @@ public class DayManager : MonoBehaviour
         }
 
         //adds a new DayReq object, with the day's requirements and number and adds that to AddToDay
-        AddToDay(dayNum, new DayRequirements(dayNum, reqDict));
+        AddToDay(dayNum, new DayRequirements(dayNum, reqDict, expectedFaces));
     }
     private void AddToDay(int dayNum, DayRequirements DayReqs)
     {
@@ -386,12 +386,14 @@ public class DayManager : MonoBehaviour
 public class DayRequirements
 {
     public int dayNum;
+    public int _expectedFaces;
 
     public Dictionary<DayManager.ObjTypes, (string name, int progress, int total)> requirements;
     //type of objective - progress int, total int, display name
-    public DayRequirements(int day, Dictionary<DayManager.ObjTypes, (string name, int progress, int total)> reqs)
+    public DayRequirements(int day, Dictionary<DayManager.ObjTypes, (string name, int progress, int total)> reqs, int expectedFaces = 2)
     {
         dayNum = day;
         requirements = reqs;
+        _expectedFaces = expectedFaces;
     }
 }
