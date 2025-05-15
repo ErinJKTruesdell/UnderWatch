@@ -48,8 +48,7 @@ public class SF_ReactionEmoji : MonoBehaviour
     {
         //set the number text for the react
         reactNum = parentCell._postItem.ReactNumDict[reactName].Item1;
-        if (reactNum > 0) reactNumText.text = reactNum.ToString();
-        else reactNumText.text = "0";
+        reactNumText.text = reactNum.ToString();
 
         //if user has liked this reaction before
         if (parentCell._postItem.ReactNumDict[reactName].Item2 == true)
@@ -69,7 +68,6 @@ public class SF_ReactionEmoji : MonoBehaviour
             greyEmoji.color = Color.white;
 
             reactNumText.fontSize = 15;
-            reactNumText.color = Color.white;
 
             colorEmoji.SetActive(false);
             bannerObj.SetActive(false);
@@ -135,7 +133,6 @@ public class SF_ReactionEmoji : MonoBehaviour
         if (reactNum > 0)
         {
             greyBanner.color = neutralGrey;
-            reactNumText.color = Color.white;
             reactNumText.fontSize = 15;
         }
         else
@@ -163,7 +160,7 @@ public class SF_ReactionEmoji : MonoBehaviour
     }
     void LikeSetup()
     {
-        reactNumText.color = neutralGrey;
+        reactNumText.color = darkGrey;
         reactNumText.fontSize = 20;
         colorEmoji.SetActive(true);
         bannerObj.SetActive(true);

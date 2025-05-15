@@ -13,10 +13,10 @@ public class userData
 {
     public string username;
     public string profUrl;
-
-    public userData(string un, string url)
+    public string fullName;
+    public userData(string un, string url, string fn)
     {
-        username = un; profUrl = url;
+        username = un; profUrl = url; fullName = fn;
     }
 }
 
@@ -104,12 +104,13 @@ public class SearchScript : MonoBehaviour
                 string[] dataPartition = responseText.Split("@");
                 string[] UNData = dataPartition[0].Split('|');
                 string[] PFPData = dataPartition[1].Split('|');
+                string[] fullNameData = dataPartition[2].Split('|');
 
                 for (int j = 0; j < UNData.Length; j++)
                 {
                     if (UNData[j].Length > 2 && !UNData[j].Contains("Sponsored")) // trim off that last empty bit
                     {
-                        userNames.Add(new userData(UNData[j], PFPData[j]));
+                        userNames.Add(new userData(UNData[j], PFPData[j], fullNameData[j]));
                     }
                 }
 
@@ -130,8 +131,8 @@ public class SearchScript : MonoBehaviour
                     searchListItem li = searchUserItem.GetComponent<searchListItem>();
 
                     li.usernameText.text = i.username.Trim();
-                    if (!prevSearches.Contains(i.username.Trim()))
-                    {
+                    li.fullNameText.text = i.fullName.Trim();
+                    if (!prevSearches.Contains(i.username.Trim()))                    {
                         searchUserItem.SetActive(false);
                     }
 

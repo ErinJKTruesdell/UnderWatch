@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class searchListItem : MonoBehaviour
 {
     public TMP_Text usernameText;
+    public TMP_Text fullNameText;
     public RawImage profilePic;
     public void ClickOnProfile()
     {
