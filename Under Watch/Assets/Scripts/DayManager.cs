@@ -114,6 +114,9 @@ public class DayManager : MonoBehaviour
             currentDayReqs.requirements[reqName] = reqData;
             if (reqData.progress >= reqData.total)
             {
+                //doesnt hurt ot send it more
+                StartCoroutine(SendLevelNum());
+
                 //this requirement is fulfilled, popup and check if day is done
                 Dictionary<ObjTypes, (string name, int progress, int total)> tempObjDict = new()
                 {

@@ -1292,6 +1292,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1808048314}
   - component: {fileID: 1808048313}
+  - component: {fileID: 1808048315}
   m_Layer: 0
   m_Name: ProfileUpdateManager
   m_TagString: Untagged
@@ -1330,6 +1331,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1808048315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1808048312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0145fb35751a9e469528cb411cad81e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectivesText: {fileID: 0}
+  postsText: {fileID: 0}
+  reactsText: {fileID: 0}
 --- !u!224 &2069803370 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1193873517623734329, guid: 31ac6f51e44c37649b794f7f7616487b, type: 3}
@@ -1522,6 +1538,10 @@ PrefabInstance:
     - target: {fileID: 4396682251554413877, guid: 31ac6f51e44c37649b794f7f7616487b, type: 3}
       propertyPath: m_text
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4810726403255999961, guid: 31ac6f51e44c37649b794f7f7616487b, type: 3}
+      propertyPath: m_text
+      value: objectives
       objectReference: {fileID: 0}
     - target: {fileID: 5388262940947866052, guid: 31ac6f51e44c37649b794f7f7616487b, type: 3}
       propertyPath: m_AnchorMax.x
