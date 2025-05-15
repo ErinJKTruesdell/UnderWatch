@@ -452,7 +452,7 @@ public class SC_LoginSystem : MonoBehaviour
                     if (isCached == false)
                     {
                        Debug.Log(isCached);
-                       SetLoginPrefs(email, password, cacheCheckToggle.isOn);
+                       SetLoginPrefs(email, password, true);
                     }
                 }
                 else

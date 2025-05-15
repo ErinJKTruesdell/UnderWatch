@@ -434,7 +434,7 @@ public class RegistrationManager : MonoBehaviour
                     Debug.Log("successRegister");
 
                     loginSystem.loginUponRegister(username.text, email.text, pointsStart, password.text);
-                    loginSystem.SetLoginPrefs(email.text, password.text, cacheCheckToggle.isOn);
+                    loginSystem.SetLoginPrefs(email.text, password.text, true);
                     privacyPolicy.SetActive(true);
                 }
                 else

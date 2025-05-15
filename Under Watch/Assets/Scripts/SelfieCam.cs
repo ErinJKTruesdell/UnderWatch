@@ -41,7 +41,8 @@ public class SelfieCam : MonoBehaviour
     public int facesExpected = 1;
     private bool isAngleSelfie = false;
     private bool isLocSelfie = false;
-
+    private bool isNormalSelfie = false;
+    
     bool approval = false;
 
     Vector3 currentLocalEurlerAngles = Vector3.zero;
@@ -88,8 +89,8 @@ public class SelfieCam : MonoBehaviour
                 if (UnityEngine.Application.platform == RuntimePlatform.Android)
                     webcam = new WebCamTexture(devices[1].name);
                 else
-                    webcam = new WebCamTexture(devices[1].name);
-                Debug.Log("cam: " + devices[1].name);
+                    webcam = new WebCamTexture(devices[2].name);
+                Debug.Log("cam: " + devices[2].name);
             }
 
             webcam.Play();
@@ -184,7 +185,6 @@ public class SelfieCam : MonoBehaviour
                     StopCoroutine(processingCoroutine);
                     processingCoroutine = null;
                 }
-
                 closeButton.SetActive(true);
             }
             else
@@ -207,71 +207,67 @@ public class SelfieCam : MonoBehaviour
     void DetermineObjectives()
     {
         isOtherSelfie = false;
-        facesExpected = 1;
+        facesExpected = 0;
         isAngleSelfie = false;
         isLocSelfie = false;
+        isNormalSelfie = false;
 
         if (DayManager.DoesDayContainObjective(DayManager.ObjTypes.selfieAngle))
         {
             isAngleSelfie = true;
         }
-        else if (DayManager.DoesDayContainObjective(DayManager.ObjTypes.selfieOthers))
+        if (DayManager.DoesDayContainObjective(DayManager.ObjTypes.selfieOthers))
         {
             isOtherSelfie = true;
             //determine # others expected
             facesExpected = DayManager.currentDayReqs._expectedFaces;
         }
-        else if (DayManager.DoesDayContainObjective(DayManager.ObjTypes.selfieLocation))
+        if (DayManager.DoesDayContainObjective(DayManager.ObjTypes.selfieLocation))
         {
             isLocSelfie = true;
+        }
+        if (DayManager.DoesDayContainObjective(DayManager.ObjTypes.selfie))
+        {
+            isNormalSelfie = true;
         }
     }
 
     void HandleResponseForObjectives(string response, bool approval)
     {
         string[] dataPartition = response.Split("|");
-        string faceCount = dataPartition[5];
+        string faceCount = dataPartition[7];
+
+        bool angleApproved = dataPartition[8].Contains("ANGLE");
+        bool othersApproved = dataPartition[9].Contains("OTHERS");
+        bool locApproved = dataPartition[10].Contains("LOC");
+        bool normalApproved = dataPartition[11].Contains("NORMAL");
+
 
         if (isAngleSelfie)
         {
             RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.selfieAngle);
+        }
+        if (normalApproved)
+        {
             RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.selfie);
+        }
+        if (othersApproved == true)
+        {
+            responseText.text = faceCount + " people detected in selfie!";
+            RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.selfieOthers);
         }
         else if (isOtherSelfie)
         {
-            if (approval)
-            {
-                responseText.text = faceCount + " people detected in selfie!";
-                RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.selfieAngle);
-            }
-            else
-            {
-                responseText.text = faceCount += " people detected in selfie. Please try again.";
-            }
+            responseText.text = faceCount += " people detected in selfie. Please try again.";
+        }
+        if (locApproved)
+        {
+            RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.selfieLocation);
+            responseText.text = "Correct location detected!";
         }
         else if (isLocSelfie)
         {
-            if (approval)
-            {
-                responseText.text = "Correct location detected!";
-                RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.selfieLocation);
-            }
-            else
-            {
-                responseText.text += " Incorrect location detected. Please try again.";
-            }
-        }
-        else
-        {
-            if (approval)
-            {
-                responseText.text = "Your face was detected!";
-                RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.selfie);
-            }
-            else
-            {
-                responseText.text += "Your face was not detected! Please try again.";
-            }
+            responseText.text += " Incorrect location detected. Please try again.";
         }
     }
 

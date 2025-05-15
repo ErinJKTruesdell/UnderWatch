@@ -57,6 +57,7 @@ public class DayManager : MonoBehaviour
     }
     private void Start()
     {
+        UpdateAdRate();
         StartCoroutine(SendLevelData(currentDay));
         //we have a day 0, so -1
         maxDays = allDays.Count -1;
@@ -119,6 +120,8 @@ public class DayManager : MonoBehaviour
         currentDay++;
         SetActiveReqs(currentDay);
 
+        //server connections: 
+        UpdateAdRate();
         StartCoroutine(SendLevelData(currentDay));
     }
     public Dictionary<ObjTypes, (string name, int progress, int total)> GetCurrentRequirements()
@@ -133,14 +136,14 @@ public class DayManager : MonoBehaviour
             (ObjTypes.register, "Make an account!", 0, 1), //
             (ObjTypes.profilePic, "Snap a profile picture!", 0, 1), //
             (ObjTypes.privacyPolicy, "Accept our privacy policy!", 0, 1) //
-        });
+        }, 0);
 
         //ad frequency 0, snapgram announcement
         AddNewRequirement(1, new List<(ObjTypes, string, int, int)>()
         {
             (ObjTypes.selfie, "Snap a selfie!", 0, 1), //
             (ObjTypes.announcements, "Check your inbox!", 0, 1) //
-        });
+        }, 0);
 
         AddNewRequirement(2, new List<(ObjTypes, string, int, int)>()
         {
@@ -148,7 +151,7 @@ public class DayManager : MonoBehaviour
             (ObjTypes.react, "Show your love for 3 posts!", 0, 3) //
            // (ObjTypes.favorites, "total 3 favorited accounts", 0, 3),
            // (ObjTypes.engagementInbox, "check engagement inbox", 0, 1)
-        });
+        }, 0);
 
         //privacy policy update
         AddNewRequirement(3, new List<(ObjTypes, string, int, int)>()
@@ -157,7 +160,7 @@ public class DayManager : MonoBehaviour
             (ObjTypes.minutes, "Reach 5 minutes on SnapGram!", 0, 5), //
             (ObjTypes.privacyPolicy, "Accept our updated privacy policy!", 0, 1) //
             
-        });
+        }, 0);
 
         //ad frequency 6, snapgram announcement
         AddNewRequirement(4, new List<(ObjTypes, string, int, int)>()
@@ -167,7 +170,7 @@ public class DayManager : MonoBehaviour
             (ObjTypes.announcements, "Check your inbox!", 0, 1), //
            // (ObjTypes.favorites, "total 5 favorited accounts", 0, 5),
           //  (ObjTypes.engagementInbox, "check engagement inbox", 0 ,1)
-        });
+        }, 0);
 
         AddNewRequirement(5, new List<(ObjTypes, string, int, int)>()
         {
@@ -212,7 +215,7 @@ public class DayManager : MonoBehaviour
             
             (ObjTypes.privacyPolicy, "Accept our updated privacy policy!", 0, 1), //
             (ObjTypes.announcements, "Check your inbox!", 0, 1) //
-        });
+        }, 0);
 
         //ad frequency 2
         AddNewRequirement(9, new List<(ObjTypes, string, int, int)>()
@@ -248,21 +251,25 @@ public class DayManager : MonoBehaviour
         switch (currentDay)
         {
             case 0:
-                //0
+                StartCoroutine(setAdRate(-1));
                 break;
             case 4:
-                //6
+                StartCoroutine(setAdRate(6));
                 break;
             case 6:
-                
+                StartCoroutine(setAdRate(5));
                 break;
             case 7:
+                StartCoroutine(setAdRate(4));
                 break;
             case 8:
+                StartCoroutine(setAdRate(3));
                 break;
             case 9:
+                StartCoroutine(setAdRate(2));
                 break;
             case 10:
+                StartCoroutine(setAdRate(1));
                 break;
         }
     }
@@ -286,7 +293,6 @@ public class DayManager : MonoBehaviour
     void CheckIfAllReqsFilled(DayRequirements currentReqs)
     {
         bool allReqsFilled = true;
-        Debug.Log(currentReqs.requirements);
         foreach (KeyValuePair<ObjTypes, (string name, int progress, int total)> kvp in currentReqs.requirements)
         {
             if (kvp.Value.progress != kvp.Value.total)
@@ -320,7 +326,7 @@ public class DayManager : MonoBehaviour
 
             if (!allCompletedReqNames.Contains(completedReq.name))
             {
-                yield return StartCoroutine(achMan.notificationPopup(completedReq.name + " Click to check your progress!"));
+                yield return StartCoroutine(achMan.notificationPopup(completedReq.name + " Check your progress!"));
                 allCompletedReqNames.Add(completedReq.name);
                 allCompletedReqs.Add(completedReq);
             }
@@ -384,9 +390,9 @@ public class DayManager : MonoBehaviour
         WWWForm form = new WWWForm();
         Debug.Log("Selected ad rate to upload: " + adrate);
         form.AddField("adRate", adrate.ToString());
+        form.AddField("username", gm.scls.getUsername());
 
-
-        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "/set_ad_rate.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "set-player-ad-rate.php", form))
         {
             yield return www.SendWebRequest();
 
@@ -399,7 +405,6 @@ public class DayManager : MonoBehaviour
             {
                 //return null
                 string responseText = www.downloadHandler.text;
-
                 Debug.Log("Response: " + responseText);
             }
         }
