@@ -19,7 +19,7 @@ public class RequirementItem : MonoBehaviour
 
         if (progress >= total)
         {
-            completionText.text = $"{progress} / {total}";
+            completionText.text = $"{total} / {total}";
             checkImage.SetActive(true);
             crossImage.SetActive(true);
         }

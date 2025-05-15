@@ -78,7 +78,6 @@ public class SC_LoginSystem : MonoBehaviour
     {
         return userName;
     }
-
     public void loginUponRegister(string username, string email, int points, string password)
     {
         Debug.Log("logging in on register: " + username);
@@ -116,14 +115,14 @@ public class SC_LoginSystem : MonoBehaviour
 
     void EnableLoginReg(bool enabling)
     {
-            LoginButton.SetActive(enabling);
-            RegisterButton.SetActive(enabling);
-            logo.SetActive(enabling);
+        LoginButton.SetActive(enabling);
+        RegisterButton.SetActive(enabling);
+        logo.SetActive(enabling);
     }
 
     void EnableLoginFields(bool enabling)
     {
-//        ForgotPasswordButton.SetActive(enabling);
+//      ForgotPasswordButton.SetActive(enabling);
         backButton.SetActive(enabling);
         loginFields.SetActive(enabling);
     }

@@ -32,11 +32,14 @@ public class DayManager : MonoBehaviour
     public Dictionary<int, DayRequirements> allDays = new();
     public static DayRequirements currentDayReqs;
 
+    public static List<CompletedRequirement> allCompletedReqs = new();
+    public static List<string> allCompletedReqNames = new();
+
     public static bool dayCompleted = false;
     public static int currentDay { get; private set; }
     public static int maxDays { get; private set; }
 
-    public Queue<string> achievementsQueue = new();
+    public Queue<CompletedRequirement> achievementsQueue = new();
     bool isWorking = false;
 
     //refs
@@ -74,7 +77,21 @@ public class DayManager : MonoBehaviour
             if (reqData.progress >= reqData.total)
             {
                 //this requirement is fulfilled, popup and check if day is done
-                achievementsQueue.Enqueue(reqData.name);
+                Dictionary<ObjTypes, (string name, int progress, int total)> tempObjDict = new()
+                {
+                    { reqName, reqData }
+                };
+
+                CompletedRequirement comp = new()
+                {
+                    day = currentDay,
+                    objType = reqName,
+                    name = reqData.name,
+                    progress = reqData.progress,
+                    total = reqData.total
+                };
+
+                achievementsQueue.Enqueue(comp);
                 if (!isWorking)
                     StartCoroutine(DequeueAchievements());
 
@@ -283,7 +300,7 @@ public class DayManager : MonoBehaviour
     }
     public void SetActiveReqs(int dayNum)
     {
-        //verify the day exists
+        //verify the day exists in allDays
         if (allDays.TryGetValue(dayNum, out var day))
         {
             currentDayReqs = day;
@@ -296,11 +313,19 @@ public class DayManager : MonoBehaviour
     IEnumerator DequeueAchievements()
     {
         isWorking = true;
-        Debug.Log("count: " + achievementsQueue.Count);
+
         while (achievementsQueue.Count > 0)
         {
-            string reqName = achievementsQueue.Dequeue();
-            yield return StartCoroutine(achMan.notificationPopup(reqName + " completed!"));
+            var completedReq = achievementsQueue.Dequeue();
+
+            if (!allCompletedReqNames.Contains(completedReq.name))
+            {
+                yield return StartCoroutine(achMan.notificationPopup(completedReq.name + " completed!"));
+                allCompletedReqNames.Add(completedReq.name);
+                allCompletedReqs.Add(completedReq);
+            }
+            else
+                Debug.Log("already displayed that popup!");
         }
         isWorking = false;
     }
@@ -405,4 +430,12 @@ public class DayRequirements
         requirements = reqs;
         _expectedFaces = expectedFaces;
     }
+}
+public class CompletedRequirement
+{
+    public int day;
+    public DayManager.ObjTypes objType;
+    public string name;
+    public int progress;
+    public int total;
 }

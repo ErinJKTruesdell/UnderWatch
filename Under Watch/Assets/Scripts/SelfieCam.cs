@@ -33,7 +33,7 @@ public class SelfieCam : MonoBehaviour
     public TextMeshProUGUI targetUNText;
     public RawImage targetPfpImage;
 
-    public RawImage unPfpImage;
+    public searchListItem userListing;
 
 
     private bool isOtherSelfie = false;
@@ -115,7 +115,7 @@ public class SelfieCam : MonoBehaviour
         if (scls != null)
         {
             byte[] bytes = EncodePhoto().EncodeToPNG();
-            string loggedInUser = gm.scls.getUsername();
+            string loggedInUser = scls.getUsername();
 
             string filename = loggedInUser + "-" + DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day + "-" + DateTime.Now.Hour + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Second + ".png";
             string path = Application.persistentDataPath + filename;
@@ -127,8 +127,10 @@ public class SelfieCam : MonoBehaviour
                 responseText.text = "Verifying Image...";
                 StartCoroutine(ShowProcessingAnimation());
                 blockingPanel.SetActive(true);
+                unText.text = loggedInUser;
 
                 StartCoroutine(SelfieUpload(path));
+
             }
         }
     }
@@ -312,10 +314,9 @@ public class SelfieCam : MonoBehaviour
         string targetUN = dataPartition[3].Trim();
         string targetPfp = GameManager.rootURL + dataPartition[4].Trim();
 
-        unText.text = scls.getUsername();
         targetUNText.text = targetUN;
 
-        StartCoroutine(downloadImageFromURL(unPfp, unPfpImage));
+        StartCoroutine(downloadImageFromURL(unPfp, userListing));
         //StartCoroutine(downloadImageFromURL(targetPfp, targetPfpImage));
     }
 
@@ -409,7 +410,7 @@ public class SelfieCam : MonoBehaviour
         }*/
     }
 
-    IEnumerator downloadImageFromURL(string url1, RawImage image1)
+    IEnumerator downloadImageFromURL(string url1, searchListItem li)
     {
         Debug.Log("Starting image Download Request");
         UnityWebRequest request = UnityWebRequestTexture.GetTexture(url1);
@@ -420,7 +421,7 @@ public class SelfieCam : MonoBehaviour
         }
         else
         {
-            image1.texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
+            li.profilePic.texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
         }
 
     }
