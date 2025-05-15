@@ -92,9 +92,10 @@ public class DayManager : MonoBehaviour
         //yield return StartCoroutine(LoadLevelProgress(currentDay));
         SetActiveReqs(currentDay);
 
-        UpdateAdRate();
         StartCoroutine(SaveLevelNum());
+        StartCoroutine(SendLevelNum());
 
+        UpdateAdRate();
         isLoadingLevels = false;
         loadingScreenBlocker.SetActive(false);
     }
@@ -161,6 +162,8 @@ public class DayManager : MonoBehaviour
 
         StartCoroutine(SaveLevelNum());
         StartCoroutine(SendLevelData(currentDay));
+        StartCoroutine(SendLevelNum());
+
     }
     public Dictionary<ObjTypes, (string name, int progress, int total)> GetCurrentRequirements()
     {
@@ -414,6 +417,26 @@ public class DayManager : MonoBehaviour
         PlayerPrefs.Save();
         yield return null;
     }
+        public IEnumerator SendLevelNum()
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("username", gm.scls.getUsername());
+        form.AddField("level", currentDay);
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "level_update.php", form))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("Failed to load level: " + www.error);
+                yield break;
+            }
+            else
+            {
+                Debug.Log("response: " + www.downloadHandler.text);
+            }
+        }
+    }
     /*public IEnumerator LoadLevelNum()
     {
         WWWForm form = new WWWForm();
@@ -434,26 +457,7 @@ public class DayManager : MonoBehaviour
             }
         }
     }
-    public IEnumerator SendLevelNum()
-    {
-        WWWForm form = new WWWForm();
-        form.AddField("username", gm.scls.getUsername());
-        form.AddField("level", currentDay);
-        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "level_update.php", form))
-        {
-            yield return www.SendWebRequest();
 
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Debug.LogError("Failed to load level: " + www.error);
-                yield break;
-            }
-            else
-            {
-                Debug.Log("response: " + www.downloadHandler.text);
-            }
-        }
-    }
     public IEnumerator LoadLevelProgress(int level)
     {
         WWWForm form = new WWWForm();

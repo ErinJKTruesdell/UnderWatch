@@ -120,7 +120,10 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
         string pfpImageURl;
 
         Debug.Log("Starting Request: " + timestamp);
-
+        while (scls.getUsername() == null)
+        {
+            yield return new WaitForEndOfFrame();
+        }
         WWWForm form = new WWWForm();
         //form.AddField("previousDate", currentPhotoTimestamp);
         form.AddField("previousDate", timestamp);

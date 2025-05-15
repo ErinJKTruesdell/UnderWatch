@@ -13,8 +13,8 @@ public class GameManager : MonoBehaviour
 
     public static string rootURL = "egs01.westphal.drexel.edu/";
 
-    public DateTime loginTime;
-    public DateTime openSocialFeedTime;
+    public DateTime loginTime = new();
+    public DateTime openSocialFeedTime = new();
 
     public SC_LoginSystem scls;
     public TouchScreenKeyboard keyboard;
@@ -38,12 +38,12 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        scls = GameObject.FindObjectOfType<SC_LoginSystem>();
 
         RegistrationManager.gm = this;
     }
     void Start()
     {
-        scls = GameObject.FindObjectOfType<SC_LoginSystem>();
         if (scls == null)
         {
             scls = new SC_LoginSystem();
