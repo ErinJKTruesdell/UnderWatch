@@ -417,7 +417,7 @@ public class DayManager : MonoBehaviour
         PlayerPrefs.Save();
         yield return null;
     }
-        public IEnumerator SendLevelNum()
+    public IEnumerator SendLevelNum()
     {
         WWWForm form = new WWWForm();
         form.AddField("username", gm.scls.getUsername());

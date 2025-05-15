@@ -2093,6 +2093,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scls: {fileID: 386920554}
   ach: {fileID: 2042832731}
+  userLoggedOut:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &872406428
 Transform:
   m_ObjectHideFlags: 0

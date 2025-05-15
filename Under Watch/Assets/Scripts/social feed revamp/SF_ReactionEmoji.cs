@@ -55,6 +55,7 @@ public class SF_ReactionEmoji : MonoBehaviour
         //if user has liked this reaction before
         if (parentCell._postItem.ReactNumDict[reactName].Item2 == true)
         {
+            Debug.Log("reacted : " + parentCell._postItem.ReactNumDict[reactName].Item2);
             colorEmoji.SetActive(true);
             bannerObj.SetActive(true);
             userClicked = true;
@@ -65,6 +66,7 @@ public class SF_ReactionEmoji : MonoBehaviour
         //if this reaction has been liked by any user
         else if (reactNum > 0)
         {
+            Debug.Log("reacted by others" + parentCell._postItem.ReactNumDict[reactName].Item2);
             LikeSetup();
             greyBanner.color = neutralGrey;
             greyEmoji.color = Color.white;
