@@ -37,6 +37,8 @@ public class SF_ReactionEmoji : MonoBehaviour
     public string reactName = "";
 
     public bool isAd = false;
+    bool reactionInProgress = false;
+
     private void Awake()
     {
         parentCell = GetComponentInParent<SF_Cell>();
@@ -84,10 +86,12 @@ public class SF_ReactionEmoji : MonoBehaviour
 
     IEnumerator Like()
     {
+        reactionInProgress = true;
+
         //if the user has already clicked the button
         if (userClicked == true)
         {
-            StartCoroutine(Unlike());
+            yield return StartCoroutine(Unlike());
         }
         //if the user hasn't clicked before
         else
@@ -99,7 +103,7 @@ public class SF_ReactionEmoji : MonoBehaviour
             ColorizeBanner();
             LikeAnims();
         }
-        yield return null;
+        reactionInProgress = false;
     }
 
     void HandleLevelRequirements()
@@ -116,7 +120,12 @@ public class SF_ReactionEmoji : MonoBehaviour
     void ResetText()
     {
         reactNumText.fontSize = 15;
+        //sometimes the react can go negative for unknown smartphone reasons
+        if (reactNum < 0)
+            reactNum = 0;
+
         reactNumText.text = reactNum.ToString();
+
         reactNumText.color = darkGrey;
     }
     IEnumerator Unlike()
@@ -126,7 +135,7 @@ public class SF_ReactionEmoji : MonoBehaviour
         userClicked = false;
 
         bannerSlide.Play("bannerReverse");
-        emojiAnim.Play("emojiReverse");
+        //emojiAnim.Play("emojiReverse");
 
         yield return new WaitForSeconds(.15f);
         //if other users have reacted
@@ -208,7 +217,10 @@ public class SF_ReactionEmoji : MonoBehaviour
     }
     public void LikeVoid()
     {
-        StartCoroutine(Like());
+        if (!reactionInProgress)
+        {
+            StartCoroutine(Like());
+        }
     }
 
     void ColorizeBanner()
