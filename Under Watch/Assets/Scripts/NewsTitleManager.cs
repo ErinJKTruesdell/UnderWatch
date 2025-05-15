@@ -98,6 +98,10 @@ public class NewsTitleManager : MonoBehaviour
                 currentDayNewsObjects.Add(newsObj);
                 AllNewsObjects.Add(newsObj);
             }
+            if (newsData.day == day)
+            {
+                PlayerPrefs.SetInt("hasSeenNews", 0);
+            }
         }
 
         // Now destroy safely

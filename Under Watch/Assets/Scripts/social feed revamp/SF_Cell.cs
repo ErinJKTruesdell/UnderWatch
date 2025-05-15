@@ -90,7 +90,7 @@ public class SF_Cell : MonoBehaviour, ICell
         {
             adButton.enabled = true;
             adLink = postItem.adLink;
-            locText.text = "Sponsored Post";
+            locText.text = "Click to engage with Sponsor";
 
             StartCoroutine(LoadPostImages(true));
 
@@ -107,7 +107,8 @@ public class SF_Cell : MonoBehaviour, ICell
         }
         else
         {
-            locText.text = postItem.location;
+            //postItem.location
+            locText.text = "";
             adButton.enabled = false;
 
             if (postItem.postPhoto == null || postItem.pfpPhoto == null)
