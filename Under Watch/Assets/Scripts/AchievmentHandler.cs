@@ -11,6 +11,7 @@ using UnityEngine.UI;
 
 public class AchievementsManager : MonoBehaviour
 {
+    public static AchievementsManager achManInstance;
     //to create a new achievement:
     //add the object in the achievements list, create an int[] for the tiers, ensure there is an int counting, then fill out the UpdateAchievement in OnEnable
 
@@ -46,7 +47,15 @@ public class AchievementsManager : MonoBehaviour
             ach = new AchieveMonitor();
         }
 
-        DontDestroyOnLoad(this);
+        if (achManInstance == null)
+        {
+            achManInstance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
     void OnEnable()
     {
