@@ -17,13 +17,9 @@ public class ProfileUpdateManager : MonoBehaviour
     SC_LoginSystem loginSystem;
 
    // public int socialFeedIndex;
-
     public NativeGallery.MediaPickCallback ngmpc = new NativeGallery.MediaPickCallback(handleNewPicture);
-
     bool isWorking = false;
-
     bool profImageSet = false;
-
     public GameManager gm;
 
     // Start is called before the first frame update

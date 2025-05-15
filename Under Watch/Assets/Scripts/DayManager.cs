@@ -278,7 +278,7 @@ public class DayManager : MonoBehaviour
         //ad frequency 1
         AddNewRequirement(10, new List<(ObjTypes, string, int, int)>()
         {
-            (ObjTypes.selfie, "Snap a selfie with the billboard at Chestnut & 31st!", 0, 4), //
+            (ObjTypes.selfie, "Snap a selfie with the billboard at Chestnut & 31st!", 0, 1), //
             (ObjTypes.selfieOthers, "Snap a selfie with 5 people in it!", 0, 1), //
             //(ObjTypes.selfieLocation, "post 1 selfie at location: Billboard", 0, 1),
             //(ObjTypes.selfieAngle, "post 1 selfie from right", 0, 1),
@@ -380,6 +380,9 @@ public class DayManager : MonoBehaviour
                 yield return StartCoroutine(achMan.notificationPopup(completedReq.name + " Check your progress!"));
                 allCompletedReqNames.Add(completedReq.name);
                 allCompletedReqs.Add(completedReq);
+
+                StartCoroutine(SaveLevelNum());
+                StartCoroutine(SendLevelNum());
             }
             else
                 Debug.Log("already displayed that popup!");
