@@ -422,6 +422,7 @@ public class DayManager : MonoBehaviour
         WWWForm form = new WWWForm();
         form.AddField("username", gm.scls.getUsername());
         form.AddField("level", currentDay);
+        form.AddField("objs_completed", objCompleted);
         using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "level_update.php", form))
         {
             yield return www.SendWebRequest();
