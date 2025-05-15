@@ -28,6 +28,7 @@ public class DayManager : MonoBehaviour
         engagementInbox,
         favorites,
     }
+    public static DayManager dayManInstance;
 
     public Dictionary<int, DayRequirements> allDays = new();
     public static DayRequirements currentDayReqs;
@@ -53,31 +54,47 @@ public class DayManager : MonoBehaviour
     public static bool isLoadingLevels;
     private void Awake()
     {
+        if (dayManInstance == null)
+        {
+            dayManInstance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
         gm = FindObjectOfType<GameManager>();
 
-        AddAllRequirements();
-        StartCoroutine(StartWaitList());
-
-        DontDestroyOnLoad(this);
+        VoidStartList();
     }
     private void Start()
     {
+        gm.userLoggedOut.AddListener(VoidStartList);
         //we have a day 0, so -1
         maxDays = allDays.Count -1;
     }
-
-    IEnumerator StartWaitList()
+    void VoidStartList()
     {
+        StartCoroutine(StartWaitList());
+    }
+    public IEnumerator StartWaitList()
+    {
+        allDays.Clear();
+        allCompletedReqs.Clear();
+        allCompletedReqNames.Clear();
+        reactedPostIDs.Clear();
+
+        AddAllRequirements();
         isLoadingLevels = true;
         loadingScreenBlocker.SetActive(true);
 
         yield return StartCoroutine(LoadLevelNum());
-        yield return StartCoroutine(LoadLevelProgress(currentDay));
+        //yield return StartCoroutine(LoadLevelProgress(currentDay));
         SetActiveReqs(currentDay);
 
         UpdateAdRate();
         StartCoroutine(SendLevelData(currentDay));
-        StartCoroutine(SendLevelNum());
+        StartCoroutine(SaveLevelNum());
 
         isLoadingLevels = false;
         loadingScreenBlocker.SetActive(false);
@@ -143,7 +160,7 @@ public class DayManager : MonoBehaviour
         //server connections: 
         UpdateAdRate();
 
-        StartCoroutine(SendLevelNum());
+        StartCoroutine(SaveLevelNum());
         StartCoroutine(SendLevelData(currentDay));
     }
     public Dictionary<ObjTypes, (string name, int progress, int total)> GetCurrentRequirements()
@@ -299,6 +316,7 @@ public class DayManager : MonoBehaviour
     {
         //fills a dict with all the requirements for one day
         Dictionary<ObjTypes, (string name, int progress, int total)> reqDict = new();
+
         foreach (var req in reqData)
         {
             reqDict.Add(req.Item1, (req.Item2, req.Item3, req.Item4));
@@ -385,6 +403,19 @@ public class DayManager : MonoBehaviour
         return reqProg;
     }
     public IEnumerator LoadLevelNum()
+    {
+        currentDay = PlayerPrefs.GetInt("currentDay");
+        objCompleted = PlayerPrefs.GetInt("objectivesCompleted");
+        yield return new WaitForEndOfFrame();
+    }
+    public IEnumerator SaveLevelNum()
+    {
+        PlayerPrefs.SetInt("currentDay", currentDay);
+        PlayerPrefs.SetInt("objectivesCompleted", objCompleted);
+        PlayerPrefs.Save();
+        yield return null;
+    }
+    /*public IEnumerator LoadLevelNum()
     {
         WWWForm form = new WWWForm();
         form.AddField("username", gm.scls.getUsername());
@@ -476,7 +507,7 @@ public class DayManager : MonoBehaviour
                 Debug.LogError("JSON parse failed: " + e.Message);
             }
         }
-    }
+    }*/
 
 
     IEnumerator SendLevelData(int currentLevel)

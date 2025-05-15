@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class AchieveMonitor : MonoBehaviour
 {
+    public static AchieveMonitor achmonInstance;
     public int adClicks;
     public int favorites;
     public int minutes;
@@ -37,7 +38,15 @@ public class AchieveMonitor : MonoBehaviour
 
     private void Awake()
     {
-        DontDestroyOnLoad(this);
+        if (achmonInstance == null)
+        {
+            achmonInstance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
 }

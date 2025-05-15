@@ -9,6 +9,8 @@ using static OnlineMapsGPXObject;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager gmInstance;
+
     public static string rootURL = "egs01.westphal.drexel.edu/";
 
     public DateTime loginTime;
@@ -23,10 +25,21 @@ public class GameManager : MonoBehaviour
     static public Color32 redCol = new(180, 17, 75, 255);
 
     private float sessionTimer = 0f;
+
+    public UnityEvent userLoggedOut = new();
     private void Awake()
     {
-        RegistrationManager.gm = this;
+        if (gmInstance == null)
+        {
+            gmInstance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
 
+        RegistrationManager.gm = this;
     }
     void Start()
     {
@@ -144,6 +157,8 @@ public class GameManager : MonoBehaviour
         scls.isLoggedIn = false;
         scls.userName = "";
         scls.userEmail = "";
+
+        userLoggedOut?.Invoke();
 
         Debug.Log("User login data cleared");
     }

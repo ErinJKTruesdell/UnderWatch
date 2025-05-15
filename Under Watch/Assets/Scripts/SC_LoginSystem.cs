@@ -9,6 +9,7 @@ using DG.Tweening;
 
 public class SC_LoginSystem : MonoBehaviour
 {
+    public static SC_LoginSystem sclsInstance;
     public enum CurrentWindow { Login, Register }
     public CurrentWindow currentWindow = CurrentWindow.Login;
 
@@ -218,7 +219,7 @@ public class SC_LoginSystem : MonoBehaviour
 
     private void Awake()
     {
-        DontDestroyOnLoad(this);
+        //dont destrroy it because it has button hookups!
         RegistrationManager.loginSystem = this;
 
         //can change any settings inside the init
