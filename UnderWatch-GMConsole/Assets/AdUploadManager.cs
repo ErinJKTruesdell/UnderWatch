@@ -218,9 +218,9 @@ public class AdUploadManager : MonoBehaviour
         {
             string filename = Path.GetFileName(s);
 
-
-
-            string[] filenameImageParts = filename.Split("-");
+            string baseName = Path.GetFileNameWithoutExtension(filename);
+            string[] parts = baseName.Split('_');
+            
             string uid;
             if (isForAllUsers)
             {
@@ -228,7 +228,15 @@ public class AdUploadManager : MonoBehaviour
             }
             else
             {
-                uid = filenameImageParts[filenameImageParts.Length - 1].Split(".")[0];//the username is in this string
+                if (parts.Length > 1)
+                {
+                    uid = parts[0]; // extract username before first underscore
+                }
+                else
+                {
+                    errorText.text += $"\nError: Filename '{filename}' is not in expected format (username_other.png)";
+                    continue; // skip this file
+                }
             }
 
             //create WWform with username and image to upload, plus set timestamp (month/day) year can be appended automatically
