@@ -93,7 +93,6 @@ public class DayManager : MonoBehaviour
         SetActiveReqs(currentDay);
 
         UpdateAdRate();
-        StartCoroutine(SendLevelData(currentDay));
         StartCoroutine(SaveLevelNum());
 
         isLoadingLevels = false;

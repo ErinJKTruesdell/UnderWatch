@@ -89,8 +89,8 @@ public class SelfieCam : MonoBehaviour
                 if (UnityEngine.Application.platform == RuntimePlatform.Android)
                     webcam = new WebCamTexture(devices[1].name);
                 else
-                    webcam = new WebCamTexture(devices[2].name);
-                Debug.Log("cam: " + devices[2].name);
+                    webcam = new WebCamTexture(devices[1].name);
+                Debug.Log("cam: " + devices[1].name);
             }
 
             webcam.Play();
