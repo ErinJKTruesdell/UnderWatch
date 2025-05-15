@@ -755,6 +755,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentWindow: 0
+  isLoggedIn: 0
   LoginButton: {fileID: 2128224215}
   RegisterButton: {fileID: 658043307}
   ForgotPasswordButton: {fileID: 567180331}
@@ -770,6 +771,7 @@ MonoBehaviour:
   backButton: {fileID: 1248536937}
   errorText: {fileID: 490063105}
   userName: 
+  userEmail: 
 --- !u!4 &386920555
 Transform:
   m_ObjectHideFlags: 0

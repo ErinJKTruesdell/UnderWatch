@@ -1872,7 +1872,6 @@ GameObject:
   - component: {fileID: 1486686224}
   - component: {fileID: 1486686227}
   - component: {fileID: 1486686226}
-  - component: {fileID: 1486686225}
   m_Layer: 5
   m_Name: TargetProf
   m_TagString: Untagged
@@ -1901,21 +1900,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 699}
   m_SizeDelta: {x: 600, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1486686225
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1486686223}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b007a03c290d3f47ac251088a776ec4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  usernameText: {fileID: 703119833}
-  fullNameText: {fileID: 0}
-  profilePic: {fileID: 803212989}
 --- !u!114 &1486686226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2299,8 +2283,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000061035156}
-  m_SizeDelta: {x: 700, y: 1502}
+  m_AnchoredPosition: {x: 0, y: 6}
+  m_SizeDelta: {x: 700, y: 3248.18}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1759434999
 MonoBehaviour:
@@ -2322,7 +2306,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d8f608071dbfecf4ab05bc0322d4be23, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b1a840dfea9f86a4bb5e28205ecf64db, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2835,7 +2819,7 @@ MonoBehaviour:
   unText: {fileID: 2059434374}
   targetUNText: {fileID: 703119833}
   targetPfpImage: {fileID: 803212989}
-  userListing: {fileID: 0}
+  userListing: {fileID: 2021728431}
   facesExpected: 1
 --- !u!4 &2136051675
 Transform:

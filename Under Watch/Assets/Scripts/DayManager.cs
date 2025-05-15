@@ -320,7 +320,7 @@ public class DayManager : MonoBehaviour
 
             if (!allCompletedReqNames.Contains(completedReq.name))
             {
-                yield return StartCoroutine(achMan.notificationPopup(completedReq.name + " completed!"));
+                yield return StartCoroutine(achMan.notificationPopup(completedReq.name + " Click to check your progress!"));
                 allCompletedReqNames.Add(completedReq.name);
                 allCompletedReqs.Add(completedReq);
             }

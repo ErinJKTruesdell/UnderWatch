@@ -33,8 +33,9 @@ public class SelfieCam : MonoBehaviour
     public TextMeshProUGUI targetUNText;
     public RawImage targetPfpImage;
 
-    public searchListItem userListing;
+    public searchListItem userListing = new();
 
+    private Coroutine processingCoroutine;
 
     private bool isOtherSelfie = false;
     public int facesExpected = 1;
@@ -125,9 +126,12 @@ public class SelfieCam : MonoBehaviour
             if (gm.scls != null && gm.scls.getIsLoggedIn())
             {
                 responseText.text = "Verifying Image...";
-                StartCoroutine(ShowProcessingAnimation());
+
+                //checks if null, if not start
+                processingCoroutine ??= StartCoroutine(ShowProcessingAnimation());
+
                 blockingPanel.SetActive(true);
-                unText.text = loggedInUser;
+                unText.text = "@" + loggedInUser;
 
                 StartCoroutine(SelfieUpload(path));
 
@@ -174,7 +178,13 @@ public class SelfieCam : MonoBehaviour
                 responseText.text = "Error: " + www.error;
 
                 Debug.Log(www.error);
-                StopAllCoroutines(); // Stop the processing animation
+
+                if (processingCoroutine != null)
+                {
+                    StopCoroutine(processingCoroutine);
+                    processingCoroutine = null;
+                }
+
                 closeButton.SetActive(true);
             }
             else
@@ -310,7 +320,7 @@ public class SelfieCam : MonoBehaviour
 
         string[] dataPartition = responseText.Split("|");
         string unData = dataPartition[1].Trim();
-        string unPfp = GameManager.rootURL + dataPartition[3].Trim();
+        string unPfp = GameManager.rootURL + dataPartition[2].Trim();
         string targetUN = dataPartition[3].Trim();
         string targetPfp = GameManager.rootURL + dataPartition[4].Trim();
 
@@ -324,6 +334,9 @@ public class SelfieCam : MonoBehaviour
     {
         if (devices.Length > 1)
         {
+            if (webcam == null || !webcam.isPlaying)
+                InitWebcam();
+
             overlay.SetActive(false);
 
             Texture2D snap = new Texture2D(webcam.width, webcam.height);
@@ -362,7 +375,11 @@ public class SelfieCam : MonoBehaviour
 
     void HandleServerResponse(string jsonResponse)
     {
-        StopAllCoroutines(); // Stop the processing animation
+        if (processingCoroutine != null)
+        {
+            StopCoroutine(processingCoroutine);
+            processingCoroutine = null;
+        }
 
         //yeah, it's not great, lets fix it later
         if (jsonResponse.Contains("Selfie Approved"))
@@ -424,6 +441,14 @@ public class SelfieCam : MonoBehaviour
             li.profilePic.texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
         }
 
+    }
+    void OnApplicationFocus(bool hasFocus)
+    {
+        if (hasFocus && (webcam == null || !webcam.isPlaying))
+        {
+            Debug.Log("App regained focus. Restarting webcam...");
+            InitWebcam();
+        }
     }
 
     [System.Serializable]

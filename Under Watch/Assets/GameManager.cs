@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
         }
 
         scls.gm = this;
+        Screen.sleepTimeout = SleepTimeout.SystemSetting;
 
         DontDestroyOnLoad(this);
     }
