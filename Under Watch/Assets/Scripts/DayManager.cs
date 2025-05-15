@@ -297,6 +297,9 @@ public class DayManager : MonoBehaviour
             case 4:
                 StartCoroutine(setAdRate(6));
                 break;
+            case 5:
+                StartCoroutine(setAdRate(6));
+                break;
             case 6:
                 StartCoroutine(setAdRate(5));
                 break;

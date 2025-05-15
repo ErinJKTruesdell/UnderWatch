@@ -58,13 +58,14 @@ public class NewsTitleManager : MonoBehaviour
     private void SpawnNewsObjs()
     {
         //clear the UI elements
-        currentDayNewsObjects.Clear();
+        //currentDayNewsObjects.Clear();
 
         AddAllNewsData();
 
-        if (currentDayNewsObjects.Count > 0)
+        if (AllNewsObjects.Count > 0)
         {
-            foreach (NewsObject news in currentDayNewsObjects)
+            Debug.Log(AllNewsObjects.Count + "count");
+            foreach (NewsObject news in AllNewsObjects)
             {
                 GameObject newsObj = Instantiate(newsPrefab) as GameObject;
                 newsObj.transform.SetParent(contentParent);
@@ -91,7 +92,7 @@ public class NewsTitleManager : MonoBehaviour
             {
                 containersToDestroy.Add(newsData.gameObject);
             }
-            else if (newsData.day == day)
+            else if (newsData.day <= day)
             {
                 NewsObject newsObj = new(newsData.day, newsData.title, newsData.subtitle, newsData.desc);
                 currentDayNewsObjects.Add(newsObj);
