@@ -72,7 +72,7 @@ public class LocalRequirementManager : MonoBehaviour
     {
         yield return StartCoroutine(ClearCurrentReqs());
 
-        localReqDict = dayMan.GetCurrentRequirements();
+        localReqDict = new (dayMan.GetCurrentRequirements());
         Debug.Log("Count: " + localReqDict.Count);
         foreach (KeyValuePair<DayManager.ObjTypes, (string name, int progress, int total)> kvp in localReqDict)
         {

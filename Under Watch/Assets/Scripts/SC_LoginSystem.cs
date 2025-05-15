@@ -65,6 +65,21 @@ public class SC_LoginSystem : MonoBehaviour
         Application.targetFrameRate = 60; // Or Application.targetFrameRate = Screen.currentResolution.refreshRate;
 
         gm.RequestExactAlarmPermission();
+
+        // attempt login with any saved information
+        if (PlayerPrefs.GetString("savedUsername", "") != "" || PlayerPrefs.GetString("savedPassword", "") != "")
+        {
+            isCached = true;
+            StartCoroutine(LoginEnumerator(PlayerPrefs.GetString("savedUsername", ""), PlayerPrefs.GetString("savedPassword", "")));
+            Debug.Log("Cached login data used" + PlayerPrefs.GetString("savedUsername", "") + PlayerPrefs.GetString("savedPassword", ""));
+        }
+        else
+        {
+            //else show login/register buttons
+            LoginButton.SetActive(true);
+            RegisterButton.SetActive(true);
+            ForgotPasswordButton.SetActive(false);
+        }
     }
 
 
@@ -205,20 +220,6 @@ public class SC_LoginSystem : MonoBehaviour
     {
         DontDestroyOnLoad(this);
         RegistrationManager.loginSystem = this;
-        // attempt login with any saved information
-        if (PlayerPrefs.GetString("savedUsername", "") != "" || PlayerPrefs.GetString("savedPassword", "") != "")
-        {
-            isCached = true;
-            StartCoroutine(LoginEnumerator(PlayerPrefs.GetString("savedUsername", ""), PlayerPrefs.GetString("savedPassword", "")));
-            Debug.Log("Cached login data used" + PlayerPrefs.GetString("savedUsername", "") + PlayerPrefs.GetString("savedPassword", ""));
-        }
-        else
-        {
-            //else show login/register buttons
-            LoginButton.SetActive(true);
-            RegisterButton.SetActive(true);
-            ForgotPasswordButton.SetActive(false);
-        }
 
         //can change any settings inside the init
         DOTween.Init();
@@ -420,6 +421,11 @@ public class SC_LoginSystem : MonoBehaviour
 
     public IEnumerator LoginEnumerator(string email, string password)
     {
+        while (DayManager.isLoadingLevels)
+        {
+            yield return new WaitForSeconds(.1f);
+        }
+
         isWorking = true;
         registrationCompleted = false;
         errorMessage = "";

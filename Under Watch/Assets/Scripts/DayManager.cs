@@ -38,6 +38,7 @@ public class DayManager : MonoBehaviour
     public static bool dayCompleted = false;
     public static int currentDay { get; private set; }
     public static int maxDays { get; private set; }
+    public static int objCompleted = 0;
 
     public Queue<CompletedRequirement> achievementsQueue = new();
     bool isWorking = false;
@@ -47,20 +48,39 @@ public class DayManager : MonoBehaviour
     public AchievementsManager achMan;
 
     public static List<string> reactedPostIDs = new();
+
+    public GameObject loadingScreenBlocker;
+    public static bool isLoadingLevels;
     private void Awake()
     {
-        DontDestroyOnLoad(this);
         gm = FindObjectOfType<GameManager>();
 
         AddAllRequirements();
-        SetActiveReqs(currentDay);
+        StartCoroutine(StartWaitList());
+
+        DontDestroyOnLoad(this);
     }
     private void Start()
     {
-        UpdateAdRate();
-        StartCoroutine(SendLevelData(currentDay));
         //we have a day 0, so -1
         maxDays = allDays.Count -1;
+    }
+
+    IEnumerator StartWaitList()
+    {
+        isLoadingLevels = true;
+        loadingScreenBlocker.SetActive(true);
+
+        yield return StartCoroutine(LoadLevelNum());
+        yield return StartCoroutine(LoadLevelProgress(currentDay));
+        SetActiveReqs(currentDay);
+
+        UpdateAdRate();
+        StartCoroutine(SendLevelData(currentDay));
+        StartCoroutine(SendLevelNum());
+
+        isLoadingLevels = false;
+        loadingScreenBlocker.SetActive(false);
     }
     public void UpdateReq(int value, ObjTypes reqName, int overrideValue = -1)
     {
@@ -122,6 +142,8 @@ public class DayManager : MonoBehaviour
 
         //server connections: 
         UpdateAdRate();
+
+        StartCoroutine(SendLevelNum());
         StartCoroutine(SendLevelData(currentDay));
     }
     public Dictionary<ObjTypes, (string name, int progress, int total)> GetCurrentRequirements()
@@ -326,6 +348,9 @@ public class DayManager : MonoBehaviour
 
             if (!allCompletedReqNames.Contains(completedReq.name))
             {
+                objCompleted++;
+                StartCoroutine(SendLevelData(currentDay));
+
                 yield return StartCoroutine(achMan.notificationPopup(completedReq.name + " Check your progress!"));
                 allCompletedReqNames.Add(completedReq.name);
                 allCompletedReqs.Add(completedReq);
@@ -359,27 +384,139 @@ public class DayManager : MonoBehaviour
         int reqProg = currentDayReqs.requirements[reqName].total;
         return reqProg;
     }
-    IEnumerator SendLevelData(int currentLevel)
+    public IEnumerator LoadLevelNum()
     {
         WWWForm form = new WWWForm();
-
         form.AddField("username", gm.scls.getUsername());
-        form.AddField("level", currentLevel);
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "get-user-level.php", form))
+        {
+            yield return www.SendWebRequest();
 
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("Failed to load level: " + www.error);
+                yield break;
+            }
+            else
+            {
+                Debug.Log("response: " + www.downloadHandler.text);
+                int level = Convert.ToInt32(www.downloadHandler.text.Trim());
+            }
+        }
+    }
+    public IEnumerator SendLevelNum()
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("username", gm.scls.getUsername());
+        form.AddField("level", currentDay);
         using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "level_update.php", form))
         {
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
             {
-                string errorMessage = www.error;
-                Debug.Log(errorMessage);
-                Debug.Log("level data send error, releasing queue");
+                Debug.LogError("Failed to load level: " + www.error);
+                yield break;
             }
             else
             {
-                string responseText = www.downloadHandler.text;
-                Debug.Log("level send: " + responseText);
+                Debug.Log("response: " + www.downloadHandler.text);
+            }
+        }
+    }
+    public IEnumerator LoadLevelProgress(int level)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("username", gm.scls.getUsername());
+        form.AddField("level_id", level);
+        
+
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "get-user-progress.php", form))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log("Failed to load progress: " + www.error);
+                yield break;
+            }
+
+            string raw = www.downloadHandler.text.Trim();
+            if (!raw.StartsWith("["))
+            {
+                Debug.Log("Invalid JSON array returned: " + raw);
+                yield break;
+            }
+
+            string wrappedJson = "{\"list\":" + raw + "}";
+
+            try
+            {
+                var loaded = JsonUtility.FromJson<RequirementProgressWrapper>(wrappedJson);
+                Dictionary<ObjTypes, (string, int, int)> requirementDict = new();
+
+                foreach (var req in loaded.list)
+                {
+                    if (Enum.TryParse(req.obj_type, out ObjTypes objType))
+                    {
+                        requirementDict[objType] = (req.name, req.progress, req.total);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Unknown ObjType: " + req.obj_type);
+                    }
+                }
+
+                currentDayReqs = new DayRequirements(level, requirementDict);
+
+                Debug.Log("Requirements loaded from server.");
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("JSON parse failed: " + e.Message);
+            }
+        }
+    }
+
+
+    IEnumerator SendLevelData(int currentLevel)
+    {
+        List<RequirementProgressData> reqs = new();
+
+        foreach (var kvp in currentDayReqs.requirements)
+        {
+            reqs.Add(new RequirementProgressData
+            {
+                obj_type = kvp.Key.ToString(),
+                name = kvp.Value.name,
+                progress = kvp.Value.progress,
+                total = kvp.Value.total
+            });
+        }
+
+        // Wrap in a list object so JsonUtility can serialize it
+        RequirementProgressWrapper wrapper = new() { list = reqs };
+        string jsonData = JsonUtility.ToJson(wrapper);
+
+        //  Escape the JSON so PHP sees it cleanly
+        jsonData = UnityWebRequest.EscapeURL(jsonData);
+
+        WWWForm form = new WWWForm();
+        form.AddField("username", gm.scls.getUsername());
+        form.AddField("level_id", currentLevel);
+        form.AddField("requirement_data", jsonData);  // Send safely as a form field
+
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "update-user-progress.php", form))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log("Send failed: " + www.error);
+            }
+            else
+            {
+                Debug.Log("Send success: " + www.downloadHandler.text);
             }
         }
     }
@@ -410,6 +547,7 @@ public class DayManager : MonoBehaviour
         }
 
     }
+
     private void OnEnable()
     {
         RequirementEventHandler.OnCompletedAllDayReqs += AllDayReqsFulfilled;
@@ -420,6 +558,8 @@ public class DayManager : MonoBehaviour
         RequirementEventHandler.OnCompletedAllDayReqs -= AllDayReqsFulfilled;
         RequirementEventHandler.OnCompletedAReq -= UpdateReq;
     }
+
+
 }
 
 public class DayRequirements
@@ -443,4 +583,19 @@ public class CompletedRequirement
     public string name;
     public int progress;
     public int total;
+}
+
+[System.Serializable]
+public class RequirementProgressData
+{
+    public string obj_type;
+    public string name;
+    public int progress;
+    public int total;
+}
+
+[System.Serializable]
+public class RequirementProgressWrapper
+{
+    public List<RequirementProgressData> list;
 }

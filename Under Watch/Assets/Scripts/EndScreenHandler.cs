@@ -10,6 +10,7 @@ public class EndScreenHandler : MonoBehaviour
     public TMP_Text dayText;
     public TMP_Text dayDescText;
     public TMP_Text dayCounter;
+    public TMP_Text objCounter;
 
     [TextArea] public string FinalDayDesc;
 
@@ -31,7 +32,7 @@ public class EndScreenHandler : MonoBehaviour
         currentDay = DayManager.currentDay;
         dayText.text = "End of Day: " + currentDay;
         dayCounter.text = currentDay + " / " + DayManager.maxDays;
-
+        objCounter.text = DayManager.objCompleted + " / " + "41 Objectives" ;
         if (currentDay >= DayManager.maxDays)
         {
             EndGame();

@@ -84,22 +84,22 @@ public class AchievementsManager : MonoBehaviour
         {
             if (counterVar >= tierThresholds[3] && tierThresholds[3] != -1)
             {
-                StartCoroutine(notificationPopup($"You just achieved the final star of {title}!"));
+                //StartCoroutine(notificationPopup($"You just achieved the final star of {title}!"));
                 tierThresholds[3] = -1;
             }
             else if (counterVar >= tierThresholds[2] && tierThresholds[2] != -1)
             {
-                StartCoroutine(notificationPopup($"You just achieved the third star of {title}!"));
+                //StartCoroutine(notificationPopup($"You just achieved the third star of {title}!"));
                 tierThresholds[2] = -1;
             }
             else if (counterVar >= tierThresholds[1] && tierThresholds[1] != -1)
             {
-                StartCoroutine(notificationPopup($"You just achieved the second star of {title}!"));
+                //StartCoroutine(notificationPopup($"You just achieved the second star of {title}!"));
                 tierThresholds[1] = -1;
             }
             else if (counterVar >= tierThresholds[0] && tierThresholds[0] != -1)
             {
-                StartCoroutine(notificationPopup($"You just achieved the first star of {title}!"));
+                //StartCoroutine(notificationPopup($"You just achieved the first star of {title}!"));
                 tierThresholds[0] = -1;
             }
         }  
