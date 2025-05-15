@@ -225,6 +225,7 @@ public class SC_LoginSystem : MonoBehaviour
         //can change any settings inside the init
         DOTween.Init();
 
+        DontDestroyOnLoad(this);
     }
 
     public void goToRegistration()
