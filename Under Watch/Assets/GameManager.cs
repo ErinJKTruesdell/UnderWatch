@@ -140,6 +140,9 @@ public class GameManager : MonoBehaviour
     {
         PlayerPrefs.DeleteAll();
         ProgressToScene("LoginScene");
+        scls.isLoggedIn = false;
+        scls.userName = "";
+        scls.userEmail = "";
 
         Debug.Log("User login data cleared");
     }

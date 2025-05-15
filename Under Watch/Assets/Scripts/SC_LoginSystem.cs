@@ -22,7 +22,7 @@ public class SC_LoginSystem : MonoBehaviour
 
     bool isWorking = false;
     bool registrationCompleted = false;
-    bool isLoggedIn = false;
+    public bool isLoggedIn = false;
 
     bool isCached = false;
 
@@ -50,7 +50,7 @@ public class SC_LoginSystem : MonoBehaviour
 
     //Logged-in user data
     public string userName = "";
-    string userEmail = "";
+    public string userEmail = "";
 
     public event TargetHandler Target;
     public EventArgs e = null;
@@ -63,7 +63,6 @@ public class SC_LoginSystem : MonoBehaviour
         logo.transform.DOLocalMoveY(1000, .7f).From().SetEase(Ease.OutQuad);
 
         Application.targetFrameRate = 60; // Or Application.targetFrameRate = Screen.currentResolution.refreshRate;
-
 
         gm.RequestExactAlarmPermission();
     }

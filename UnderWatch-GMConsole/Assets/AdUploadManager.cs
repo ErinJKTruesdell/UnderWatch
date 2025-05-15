@@ -71,6 +71,7 @@ public class AdUploadManager : MonoBehaviour
 
     void OnFilesSelected(string[] filePaths)
     {
+        isForAllUsers = false;
         filepaths = filePaths;
         numadstext.text = filePaths.Length + " ad files selected.";
     }
@@ -87,6 +88,8 @@ public class AdUploadManager : MonoBehaviour
 
     public void startUpload()
     {
+        isForAllUsers = false;
+
         if (!isWorking && filepaths != null)
         {
 
@@ -156,8 +159,6 @@ public class AdUploadManager : MonoBehaviour
                 Debug.Log("Response: " + responseText);
                 selectedAdRate = int.Parse(responseText);
                 adRateText.text = "Ads are currently shown every " + selectedAdRate.ToString() + " posts";
-
-
             }
         }
 
@@ -273,6 +274,8 @@ public class AdUploadManager : MonoBehaviour
             form.AddField("advertiser", adName);
             form.AddField("min_level", minDay);
             form.AddField("max_level", maxDay);
+            form.AddField("submit", "submit");
+            Debug.Log("UID: " + uid);
 
             byte[] FileUpload = null;
             bool isError = false;
