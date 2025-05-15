@@ -44,6 +44,11 @@ public class NewsTitleManager : MonoBehaviour
     }
     private void OnEnable()
     {
+        foreach (Transform child in contentParent)
+        {
+            Destroy(child.gameObject);
+        }
+
         clickedToDetails.AddListener(OpenDetailsWindow);
         SpawnNewsObjs();
         if (DayManager.DoesDayContainObjective(DayManager.ObjTypes.announcements) || DayManager.currentDay == 0)
@@ -111,7 +116,6 @@ public class NewsTitleManager : MonoBehaviour
         }
         // Refresh the array so you're not holding references to destroyed components
         newsDataContainers = containersParent.GetComponentsInChildren<NewsDataContainer>();
-
     }
     private void OpenDetailsWindow(NewsObject newsObj)
     {
