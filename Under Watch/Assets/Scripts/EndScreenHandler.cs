@@ -56,5 +56,6 @@ public class EndScreenHandler : MonoBehaviour
     {
         dayDescText.text = FinalDayDesc;
         loginButton.SetActive(false);
+        PlayerPrefs.DeleteAll();
     }
 }

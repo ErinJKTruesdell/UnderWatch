@@ -64,14 +64,18 @@ public class DayManager : MonoBehaviour
             Destroy(gameObject);
         }
         gm = FindObjectOfType<GameManager>();
-
-        VoidStartList();
     }
     private void Start()
     {
         gm.userLoggedOut.AddListener(VoidStartList);
+        gm.scls.userLoggedIn.AddListener(VoidStartList);
+        gm.scls.userLoggedIn.AddListener(DeletePrefs);
         //we have a day 0, so -1
-        maxDays = allDays.Count -1;
+    }
+    void DeletePrefs()
+    {
+        PlayerPrefs.DeleteAll();
+        Debug.Log("clearing all prefs");
     }
     void VoidStartList()
     {
@@ -88,16 +92,16 @@ public class DayManager : MonoBehaviour
         isLoadingLevels = true;
         loadingScreenBlocker.SetActive(true);
 
-        yield return StartCoroutine(LoadLevelNum());
         //yield return StartCoroutine(LoadLevelProgress(currentDay));
-        SetActiveReqs(currentDay);
+        yield return StartCoroutine(LoadCurLevel());
 
-        StartCoroutine(SaveLevelNum());
-        StartCoroutine(SendLevelNum());
+        SetActiveReqs(currentDay);
 
         UpdateAdRate();
         isLoadingLevels = false;
         loadingScreenBlocker.SetActive(false);
+        maxDays = allDays.Count - 1;
+
     }
     public void UpdateReq(int value, ObjTypes reqName, int overrideValue = -1)
     {
@@ -160,13 +164,12 @@ public class DayManager : MonoBehaviour
         currentDay++;
         SetActiveReqs(currentDay);
 
+        NewsButton.firstLoad = true;
+
         //server connections: 
         UpdateAdRate();
-
-        StartCoroutine(SaveLevelNum());
         StartCoroutine(SendLevelData(currentDay));
         StartCoroutine(SendLevelNum());
-
     }
     public Dictionary<ObjTypes, (string name, int progress, int total)> GetCurrentRequirements()
     {
@@ -191,7 +194,7 @@ public class DayManager : MonoBehaviour
 
         AddNewRequirement(2, new List<(ObjTypes, string, int, int)>()
         {
-            (ObjTypes.selfie, "Snap a selfie!", 0, 1), //
+            (ObjTypes.selfie, "Snap another selfie!", 0, 1), //
             (ObjTypes.react, "Show your love for 3 posts!", 0, 3) //
            // (ObjTypes.favorites, "total 3 favorited accounts", 0, 3),
            // (ObjTypes.engagementInbox, "check engagement inbox", 0, 1)
@@ -211,7 +214,7 @@ public class DayManager : MonoBehaviour
         {
             (ObjTypes.selfie, "Snap a selfie in the URBN Center!", 0, 1), //
             (ObjTypes.react, "Show your love for 5 posts!", 0, 5), //
-            (ObjTypes.announcements, "Check your inbox!", 0, 1), //
+            (ObjTypes.announcements, "Read the news in your inbox again!", 0, 1), //
            // (ObjTypes.favorites, "total 5 favorited accounts", 0, 5),
           //  (ObjTypes.engagementInbox, "check engagement inbox", 0 ,1)
         }, 0);
@@ -228,7 +231,7 @@ public class DayManager : MonoBehaviour
         AddNewRequirement(6, new List<(ObjTypes, string, int, int)>()
         {
             (ObjTypes.selfie, "Snap a selfie with the Drexel Dragon!", 0, 1), //
-            (ObjTypes.selfieOthers, "Snap a selfie with 2 people in it!", 0, 1), //
+            (ObjTypes.selfieOthers, "Snap another selfie with 2 people in it!", 0, 1), //
             (ObjTypes.react, "Show your love for 10 posts!", 0, 10), //
             //(ObjTypes.selfieAngle, "post 1 selfie from front angle", 0, 1), //
             (ObjTypes.minutes, "Reach 20 minutes on SnapGram!", 0, 20) //
@@ -257,8 +260,8 @@ public class DayManager : MonoBehaviour
             (ObjTypes.adClicks, "Engage with 10 sponsored posts!", 0, 10), //
             (ObjTypes.minutes, "Reach 45 minutes on SnapGram!", 0, 45), //
             
-            (ObjTypes.privacyPolicy, "Accept our updated privacy policy!", 0, 1), //
-            (ObjTypes.announcements, "Check your inbox!", 0, 1) //
+            (ObjTypes.privacyPolicy, "Accept our new privacy policy!", 0, 1), //
+            (ObjTypes.announcements, "Read the news in your inbox again!", 0, 1) //
         }, 0);
 
         //ad frequency 2
@@ -375,13 +378,13 @@ public class DayManager : MonoBehaviour
             if (!allCompletedReqNames.Contains(completedReq.name))
             {
                 objCompleted++;
+                Debug.Log("req: " + objCompleted + completedReq.name);
                 StartCoroutine(SendLevelData(currentDay));
-
+                Debug.Log("achievement triggerred " + completedReq.name);
                 yield return StartCoroutine(achMan.notificationPopup(completedReq.name + " Check your progress!"));
                 allCompletedReqNames.Add(completedReq.name);
                 allCompletedReqs.Add(completedReq);
 
-                StartCoroutine(SaveLevelNum());
                 StartCoroutine(SendLevelNum());
             }
             else
@@ -413,21 +416,15 @@ public class DayManager : MonoBehaviour
         int reqProg = currentDayReqs.requirements[reqName].total;
         return reqProg;
     }
-    public IEnumerator LoadLevelNum()
+    public IEnumerator LoadCurLevel()
     {
-        currentDay = PlayerPrefs.GetInt("currentDay");
-        objCompleted = PlayerPrefs.GetInt("objectivesCompleted");
+        yield return StartCoroutine(LoadLevelNum());
         yield return new WaitForEndOfFrame();
-    }
-    public IEnumerator SaveLevelNum()
-    {
-        PlayerPrefs.SetInt("currentDay", currentDay);
-        PlayerPrefs.SetInt("objectivesCompleted", objCompleted);
-        PlayerPrefs.Save();
-        yield return null;
     }
     public IEnumerator SendLevelNum()
     {
+        Debug.Log("occuring");
+
         WWWForm form = new WWWForm();
         form.AddField("username", gm.scls.getUsername());
         form.AddField("level", currentDay);
@@ -447,8 +444,11 @@ public class DayManager : MonoBehaviour
             }
         }
     }
-    /*public IEnumerator LoadLevelNum()
+    public IEnumerator LoadLevelNum()
     {
+        while (gm.scls.getUsername() == null)
+            yield return new WaitForSeconds(.1f);
+
         WWWForm form = new WWWForm();
         form.AddField("username", gm.scls.getUsername());
         using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "get-user-level.php", form))
@@ -457,17 +457,25 @@ public class DayManager : MonoBehaviour
 
             if (www.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError("Failed to load level: " + www.error);
+                Debug.Log("Failed to load level: " + www.error);
                 yield break;
             }
             else
             {
                 Debug.Log("response: " + www.downloadHandler.text);
-                int level = Convert.ToInt32(www.downloadHandler.text.Trim());
+                if (www.downloadHandler.text != "")
+                {
+                    string[] partition = www.downloadHandler.text.Split("|");
+
+                    int level = Convert.ToInt32(partition[0]);
+                    currentDay = level;
+                    int objs = Convert.ToInt32(partition[1]);
+                    objCompleted = objs;
+                }
             }
         }
     }
-
+    /*
     public IEnumerator LoadLevelProgress(int level)
     {
         WWWForm form = new WWWForm();
@@ -596,6 +604,8 @@ public class DayManager : MonoBehaviour
     {
         RequirementEventHandler.OnCompletedAllDayReqs += AllDayReqsFulfilled;
         RequirementEventHandler.OnCompletedAReq += UpdateReq;
+
+        
     }
     private void OnDisable()
     {

@@ -6,6 +6,7 @@ using UnityEngine.Events;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using static OnlineMapsGPXObject;
+using UnityEngine.Android;
 
 public class GameManager : MonoBehaviour
 {
@@ -44,6 +45,9 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
+        RequestExactAlarmPermission();
+        RequestAllLocationPermissions();
+
         if (scls == null)
         {
             scls = new SC_LoginSystem();
@@ -152,7 +156,11 @@ public class GameManager : MonoBehaviour
 
     public void LogOut()
     {
-        PlayerPrefs.DeleteAll();
+        PlayerPrefs.DeleteKey("savedUsername");
+        PlayerPrefs.DeleteKey("savedPassword");
+        PlayerPrefs.DeleteKey("currentDay");
+        PlayerPrefs.DeleteKey("objectivesCompleted");
+
         ProgressToScene("LoginScene");
         scls.isLoggedIn = false;
         scls.userName = "";
@@ -264,4 +272,56 @@ public class GameManager : MonoBehaviour
     {
         return activity.Call<AndroidJavaObject>("getSystemService", "alarm");
     }
+
+    public void RequestAllLocationPermissions()
+    {
+        // Foreground location
+        if (!Permission.HasUserAuthorizedPermission(Permission.FineLocation))
+        {
+            Permission.RequestUserPermission(Permission.FineLocation);
+        }
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+        using (AndroidJavaObject activity = GetCurrentActivity())
+        {
+            AndroidJavaObject context = activity.Call<AndroidJavaObject>("getApplicationContext");
+
+            // Check and request ACCESS_BACKGROUND_LOCATION for Android 10+
+            if (GetSDKInt() >= 29)
+            {
+                string backgroundPermission = "android.permission.ACCESS_BACKGROUND_LOCATION";
+                AndroidJavaClass permissionChecker = new AndroidJavaClass("androidx.core.content.ContextCompat");
+                int permissionStatus = permissionChecker.CallStatic<int>("checkSelfPermission", context, backgroundPermission);
+
+                if (permissionStatus != 0) // PERMISSION_GRANTED = 0
+                {
+                    // Show rationale UI before requesting background location if necessary
+                    ShowBackgroundLocationRationale();
+
+                    activity.Call("requestPermissions", new string[] { backgroundPermission }, 101);
+                }
+            }
+        }
+#endif
+    }
+
+    private void ShowBackgroundLocationRationale()
+    {
+        Debug.Log("Explain to user why background location is needed before requesting it.");
+        // You should show a UI panel here that explains why the background location is important.
+    }
+
+    private AndroidJavaObject GetCurrentActivity()
+    {
+        AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        return unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+    }
+
+    private int GetSDKInt()
+    {
+        AndroidJavaClass version = new AndroidJavaClass("android.os.Build$VERSION");
+        return version.GetStatic<int>("SDK_INT");
+    }
+
+
 }

@@ -108,6 +108,7 @@ MonoBehaviour:
   pfpImage: {fileID: 8576007353430526066}
   colorFrame: {fileID: 999130512727177240}
   bgTex: {fileID: 2800000, guid: 86fc385f383321449b999c971072afd7, type: 3}
+  snapPFPTex: {fileID: 2800000, guid: b39e91f46348d4448897408dc9e02a7c, type: 3}
   adButton: {fileID: 5722899357728616398}
   pfpButton: {fileID: 8692282527625510142}
   reacts:

@@ -83,7 +83,9 @@ namespace InfinityCode.OnlineMapsExamples
             // Save the version number and the date of the last check.
             PlayerPrefs.SetString(VERSION_KEY, version);
             PlayerPrefs.SetString(LAST_CHECK_KEY, DateTime.Now.ToString("yyyy-MM-dd"));
-            
+
+            PlayerPrefs.Save();
+
             // Set the version number to the map.
             map.activeType["version"] = version;
         }

@@ -36,6 +36,7 @@ public class RegistrationManager : MonoBehaviour
     public ActivityStarter activityStarter;
 #endif
     public static GameManager gm;
+    public static DayManager dayMan;
 
     public int socialFeedIndex;
 
@@ -84,7 +85,8 @@ public class RegistrationManager : MonoBehaviour
     public void Start()
     {
 
-        gm.RequestExactAlarmPermission();
+        //gm.RequestExactAlarmPermission();
+        //gm.RequestAllLocationPermissions();
 
         regTextFields.transform.DOLocalMoveX(1400f, .5f).From().SetEase(Ease.OutQuad)
             .OnComplete(() => originalPos.Add(regTextFields.transform.localPosition)); 
@@ -436,6 +438,7 @@ public class RegistrationManager : MonoBehaviour
                     loginSystem.loginUponRegister(username.text, email.text, pointsStart, password.text);
                     loginSystem.SetLoginPrefs(email.text, password.text, true);
                     privacyPolicy.SetActive(true);
+                    StartCoroutine(dayMan.SendLevelNum());
                 }
                 else
                 {

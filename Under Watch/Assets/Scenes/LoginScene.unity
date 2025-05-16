@@ -421,7 +421,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: You achieved something!
+  m_text: You achieved something! You achieved something!You achieved something!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c4275f27d52e7419bb2ba3153a4e0842, type: 2}
   m_sharedMaterial: {fileID: -7881088334622637832, guid: c4275f27d52e7419bb2ba3153a4e0842, type: 2}
@@ -514,8 +514,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 33.69055}
-  m_SizeDelta: {x: -50, y: 48.5}
+  m_AnchoredPosition: {x: 0, y: 45.745}
+  m_SizeDelta: {x: -50, y: 74.392}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &294599839
 GameObject:
@@ -772,6 +772,9 @@ MonoBehaviour:
   errorText: {fileID: 490063105}
   userName: 
   userEmail: 
+  userLoggedIn:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &386920555
 Transform:
   m_ObjectHideFlags: 0
@@ -2862,7 +2865,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 105}
+  m_AnchoredPosition: {x: 0, y: 130}
   m_SizeDelta: {x: -50, y: 94.1189}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1406555683

@@ -66,6 +66,8 @@ public class SF_ReactionEmoji : MonoBehaviour
         //if this reaction has been liked by any user
         else if (reactNum > 0)
         {
+            userClicked = false;
+
             Debug.Log("reacted by others" + parentCell._postItem.ReactNumDict[reactName].Item2);
             LikeSetup();
             greyBanner.color = neutralGrey;
@@ -78,6 +80,8 @@ public class SF_ReactionEmoji : MonoBehaviour
         }
         else
         {
+            userClicked = false;
+
             ResetText();
             greyEmoji.color = Color.white;
             colorEmoji.SetActive(false);
@@ -159,7 +163,6 @@ public class SF_ReactionEmoji : MonoBehaviour
     }
     void FillLikeData()
     {
-        userClicked = true;
 
         reactNum++;
         reactNumText.text = reactNum.ToString();
@@ -192,11 +195,19 @@ public class SF_ReactionEmoji : MonoBehaviour
     //this feels dangerous, could the user spam like/unlikes and crash the app?
     private IEnumerator SendLikeDataToServer()
     {
+        while (parentCell.postID == null || parentCell.scls.getUsername() == null)
+        {
+            yield return new WaitForSeconds(.2f);
+        }
+
+        string postID = parentCell.postID;
+        string un = parentCell.scls.getUsername();
+
         WWWForm form = new WWWForm();
 
-        form.AddField("username", parentCell.scls.getUsername());
+        form.AddField("username", un);
         form.AddField("react", reactName);
-        form.AddField("post_id", parentCell.postID);
+        form.AddField("post_id", postID);
 
         //I dont think the like count is getting incremented
 

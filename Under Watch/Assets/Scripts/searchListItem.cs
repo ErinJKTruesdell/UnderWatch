@@ -13,6 +13,7 @@ public class searchListItem : MonoBehaviour
     public void ClickOnProfile()
     {
         PlayerPrefs.SetString("SearchedUNs", SearchScript.prevSearches += usernameText.text.ToLower());
+        PlayerPrefs.Save();
 
         ShowClickedProfile.userName = transform.GetChild(0).GetComponent<TextMeshProUGUI>().text;
         ShowClickedProfile.sceneCameFrom = SceneManager.GetActiveScene().name;

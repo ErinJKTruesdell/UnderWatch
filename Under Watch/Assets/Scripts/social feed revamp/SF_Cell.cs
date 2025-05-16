@@ -29,6 +29,7 @@ public class SF_Cell : MonoBehaviour, ICell
 
     public UnityEngine.UI.Image colorFrame;
     public Texture2D bgTex;
+    public Texture2D snapPFPTex;
 
     //Model - is this taking up significant memory?
     public SFPostItem _postItem;
@@ -82,17 +83,18 @@ public class SF_Cell : MonoBehaviour, ICell
         _cellIndex = cellIndex;
         _postItem = postItem;
 
-        postID = postItem.postID;
-        postIDText.text = postID;
-        unText.text = postItem.username;
+        StartCoroutine(LoadPostID());
+        StartCoroutine(LoadPostUN());
 
         if (postItem.isAd)
         {
+            pfpImage.texture = snapPFPTex;
+
             adButton.enabled = true;
-            adLink = postItem.adLink;
             locText.text = "Click to engage with Sponsor";
 
-            StartCoroutine(LoadPostImages(true));
+            StartCoroutine(LoadPostAdURL());
+            StartCoroutine(LoadPostImage());
 
             if (!loadedPosts.Contains(cellIndex))
             {
@@ -111,15 +113,8 @@ public class SF_Cell : MonoBehaviour, ICell
             locText.text = "";
             adButton.enabled = false;
 
-            if (postItem.postPhoto == null || postItem.pfpPhoto == null)
-            {
-                StartCoroutine(LoadPostImages(false));
-            }
-            else
-            {
-                postImage.texture = postItem.postPhoto;
-                pfpImage.texture = postItem.pfpPhoto;
-            }
+            StartCoroutine(LoadPostImage());
+            StartCoroutine(LoadPfpImage());
         }
 
         _postItem.ReactNumDict = postItem.ReactNumDict;
@@ -128,26 +123,49 @@ public class SF_Cell : MonoBehaviour, ICell
             react.LoadReacts();
         }
     }
-    IEnumerator LoadPostImages(bool isAd)
+    IEnumerator LoadPostID()
     {
+        while (_postItem.postID == null)
+            yield return new WaitForSeconds(.1f);
+        postID = _postItem.postID;
+        postIDText.text = postID;
+    }
+    IEnumerator LoadPostUN()
+    {
+        while (_postItem.username == null)
+            yield return new WaitForSeconds(.1f);
+
+        unText.text = _postItem.username;
+    }
+    IEnumerator LoadPostAdURL()
+    {
+        while (_postItem.username == null)
+            yield return new WaitForSeconds(.1f);
+
+        adLink = _postItem.adLink;
+    }
+
+    IEnumerator LoadPostImage()
+    {
+        postImage.texture = bgTex;
+
         while (_postItem.postPhoto == null)
         {
             yield return new WaitForSeconds(.1f);
-            pfpImage.texture = bgTex;
         }
         postImage.texture = _postItem.postPhoto;
-        if (!isAd)
-        {
-            while (_postItem.pfpPhoto == null)
-            {
-                yield return new WaitForSeconds(.1f);
-            }
-            pfpImage.texture = _postItem.pfpPhoto;
-        }
-        else
-            pfpImage.texture = bgTex;
-
     }
+    IEnumerator LoadPfpImage()
+    {
+        pfpImage.texture = bgTex;
+
+        while (_postItem.pfpPhoto == null)
+        {
+            yield return new WaitForSeconds(.1f);
+        }
+        pfpImage.texture = _postItem.pfpPhoto;
+    }
+
     private void SetCellColor(int index)
     {
         index %= 3;

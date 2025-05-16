@@ -2859,8 +2859,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5618791209803942633}
   - {fileID: 7818131710586179344}
+  - {fileID: 5618791209803942633}
   - {fileID: 8817453049959286950}
   - {fileID: 5206904883370491457}
   - {fileID: 6132973810554717166}
@@ -3114,7 +3114,7 @@ GameObject:
   - component: {fileID: 2297032827837387592}
   - component: {fileID: 1694422287982258776}
   - component: {fileID: 1205171690092164358}
-  - component: {fileID: 6216941158765633852}
+  - component: {fileID: 527672903946005388}
   m_Layer: 5
   m_Name: NewsPopup
   m_TagString: Untagged
@@ -3129,7 +3129,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7297577307636412595}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3140,8 +3140,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 3.7609}
-  m_SizeDelta: {x: -80, y: 1288.5}
+  m_AnchoredPosition: {x: 0, y: -0.00002527237}
+  m_SizeDelta: {x: 0, y: 1288.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2297032827837387592
 CanvasRenderer:
@@ -3194,7 +3194,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 0
---- !u!114 &6216941158765633852
+--- !u!114 &527672903946005388
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3906,7 +3906,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6216941158765633852}
+      - m_Target: {fileID: 527672903946005388}
         m_TargetAssemblyTypeName: NewsTitleManager, Assembly-CSharp
         m_MethodName: CloseDetailsWindow
         m_Mode: 1
@@ -4055,7 +4055,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6216941158765633852}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: NewsTitleManager, Assembly-CSharp
         m_MethodName: CloseDetailsWindow
         m_Mode: 1
@@ -4234,7 +4234,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1881534070420041712, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
       propertyPath: subtitle
-      value: Click on them to interact
+      value: 'Your data is handled in a safe and legal manner! Read our full statement
+        here! '
       objectReference: {fileID: 0}
     - target: {fileID: 2068048972840628376, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
       propertyPath: m_Pivot.x
@@ -4552,7 +4553,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1881534070420041712, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
       propertyPath: subtitle
-      value: So excited to have you!
+      value: 'Your new digital home! Welcome to the SnapGram family! '
       objectReference: {fileID: 0}
     - target: {fileID: 2068048972840628376, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
       propertyPath: m_Pivot.x
@@ -4695,7 +4696,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1881534070420041712, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
       propertyPath: subtitle
-      value: Read on to find out more!
+      value: 'Making SnapGram smoother, smarter, and more fun than ever! Click to
+        learn more! '
       objectReference: {fileID: 0}
     - target: {fileID: 2068048972840628376, guid: b57e20b9f2df91e42a4c142e53793094, type: 3}
       propertyPath: m_Pivot.x

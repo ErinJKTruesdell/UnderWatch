@@ -159,6 +159,8 @@ namespace InfinityCode.OnlineMapsExamples
             
             // Save settings to PlayerPrefs
             PlayerPrefs.SetString(key, json.ToString());
+            PlayerPrefs.Save();
+
         }
     }
 }

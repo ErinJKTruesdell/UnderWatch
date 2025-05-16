@@ -98,8 +98,6 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
             SFPostItem emptyObj = emptyItemsQueue.Dequeue();
             yield return StartCoroutine(GetRequest(emptyObj, localTimestamp));  // Waits for download to finish
             localTimestamp = currentPhotoTimestamp; // currentPhotoTimestamp is updated in GetRequest
-
-            Debug.Log("added post: " + emptyObj.postPhoto + " added pfp: " + emptyObj.pfpPhoto);
         }
         if (isFirstLoad)
             _recyclableScrollRect.ReloadData();  // Notify scroll list that data is ready

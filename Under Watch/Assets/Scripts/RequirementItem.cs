@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RequirementItem : MonoBehaviour
 {
     public TMP_Text titleText;
     public TMP_Text completionText;
-    public GameObject checkImage;
+    public Image checkImage;
     public GameObject crossImage;
 
     //configitem is called everytime the LocalRequirementManager is enabled
@@ -20,7 +21,7 @@ public class RequirementItem : MonoBehaviour
         if (progress >= total)
         {
             completionText.text = $"{total} / {total}";
-            checkImage.SetActive(true);
+            checkImage.enabled =  true;
             crossImage.SetActive(true);
         }
         else

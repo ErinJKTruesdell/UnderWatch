@@ -16,6 +16,8 @@ public class AchieveMonitor : MonoBehaviour
     {
         adClicks += num;
         PlayerPrefs.SetInt("adClicks", adClicks);
+        PlayerPrefs.Save();
+
         achMan.UpdateAchievement(title: "Super Supporter", tierThresholds: achMan.superSupporterTiers, counterVar: adClicks, achIndex: 0, descStart: "click on", descEnd: "ads", winDesc: "you've clicked all the ads!");
 
     }
@@ -24,6 +26,8 @@ public class AchieveMonitor : MonoBehaviour
     {
         favorites++;
         PlayerPrefs.SetInt("favorites", favorites);
+        PlayerPrefs.Save();
+
         achMan.UpdateAchievement(title: "Social Butterfly", tierThresholds: achMan.socialButterflyTiers, counterVar: favorites, achIndex: 1, descStart: "favorite", descEnd: "player profiles", winDesc: "you're a real buttefly!");
 
     }
@@ -32,6 +36,8 @@ public class AchieveMonitor : MonoBehaviour
     {
         minutes += Convert.ToInt32(mins);
         PlayerPrefs.SetInt("minutes", minutes);
+        PlayerPrefs.Save();
+
         achMan.UpdateAchievement(title: "I Spy Master", tierThresholds: achMan.iSpyMasterTiers, counterVar: minutes, achIndex: 1, descStart: "interact with the feed for", descEnd: "minutes", winDesc: "you're practically [INSERT COPYRIGHT FREE SPY NAME]!");
 
     }

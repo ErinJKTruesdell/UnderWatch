@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.Events;
 
 public class SC_LoginSystem : MonoBehaviour
 {
@@ -57,6 +58,8 @@ public class SC_LoginSystem : MonoBehaviour
     public EventArgs e = null;
     public delegate void TargetHandler(string m, EventArgs e);
 
+    public UnityEvent userLoggedIn = new();
+
     void Start()
     {
         LoginButton.transform.DOLocalMoveY(-1000, .7f).From().SetEase(Ease.OutQuad);
@@ -100,6 +103,8 @@ public class SC_LoginSystem : MonoBehaviour
         userEmail = email;
         isLoggedIn = true;
         StartCoroutine(doTargetAssignment(userName, points));
+
+        userLoggedIn?.Invoke();
     }
 
     public void showLoginFields()
@@ -246,6 +251,8 @@ public class SC_LoginSystem : MonoBehaviour
 
         PlayerPrefs.SetString("savedUsername", email);
         PlayerPrefs.SetString("savedPassword", password);
+
+        PlayerPrefs.Save();
         Debug.Log("User login data successfully cached");
 
     }
@@ -455,6 +462,7 @@ public class SC_LoginSystem : MonoBehaviour
                     ResetValues();
                     gm.saveLoginTime();
                     canvasElement.transform.DOLocalMoveY(Screen.height * 3, .7f).SetEase(Ease.OutQuad).OnComplete(() => gm.ProgressToScene("SocialFeed"));
+                    userLoggedIn?.Invoke();
 
                     //store registration information 
                     if (isCached == false)
