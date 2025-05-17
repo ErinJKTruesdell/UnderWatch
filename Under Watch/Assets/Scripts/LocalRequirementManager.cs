@@ -34,6 +34,7 @@ public class LocalRequirementManager : MonoBehaviour
     //objs
     public Transform gridObj;
     public GameObject goNextButton;
+    public GameObject confirmNextDayObj;
 
     private void Awake()
     {
@@ -56,6 +57,14 @@ public class LocalRequirementManager : MonoBehaviour
     public void NextDayAvailable()
     {
         //goNextButton.SetActive(true);
+    }
+    public void ConfirmNextDay()
+    {
+        confirmNextDayObj.SetActive(true);
+    }
+    public void CloseConfimPopup()
+    {
+        confirmNextDayObj.SetActive(false);
     }
     public void EndDay()
     {
