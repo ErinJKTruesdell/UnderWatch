@@ -589,6 +589,9 @@ public class DayManager : MonoBehaviour
             {
                 string errorMessage = www.error;
                 Debug.Log(errorMessage);
+
+                yield return new WaitForSeconds(10);
+                setAdRate(adrate);
             }
             else
             {
