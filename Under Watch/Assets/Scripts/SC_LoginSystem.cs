@@ -68,8 +68,6 @@ public class SC_LoginSystem : MonoBehaviour
 
         Application.targetFrameRate = 60; // Or Application.targetFrameRate = Screen.currentResolution.refreshRate;
 
-        gm.RequestExactAlarmPermission();
-
         // attempt login with any saved information
         if (PlayerPrefs.GetString("savedUsername", "") != "" || PlayerPrefs.GetString("savedPassword", "") != "")
         {
@@ -482,14 +480,6 @@ public class SC_LoginSystem : MonoBehaviour
 
         isWorking = false;
         //gm.ProgressToScene("SocialFeed");
-    }
-
-    public void RecordLocation()
-    {
-        if (isLoggedIn)
-        {
-            StartCoroutine(GetAndSendLocationData());
-        }
     }
 
     public IEnumerator sendResetRequest(string email)

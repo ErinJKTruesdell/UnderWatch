@@ -45,9 +45,6 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        RequestExactAlarmPermission();
-        RequestAllLocationPermissions();
-
         if (scls == null)
         {
             scls = new SC_LoginSystem();
@@ -226,91 +223,6 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    public void RequestExactAlarmPermission()
-    {
-        if (UnityEngine.Application.platform == RuntimePlatform.Android)
-        {
-            using (AndroidJavaObject activity = GetUnityActivity())
-            {
-                using (AndroidJavaObject alarmManager = GetAlarmManager(activity))
-                {
-                    bool canScheduleExactAlarms = alarmManager.Call<bool>("canScheduleExactAlarms");
-                    if (!canScheduleExactAlarms)
-                    {
-                        // Request permission by opening the settings screen
-                        using (AndroidJavaClass settings = new AndroidJavaClass("android.provider.Settings"))
-                        {
-                            string action = settings.GetStatic<string>("ACTION_REQUEST_SCHEDULE_EXACT_ALARM");
-                            using (AndroidJavaObject intent = new AndroidJavaObject("android.content.Intent", action))
-                            {
-                                activity.Call("startActivity", intent);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Debug.Log("Exact Alarm permission already granted.");
-                    }
-                }
-            }
-        }
-        else
-        {
-            Debug.LogWarning("Platform is not Android. Exact Alarm permission request is skipped.");
-        }
-    }
-
-    private AndroidJavaObject GetUnityActivity()
-    {
-        using (AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
-        {
-            return unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
-        }
-    }
-
-    private AndroidJavaObject GetAlarmManager(AndroidJavaObject activity)
-    {
-        return activity.Call<AndroidJavaObject>("getSystemService", "alarm");
-    }
-
-    public void RequestAllLocationPermissions()
-    {
-        // Foreground location
-        if (!Permission.HasUserAuthorizedPermission(Permission.FineLocation))
-        {
-            Permission.RequestUserPermission(Permission.FineLocation);
-        }
-
-#if UNITY_ANDROID && !UNITY_EDITOR
-        using (AndroidJavaObject activity = GetCurrentActivity())
-        {
-            AndroidJavaObject context = activity.Call<AndroidJavaObject>("getApplicationContext");
-
-            // Check and request ACCESS_BACKGROUND_LOCATION for Android 10+
-            if (GetSDKInt() >= 29)
-            {
-                string backgroundPermission = "android.permission.ACCESS_BACKGROUND_LOCATION";
-                AndroidJavaClass permissionChecker = new AndroidJavaClass("androidx.core.content.ContextCompat");
-                int permissionStatus = permissionChecker.CallStatic<int>("checkSelfPermission", context, backgroundPermission);
-
-                if (permissionStatus != 0) // PERMISSION_GRANTED = 0
-                {
-                    // Show rationale UI before requesting background location if necessary
-                    ShowBackgroundLocationRationale();
-
-                    activity.Call("requestPermissions", new string[] { backgroundPermission }, 101);
-                }
-            }
-        }
-#endif
-    }
-
-    private void ShowBackgroundLocationRationale()
-    {
-        Debug.Log("Explain to user why background location is needed before requesting it.");
-        // You should show a UI panel here that explains why the background location is important.
-    }
-
     private AndroidJavaObject GetCurrentActivity()
     {
         AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");

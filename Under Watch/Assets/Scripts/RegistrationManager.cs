@@ -32,9 +32,6 @@ public class RegistrationManager : MonoBehaviour
     public Texture2D defaultPfp;
 
     public static SC_LoginSystem loginSystem;
-#if UNITY_ANDROID
-    public ActivityStarter activityStarter;
-#endif
     public static GameManager gm;
     public static DayManager dayMan;
 
@@ -84,10 +81,6 @@ public class RegistrationManager : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
-
-        //gm.RequestExactAlarmPermission();
-        //gm.RequestAllLocationPermissions();
-
         regTextFields.transform.DOLocalMoveX(1400f, .5f).From().SetEase(Ease.OutQuad)
             .OnComplete(() => originalPos.Add(regTextFields.transform.localPosition)); 
         nextButton.transform.DOLocalMoveX(1400f, .5f).From().SetEase(Ease.OutQuad)
@@ -223,14 +216,6 @@ public class RegistrationManager : MonoBehaviour
         }
         else if (camAvailable)
         {
-#if UNITY_ANDROID
-            if (UnityEngine.Application.platform == RuntimePlatform.Android)
-            {
-                if (activityStarter == null)
-                    activityStarter = FindObjectOfType<ActivityStarter>();
-                activityStarter.setAlarms();
-            }
-#endif
             webcam.Play();
             camMesh.material.SetTexture("_MainTex", webcam);
             pfpPath = "";
