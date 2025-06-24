@@ -103,7 +103,6 @@ public class SF_ReactionEmoji : MonoBehaviour
         else
         {
             userClicked = true;
-            HandleLevelRequirements();
             LikeSetup();
             FillLikeData();
             ColorizeBanner();
@@ -112,17 +111,6 @@ public class SF_ReactionEmoji : MonoBehaviour
         reactionInProgress = false;
     }
 
-    void HandleLevelRequirements()
-    {
-        if (DayManager.DoesDayContainObjective(DayManager.ObjTypes.react))
-        {
-            if (!DayManager.reactedPostIDs.Contains(parentCell.postID))
-            {
-                DayManager.reactedPostIDs.Add(parentCell.postID);
-                RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.react);
-            }
-        }
-    }
     void ResetText()
     {
         reactNumText.fontSize = 15;

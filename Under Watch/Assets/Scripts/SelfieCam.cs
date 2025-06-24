@@ -142,8 +142,6 @@ public class SelfieCam : MonoBehaviour
 
     IEnumerator SelfieUpload(string path)
     {
-        DetermineObjectives();
-        StartCoroutine(GetLocation());
         float latitude = Input.location.lastData.latitude;
         float longitude = Input.location.lastData.longitude;
 
@@ -203,72 +201,12 @@ public class SelfieCam : MonoBehaviour
             Debug.Log("File does not exist");
         }
     }
-
-    void DetermineObjectives()
-    {
-        isOtherSelfie = false;
-        facesExpected = 0;
-        isAngleSelfie = false;
-        isLocSelfie = false;
-        isNormalSelfie = false;
-
-        if (DayManager.DoesDayContainObjective(DayManager.ObjTypes.selfieAngle))
-        {
-            isAngleSelfie = true;
-        }
-        if (DayManager.DoesDayContainObjective(DayManager.ObjTypes.selfieOthers))
-        {
-            isOtherSelfie = true;
-            //determine # others expected
-            facesExpected = DayManager.currentDayReqs._expectedFaces;
-        }
-        if (DayManager.DoesDayContainObjective(DayManager.ObjTypes.selfieLocation))
-        {
-            isLocSelfie = true;
-        }
-        if (DayManager.DoesDayContainObjective(DayManager.ObjTypes.selfie))
-        {
-            isNormalSelfie = true;
-        }
-    }
-
     void HandleResponseForObjectives(string response, bool approval)
     {
         string[] dataPartition = response.Split("|");
         string faceCount = dataPartition[7];
 
-        bool angleApproved = dataPartition[8].Contains("ANGLE");
-        bool othersApproved = dataPartition[9].Contains("OTHERS");
-        bool locApproved = dataPartition[10].Contains("LOC");
         bool normalApproved = dataPartition[11].Contains("NORMAL");
-
-
-        if (isAngleSelfie)
-        {
-            RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.selfieAngle);
-        }
-        if (normalApproved)
-        {
-            RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.selfie);
-        }
-        if (othersApproved == true)
-        {
-            responseText.text = faceCount + " people detected in selfie!";
-            RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.selfieOthers);
-        }
-        else if (isOtherSelfie)
-        {
-            responseText.text = faceCount += " people detected in selfie. Please try again.";
-        }
-        if (locApproved)
-        {
-            RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.selfieLocation);
-            responseText.text = "Correct location detected!";
-        }
-        else if (isLocSelfie)
-        {
-            responseText.text += " Incorrect location detected. Please try again.";
-        }
     }
 
     private Texture2D EncodePhoto()
@@ -286,20 +224,6 @@ public class SelfieCam : MonoBehaviour
         tex.ReadPixels(new Rect(topLeft, scaledSize), 0, 0);
         tex.Apply();
         return tex;
-    }
-
-    IEnumerator GetLocation()
-    {
-        //get last location
-        Input.location.Start();
-
-        // Waits until the location service initializes
-        int maxWait = 20;
-        while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
-        {
-            yield return new WaitForSeconds(1);
-            maxWait--;
-        }
     }
 
     public void HandleStartingUIResponse(string responseText)
@@ -397,30 +321,6 @@ public class SelfieCam : MonoBehaviour
             approval = false;
         }
         HandleResponseForObjectives(jsonResponse, approval);
-
-
-        /*bool match = false;
-
-        try
-        {
-            var response = JsonUtility.FromJson<ServerResponse>(jsonResponse);
-            match = response.match;
-            Debug.Log("114" + response);
-        }
-        catch
-        {
-            responseText.text = "Error parsing server response.";
-            return;
-        }*/
-
-        /*if (match)
-        {
-            responseText.text = "Verification successful";
-        }
-        else
-        {
-            responseText.text = "Verification failed, re-upload or try a different image.";
-        }*/
     }
 
     IEnumerator downloadImageFromURL(string url1, searchListItem li)

@@ -8,8 +8,6 @@ using UnityEngine.UI;
 
 public class ProfileUpdateManager : MonoBehaviour
 {
-
-
     public TMP_Text errorText;
 
     public RawImage profPic;
