@@ -72,24 +72,24 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Social Feed Closed");
         //upload social feed
-        if(scls.getUsername() != null)
+        if(SC_LoginSystem.getUsername() != null)
         {
             double timeinMinutes = Math.Round((DateTime.Now - openSocialFeedTime).TotalMinutes, 2);
-            StartCoroutine(sendSocialTimeToDatabase(timeinMinutes, scls.getUsername()));
+            StartCoroutine(sendSocialTimeToDatabase(timeinMinutes, SC_LoginSystem.getUsername()));
         }
 
     }
 
     void saveAppTime() //called on pause and on quit
     {
-        if (scls.getUsername() != null)
+        if (SC_LoginSystem.getUsername() != null)
         {
             double timeinMinutes = Math.Round((DateTime.Now - loginTime).TotalMinutes, 2);
             if (SceneManager.GetActiveScene().name == "SocialFeed")
             {
                 onSocialFeedClosed();
             }
-            StartCoroutine(sendAppTimeToDatabase(timeinMinutes, scls.getUsername()));
+            StartCoroutine(sendAppTimeToDatabase(timeinMinutes, SC_LoginSystem.getUsername()));
         }
     }
 
@@ -160,7 +160,7 @@ public class GameManager : MonoBehaviour
 
         ProgressToScene("LoginScene");
         scls.isLoggedIn = false;
-        scls.userName = "";
+        SC_LoginSystem.userName = "";
         scls.userEmail = "";
 
         userLoggedOut?.Invoke();

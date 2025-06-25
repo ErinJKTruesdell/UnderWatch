@@ -214,7 +214,6 @@ public class SF_Cell : MonoBehaviour, ICell
     public void AdClick()
     {
         Debug.Log("ad clicked");
-        RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.adClicks);
         if (adLink != "")
         {
             Application.OpenURL(adLink);

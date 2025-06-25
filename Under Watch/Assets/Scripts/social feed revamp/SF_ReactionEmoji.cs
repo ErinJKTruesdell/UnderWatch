@@ -103,7 +103,6 @@ public class SF_ReactionEmoji : MonoBehaviour
         else
         {
             userClicked = true;
-            HandleLevelRequirements();
             LikeSetup();
             FillLikeData();
             ColorizeBanner();
@@ -112,17 +111,6 @@ public class SF_ReactionEmoji : MonoBehaviour
         reactionInProgress = false;
     }
 
-    void HandleLevelRequirements()
-    {
-        if (DayManager.DoesDayContainObjective(DayManager.ObjTypes.react))
-        {
-            if (!DayManager.reactedPostIDs.Contains(parentCell.postID))
-            {
-                DayManager.reactedPostIDs.Add(parentCell.postID);
-                RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.react);
-            }
-        }
-    }
     void ResetText()
     {
         reactNumText.fontSize = 15;
@@ -195,13 +183,13 @@ public class SF_ReactionEmoji : MonoBehaviour
     //this feels dangerous, could the user spam like/unlikes and crash the app?
     private IEnumerator SendLikeDataToServer()
     {
-        while (parentCell.postID == null || parentCell.scls.getUsername() == null)
+        while (parentCell.postID == null || SC_LoginSystem.getUsername() == null)
         {
             yield return new WaitForSeconds(.2f);
         }
 
         string postID = parentCell.postID;
-        string un = parentCell.scls.getUsername();
+        string un = SC_LoginSystem.getUsername();
 
         WWWForm form = new WWWForm();
 

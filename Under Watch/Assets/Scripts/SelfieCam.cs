@@ -19,79 +19,52 @@ public class SelfieCam : MonoBehaviour
     public MeshRenderer camMesh;
     WaitForEndOfFrame frameEnd = new WaitForEndOfFrame();
 
-    public GameManager gm;
-    public SC_LoginSystem scls;
-
-    public GameObject testBox;
     public GameObject overlay;
 
     public TextMeshProUGUI responseText;
-    public GameObject blockingPanel;
-    public GameObject closeButton;
-
-    public TextMeshProUGUI unText;
-    public TextMeshProUGUI targetUNText;
-    public RawImage targetPfpImage;
-
-    public searchListItem userListing = new();
-
-    private Coroutine processingCoroutine;
-
-    private bool isOtherSelfie = false;
-    public int facesExpected = 1;
-    private bool isAngleSelfie = false;
-    private bool isLocSelfie = false;
-    private bool isNormalSelfie = false;
-    
-    bool approval = false;
 
     Vector3 currentLocalEurlerAngles = Vector3.zero;
+
+    public SelfieUploader selfieUploader;
+    public RegistrationManager regManager;
 
     void OnEnable()
     {
         InitWebcam();
-
-        gm = FindObjectOfType<GameManager>();
-        if (gm == null)
-        {
-            gm = new GameManager();
-        }
-        scls = gm.scls;
-
-        if (scls != null)
-        {
-            scls.Target += new SC_LoginSystem.TargetHandler(showNewTarget);
-        }
-        else
-        {
-            //responseText.color = Color.red;
-            //responseText.text = "No target found!";
-        }
     }
 
-    void InitWebcam()
+    public void InitWebcam()
     {
         overlay.SetActive(true);
         devices = WebCamTexture.devices;
-        WebCamDevice frontCamera;
         if (devices.Length > 1)
         {
-            for (int i = 1; i < devices.Length; i++)
+            foreach(var device in devices)
             {
-                if (devices[i].isFrontFacing)
+                if (device.isFrontFacing)
                 {
-                    frontCamera = devices[i];
-                    break;
+                    webcam = new WebCamTexture(device.name);
+
+                    if (webcam != null)
+                    {
+                        break;
+                    }
                 }
             }
-            if (devices[1].name != " ")
+            if (Application.isEditor)
+            {
+                webcam = new WebCamTexture(devices[1].name);
+                Debug.Log("starting webcam: " + devices[1].name);
+            }
+
+            /*if (device[1].name != " ")
             {
                 if (UnityEngine.Application.platform == RuntimePlatform.Android)
                     webcam = new WebCamTexture(devices[1].name);
                 else
                     webcam = new WebCamTexture(devices[1].name);
                 Debug.Log("cam: " + devices[1].name);
-            }
+            }*/
 
             webcam.Play();
             camMesh.material.SetTexture("_MainTex", webcam);
@@ -101,176 +74,28 @@ public class SelfieCam : MonoBehaviour
             responseText.color = Color.red;
             responseText.text = "No camera detected";
         }
-
     }
 
-    public void showNewTarget(string s, EventArgs e)
-    {
-        if (s.Contains("Success"))
-        {
-            testBox.SetActive(true);
-        }
-    }
     public IEnumerator takeSnap()
     {
         yield return frameEnd;
-        if (scls != null)
+        byte[] bytes = EncodePhoto().EncodeToPNG();
+        string loggedInUser = SC_LoginSystem.getUsername();
+
+        string filename = loggedInUser + "-" + DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day + "-" + DateTime.Now.Hour + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Second + ".png";
+        string path = Application.persistentDataPath + filename;
+        System.IO.File.WriteAllBytes(path, bytes);
+
+        Debug.Log("File Upload Coroutine");
+        if (selfieUploader != null)
         {
-            byte[] bytes = EncodePhoto().EncodeToPNG();
-            string loggedInUser = scls.getUsername();
-
-            string filename = loggedInUser + "-" + DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day + "-" + DateTime.Now.Hour + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Second + ".png";
-            string path = Application.persistentDataPath + filename;
-            System.IO.File.WriteAllBytes(path, bytes);
-
-            Debug.Log("File Upload Coroutine");
-            if (gm.scls != null && gm.scls.getIsLoggedIn())
-            {
-                responseText.text = "Verifying Image...";
-
-                //checks if null, if not start
-                processingCoroutine ??= StartCoroutine(ShowProcessingAnimation());
-
-                blockingPanel.SetActive(true);
-                unText.text = "@" + loggedInUser;
-
-                StartCoroutine(SelfieUpload(path));
-
-            }
+            StartCoroutine(selfieUploader.SelfieUpload(path));
+        }
+        if (regManager != null)
+        {
+            //do the registration camera stuff
         }
     }
-
-    IEnumerator SelfieUpload(string path)
-    {
-        DetermineObjectives();
-        StartCoroutine(GetLocation());
-        float latitude = Input.location.lastData.latitude;
-        float longitude = Input.location.lastData.longitude;
-
-        if (File.Exists(path))
-        {
-            Debug.Log("File exists! Uploading Form...");
-
-            WWWForm form = new WWWForm();
-
-            string[] imageNames = path.Split("/");
-            string imageName = imageNames[imageNames.Length - 1];
-            form.AddBinaryData("file", File.ReadAllBytes(path), imageName);
-
-            form.AddField("username", scls.getUsername());
-
-            //always send location
-            form.AddField("latitude", latitude.ToString());
-            form.AddField("longitude", longitude.ToString());
-
-            form.AddField("angle_selfie", isAngleSelfie.ToString());
-            form.AddField("others_selfie", isOtherSelfie.ToString());
-            form.AddField("loc_selfie", isLocSelfie.ToString());
-            form.AddField("faces_expected", facesExpected);
-
-            UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "uploadImage.php", form);
-            Debug.Log("Sending web request...");
-
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                approval = false;
-                responseText.text = "Error: " + www.error;
-
-                Debug.Log(www.error);
-
-                if (processingCoroutine != null)
-                {
-                    StopCoroutine(processingCoroutine);
-                    processingCoroutine = null;
-                }
-                closeButton.SetActive(true);
-            }
-            else
-            {
-                Debug.Log("result: " + www.result);
-                Debug.Log("response: " + www.downloadHandler.text);
-
-                //Debug.Log("Form upload complete! " + System.Text.Encoding.ASCII.GetString(www.downloadHandler.data));
-                HandleServerResponse(www.downloadHandler.text);
-                HandleStartingUIResponse(www.downloadHandler.text);
-                closeButton.SetActive(true);
-            }
-        }
-        else
-        {
-            Debug.Log("File does not exist");
-        }
-    }
-
-    void DetermineObjectives()
-    {
-        isOtherSelfie = false;
-        facesExpected = 0;
-        isAngleSelfie = false;
-        isLocSelfie = false;
-        isNormalSelfie = false;
-
-        if (DayManager.DoesDayContainObjective(DayManager.ObjTypes.selfieAngle))
-        {
-            isAngleSelfie = true;
-        }
-        if (DayManager.DoesDayContainObjective(DayManager.ObjTypes.selfieOthers))
-        {
-            isOtherSelfie = true;
-            //determine # others expected
-            facesExpected = DayManager.currentDayReqs._expectedFaces;
-        }
-        if (DayManager.DoesDayContainObjective(DayManager.ObjTypes.selfieLocation))
-        {
-            isLocSelfie = true;
-        }
-        if (DayManager.DoesDayContainObjective(DayManager.ObjTypes.selfie))
-        {
-            isNormalSelfie = true;
-        }
-    }
-
-    void HandleResponseForObjectives(string response, bool approval)
-    {
-        string[] dataPartition = response.Split("|");
-        string faceCount = dataPartition[7];
-
-        bool angleApproved = dataPartition[8].Contains("ANGLE");
-        bool othersApproved = dataPartition[9].Contains("OTHERS");
-        bool locApproved = dataPartition[10].Contains("LOC");
-        bool normalApproved = dataPartition[11].Contains("NORMAL");
-
-
-        if (isAngleSelfie)
-        {
-            RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.selfieAngle);
-        }
-        if (normalApproved)
-        {
-            RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.selfie);
-        }
-        if (othersApproved == true)
-        {
-            responseText.text = faceCount + " people detected in selfie!";
-            RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.selfieOthers);
-        }
-        else if (isOtherSelfie)
-        {
-            responseText.text = faceCount += " people detected in selfie. Please try again.";
-        }
-        if (locApproved)
-        {
-            RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.selfieLocation);
-            responseText.text = "Correct location detected!";
-        }
-        else if (isLocSelfie)
-        {
-            responseText.text += " Incorrect location detected. Please try again.";
-        }
-    }
-
     private Texture2D EncodePhoto()
     {
         Vector3[] corners = new Vector3[4];
@@ -287,45 +112,6 @@ public class SelfieCam : MonoBehaviour
         tex.Apply();
         return tex;
     }
-
-    IEnumerator GetLocation()
-    {
-        //get last location
-        Input.location.Start();
-
-        // Waits until the location service initializes
-        int maxWait = 20;
-        while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
-        {
-            yield return new WaitForSeconds(1);
-            maxWait--;
-        }
-    }
-
-    public void HandleStartingUIResponse(string responseText)
-    {
-        //this may be a unity bug, but if you try to start a void method that starts a coroutine inside another coroutine, that started coroutine is quietly killed
-        //this function is necessary to avoid that bug ~~
-        HandleUIServerResponse(responseText);
-    }
-
-    public void HandleUIServerResponse(string responseText)
-    {
-        //APPROVAL: Selfie Not Approved|uploads/67b803a642475733731280.png|uploads/67a6a54aa534c078768223.png|ezkhunter|101
-        //Approval. "|" . $username . "|" . $user_prof_url . "|" . $target_id . "|" . $target_prof_url . "|" . $faceCount;
-
-        string[] dataPartition = responseText.Split("|");
-        string unData = dataPartition[1].Trim();
-        string unPfp = GameManager.rootURL + dataPartition[2].Trim();
-        string targetUN = dataPartition[3].Trim();
-        string targetPfp = GameManager.rootURL + dataPartition[4].Trim();
-
-        targetUNText.text = targetUN;
-
-        StartCoroutine(downloadImageFromURL(unPfp, userListing));
-        //StartCoroutine(downloadImageFromURL(targetPfp, targetPfpImage));
-    }
-
     public void capturePhoto()
     {
         if (devices.Length > 1)
@@ -350,94 +136,6 @@ public class SelfieCam : MonoBehaviour
         }
     }
 
-    public void CloseBlockerPanel()
-    {
-        blockingPanel.SetActive(false);
-        responseText.text = "";
-
-        InitWebcam();    
-    }
-
-    IEnumerator ShowProcessingAnimation()
-    {
-        int dotCount = 0;
-        while (true)
-        {
-            responseText.text = "Verifying Image" + new string('.', dotCount % 4);
-            dotCount++;
-            yield return new WaitForSeconds(0.5f);
-        }
-    }
-
-    void HandleServerResponse(string jsonResponse)
-    {
-        if (processingCoroutine != null)
-        {
-            StopCoroutine(processingCoroutine);
-            processingCoroutine = null;
-        }
-
-        //yeah, it's not great, lets fix it later
-        if (jsonResponse.Contains("Selfie Approved"))
-        {
-            responseText.text = "Verification successful";
-            approval = true;
-
-            //moved this line from the top of TakeSnap(), if anything breaks
-            scls.doTargetAssignment(scls.getUsername(), 100);
-        }
-        else if (jsonResponse.Contains("Selfie Not Approved"))
-        {
-            responseText.text = "Verification failed, re-upload or try a different image.";
-            approval = false;
-        }
-        else
-        {
-            responseText.text = "Error parsing server response.";
-            approval = false;
-        }
-        HandleResponseForObjectives(jsonResponse, approval);
-
-
-        /*bool match = false;
-
-        try
-        {
-            var response = JsonUtility.FromJson<ServerResponse>(jsonResponse);
-            match = response.match;
-            Debug.Log("114" + response);
-        }
-        catch
-        {
-            responseText.text = "Error parsing server response.";
-            return;
-        }*/
-
-        /*if (match)
-        {
-            responseText.text = "Verification successful";
-        }
-        else
-        {
-            responseText.text = "Verification failed, re-upload or try a different image.";
-        }*/
-    }
-
-    IEnumerator downloadImageFromURL(string url1, searchListItem li)
-    {
-        Debug.Log("Starting image Download Request");
-        UnityWebRequest request = UnityWebRequestTexture.GetTexture(url1);
-        yield return request.SendWebRequest();
-        if (request.result != UnityWebRequest.Result.Success)
-        {
-            Debug.Log(request.error);
-        }
-        else
-        {
-            li.profilePic.texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
-        }
-
-    }
     void OnApplicationFocus(bool hasFocus)
     {
         if (hasFocus && (webcam == null || !webcam.isPlaying))
@@ -447,9 +145,4 @@ public class SelfieCam : MonoBehaviour
         }
     }
 
-    [System.Serializable]
-    private class ServerResponse
-    {
-        public bool match;
-    }
 }

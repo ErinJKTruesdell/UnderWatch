@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -491,8 +490,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2136051674}
-        m_TargetAssemblyTypeName: SelfieCam, Assembly-CSharp
+      - m_Target: {fileID: 2136051676}
+        m_TargetAssemblyTypeName: SelfieUploader, Assembly-CSharp
         m_MethodName: CloseBlockerPanel
         m_Mode: 1
         m_Arguments:
@@ -1686,7 +1685,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &1307293569
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1767,13 +1766,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1307293568}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5, y: -0.5, z: 0.5, w: -0.5}
+  m_LocalRotation: {x: 0.5, y: 0.5, z: -0.5, w: -0.5}
   m_LocalPosition: {x: -0.0198, y: -0.0541, z: 0}
   m_LocalScale: {x: 1.0197152, y: 1, z: -0.75}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 270}
+  m_LocalEulerAnglesHint: {x: -180, y: 90, z: 270}
 --- !u!1 &1344114185
 GameObject:
   m_ObjectHideFlags: 0
@@ -2789,7 +2788,7 @@ GameObject:
   - component: {fileID: 2136051674}
   - component: {fileID: 2136051676}
   m_Layer: 0
-  m_Name: SelfieCam
+  m_Name: Scripts
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2809,18 +2808,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rear: {fileID: 1980748268}
   camMesh: {fileID: 1307293570}
-  gm: {fileID: 0}
-  scls: {fileID: 0}
-  testBox: {fileID: 152666544}
   overlay: {fileID: 1759434997}
   responseText: {fileID: 1637209449}
-  blockingPanel: {fileID: 1091300757}
-  closeButton: {fileID: 357721147}
-  unText: {fileID: 2059434374}
-  targetUNText: {fileID: 703119833}
-  targetPfpImage: {fileID: 803212989}
-  userListing: {fileID: 2021728431}
-  facesExpected: 1
+  selfieUploader: {fileID: 2136051676}
+  regManager: {fileID: 0}
 --- !u!4 &2136051675
 Transform:
   m_ObjectHideFlags: 0
@@ -2845,9 +2836,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 2136051673}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26e23bc8e4a1cd44f844064e1ed63b95, type: 3}
+  m_Script: {fileID: 11500000, guid: 67f2724f7154f214ab3aa4a554d619c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gm: {fileID: 0}
+  scls: {fileID: 0}
+  selfieCam: {fileID: 2136051674}
+  userListing: {fileID: 2021728431}
+  blockingPanel: {fileID: 1091300757}
+  closeButton: {fileID: 357721147}
+  unText: {fileID: 2059434374}
+  targetUNText: {fileID: 703119833}
+  targetPfpImage: {fileID: 803212989}
+  responseText: {fileID: 1637209449}
+  facesExpected: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -8,8 +8,6 @@ using UnityEngine.UI;
 
 public class ProfileUpdateManager : MonoBehaviour
 {
-
-
     public TMP_Text errorText;
 
     public RawImage profPic;
@@ -139,12 +137,12 @@ public class ProfileUpdateManager : MonoBehaviour
         string errorMessage = "";
 
         WWWForm form = new WWWForm();
-        string un = loginSystem.getUsername();
+        string un = SC_LoginSystem.getUsername();
         form.AddField("username", un);
         Debug.Log(un);
         if (profImageSet)
         {
-            form.AddBinaryData("file", ImageConversion.EncodeToPNG(((Texture2D)profPic.texture)), loginSystem.getUsername() + "profPic.png");
+            form.AddBinaryData("file", ImageConversion.EncodeToPNG(((Texture2D)profPic.texture)), SC_LoginSystem.getUsername() + "profPic.png");
         }
 
 

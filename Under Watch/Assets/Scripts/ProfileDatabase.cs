@@ -26,10 +26,6 @@ public class ProfileDatabase : MonoBehaviour
     {
         gm = GameObject.FindObjectOfType<GameManager>();
     }
-    public void GoToAchievements()
-    {
-        gm.ProgressToScene("Achievements");
-    }
     public void PfDLogOut()
     {
         gm.LogOut();

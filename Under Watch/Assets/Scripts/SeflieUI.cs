@@ -28,7 +28,7 @@ public class SeflieUI : MonoBehaviour
          }
          scls = gm.scls;
 
-         playerUN.text = gm.scls.getUsername();
+         playerUN.text = gm.SC_LoginSystem.getUsername();
 
 
      }

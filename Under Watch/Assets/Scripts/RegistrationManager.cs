@@ -16,7 +16,6 @@ using DG.Tweening;
 using static System.Net.Mime.MediaTypeNames;
 using static OnlineMapsBingMapsElevation;
 
-
 public class RegistrationManager : MonoBehaviour
 {
     public TMP_InputField firstName;
@@ -33,7 +32,6 @@ public class RegistrationManager : MonoBehaviour
 
     public static SC_LoginSystem loginSystem;
     public static GameManager gm;
-    public static DayManager dayMan;
 
     public int socialFeedIndex;
 
@@ -350,11 +348,6 @@ public class RegistrationManager : MonoBehaviour
         }
     }
 
-    public void AfterPrivacyPolicyRegister()
-    {
-        RequirementEventHandler.InvokeAddToReq(1, DayManager.ObjTypes.register);
-    }
-
     public IEnumerator doRegistration()
     {
         Debug.Log("running");
@@ -423,7 +416,6 @@ public class RegistrationManager : MonoBehaviour
                     loginSystem.loginUponRegister(username.text, email.text, pointsStart, password.text);
                     loginSystem.SetLoginPrefs(email.text, password.text, true);
                     privacyPolicy.SetActive(true);
-                    StartCoroutine(dayMan.SendLevelNum());
                 }
                 else
                 {

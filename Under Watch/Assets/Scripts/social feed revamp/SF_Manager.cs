@@ -118,7 +118,7 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
         string pfpImageURl;
 
         Debug.Log("Starting Request: " + timestamp);
-        while (scls.getUsername() == null)
+        while (SC_LoginSystem.getUsername() == null)
         {
             yield return new WaitForEndOfFrame();
         }
@@ -127,7 +127,7 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
         form.AddField("previousDate", timestamp);
         // was originally a placeholder username "asfdasdf"
         form.AddField("username", "asfdasdf");
-        form.AddField("loggedInUser", scls.getUsername());
+        form.AddField("loggedInUser", SC_LoginSystem.getUsername());
 
         using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "/get-next-photo.php", form))
         {

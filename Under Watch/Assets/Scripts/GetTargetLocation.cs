@@ -52,8 +52,8 @@ public class GetTargetLocation : MonoBehaviour
     public void showMap()
     {
         //get target location
-        StartCoroutine(LocateTarget(sclogin.getUsername()));
-        Debug.Log(sclogin.getUsername());
+        StartCoroutine(LocateTarget(SC_LoginSystem.getUsername()));
+        Debug.Log(SC_LoginSystem.getUsername());
 
         //turn lolcation on
         infiniteScrollViewport.SetActive(false);

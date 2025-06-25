@@ -18,7 +18,7 @@ public class ShowSelfProfile : MonoBehaviour
             loginSystem = new SC_LoginSystem();
         }
         // pd.fillCanvas(loginSystem.getUsername());
-        pd.fillCanvas(loginSystem.getUsername(), pd.fullNameText.text);
+        pd.fillCanvas(SC_LoginSystem.getUsername(), pd.fullNameText.text);
     }
 
     public void hideZoomedImage()

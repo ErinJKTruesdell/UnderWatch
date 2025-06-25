@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.Events;
+using static OnlineMapsGPXObject;
+using System.Windows.Forms;
 
 public class SC_LoginSystem : MonoBehaviour
 {
@@ -51,7 +53,7 @@ public class SC_LoginSystem : MonoBehaviour
     public TMPro.TMP_Text errorText;
 
     //Logged-in user data
-    public string userName = "";
+    public static string userName = "";
     public string userEmail = "";
 
     public event TargetHandler Target;
@@ -60,13 +62,14 @@ public class SC_LoginSystem : MonoBehaviour
 
     public UnityEvent userLoggedIn = new();
 
+    bool isAccountEnabled = true;
     void Start()
     {
         LoginButton.transform.DOLocalMoveY(-1000, .7f).From().SetEase(Ease.OutQuad);
         RegisterButton.transform.DOLocalMoveY((-1000 - 138f), .7f).From().SetEase(Ease.OutQuad);
         logo.transform.DOLocalMoveY(1000, .7f).From().SetEase(Ease.OutQuad);
 
-        Application.targetFrameRate = 60; // Or Application.targetFrameRate = Screen.currentResolution.refreshRate;
+        UnityEngine.Application.targetFrameRate = 60; // Or Application.targetFrameRate = Screen.currentResolution.refreshRate;
 
         // attempt login with any saved information
         if (PlayerPrefs.GetString("savedUsername", "") != "" || PlayerPrefs.GetString("savedPassword", "") != "")
@@ -90,7 +93,7 @@ public class SC_LoginSystem : MonoBehaviour
         return isLoggedIn;
     }
 
-    public string getUsername()
+    public static string getUsername()
     {
         return userName;
     }
@@ -242,19 +245,12 @@ public class SC_LoginSystem : MonoBehaviour
 
     public void SetLoginPrefs(string email, string password, bool save)
     {
-        Debug.Log("saving");
-       /* if (save == true)
-        {
-        }*/
-
         PlayerPrefs.SetString("savedUsername", email);
         PlayerPrefs.SetString("savedPassword", password);
 
         PlayerPrefs.Save();
         Debug.Log("User login data successfully cached");
-
     }
-    //testing code, remove for prod:
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -262,180 +258,19 @@ public class SC_LoginSystem : MonoBehaviour
             PlayerPrefs.DeleteAll();
             Debug.Log("User login data cleared");
         }
-
-        /*if (Input.GetKeyDown(KeyCode.M))
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-        }
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1 );
-        }*/
     }
-
-    void OnGUI()
-    {
-
-
-
-
-        //if (!isLoggedIn)
-        //{
-        //    if (currentWindow == CurrentWindow.Login)
-        //    {
-        //        GUI.Window(0, new Rect(Screen.width / 2 - 250, Screen.height / 2 - 230, 500, 460), LoginWindow, "Login");
-        //    }
-        //    if (currentWindow == CurrentWindow.Register)
-        //    {
-        //        GUI.Window(0, new Rect(Screen.width / 2 - 125, Screen.height / 2 - 165, 250, 330), RegisterWindow, "Register");
-        //    }
-        //}
-
-        //GUI.Label(new Rect(5, 5, 500, 25), "Status: " + (isLoggedIn ? "Logged-in Username: " + userName + " Email: " + userEmail : "Logged-out"));
-        //if (isLoggedIn)
-        //{
-        //    if (GUI.Button(new Rect(5, 30, 100, 25), "Log Out"))
-        //    {
-        //        isLoggedIn = false;
-        //        userName = "";
-        //        userEmail = "";
-        //        currentWindow = CurrentWindow.Login;
-        //    }
-        //}
-    }
-
-    void LoginWindow(int index)
-    {
-        if (isWorking)
-        {
-            GUI.enabled = false;
-        }
-
-        if (errorMessage != "")
-        {
-            GUI.color = Color.red;
-            GUILayout.Label(errorMessage);
-        }
-        if (registrationCompleted)
-        {
-            GUI.color = Color.green;
-            GUILayout.Label("Registration Completed!");
-        }
-
-        GUI.color = Color.white;
-        GUILayout.Label("Email:");
-        loginEmail = GUILayout.TextField(loginEmail);
-        GUILayout.Label("Password:");
-        loginPassword = GUILayout.PasswordField(loginPassword, '*');
-
-        GUILayout.Space(5);
-
-        if (GUILayout.Button("Submit", GUILayout.Width(85)))
-        {
-            //StartCoroutine(LoginEnumerator());
-        }
-
-        GUILayout.FlexibleSpace();
-
-        GUILayout.Label("Do not have account?");
-        if (GUILayout.Button("Register", GUILayout.Width(125)))
-        {
-            ResetValues();
-            currentWindow = CurrentWindow.Register;
-        }
-    }
-
-    void RegisterWindow(int index)
-    {
-        if (isWorking)
-        {
-            GUI.enabled = false;
-        }
-
-        if (errorMessage != "")
-        {
-            GUI.color = Color.red;
-            GUILayout.Label(errorMessage);
-        }
-
-        GUI.color = Color.white;
-        GUILayout.Label("Email:");
-        registerEmail = GUILayout.TextField(registerEmail, 254);
-        GUILayout.Label("Username:");
-        
-        name = GUILayout.TextField(registerUsername, 20);
-        GUILayout.Label("Password:");
-        registerPassword1 = GUILayout.PasswordField(registerPassword1, '*', 19);
-        GUILayout.Label("Password Again:");
-        registerPassword2 = GUILayout.PasswordField(registerPassword2, '*', 19);
-
-        GUILayout.Space(5);
-
-        if (GUILayout.Button("Submit", GUILayout.Width(85)))
-        {
-            StartCoroutine(RegisterEnumerator());
-        }
-
-        GUILayout.FlexibleSpace();
-
-        GUILayout.Label("Already have an account?");
-        if (GUILayout.Button("Login", GUILayout.Width(125)))
-        {
-            ResetValues();
-            currentWindow = CurrentWindow.Login;
-        }
-    }
-
-    IEnumerator RegisterEnumerator()
-    {
-        isWorking = true;
-        registrationCompleted = false;
-        errorMessage = "";
-
-        WWWForm form = new WWWForm();
-        form.AddField("email", registerEmail);
-        form.AddField("username", registerUsername);
-        form.AddField("password1", registerPassword1);
-        form.AddField("password2", registerPassword2);
-
-        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "register.php", form))
-        {
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                errorMessage = www.error;
-            }
-            else
-            {
-                string responseText = www.downloadHandler.text;
-
-                if (responseText.Contains("Success"))
-                {
-                    ResetValues();
-                    registrationCompleted = true;
-                    currentWindow = CurrentWindow.Login;
-                }
-                else
-                {
-                    errorMessage = responseText;
-                }
-            }
-        }
-
-        isWorking = false;
-    }
-
     public IEnumerator LoginEnumerator(string email, string password)
     {
-        while (DayManager.isLoadingLevels)
-        {
-            yield return new WaitForSeconds(.1f);
-        }
-
         isWorking = true;
         registrationCompleted = false;
         errorMessage = "";
+
+        yield return StartCoroutine(CheckAccountEnabled(email));
+        if (!isAccountEnabled)
+        {
+            yield return null;
+        }
+
         WWWForm form = new WWWForm();
         form.AddField("email", email);
         form.AddField("password", password);
@@ -459,7 +294,7 @@ public class SC_LoginSystem : MonoBehaviour
                     isLoggedIn = true;
                     ResetValues();
                     gm.saveLoginTime();
-                    canvasElement.transform.DOLocalMoveY(Screen.height * 3, .7f).SetEase(Ease.OutQuad).OnComplete(() => gm.ProgressToScene("SocialFeed"));
+                    canvasElement.transform.DOLocalMoveY(UnityEngine.Screen.height * 3, .7f).SetEase(Ease.OutQuad).OnComplete(() => gm.ProgressToScene("SocialFeed"));
                     userLoggedIn?.Invoke();
 
                     //store registration information 
@@ -480,6 +315,45 @@ public class SC_LoginSystem : MonoBehaviour
 
         isWorking = false;
         //gm.ProgressToScene("SocialFeed");
+    }
+    IEnumerator CheckAccountEnabled(string email)
+    {
+        //check if account is disabled on server
+        WWWForm form = new WWWForm();
+        form.AddField("email", email);
+
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "CHANGE ME CHANGE ME", form))
+        {
+            yield return www.SendWebRequest();
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log("Non-Success Result");
+                errorMessage = www.error;
+            }
+            else
+            {
+                string responseText = www.downloadHandler.text;
+                if (responseText.Contains("Disabled"))
+                {
+                    errorMessage = "Account is disabled! Email the SnapGram team if this was a mistake.";
+                    errorText.text = errorMessage;
+                    Debug.Log(errorMessage);
+
+                    isAccountEnabled = false;
+                }
+                else if (responseText.Contains("Enabled"))
+                {
+                    Debug.Log("account is enabled, proceeding");
+                    isAccountEnabled = true;
+                }
+                else
+                {
+                    errorMessage = responseText;
+                    errorText.text = errorMessage;
+                    Debug.Log(errorMessage);
+                }
+            }
+        }
     }
 
     public IEnumerator sendResetRequest(string email)
@@ -515,8 +389,6 @@ public class SC_LoginSystem : MonoBehaviour
 
     public IEnumerator sendResetUpdatePassword(string email, string code, string newpw)
     {
-
-
         isWorking = true;
         errorMessage = "";
 
@@ -549,7 +421,7 @@ public class SC_LoginSystem : MonoBehaviour
         isWorking = false;
     }
 
-    IEnumerator GetAndSendLocationData()
+    /*IEnumerator GetAndSendLocationData()
     {
         Debug.Log("GO GO GO");
         float latitude = 0f;
@@ -630,7 +502,7 @@ public class SC_LoginSystem : MonoBehaviour
             //send locatrion data
         }
 
-    }
+    }*/
 
     void ResetValues()
     {
