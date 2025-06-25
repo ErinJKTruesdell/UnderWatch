@@ -183,13 +183,13 @@ public class SF_ReactionEmoji : MonoBehaviour
     //this feels dangerous, could the user spam like/unlikes and crash the app?
     private IEnumerator SendLikeDataToServer()
     {
-        while (parentCell.postID == null || parentCell.scls.getUsername() == null)
+        while (parentCell.postID == null || SC_LoginSystem.getUsername() == null)
         {
             yield return new WaitForSeconds(.2f);
         }
 
         string postID = parentCell.postID;
-        string un = parentCell.scls.getUsername();
+        string un = SC_LoginSystem.getUsername();
 
         WWWForm form = new WWWForm();
 

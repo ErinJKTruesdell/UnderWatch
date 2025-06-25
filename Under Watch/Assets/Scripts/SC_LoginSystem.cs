@@ -53,7 +53,7 @@ public class SC_LoginSystem : MonoBehaviour
     public TMPro.TMP_Text errorText;
 
     //Logged-in user data
-    public string userName = "";
+    public static string userName = "";
     public string userEmail = "";
 
     public event TargetHandler Target;
@@ -93,7 +93,7 @@ public class SC_LoginSystem : MonoBehaviour
         return isLoggedIn;
     }
 
-    public string getUsername()
+    public static string getUsername()
     {
         return userName;
     }
