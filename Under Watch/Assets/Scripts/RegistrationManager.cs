@@ -24,14 +24,12 @@ public class RegistrationManager : MonoBehaviour
     public TMP_InputField password;
     public TMP_InputField username;
 
-    public TMP_Text errorText;
-
     public RawImage profPic;
-    public RawImage profPicOverlay;
     public Texture2D defaultPfp;
 
     public static SC_LoginSystem loginSystem;
     public static GameManager gm;
+    public SelfieCam selfieCam;
 
     public int socialFeedIndex;
 
@@ -39,12 +37,10 @@ public class RegistrationManager : MonoBehaviour
 
     bool isWorking = false;
 
-    bool profImageSet = false;
     public Toggle cacheCheckToggle;
 
     //camera stuff:
     public GameObject camUI;
-    public GameObject overlay;
     public GameObject regTextFields;
     public GameObject regButton;
     public GameObject nextButton;
@@ -58,15 +54,7 @@ public class RegistrationManager : MonoBehaviour
 
     public GameObject privacyPolicy;
 
-    public RawImage rear;
-    WebCamDevice[] devices;
-    bool camAvailable = true;
-
-    WebCamTexture webcam;
-    public MeshRenderer camMesh;
     WaitForEndOfFrame frameEnd = new WaitForEndOfFrame();
-
-    public GameObject testBox;
 
     public TextMeshProUGUI responseText;
     public string pfpPath;
@@ -89,64 +77,7 @@ public class RegistrationManager : MonoBehaviour
         if (loginSystem == null)
         {
             loginSystem = new SC_LoginSystem();
-        }
-        
-        devices = WebCamTexture.devices;
-        WebCamDevice frontCamera = new();
-        Debug.Log(devices.Length);
-        if (devices.Length > 1)
-        {
-            for (int i = 1; i < devices.Length; i++)
-            {
-                if (devices[i].isFrontFacing)
-                {
-                    frontCamera = devices[i];
-                    break;
-                }
-            }
-            if (devices[1].name != " ")
-            {
-                if (UnityEngine.Application.platform == RuntimePlatform.Android)
-                    webcam = new WebCamTexture(frontCamera.name);
-                else
-                    webcam = new WebCamTexture(devices[1].name);
-                    Debug.Log("cam: " + devices[1].name);
-            }
-            else
-            {
-                camAvailable = false;
-                responseText.color = Color.red;
-                responseText.text = "Your camera isn't valid";
-            }
-
-            if (webcam != null)
-            {
-                webcam.Play();
-                camMesh.material.SetTexture("_MainTex", webcam);
-
-                if (!webcam.isPlaying || webcam.width <= 16) // width check ensures it's not a dummy/no-access texture
-                {
-                    Debug.LogWarning("Webcam failed to start.");
-                    camAvailable = false;
-                }
-                else
-                {
-                    camAvailable = true;
-                }
-
-            }
-            else
-            {
-                responseText.color = Color.red;
-                responseText.text = "Your camera is detected as null";
-            }
-
-        }
-        else
-        {
-            responseText.color = Color.red;
-            responseText.text = "No camera detected";
-        }
+        }       
 
         gm = FindObjectOfType<GameManager>();
         if (gm == null)
@@ -182,20 +113,8 @@ public class RegistrationManager : MonoBehaviour
             camUI.transform.DOLocalMoveX(0, .5f).SetEase(Ease.OutQuad)
                 .OnComplete(() => setCameraActive(true));
             camMeshObj.transform.DOLocalMoveX(0, .5f).SetEase(Ease.OutQuad);
-            if (camAvailable)
-            {
-                webcam.Play();
-                camMesh.material.SetTexture("_MainTex", webcam);
-                pfpPath = "";
-            }
-            else
-            {
-                responseText.color = Color.red;
-                responseText.text = "Your camera is detected, but has no output";
 
-                pfpPath = "";
-            }
-
+            selfieCam.InitWebcam();
         }
         else
         {
@@ -210,15 +129,13 @@ public class RegistrationManager : MonoBehaviour
     {
         if (email.text == "" || username.text == "" || password.text == "" || firstName.text == "" || lastName.text == "")
         {
-            errorText.text = "Missing one or more fields.";
+            responseText.text = "Missing one or more fields.";
         }
-        else if (camAvailable)
+        else if (camUI.activeSelf)
         {
-            webcam.Play();
-            camMesh.material.SetTexture("_MainTex", webcam);
-            pfpPath = "";
+            selfieCam.InitWebcam();
 
-            errorText.text = "";
+            responseText.text = "";
             regTextFields.transform.DOLocalMoveX(-1400f, .5f).SetEase(Ease.OutQuad)
                 .OnComplete(() => regTextFields.SetActive(false));
             nextButton.transform.DOLocalMoveX(-1400f, .5f).SetEase(Ease.OutQuad)
@@ -229,11 +146,6 @@ public class RegistrationManager : MonoBehaviour
         }
         else
         {
-            responseText.color = Color.red;
-            responseText.text = "Your camera isn't available, using default profile";
-
-            pfpPath = "";
-
             regTextFields.transform.DOLocalMoveX(-1400f, .5f).SetEase(Ease.OutQuad)
                 .OnComplete(() => regTextFields.SetActive(false));
             nextButton.transform.DOLocalMoveX(-1400f, .5f).SetEase(Ease.OutQuad)
@@ -241,7 +153,6 @@ public class RegistrationManager : MonoBehaviour
             camUI.transform.DOLocalMoveX(0, .5f).SetEase(Ease.OutQuad)
                 .OnComplete(() => setCameraActive(true));
             camMeshObj.transform.DOLocalMoveX(0, .5f).SetEase(Ease.OutQuad);
-
         }
     }
 
@@ -251,100 +162,16 @@ public class RegistrationManager : MonoBehaviour
         camMeshObj.SetActive(active);
     }
 
-    /*public void SetProfilePicture()
-    {
-        NativeGallery.GetImageFromGallery(ngmpc, "Select Profile Image");
-    }
-
-    public static void handleNewPicture(string path)
-    {
-        picturePassthrough("file://" + path, GameObject.FindObjectOfType<RegistrationManager>());
-    }
-
-    public static void picturePassthrough(string path, RegistrationManager instance)
-    {
-        instance.StartCoroutine(instance.GetTex(path));
-    }
-    */
-    public IEnumerator GetTex(string path)
-    {
-        using (UnityWebRequest uwr = UnityWebRequestTexture.GetTexture(path))
-        {
-            yield return uwr.SendWebRequest();
-
-            if (uwr.result != UnityWebRequest.Result.Success)
-            {
-                Debug.Log(uwr.error);
-            }
-            else
-            {
-                // Get downloaded asset bundle
-                Texture2D texture = DownloadHandlerTexture.GetContent(uwr);
-
-                while (texture.height > 1920 || texture.width > 1920)
-                {
-                    Debug.Log("Old: " + texture.width);
-                    texture = ScaleTexture(texture, texture.width / 2, texture.height / 2);
-                    Debug.Log("NEW: " + texture.width);
-                }
-
-                Rect sourceRect = new Rect(0, 0, 0, 0);
-                // crop it
-                if (texture.height > texture.width)
-                {
-                    float bottomCorner = (texture.height / 2) - (texture.width / 2);
-
-                    sourceRect = new Rect(0, bottomCorner, texture.width, texture.width);
-                }
-                else
-                {
-
-                    float bottomCorner = (texture.width / 2) - (texture.height / 2);
-
-                    sourceRect = new Rect(bottomCorner, 0, texture.height, texture.height);
-                }
-
-                int x = Mathf.FloorToInt(sourceRect.x);
-                int y = Mathf.FloorToInt(sourceRect.y);
-                int width = Mathf.FloorToInt(sourceRect.width);
-                int height = Mathf.FloorToInt(sourceRect.height);
-
-                Color[] pix = texture.GetPixels(x, y, width, height);
-                Texture2D destTex = new Texture2D(width, height);
-                destTex.SetPixels(pix);
-                destTex.Apply();
-
-                //shut off overlay
-                profPicOverlay.color = Color.clear;
-                profImageSet = true;
-            }
-        }
-    }
-    private Texture2D ScaleTexture(Texture2D source, int targetWidth, int targetHeight)
-    {
-        Texture2D result = new Texture2D(targetWidth, targetHeight, source.format, true);
-        Color[] rpixels = result.GetPixels(0);
-        float incX = (1.0f / (float)targetWidth);
-        float incY = (1.0f / (float)targetHeight);
-        for (int px = 0; px < rpixels.Length; px++)
-        {
-            rpixels[px] = source.GetPixelBilinear(incX * ((float)px % targetWidth), incY * ((float)Mathf.Floor(px / targetWidth)));
-        }
-        result.SetPixels(rpixels, 0);
-        result.Apply();
-        return result;
-    }
-
     public void RegisterUser()
     {
         if (email.text == "" || username.text == "" || password.text == "" || firstName.text == "" || lastName.text == "")
         {
-            errorText.text = "Missing one or more fields.";
+            responseText.text = "Missing one or more fields.";
         }
         else if (!isWorking)
         {
             StartCoroutine(doRegistration());
-            errorText.text = "";
+            responseText.text = "";
         }
     }
 
@@ -381,8 +208,6 @@ public class RegistrationManager : MonoBehaviour
 
         using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "register.php", form))
         {
-            //www.uploadHandler = (UploadHandler)new UploadHandlerRaw(File.ReadAllBytes(pfpPath));
-            Debug.Log("419");
             yield return www.SendWebRequest();
 
             loadingAnim.SetActive(true);
@@ -402,10 +227,10 @@ public class RegistrationManager : MonoBehaviour
             }
             else
             {
-                string responseText = www.downloadHandler.text;
-                Debug.Log("response" + responseText);
+                string responseStr = www.downloadHandler.text;
+                Debug.Log("response" + responseStr);
                 Debug.Log(username.text);
-                if (responseText.Contains("Success"))
+                if (responseStr.Contains("Success"))
                 {
                     bg.transform.DOLocalMoveY(Screen.height * 3, .7f).SetEase(Ease.OutQuad);
                     canvasElement.transform.DOLocalMoveY(Screen.height * 3, .7f).SetEase(Ease.OutQuad);
@@ -424,76 +249,23 @@ public class RegistrationManager : MonoBehaviour
                     regButton.SetActive(true);
                     pfpImage.SetActive(true);
 
-                    errorMessage = responseText;
-                    errorText.text = errorMessage;
+                    errorMessage = responseStr;
+                    responseText.text = errorMessage;
                     Debug.Log("error: " + errorMessage);
                 }
             }
         }
         isWorking = false;
     }
-
-    public void startPhotoCoroutine()
+    public void CapturedPhotoFinalStep(Texture2D pfp, string filepath)
     {
-        StartCoroutine(capturePhoto());
-    }
-
-    public IEnumerator capturePhoto()
-    {
-        if (devices.Length > 1)
-        {
-            yield return frameEnd;
-
-            Texture2D snap = new Texture2D(webcam.width, webcam.height);
-
-            snap.SetPixels(webcam.GetPixels());
-            snap.Apply();
-            camMesh.material.SetTexture("_MainTex", snap);
-            webcam.Stop();
-
-            overlay.SetActive(false);
-            Vector3[] corners = new Vector3[4];
-            rear.rectTransform.GetWorldCorners(corners);
-            Vector3 topLeft = corners[0];
-
-            var width = (int)(corners[3].x - corners[0].x); //.rect.width;
-            var height = (int)(corners[1].y - corners[0].y);
-            // Rescale the size appropriately based on the current Canvas scale
-            Vector2 scaledSize = new Vector2(width, height);
-
-            var tex = new Texture2D(width, height, TextureFormat.RGB24, false);
-
-            tex.ReadPixels(new Rect(topLeft, scaledSize), 0, 0);
-            tex.Apply();
-
-            EncodePic(tex, username.text + "profPic.png");
-            overlay.SetActive(true);
-        }
-        else
-        {
-            responseText.color = Color.red;
-            responseText.text = "No camera detected, using default photo";
-
-            EncodePic(defaultPfp);
-        }
-    }
-
-    void EncodePic(Texture2D tex, string filename = "defaultpfoPic.png")
-    {
-
-        byte[] bytes = tex.EncodeToPNG();
-        pfpPath = UnityEngine.Application.persistentDataPath + filename;
-        Debug.Log("--------------------------------------SAVING TO PATH--------------------------------------");
-        Debug.Log("PATH: " + pfpPath);
-        Debug.Log("------------------------------------------------------------------------------------------");
-        System.IO.File.WriteAllBytes(pfpPath, bytes);
+        profPic.texture = pfp;
+        pfpPath = filepath;
 
         regTextFields.SetActive(true);
         nextButton.SetActive(false);
         regButton.SetActive(true);
         pfpImage.SetActive(true);
-
-        profPic.texture = tex;
 
         regTextFields.transform.localPosition = new Vector2(1400, originalPos[0].y - goDownByValue);
         regButton.transform.localPosition = new Vector2(1400, originalPos[1].y - goDownByValue);
@@ -506,7 +278,5 @@ public class RegistrationManager : MonoBehaviour
         camUI.transform.DOLocalMoveX(-1400f, .5f).SetEase(Ease.OutQuad)
             .OnComplete(() => setCameraActive(false));
         camMeshObj.transform.DOLocalMoveX(-1400, .5f).SetEase(Ease.OutQuad);
-
-        StartCoroutine(GetTex(pfpPath));
     }
 }

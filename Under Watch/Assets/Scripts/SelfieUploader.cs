@@ -32,21 +32,22 @@ public class SelfieUploader : MonoBehaviour
     bool approval;
     void OnEnable()
     {
-        gm = FindObjectOfType<GameManager>();
         if (gm == null)
         {
-            gm = new GameManager();
+            gm = FindObjectOfType<GameManager>();
         }
-        scls = gm.scls;
+        if (scls == null)
+        {
+            scls = FindObjectOfType<SC_LoginSystem>();
+        }
+        if (selfieCam == null)
+        {
+            selfieCam = FindObjectOfType<SelfieCam>();
+        }
 
         if (scls != null)
         {
             scls.Target += new SC_LoginSystem.TargetHandler(showNewTarget);
-        }
-        else
-        {
-            //responseText.color = Color.red;
-            //responseText.text = "No target found!";
         }
     }
 
@@ -60,6 +61,7 @@ public class SelfieUploader : MonoBehaviour
         //checks if null, if not start
         processingCoroutine ??= StartCoroutine(ShowProcessingAnimation());
 
+        responseText.color = Color.white;
         responseText.text = "Verifying Image...";
 
         blockingPanel.SetActive(true);
@@ -77,9 +79,7 @@ public class SelfieUploader : MonoBehaviour
             string[] imageNames = path.Split("/");
             string imageName = imageNames[imageNames.Length - 1];
             form.AddBinaryData("file", File.ReadAllBytes(path), imageName);
-
             form.AddField("username", SC_LoginSystem.getUsername());
-
             //always send location
             form.AddField("latitude", latitude.ToString());
             form.AddField("longitude", longitude.ToString());
@@ -88,14 +88,12 @@ public class SelfieUploader : MonoBehaviour
 
             UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "uploadImage.php", form);
             Debug.Log("Sending web request...");
-
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
             {
                 approval = false;
                 responseText.text = "Error: " + www.error;
-
                 Debug.Log(www.error);
 
                 if (processingCoroutine != null)
@@ -110,9 +108,9 @@ public class SelfieUploader : MonoBehaviour
                 Debug.Log("result: " + www.result);
                 Debug.Log("response: " + www.downloadHandler.text);
 
-                //Debug.Log("Form upload complete! " + System.Text.Encoding.ASCII.GetString(www.downloadHandler.data));
                 HandleServerResponse(www.downloadHandler.text);
                 HandleStartingUIResponse(www.downloadHandler.text);
+
                 closeButton.SetActive(true);
             }
         }
@@ -163,31 +161,36 @@ public class SelfieUploader : MonoBehaviour
             approval = false;
         }
     }
-
-
-
-    public void HandleStartingUIResponse(string responseText)
+    public void HandleStartingUIResponse(string serverResponse)
     {
         //this may be a unity bug, but if you try to start a void method that starts a coroutine inside another coroutine, that started coroutine is quietly killed
         //this function is necessary to avoid that bug ~~
-        HandleUIServerResponse(responseText);
+        HandleUIServerResponse(serverResponse);
     }
 
-    public void HandleUIServerResponse(string responseText)
+    public void HandleUIServerResponse(string serverResponse)
     {
         //APPROVAL: Selfie Not Approved|uploads/67b803a642475733731280.png|uploads/67a6a54aa534c078768223.png|ezkhunter|101
         //Approval. "|" . $username . "|" . $user_prof_url . "|" . $target_id . "|" . $target_prof_url . "|" . $faceCount;
 
-        string[] dataPartition = responseText.Split("|");
-        string unData = dataPartition[1].Trim();
-        string unPfp = GameManager.rootURL + dataPartition[2].Trim();
-        string targetUN = dataPartition[3].Trim();
-        string targetPfp = GameManager.rootURL + dataPartition[4].Trim();
+        try
+        {
+            string[] dataPartition = serverResponse.Split("|");
+            string unData = dataPartition[1].Trim();
+            string unPfp = GameManager.rootURL + dataPartition[2].Trim();
+            string targetUN = dataPartition[3].Trim();
+            string targetPfp = GameManager.rootURL + dataPartition[4].Trim();
 
-        targetUNText.text = targetUN;
+            targetUNText.text = targetUN;
 
-        StartCoroutine(downloadImageFromURL(unPfp, userListing));
-        //StartCoroutine(downloadImageFromURL(targetPfp, targetPfpImage));
+            StartCoroutine(downloadImageFromURL(unPfp, userListing));
+            //StartCoroutine(downloadImageFromURL(targetPfp, targetPfpImage));
+        }
+        catch (IndexOutOfRangeException e)
+        {
+            responseText.text = "Response doesn't contain enough parts";
+            Debug.LogException(e);
+        }        
     }
 
     IEnumerator ShowProcessingAnimation()
@@ -202,6 +205,7 @@ public class SelfieUploader : MonoBehaviour
     }
     public void CloseBlockerPanel()
     {
+        closeButton.SetActive(false);
         blockingPanel.SetActive(false);
         responseText.text = "";
 

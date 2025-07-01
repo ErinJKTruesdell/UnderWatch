@@ -1,14 +1,11 @@
 using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.Events;
-using static OnlineMapsGPXObject;
-using System.Windows.Forms;
 
 public class SC_LoginSystem : MonoBehaviour
 {

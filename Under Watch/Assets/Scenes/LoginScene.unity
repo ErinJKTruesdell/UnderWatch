@@ -769,7 +769,6 @@ MonoBehaviour:
   pwField: {fileID: 1606112995}
   backButton: {fileID: 1248536937}
   errorText: {fileID: 490063105}
-  userName: 
   userEmail: 
   userLoggedIn:
     m_PersistentCalls:
