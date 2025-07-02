@@ -35,7 +35,7 @@ public class AssignNewTarget : MonoBehaviour
 
     IEnumerator ChangeTargetRoutine()
     {
-        string username = SC_LoginSystem.getUsername();
+        string username = GameManager.loggedInUser.un;
         yield return StartCoroutine(scls.doTargetAssignment(username, -25));
         StartCoroutine(getTargetLoc.LocateTarget(username));
 

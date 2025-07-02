@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.Events;
+using static OnlineMapsGPXObject;
 
 public class SC_LoginSystem : MonoBehaviour
 {
@@ -49,17 +50,19 @@ public class SC_LoginSystem : MonoBehaviour
 
     public TMPro.TMP_Text errorText;
 
-    //Logged-in user data
-    public static string userName = "";
-    public string userEmail = "";
-
-    public event TargetHandler Target;
-    public EventArgs e = null;
-    public delegate void TargetHandler(string m, EventArgs e);
-
     public UnityEvent userLoggedIn = new();
 
     bool isAccountEnabled = true;
+    private void Awake()
+    {
+        //dont destrroy it because it has button hookups!
+        RegistrationManager.loginSystem = this;
+
+        //can change any settings inside the init
+        DOTween.Init();
+
+        DontDestroyOnLoad(this);
+    }
     void Start()
     {
         LoginButton.transform.DOLocalMoveY(-1000, .7f).From().SetEase(Ease.OutQuad);
@@ -84,23 +87,23 @@ public class SC_LoginSystem : MonoBehaviour
         }
     }
 
-
     public bool getIsLoggedIn()
     {
         return isLoggedIn;
     }
 
-    public static string getUsername()
-    {
-        return userName;
-    }
-    public void loginUponRegister(string username, string email, int points, string password)
+    public void loginUponRegister(string username, string email, int points, string password, string firstName, string lastName, Texture pfp)
     {
         Debug.Log("logging in on register: " + username);
-        userName = username;
-        userEmail = email;
+
+        GameManager.loggedInUser.un = username;
+        GameManager.loggedInUser.email = email;
+        GameManager.loggedInUser.firstName = firstName;
+        GameManager.loggedInUser.lastName = lastName;
+        GameManager.loggedInUser.profilePic = (pfp as Texture2D);
+
         isLoggedIn = true;
-        StartCoroutine(doTargetAssignment(userName, points));
+        StartCoroutine(doTargetAssignment(username, points));
 
         userLoggedIn?.Invoke();
     }
@@ -188,47 +191,24 @@ public class SC_LoginSystem : MonoBehaviour
                     errorMessage = www.error;
                     Debug.Log("unsuccessful assignment!" + errorMessage);
                 }
-                //else
-                // {
                 string responseText = www.downloadHandler.text;
-
-                string returnText = "";
 
                 if (responseText.Contains("New Target"))
                 {
-                    returnText = responseText;
-                    Debug.Log("successful assignment!" + returnText);
+                    Debug.Log("successful assignment!" + responseText);
+                    SetTargetInfo(responseText);
                 }
                 else
                 {
-                    returnText = responseText;
-                    Debug.Log("unsuccessful assignment!" + returnText);
-
-                }
-                //}
-                if (Target != null)
-                {
-                    Target(returnText, e);
+                    Debug.Log("unsuccessful assignment!" + responseText);
                 }
             }
-
             isWorking = false;
         }
         else
         {
             Debug.Log("not logged in!");
         }
-    }
-
-    private void Awake()
-    {
-        //dont destrroy it because it has button hookups!
-        RegistrationManager.loginSystem = this;
-
-        //can change any settings inside the init
-        DOTween.Init();
-
-        DontDestroyOnLoad(this);
     }
 
     public void goToRegistration()
@@ -277,22 +257,22 @@ public class SC_LoginSystem : MonoBehaviour
             yield return www.SendWebRequest();
             if (www.result != UnityWebRequest.Result.Success)
             {
-                Debug.Log("Non-Success Result");
                 errorMessage = www.error;
+
+                Debug.Log("Non-Success Result" + www.error);
             }
             else
             {
                 string responseText = www.downloadHandler.text;
                 if (responseText.Contains("Success"))
                 {
-                    string[] dataChunks = responseText.Split('|');
-                    userName = dataChunks[1];
-                    userEmail = dataChunks[2];
                     isLoggedIn = true;
                     ResetValues();
                     gm.saveLoginTime();
                     canvasElement.transform.DOLocalMoveY(UnityEngine.Screen.height * 3, .7f).SetEase(Ease.OutQuad).OnComplete(() => gm.ProgressToScene("SocialFeed"));
                     userLoggedIn?.Invoke();
+
+                    SetUserInfo(responseText);
 
                     //store registration information 
                     if (isCached == false)
@@ -309,10 +289,89 @@ public class SC_LoginSystem : MonoBehaviour
                 }
             }
         }
-
         isWorking = false;
         //gm.ProgressToScene("SocialFeed");
     }
+
+    public IEnumerator GetTargetInfo()
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("username", GameManager.loggedInUser.un);
+
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "get-target-info.php", form))
+        {
+            yield return www.SendWebRequest();
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log("Non-Success Result");
+            }
+            else
+            {
+                string responseText = www.downloadHandler.text;
+                if (responseText.Contains("Success"))
+                {
+                    Debug.Log("Target found, saving info");
+                    SetTargetInfo(responseText);
+                }
+                else if (responseText.Contains("No Target Found"))
+                {
+                    Debug.Log("No target found, reassigning!");
+                    StartCoroutine(doTargetAssignment(GameManager.loggedInUser.un, 0));
+                }
+                else
+                {
+                    Debug.Log("Error: " + responseText);
+                }             
+            }
+        }
+    }
+
+    public void SetTargetInfo(string response)
+    {
+        try
+        {
+            //"Success" ."|". $target_name ."|". $targetFirst ."|". $targetLast ."|". $targetPFP;
+            string[] dataPartition = response.Split("|");
+
+            string un = dataPartition[1].Trim();
+            string firstName = dataPartition[2].Trim();
+            string lastName = dataPartition[3].Trim();
+            string profilePicURL = dataPartition[4].Trim();
+
+            GameManager.currTarget = new(un, firstName, lastName);
+            StartCoroutine(downloadImageFromURL(profilePicURL, GameManager.currTarget));
+        }
+        catch (IndexOutOfRangeException e)
+        {
+            errorText.text = "Response doesn't contain enough parts";
+            Debug.LogException(e);
+        }
+    }
+
+    public void SetUserInfo(string responseText)
+    {
+        try
+        {
+            //"Success" . "|" . $username_tmp . "|" .  $email_tmp . "|" . $firstName . "|" . $lastName . "|" . $pfpfURL;
+            string[] dataPartition = responseText.Split('|');
+
+            string un = dataPartition[1].Trim();
+            string email = dataPartition[2].Trim();
+            string firstName = dataPartition[3].Trim();
+            string lastName = dataPartition[4].Trim();
+            string profilePicURL = dataPartition[5].Trim();
+
+            GameManager.loggedInUser = new(un, firstName, lastName, _email: email);
+            StartCoroutine(downloadImageFromURL(profilePicURL, GameManager.loggedInUser));
+            StartCoroutine(GetTargetInfo());
+        }
+        catch (IndexOutOfRangeException e)
+        {
+            errorText.text = "Response doesn't contain enough parts";
+            Debug.LogException(e);
+        }
+    }
+
     IEnumerator CheckAccountEnabled(string email)
     {
         //check if account is disabled on server
@@ -500,6 +559,20 @@ public class SC_LoginSystem : MonoBehaviour
         }
 
     }*/
+    IEnumerator downloadImageFromURL(string url, UserInfo user)
+    {
+        Debug.Log("Starting image Download Request");
+        UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
+        yield return request.SendWebRequest();
+        if (request.result != UnityWebRequest.Result.Success)
+        {
+            Debug.Log(request.error);
+        }
+        else
+        {
+            user.profilePic = ((DownloadHandlerTexture)request.downloadHandler).texture;
+        }
+    }
 
     void ResetValues()
     {

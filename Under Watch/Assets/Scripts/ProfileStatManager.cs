@@ -33,7 +33,7 @@ public class ProfileStatManager : MonoBehaviour
     IEnumerator GetProfileData()
     {
         WWWForm form = new WWWForm();
-        form.AddField("username", SC_LoginSystem.getUsername());
+        form.AddField("username", GameManager.loggedInUser.un);
         using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "get-profile-stats.php", form))
         {
             yield return www.SendWebRequest();

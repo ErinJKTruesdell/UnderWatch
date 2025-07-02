@@ -102,7 +102,7 @@ public class ProfilePhoto : MonoBehaviour
 
         //upload to server
         Debug.Log("Getting logged in user...");
-        string loggedInUser = gm.SC_LoginSystem.getUsername();
+        string loggedInUser = gm.GameManager.loggedInUser.un;
 
         Debug.Log("File Upload Coroutine");
         if (gm.scls != null && gm.scls.getIsLoggedIn())
@@ -118,7 +118,7 @@ public class ProfilePhoto : MonoBehaviour
                 string[] imageNames = path.Split("/");
                 string imageName = imageNames[imageNames.Length - 1];
                 form.AddBinaryData("file", File.ReadAllBytes(path), imageName);
-                form.AddField("username", SC_LoginSystem.getUsername());
+                form.AddField("username", GameManager.loggedInUser.un);
                 form.AddField("latitude", latitude.ToString());
                 form.AddField("longitude", longitude.ToString());
 

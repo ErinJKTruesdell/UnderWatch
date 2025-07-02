@@ -16,6 +16,8 @@ public class SelfieCam : MonoBehaviour
     public WebCamTexture webcam;
 
     public GameObject overlay;
+    public GameObject button;
+
     public Transform camTransform;
 
     public TextMeshProUGUI responseText;
@@ -42,6 +44,7 @@ public class SelfieCam : MonoBehaviour
     {
         CleanupWebcam();
         overlay.SetActive(true);
+        button.SetActive(true);
 
         // Request permissions first, then initialize camera
         StartCoroutine(RequestCamPerms(() => {
@@ -127,7 +130,6 @@ public class SelfieCam : MonoBehaviour
                 float ratio = (float)webcam.width / webcam.height;
                 camView.GetComponent<AspectRatioFitter>().aspectRatio = ratio;
 
-
                 Debug.Log($"Texture assigned to material: {webcam.width}x{webcam.height}");
                 Debug.Log($"Webcam videoRotationAngle: {webcam.videoRotationAngle}");
                 Debug.Log($"Webcam videoVerticallyMirrored: {webcam.videoVerticallyMirrored}");
@@ -158,30 +160,38 @@ public class SelfieCam : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
 
-        webcam.Pause();
-
-        //takes image directly from camera to get highest quality
-        Texture2D tex = new Texture2D(webcam.width, webcam.height);
-        tex.SetPixels(webcam.GetPixels());
-        tex.Apply();
-
-        camView.texture = tex;
-
-        byte[] bytes = tex.EncodeToPNG();
-        string loggedInUser = SC_LoginSystem.getUsername();
-
-        string filename = loggedInUser + "-" + DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day + "-" + DateTime.Now.Hour + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Second + ".png";
-        string path = Application.persistentDataPath + filename;
-        System.IO.File.WriteAllBytes(path, bytes);
-
-        Debug.Log("File Upload Coroutine");
-        if (selfieUploader != null)
+        try
         {
-            StartCoroutine(selfieUploader.SelfieUpload(path));
+            webcam.Pause();
+
+            //takes image directly from camera to get highest quality
+            Texture2D tex = new Texture2D(webcam.width, webcam.height);
+            tex.SetPixels(webcam.GetPixels());
+            tex.Apply();
+
+            camView.texture = tex;
+
+            byte[] bytes = tex.EncodeToPNG();
+            string loggedInUser = GameManager.loggedInUser.un;
+
+            string filename = loggedInUser + "-" + DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day + "-" + DateTime.Now.Hour + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Second + ".png";
+            string path = Application.persistentDataPath + filename;
+            System.IO.File.WriteAllBytes(path, bytes);
+
+            Debug.Log("File Upload Coroutine");
+            if (selfieUploader != null)
+            {
+                StartCoroutine(selfieUploader.SelfieUpload(path));
+            }
+            if (regManager != null)
+            {
+                regManager.CapturedPhotoFinalStep(tex, path);
+            }
         }
-        if (regManager != null)
+        catch (Exception e)
         {
-           regManager.CapturedPhotoFinalStep(tex, path);
+            Debug.Log(e);
+            responseText.text += "Could not take a photo!";
         }
     }
     public void capturePhoto()
@@ -192,6 +202,7 @@ public class SelfieCam : MonoBehaviour
                 InitWebcam();
 
             overlay.SetActive(false);
+            button.SetActive(false);
 
             StartCoroutine(takeSnap());
         }

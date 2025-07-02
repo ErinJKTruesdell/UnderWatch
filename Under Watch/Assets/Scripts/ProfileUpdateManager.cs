@@ -121,14 +121,12 @@ public class ProfileUpdateManager : MonoBehaviour
         return result;
     }
     public void RegisterUser()
-    {
-        
+    {        
         if (!isWorking && profImageSet)
         {
             errorText.text = "";
             StartCoroutine(doUpdate());
         }
-
     }
 
     public IEnumerator doUpdate()
@@ -137,14 +135,13 @@ public class ProfileUpdateManager : MonoBehaviour
         string errorMessage = "";
 
         WWWForm form = new WWWForm();
-        string un = SC_LoginSystem.getUsername();
+        string un = GameManager.loggedInUser.un;
         form.AddField("username", un);
         Debug.Log(un);
         if (profImageSet)
         {
-            form.AddBinaryData("file", ImageConversion.EncodeToPNG(((Texture2D)profPic.texture)), SC_LoginSystem.getUsername() + "profPic.png");
+            form.AddBinaryData("file", ImageConversion.EncodeToPNG(((Texture2D)profPic.texture)), GameManager.loggedInUser.un + "profPic.png");
         }
-
 
         using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "profPic.php", form))
         {

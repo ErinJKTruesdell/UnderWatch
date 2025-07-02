@@ -34,6 +34,11 @@ public class ProfileDatabase : MonoBehaviour
     public void fillCanvas(string username, string fullName)
     {
         Debug.Log("Filling Canvas: " + username + fullName);
+
+        fullNameText.text = fullName;
+        usernameText.text = "@" + username;
+        usernameText.gameObject.SetActive(true);
+
         StartCoroutine(getAndDownloadImages(username));
     }
     private IEnumerator getAndDownloadImages(string username)
@@ -41,9 +46,6 @@ public class ProfileDatabase : MonoBehaviour
         // get data from server
         WWWForm form = new WWWForm();
         form.AddField("username", username); //dummy data
-        Debug.Log("usn: " + username);
-        usernameText.text = "@" + username;
-        usernameText.gameObject.SetActive(true);
 
         using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "/get-all-user-photos.php", form))
         {
@@ -70,9 +72,6 @@ public class ProfileDatabase : MonoBehaviour
 
                 if (userChunks.Length > 1)
                 {
-                    fullNameText.text = userChunks[0].Trim();
-                    Debug.Log("name: " + fullNameText.text);
-
                     string profUrl = "/" + userChunks[1];
                     Debug.Log(profUrl);
                     StartCoroutine(downloadImageFromURL(GameManager.rootURL + profUrl, profileImage));

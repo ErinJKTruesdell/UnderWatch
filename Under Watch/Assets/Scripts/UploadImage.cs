@@ -41,7 +41,7 @@ public class UploadImage : MonoBehaviour
         if (loginSystem != null && loginSystem.getIsLoggedIn())
         {
             Debug.Log("Getting logged in user...");
-            string loggedInUser = SC_LoginSystem.getUsername();
+            string loggedInUser = GameManager.loggedInUser.un;
             Debug.Log(filePath);
 
             if (File.Exists(filePath))

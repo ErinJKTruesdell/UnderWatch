@@ -15,6 +15,7 @@ using UnityEngine.AI;
 using DG.Tweening;
 using static System.Net.Mime.MediaTypeNames;
 using static OnlineMapsBingMapsElevation;
+using Unity.VisualScripting;
 
 public class RegistrationManager : MonoBehaviour
 {
@@ -238,7 +239,7 @@ public class RegistrationManager : MonoBehaviour
                     loadingAnim.SetActive(false);
                     Debug.Log("successRegister");
 
-                    loginSystem.loginUponRegister(username.text, email.text, pointsStart, password.text);
+                    loginSystem.loginUponRegister(username.text, email.text, pointsStart, password.text, firstName.text, lastName.text, profPic.texture);
                     loginSystem.SetLoginPrefs(email.text, password.text, true);
                     privacyPolicy.SetActive(true);
                 }

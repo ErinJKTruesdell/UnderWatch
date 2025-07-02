@@ -145,7 +145,7 @@ public class PostUIHandling : MonoBehaviour
     {
         WWWForm form = new WWWForm();
 
-        form.AddField("username", SC_LoginSystem.getUsername());
+        form.AddField("username", GameManager.loggedInUser.un);
         form.AddField("react", emojiClicked);
         form.AddField("post_id", sfd.postID);
 

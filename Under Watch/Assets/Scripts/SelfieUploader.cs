@@ -8,6 +8,7 @@ using System.IO;
 using TMPro;
 using System.Net;
 using DG.Tweening.Plugins.Core.PathCore;
+using DG.Tweening;
 
 public class SelfieUploader : MonoBehaviour
 {
@@ -21,11 +22,16 @@ public class SelfieUploader : MonoBehaviour
 
     public GameObject blockingPanel;
     public GameObject closeButton;
+    public GameObject profileObjects;
+
+    public TextMeshProUGUI responseText;
 
     public TextMeshProUGUI unText;
     public TextMeshProUGUI targetUNText;
+    public TextMeshProUGUI targetNameText;
+
     public RawImage targetPfpImage;
-    public TextMeshProUGUI responseText;
+    public RawImage userPfpImage;
 
     public int facesExpected = 1;
 
@@ -44,16 +50,6 @@ public class SelfieUploader : MonoBehaviour
         {
             selfieCam = FindObjectOfType<SelfieCam>();
         }
-
-        if (scls != null)
-        {
-            scls.Target += new SC_LoginSystem.TargetHandler(showNewTarget);
-        }
-    }
-
-    public void showNewTarget(string s, EventArgs e)
-    {
-
     }
 
     public IEnumerator SelfieUpload(string path)
@@ -65,7 +61,14 @@ public class SelfieUploader : MonoBehaviour
         responseText.text = "Verifying Image...";
 
         blockingPanel.SetActive(true);
-        unText.text = "@" + SC_LoginSystem.getUsername();
+        profileObjects.SetActive(true);
+        profileObjects.transform.DOLocalMoveY(Screen.height * 3, 1.3f).SetEase(Ease.OutQuad).From();
+
+        unText.text = "@" + GameManager.loggedInUser.un;
+        
+        //will getting the new user cause issues?
+        targetUNText.text = GameManager.currTarget.un;
+        targetPfpImage.texture = GameManager.currTarget.profilePic;
 
         float latitude = Input.location.lastData.latitude;
         float longitude = Input.location.lastData.longitude;
@@ -79,7 +82,7 @@ public class SelfieUploader : MonoBehaviour
             string[] imageNames = path.Split("/");
             string imageName = imageNames[imageNames.Length - 1];
             form.AddBinaryData("file", File.ReadAllBytes(path), imageName);
-            form.AddField("username", SC_LoginSystem.getUsername());
+            form.AddField("username", GameManager.loggedInUser.un);
             //always send location
             form.AddField("latitude", latitude.ToString());
             form.AddField("longitude", longitude.ToString());
@@ -109,7 +112,6 @@ public class SelfieUploader : MonoBehaviour
                 Debug.Log("response: " + www.downloadHandler.text);
 
                 HandleServerResponse(www.downloadHandler.text);
-                HandleStartingUIResponse(www.downloadHandler.text);
 
                 closeButton.SetActive(true);
             }
@@ -117,20 +119,6 @@ public class SelfieUploader : MonoBehaviour
         else
         {
             Debug.Log("File does not exist");
-        }
-    }
-    IEnumerator downloadImageFromURL(string url1, searchListItem li)
-    {
-        Debug.Log("Starting image Download Request");
-        UnityWebRequest request = UnityWebRequestTexture.GetTexture(url1);
-        yield return request.SendWebRequest();
-        if (request.result != UnityWebRequest.Result.Success)
-        {
-            Debug.Log(request.error);
-        }
-        else
-        {
-            li.profilePic.texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
         }
     }
 
@@ -147,8 +135,6 @@ public class SelfieUploader : MonoBehaviour
         {
             responseText.text = "Verification successful";
             approval = true;
-            //moved this line from the top of TakeSnap(), if anything breaks
-            StartCoroutine(scls.doTargetAssignment(SC_LoginSystem.getUsername(), 100));
         }
         else if (jsonResponse.Contains("Selfie Not Approved"))
         {
@@ -170,27 +156,16 @@ public class SelfieUploader : MonoBehaviour
 
     public void HandleUIServerResponse(string serverResponse)
     {
-        //APPROVAL: Selfie Not Approved|uploads/67b803a642475733731280.png|uploads/67a6a54aa534c078768223.png|ezkhunter|101
-        //Approval. "|" . $username . "|" . $user_prof_url . "|" . $target_id . "|" . $target_prof_url . "|" . $faceCount;
+        //Approval.  "|" $isUserInPic ."|". $isTargetInPic;
+        HandleTargetUIResponse();
+    }
 
-        try
+    void HandleTargetUIResponse()
+    {
+        if (approval)
         {
-            string[] dataPartition = serverResponse.Split("|");
-            string unData = dataPartition[1].Trim();
-            string unPfp = GameManager.rootURL + dataPartition[2].Trim();
-            string targetUN = dataPartition[3].Trim();
-            string targetPfp = GameManager.rootURL + dataPartition[4].Trim();
-
-            targetUNText.text = targetUN;
-
-            StartCoroutine(downloadImageFromURL(unPfp, userListing));
-            //StartCoroutine(downloadImageFromURL(targetPfp, targetPfpImage));
+            StartCoroutine(scls.doTargetAssignment(GameManager.loggedInUser.un, 100));
         }
-        catch (IndexOutOfRangeException e)
-        {
-            responseText.text = "Response doesn't contain enough parts";
-            Debug.LogException(e);
-        }        
     }
 
     IEnumerator ShowProcessingAnimation()
@@ -207,6 +182,9 @@ public class SelfieUploader : MonoBehaviour
     {
         closeButton.SetActive(false);
         blockingPanel.SetActive(false);
+        profileObjects.transform.DOLocalMoveY(Screen.height * 3, 1.3f).SetEase(Ease.OutQuad)
+            .OnComplete(() => profileObjects.SetActive(false));
+
         responseText.text = "";
 
         selfieCam.InitWebcam();
@@ -217,5 +195,4 @@ public class SelfieUploader : MonoBehaviour
     {
         public bool match;
     }
-
 }
