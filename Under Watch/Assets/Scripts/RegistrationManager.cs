@@ -50,7 +50,6 @@ public class RegistrationManager : MonoBehaviour
     public GameObject loadingAnim;
     public GameObject canvasElement;
     public GameObject bg;
-    public GameObject camMeshObj;
     public GameObject cacheToggle;
 
     public GameObject privacyPolicy;
@@ -100,8 +99,6 @@ public class RegistrationManager : MonoBehaviour
             nextButton.transform.DOLocalMoveX(originalPos[1].x, .5f).SetEase(Ease.OutQuad);
             camUI.transform.DOLocalMoveX(1400f, .5f).SetEase(Ease.OutQuad)
                 .OnComplete(() => setCameraActive(false));
-            camMeshObj.transform.DOLocalMoveX(1400f, .5f).SetEase(Ease.OutQuad);
-
         }
         else if (pfpImage.activeSelf)
         {
@@ -113,7 +110,6 @@ public class RegistrationManager : MonoBehaviour
                 .OnComplete(() => pfpImage.SetActive(false));
             camUI.transform.DOLocalMoveX(0, .5f).SetEase(Ease.OutQuad)
                 .OnComplete(() => setCameraActive(true));
-            camMeshObj.transform.DOLocalMoveX(0, .5f).SetEase(Ease.OutQuad);
 
             selfieCam.InitWebcam();
         }
@@ -143,7 +139,6 @@ public class RegistrationManager : MonoBehaviour
                 .OnComplete(() => nextButton.SetActive(false));
             camUI.transform.DOLocalMoveX(0, .5f).SetEase(Ease.OutQuad)
                 .OnComplete(() => setCameraActive(true));
-            camMeshObj.transform.DOLocalMoveX(0, .5f).SetEase(Ease.OutQuad);
         }
         else
         {
@@ -153,14 +148,12 @@ public class RegistrationManager : MonoBehaviour
                 .OnComplete(() => nextButton.SetActive(false));
             camUI.transform.DOLocalMoveX(0, .5f).SetEase(Ease.OutQuad)
                 .OnComplete(() => setCameraActive(true));
-            camMeshObj.transform.DOLocalMoveX(0, .5f).SetEase(Ease.OutQuad);
         }
     }
 
     void setCameraActive(bool active)
     {
         camUI.SetActive(active);
-        camMeshObj.SetActive(active);
     }
 
     public void RegisterUser()
@@ -278,6 +271,5 @@ public class RegistrationManager : MonoBehaviour
 
         camUI.transform.DOLocalMoveX(-1400f, .5f).SetEase(Ease.OutQuad)
             .OnComplete(() => setCameraActive(false));
-        camMeshObj.transform.DOLocalMoveX(-1400, .5f).SetEase(Ease.OutQuad);
     }
 }

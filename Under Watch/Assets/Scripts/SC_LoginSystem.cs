@@ -131,7 +131,6 @@ public class SC_LoginSystem : MonoBehaviour
         LoginButton.transform.DOLocalMoveX(0, .5f).SetEase(Ease.OutQuad);
         RegisterButton.transform.DOLocalMoveX(0, .5f).SetEase(Ease.OutQuad);
         logo.transform.DOLocalMoveX(0f, .5f).SetEase(Ease.OutQuad).OnComplete(() => EnableLoginFields(true));
-
     }
 
     void EnableLoginReg(bool enabling)
@@ -243,49 +242,48 @@ public class SC_LoginSystem : MonoBehaviour
         errorMessage = "";
 
         yield return StartCoroutine(CheckAccountEnabled(email));
-        if (!isAccountEnabled)
+
+        if (isAccountEnabled)
         {
-            yield return null;
-        }
+            WWWForm form = new WWWForm();
+            form.AddField("email", email);
+            form.AddField("password", password);
 
-        WWWForm form = new WWWForm();
-        form.AddField("email", email);
-        form.AddField("password", password);
-
-        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "login.php", form))
-        {
-            yield return www.SendWebRequest();
-            if (www.result != UnityWebRequest.Result.Success)
+            using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "login.php", form))
             {
-                errorMessage = www.error;
-
-                Debug.Log("Non-Success Result" + www.error);
-            }
-            else
-            {
-                string responseText = www.downloadHandler.text;
-                if (responseText.Contains("Success"))
+                yield return www.SendWebRequest();
+                if (www.result != UnityWebRequest.Result.Success)
                 {
-                    isLoggedIn = true;
-                    ResetValues();
-                    gm.saveLoginTime();
-                    canvasElement.transform.DOLocalMoveY(UnityEngine.Screen.height * 3, .7f).SetEase(Ease.OutQuad).OnComplete(() => gm.ProgressToScene("SocialFeed"));
-                    userLoggedIn?.Invoke();
+                    errorMessage = www.error;
 
-                    SetUserInfo(responseText);
-
-                    //store registration information 
-                    if (isCached == false)
-                    {
-                       Debug.Log(isCached);
-                       SetLoginPrefs(email, password, true);
-                    }
+                    Debug.Log("Non-Success Result" + www.error);
                 }
                 else
                 {
-                    errorMessage = responseText;
-                    errorText.text = errorMessage;
-                    Debug.Log(errorMessage);
+                    string responseText = www.downloadHandler.text;
+                    if (responseText.Contains("Success"))
+                    {
+                        isLoggedIn = true;
+                        ResetValues();
+                        gm.saveLoginTime();
+                        canvasElement.transform.DOLocalMoveY(UnityEngine.Screen.height * 3, .7f).SetEase(Ease.OutQuad).OnComplete(() => gm.ProgressToScene("SocialFeed"));
+                        userLoggedIn?.Invoke();
+
+                        SetUserInfo(responseText);
+
+                        //store registration information 
+                        if (isCached == false)
+                        {
+                            Debug.Log(isCached);
+                            SetLoginPrefs(email, password, true);
+                        }
+                    }
+                    else
+                    {
+                        errorMessage = responseText;
+                        errorText.text = errorMessage;
+                        Debug.Log(errorMessage);
+                    }
                 }
             }
         }
@@ -378,13 +376,14 @@ public class SC_LoginSystem : MonoBehaviour
         WWWForm form = new WWWForm();
         form.AddField("email", email);
 
-        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "CHANGE ME CHANGE ME", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "get-user-enabled.php", form))
         {
             yield return www.SendWebRequest();
             if (www.result != UnityWebRequest.Result.Success)
             {
-                Debug.Log("Non-Success Result");
                 errorMessage = www.error;
+
+                Debug.Log("Non-Success Result" + errorMessage);
             }
             else
             {
