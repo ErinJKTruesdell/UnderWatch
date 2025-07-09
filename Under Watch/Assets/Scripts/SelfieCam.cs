@@ -8,6 +8,8 @@ using TMPro;
 using System.Net;
 using DG.Tweening.Plugins.Core.PathCore;
 using UnityEngine.Android;
+using Unity.VisualScripting;
+using static System.Net.Mime.MediaTypeNames;
 
 public class SelfieCam : MonoBehaviour
 {
@@ -24,6 +26,8 @@ public class SelfieCam : MonoBehaviour
 
     public SelfieUploader selfieUploader;
     public RegistrationManager regManager;
+
+    public Texture2D tex;
     private void Awake()
     {
         if (selfieUploader == null)
@@ -165,33 +169,42 @@ public class SelfieCam : MonoBehaviour
             webcam.Pause();
 
             //takes image directly from camera to get highest quality
-            Texture2D tex = new Texture2D(webcam.width, webcam.height);
+            tex = new Texture2D(webcam.width, webcam.height);
             tex.SetPixels(webcam.GetPixels());
             tex.Apply();
 
             camView.texture = tex;
 
-            byte[] bytes = tex.EncodeToPNG();
-            string loggedInUser = GameManager.loggedInUser.un;
-
-            string filename = loggedInUser + "-" + DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day + "-" + DateTime.Now.Hour + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Second + ".png";
-            string path = Application.persistentDataPath + filename;
-            System.IO.File.WriteAllBytes(path, bytes);
-
-            Debug.Log("File Upload Coroutine");
-            if (selfieUploader != null)
-            {
-                StartCoroutine(selfieUploader.SelfieUpload(path));
-            }
-            if (regManager != null)
-            {
-                regManager.CapturedPhotoFinalStep(tex, path);
-            }
+            uploadPic(tex);
         }
         catch (Exception e)
         {
-            Debug.Log(e);
+            Debug.Log(e + "Could not take a photo");
             responseText.text += "Could not take a photo!";
+
+            new WaitForSeconds(3);
+            uploadPic(tex);
+        }
+    }
+
+    void uploadPic( Texture2D tex)
+    {
+        //tex and is assigned a default in inspector
+
+        byte[] bytes = tex.EncodeToPNG();
+
+        string filename = DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day + "-" + DateTime.Now.Hour + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Second + ".png";
+        string path = UnityEngine.Application.persistentDataPath + filename;
+        System.IO.File.WriteAllBytes(path, bytes);
+
+        Debug.Log("File Upload Coroutine");
+        if (selfieUploader != null)
+        {
+            StartCoroutine(selfieUploader.SelfieUpload(path));
+        }
+        if (regManager != null)
+        {
+            regManager.CapturedPhotoFinalStep(tex, path);
         }
     }
     public void capturePhoto()

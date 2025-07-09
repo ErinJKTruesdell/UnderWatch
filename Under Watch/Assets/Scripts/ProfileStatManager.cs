@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.Networking;
 using System;
+using UnityEngine.SceneManagement;
 
 public class ProfileStatManager : MonoBehaviour
 {
@@ -18,18 +19,25 @@ public class ProfileStatManager : MonoBehaviour
 
     public GameManager gm;
 
+    string un;
     private void OnEnable()
     {
         gm = FindObjectOfType<GameManager>();
 
         InitObjectivesCount();
         InitPostsAndReacts();
-        profileInfo.SetActive(true);
-
     }
-
     void InitPostsAndReacts()
     {
+        if (SceneManager.GetActiveScene().name == ("ClickedProfile"))
+        {
+            un = ShowClickedProfile.userName;
+        }
+        else
+        {
+            un = GameManager.loggedInUser.un;
+        }
+
         StartCoroutine(GetProfileData());
     }
 
@@ -41,7 +49,7 @@ public class ProfileStatManager : MonoBehaviour
     IEnumerator GetProfileData()
     {
         WWWForm form = new WWWForm();
-        form.AddField("username", GameManager.loggedInUser.un);
+        form.AddField("username", un);
         using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "get-profile-stats.php", form))
         {
             yield return www.SendWebRequest();
@@ -60,39 +68,48 @@ public class ProfileStatManager : MonoBehaviour
         }
     }
 
-    void HandleProfileStatDisplay(string response)
+    public void HandleProfileStatDisplay(string response)
     {
         //$reactNum . "|" . $postNum. "|" . $work . "|" . $att1 . "|" . $att2 . "|" . $att3;
         try
         {
-            string[] partition = response.Split("@");
-            string[] statInfo = partition[0].Split("|");
-            string[] profAtt = partition[1].Split("|");
+            profileInfo.SetActive(true);
+            workLoc.text = "";
+            attributes.text = "";
 
+            string[] partition = response.Split("@");
+            Debug.Log(partition[0]);
+            Debug.Log(partition[1]);
+            string[] statInfo = partition[0].Split("|");
             reactsText.text = statInfo[0];
             postsText.text = statInfo[1];
 
-            //if all the strings are empty, throw an exception
-            if (string.IsNullOrEmpty(profAtt.ToString()))
+            string[] profAtt = partition[1].Split("|");
+
+            Debug.Log("Assigning attributes" + profAtt[0] + profAtt[1] + profAtt[2] + profAtt[3]);
+
+            //if the work string is empty, don't bother showing the rest
+            //check if a string is empty before adding it to the sentence
+            if (!string.IsNullOrEmpty(profAtt[0]))
+                workLoc.text = "I work at " + profAtt[0];
+            else
                 throw new Exception("Attributes string is empty.");
 
-            //check if a string is empty before adding it to the sentence
+            if (!string.IsNullOrEmpty(profAtt[1]))
+                attributes.text += $" {profAtt[1]}.";
+
             if (!string.IsNullOrEmpty(profAtt[2]))
-                workLoc.text = "I work at " + profAtt[2];
+                attributes.text += $" {profAtt[2]}";
 
             if (!string.IsNullOrEmpty(profAtt[3]))
-                attributes.text += $" {profAtt[3]}.";
-
-            if (!string.IsNullOrEmpty(profAtt[4]))
-                attributes.text += $" {profAtt[4]}";
-
-            if (!string.IsNullOrEmpty(profAtt[5]))
-                attributes.text += $", and {profAtt[5]}!";
+                attributes.text += $", and {profAtt[3]}!";
         }
         catch (Exception e)
         {
             Debug.Log(e);
             profileInfo.SetActive(false);
         }
+
+        VLGFiddler.RebuildVLGLayout();
     }
 }

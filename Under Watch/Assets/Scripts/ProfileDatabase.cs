@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 public class ProfileDatabase : MonoBehaviour
 {
-
     public RawImage profileImage;
 
     public RawImage zoomedImage;
@@ -31,15 +30,18 @@ public class ProfileDatabase : MonoBehaviour
         gm.LogOut();
     }
 
-    public void fillCanvas(string username, string fullName)
+    public void fillCanvas(string username)
     {
-        Debug.Log("Filling Canvas: " + username + fullName);
+        Debug.Log("Filling Canvas: " + username);
 
-        fullNameText.text = fullName;
         usernameText.text = "@" + username;
         usernameText.gameObject.SetActive(true);
 
         StartCoroutine(getAndDownloadImages(username));
+
+        if (username == GameManager.loggedInUser.un)
+            //if we're looking at the currently logged in user, we can just load the stored fullname
+            fullNameText.text = GameManager.loggedInUser.firstName + " " + GameManager.loggedInUser.lastName;
     }
     private IEnumerator getAndDownloadImages(string username)
     {
@@ -47,14 +49,13 @@ public class ProfileDatabase : MonoBehaviour
         WWWForm form = new WWWForm();
         form.AddField("username", username); //dummy data
 
-        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "/get-all-user-photos.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "get-all-user-photos.php", form))
         {
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
             {
                 //yay show the picture
-                //errorMessage = www.error;
                 string errorMessage = www.error;
                 Debug.Log(errorMessage);
 
@@ -72,6 +73,8 @@ public class ProfileDatabase : MonoBehaviour
 
                 if (userChunks.Length > 1)
                 {
+                    fullNameText.text = userChunks[0];
+
                     string profUrl = "/" + userChunks[1];
                     Debug.Log(profUrl);
                     StartCoroutine(downloadImageFromURL(GameManager.rootURL + profUrl, profileImage));
@@ -92,12 +95,9 @@ public class ProfileDatabase : MonoBehaviour
                             StartCoroutine(downloadImageFromURL(GameManager.rootURL + i, ppp.thisImage));
                         }
                     }
-
                 }
             }
-
         }
-
     }
 
     private IEnumerator downloadImageFromURL(string url1, RawImage image1)

@@ -15,7 +15,7 @@ public class ShowClickedProfile : MonoBehaviour
 
     private void Start()
     {
-        pd.fillCanvas(userName, pd.fullNameText.text);
+        pd.fillCanvas(userName);
 
         searchScript = new SearchScript();
     }

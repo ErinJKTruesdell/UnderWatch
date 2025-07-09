@@ -52,7 +52,7 @@ public class RegistrationManager : MonoBehaviour
     public GameObject bg;
     public GameObject cacheToggle;
 
-    public GameObject privacyPolicy;
+    public GameObject attributePrivacyCanvas;
 
     WaitForEndOfFrame frameEnd = new WaitForEndOfFrame();
 
@@ -234,7 +234,7 @@ public class RegistrationManager : MonoBehaviour
 
                     loginSystem.loginUponRegister(username.text, email.text, pointsStart, password.text, firstName.text, lastName.text, profPic.texture);
                     loginSystem.SetLoginPrefs(email.text, password.text, true);
-                    privacyPolicy.SetActive(true);
+                    attributePrivacyCanvas.SetActive(true);
                 }
                 else
                 {

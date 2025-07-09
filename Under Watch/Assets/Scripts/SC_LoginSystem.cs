@@ -96,11 +96,7 @@ public class SC_LoginSystem : MonoBehaviour
     {
         Debug.Log("logging in on register: " + username);
 
-        GameManager.loggedInUser.un = username;
-        GameManager.loggedInUser.email = email;
-        GameManager.loggedInUser.firstName = firstName;
-        GameManager.loggedInUser.lastName = lastName;
-        GameManager.loggedInUser.profilePic = (pfp as Texture2D);
+        GameManager.loggedInUser = new(username, firstName, lastName, pfp as Texture2D, email);
 
         isLoggedIn = true;
         StartCoroutine(doTargetAssignment(username, points));

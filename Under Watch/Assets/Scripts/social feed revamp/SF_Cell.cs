@@ -36,7 +36,7 @@ public class SF_Cell : MonoBehaviour, ICell
     private int _cellIndex;
 
     //ad handling
-    public UnityEngine.UI.Button adButton;
+    public GameObject adButton;
     public UnityEngine.UI.Button pfpButton;
 
     List<int> loadedPosts = new();
@@ -90,7 +90,7 @@ public class SF_Cell : MonoBehaviour, ICell
         {
             pfpImage.texture = snapPFPTex;
 
-            adButton.enabled = true;
+            adButton.SetActive(true);
             locText.text = "Click to engage with Sponsor";
 
             StartCoroutine(LoadPostAdURL());
@@ -111,7 +111,7 @@ public class SF_Cell : MonoBehaviour, ICell
         {
             //postItem.location
             locText.text = "";
-            adButton.enabled = false;
+            adButton.SetActive(false);
 
             StartCoroutine(LoadPostImage());
             StartCoroutine(LoadPfpImage());

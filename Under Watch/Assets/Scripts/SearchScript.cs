@@ -46,7 +46,6 @@ public class SearchScript : MonoBehaviour
             loading.SetActive(true);
         }
 
-
         StartCoroutine(PopulateSearch());
 
         prevSearches = PlayerPrefs.GetString("SearchedUNs");
@@ -111,6 +110,7 @@ public class SearchScript : MonoBehaviour
                     if (UNData[j].Length > 2 && !UNData[j].Contains("Sponsored")) // trim off that last empty bit
                     {
                         userNames.Add(new userData(UNData[j], PFPData[j], fullNameData[j]));
+                        Debug.Log("pfp" + PFPData[j]);
                     }
                 }
 
@@ -121,7 +121,6 @@ public class SearchScript : MonoBehaviour
 
                 foreach (userData i in userNames)
                 {
-
                     GameObject searchUserItem = Instantiate(searchProfileItem) as GameObject;
                     searchUserItem.transform.parent = gridObj;
                     searchUserItem.transform.localScale = new Vector3(1, 1, 1);
@@ -135,7 +134,6 @@ public class SearchScript : MonoBehaviour
                     if (!prevSearches.Contains(i.username.Trim()))                    {
                         searchUserItem.SetActive(false);
                     }
-
 
                     //downlaod prof img
 
@@ -188,6 +186,13 @@ public class SearchScript : MonoBehaviour
                 {
                     ele.SetActive(false);
                 }
+            }
+        }
+        else
+        {
+            foreach (GameObject ele in Element)
+            {
+                ele.SetActive(false);
             }
         }
     }

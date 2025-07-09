@@ -194,6 +194,7 @@ MonoBehaviour:
   responseText: {fileID: 743149907242431485}
   selfieUploader: {fileID: 0}
   regManager: {fileID: 0}
+  tex: {fileID: 2800000, guid: 86fc385f383321449b999c971072afd7, type: 3}
 --- !u!1 &1281559143979317092
 GameObject:
   m_ObjectHideFlags: 0
