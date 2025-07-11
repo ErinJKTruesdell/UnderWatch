@@ -107,14 +107,14 @@ public class GameManager : MonoBehaviour
 
 public class UserInfo
 {
-    public Texture2D profilePic;
+    public Texture profilePic;
     public string un;
     public string firstName;
     public string lastName;
     public string email;
     //any other dating app info
 
-    public UserInfo(string _un, string _firstName, string _lastName, Texture2D _profilePic = null, string _email = " ")
+    public UserInfo(string _un, string _firstName, string _lastName, Texture _profilePic = null, string _email = " ")
     {
         un = _un;
         firstName = _firstName;

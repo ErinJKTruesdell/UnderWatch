@@ -98,8 +98,7 @@ public class SC_LoginSystem : MonoBehaviour
     {
         Debug.Log("logging in on register: " + username);
 
-        GameManager.loggedInUser = new(username, firstName, lastName, pfp as Texture2D, email);
-
+        GameManager.loggedInUser = new(username, firstName, lastName, pfp, email);
         isLoggedIn = true;
         StartCoroutine(doTargetAssignment(username, points));
 
@@ -331,7 +330,7 @@ public class SC_LoginSystem : MonoBehaviour
             string un = dataPartition[1].Trim();
             string firstName = dataPartition[2].Trim();
             string lastName = dataPartition[3].Trim();
-            string profilePicURL = dataPartition[4].Trim();
+            string profilePicURL = GameManager.rootURL + dataPartition[4].Trim();
 
             GameManager.currTarget = new(un, firstName, lastName);
             StartCoroutine(downloadImageFromURL(profilePicURL, GameManager.currTarget));
@@ -354,7 +353,7 @@ public class SC_LoginSystem : MonoBehaviour
             string email = dataPartition[2].Trim();
             string firstName = dataPartition[3].Trim();
             string lastName = dataPartition[4].Trim();
-            string profilePicURL = dataPartition[5].Trim();
+            string profilePicURL = GameManager.rootURL + dataPartition[5].Trim();
 
             GameManager.loggedInUser = new(un, firstName, lastName, _email: email);
             StartCoroutine(downloadImageFromURL(profilePicURL, GameManager.loggedInUser));
@@ -557,7 +556,7 @@ public class SC_LoginSystem : MonoBehaviour
     }*/
     IEnumerator downloadImageFromURL(string url, UserInfo user)
     {
-        Debug.Log("Starting image Download Request");
+        Debug.Log("Starting image Download Request for user: " + user.un + " from URL: " + url);
         UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
         yield return request.SendWebRequest();
         if (request.result != UnityWebRequest.Result.Success)

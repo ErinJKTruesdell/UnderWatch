@@ -37,6 +37,7 @@ public class ProfileDatabase : MonoBehaviour
         Debug.Log("Filling Canvas: " + username);
 
         usernameText.text = "@" + username;
+        profileImage.texture = GameManager.loggedInUser.profilePic;
         usernameText.gameObject.SetActive(true);
 
         StartCoroutine(getAndDownloadImages(username));
@@ -79,7 +80,6 @@ public class ProfileDatabase : MonoBehaviour
 
                     string profUrl = "/" + userChunks[1];
                     Debug.Log(profUrl);
-                    StartCoroutine(downloadImageFromURL(GameManager.rootURL + profUrl, profileImage));
 
                     //create prefab and load images
                     for (int s = 1; s < userChunks.Length; s++)
