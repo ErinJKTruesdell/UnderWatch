@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.Events;
 using static OnlineMapsGPXObject;
+using Unity.VisualScripting;
 
 public class SC_LoginSystem : MonoBehaviour
 {
@@ -80,6 +81,7 @@ public class SC_LoginSystem : MonoBehaviour
         }
         else
         {
+            Debug.Log("No cached login data found");
             //else show login/register buttons
             LoginButton.SetActive(true);
             RegisterButton.SetActive(true);
@@ -261,7 +263,6 @@ public class SC_LoginSystem : MonoBehaviour
                     {
                         isLoggedIn = true;
                         ResetValues();
-                        gm.saveLoginTime();
                         canvasElement.transform.DOLocalMoveY(UnityEngine.Screen.height * 3, .7f).SetEase(Ease.OutQuad).OnComplete(() => gm.ProgressToScene("SocialFeed"));
                         userLoggedIn?.Invoke();
 
@@ -297,7 +298,7 @@ public class SC_LoginSystem : MonoBehaviour
             yield return www.SendWebRequest();
             if (www.result != UnityWebRequest.Result.Success)
             {
-                Debug.Log("Non-Success Result");
+                Debug.Log("Non-Success Result" + www.downloadHandler.text + www.error);
             }
             else
             {

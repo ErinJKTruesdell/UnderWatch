@@ -56,74 +56,15 @@ public class GameManager : MonoBehaviour
 
         DontDestroyOnLoad(this);
     }
-    public void saveLoginTime()
-    {
-        loginTime = DateTime.Now;
-
-        Debug.Log("Starting app time tracking...");
-    }
-
-    public void saveSocialFeedTime()
-    {
-        Debug.Log("Social Feed Opened");
-        openSocialFeedTime = DateTime.Now;
-    }
-
-    public void onSocialFeedClosed()
-    {
-        Debug.Log("Social Feed Closed");
-        //upload social feed
-        if(scls.isLoggedIn)
-        {
-            double timeinMinutes = Math.Round((DateTime.Now - openSocialFeedTime).TotalMinutes, 2);
-            StartCoroutine(sendSocialTimeToDatabase(timeinMinutes, GameManager.loggedInUser.un));
-        }
-    }
-
-    void saveAppTime() //called on pause and on quit
-    {
-        if (scls.isLoggedIn)
-        {
-            double timeinMinutes = Math.Round((DateTime.Now - loginTime).TotalMinutes, 2);
-            if (SceneManager.GetActiveScene().name == "SocialFeed")
-            {
-                onSocialFeedClosed();
-            }
-            StartCoroutine(sendAppTimeToDatabase(timeinMinutes, GameManager.loggedInUser.un));
-        }
-    }
-
-    private void OnApplicationPause(bool pause)
-    {
-        if (pause)
-        {
-            saveAppTime();
-        }
-        else
-        {
-            loginTime = DateTime.Now;
-        }
-    }
-
-    private void OnApplicationQuit()
-    {
-        saveAppTime();
-    }
-
     public void ProgressToScene(string sceneName)
     {
-        if(SceneManager.GetActiveScene().name == "SocialFeed" &&  SceneManager.loadedSceneCount == 1)
+        if (SceneManager.GetActiveScene().name == "SocialFeed" && SceneManager.loadedSceneCount == 1)
         {
-            onSocialFeedClosed();
             SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
         }
         else
         {
             SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
-        }
-        if (sceneName == "SocialFeed")
-        {
-            saveSocialFeedTime();
         }
     }
 
@@ -149,56 +90,7 @@ public class GameManager : MonoBehaviour
         ProgressToScene("ForgotPassword");
     }
 
-    IEnumerator sendSocialTimeToDatabase(double minutes, string username)
-    {
-        ach.addMinutes(minutes);
-
-        Debug.Log("Social feed closed by " + username + " after " + minutes + " minutes.");
-        WWWForm form = new WWWForm();
-        form.AddField("username", username);
-        form.AddField("time", minutes.ToString());
-
-        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "append-social-feed-time.php", form))
-        {
-            yield return www.SendWebRequest();
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Debug.Log("Non-Success Result");
-                string responseText = www.downloadHandler.text;
-
-                Debug.Log(responseText);
-            }
-            else
-            {
-                string responseText = www.downloadHandler.text;
-                
-                    Debug.Log(responseText);            
-            }
-        }
-    }
-
-    IEnumerator sendAppTimeToDatabase(double minutes, string username)
-    {
-        WWWForm form = new WWWForm();
-        form.AddField("username", username);
-        form.AddField("time", minutes.ToString());
-
-        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "append-in-app-time.php", form))
-        {
-            yield return www.SendWebRequest();
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Debug.Log("Non-Success Result");
-            }
-            else
-            {
-                string responseText = www.downloadHandler.text;
-
-                Debug.Log(responseText);
-
-            }
-        }
-    }
+# if UNITY_ANDROID
     private AndroidJavaObject GetCurrentActivity()
     {
         AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
@@ -210,6 +102,7 @@ public class GameManager : MonoBehaviour
         AndroidJavaClass version = new AndroidJavaClass("android.os.Build$VERSION");
         return version.GetStatic<int>("SDK_INT");
     }
+#endif
 }
 
 public class UserInfo
@@ -229,5 +122,7 @@ public class UserInfo
 
         profilePic = _profilePic;
         email = _email;
+
+        Debug.Log("Saved user: " + un);
     }
 }

@@ -118,8 +118,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4386700383302837909}
   - {fileID: 4421035398917693559}
+  - {fileID: 4386700383302837909}
   - {fileID: 1170482055464091260}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -181,6 +181,9 @@ MonoBehaviour:
   usernameText: {fileID: 6461853585700074839}
   fullNameText: {fileID: 6719612297498001613}
   profilePic: {fileID: 258025993153112389}
+  workLoc: {fileID: 0}
+  attributes: {fileID: 0}
+  profileInfo: {fileID: 0}
 --- !u!1 &4794696471757487990
 GameObject:
   m_ObjectHideFlags: 0

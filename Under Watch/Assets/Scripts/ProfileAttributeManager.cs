@@ -1,16 +1,15 @@
-using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
+using TMPro;
 using UnityEngine.Networking;
-using static OnlineMapsGPXObject;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
-
+using System;
+using UnityEngine.SceneManagement;
+using DG.Tweening;
+using System.Linq;
 public class ProfileAttributeManager : MonoBehaviour
 {
-    public List<TMP_InputField> attributeResponses = new();
+    public List<(TMP_InputField response, string attName)> attributeResponses = new();
 
     public GameObject attributeObj;
     public Transform attParent;
@@ -23,7 +22,7 @@ public class ProfileAttributeManager : MonoBehaviour
     {
         foreach (TMP_InputField att in attParent.GetComponentsInChildren<TMP_InputField>())
         {
-            attributeResponses.Add(att);
+            attributeResponses.Add((att, ""));
         }
     }
     private void OnEnable()
@@ -43,29 +42,11 @@ public class ProfileAttributeManager : MonoBehaviour
 
     public void NextButton()
     {
-        string responseValid = "";
         responseText.text = "";
         responseText.color = Color.white;
 
-        Debug.Log("????");
-
-        foreach (TMP_InputField attField in attributeResponses)
+        if (CheckInput() == false)
         {
-            if (attField.text == "")
-            {
-                responseValid = "Missing one or more fields.";
-                break;
-            }
-            else if (attField.text.Length < 3)
-            {
-                responseValid = "Response in one or more fields is too short!";
-                break;
-            }
-        }
-        if (responseValid != "")
-        {
-            responseText.text = responseValid;
-            responseValid = "";
             return;
         }
 
@@ -73,10 +54,44 @@ public class ProfileAttributeManager : MonoBehaviour
         StartCoroutine(SendAttributesData());
     }
 
+    bool CheckInput()
+    {
+        foreach (var attField in attributeResponses)
+        {
+            string response = attField.response.text;
+
+            if (response.All(char.IsDigit))
+                //skip if it's all a number
+                continue;
+
+            if (response == "")
+            {
+                responseText.text = "Missing one or more fields.";
+                return false;
+            }
+            else if (response.Length < 3)
+            {
+                responseText.text = "Response in one or more fields is too short!";
+                return false;
+            }
+        }
+        return true;
+    }
     IEnumerator GetAttributesData()
     {
+        try
+        {
+            string un = GameManager.loggedInUser.un;
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+            SceneManager.LoadScene("LoginScene");
+            yield break;
+        }
+        //gets 3 random attributes of all possible ones - NOT a user's attributes
         WWWForm form = new WWWForm();
-        form.AddField("username", GameManager.loggedInUser.un);
+        form.AddField("username", GameManager.loggedInUser.un); //dummy data
         using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "get_profile_attributes.php", form))
         {
             yield return www.SendWebRequest();
@@ -97,21 +112,21 @@ public class ProfileAttributeManager : MonoBehaviour
     void HandleAttData(string response)
     {
         string[] attChunks = response.Split("|");
-        //having a wierd issue with this not working bc one of the chukns is empty
 
         foreach (string att in attChunks)
         {
             if (!string.IsNullOrEmpty(att))
             {
-                GameObject attObj = Instantiate(attPrefab, attParent);
-                attributeResponses.Add(attObj.GetComponent<TMP_InputField>());
-
                 string[] titleExPair = att.Split("@");
+
+                GameObject attObj = Instantiate(attPrefab, attParent);
+                attributeResponses.Add((attObj.GetComponent<TMP_InputField>(), titleExPair[0]));
+
                 if (titleExPair.Length == 2)
                 {
                     AttributeObject attContainer = attObj.GetComponent<AttributeObject>();
                     attContainer.title.text = titleExPair[0];
-                    attContainer.placeHolderText.text = titleExPair[1];
+                    attContainer.example.text = titleExPair[1];
                 }
                 else
                     Debug.Log("Wrong format for attribute string");
@@ -121,13 +136,19 @@ public class ProfileAttributeManager : MonoBehaviour
 
     IEnumerator SendAttributesData()
     {
+        TrimResponses();
+
         WWWForm form = new WWWForm();
         form.AddField("username", GameManager.loggedInUser.un);
-        form.AddField("workLoc", attributeResponses[0].text);
+        form.AddField("workLoc", attributeResponses[0].response.text);
 
-        form.AddField("att1", attributeResponses[1].text);
-        form.AddField("att2", attributeResponses[2].text);
-        form.AddField("att3", attributeResponses[3].text);
+        form.AddField("att1", attributeResponses[1].response.text);
+        form.AddField("att2", attributeResponses[2].response.text);
+        form.AddField("att3", attributeResponses[3].response.text);
+
+        form.AddField("att1Name", attributeResponses[1].attName);
+        form.AddField("att2Name", attributeResponses[2].attName);
+        form.AddField("att3Name", attributeResponses[3].attName);
 
         using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "post-profile-attributes.php", form))
         {
@@ -152,4 +173,14 @@ public class ProfileAttributeManager : MonoBehaviour
             }
         }
     }
+
+    void TrimResponses()
+    {
+        foreach (var attField in attributeResponses)
+        {
+            attField.response.text.Trim().ToLower();
+            attField.attName.Trim().ToLower();
+        }
+    }
+    
 }

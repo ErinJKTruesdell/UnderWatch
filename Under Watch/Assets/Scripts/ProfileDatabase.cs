@@ -24,6 +24,8 @@ public class ProfileDatabase : MonoBehaviour
     private void Start()
     {
         gm = GameObject.FindObjectOfType<GameManager>();
+
+        fillCanvas(GameManager.loggedInUser.un);
     }
     public void PfDLogOut()
     {

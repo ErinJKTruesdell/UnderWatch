@@ -6,5 +6,5 @@ using UnityEngine;
 public class AttributeObject : MonoBehaviour
 {
     public TMP_Text title;
-    public TMP_Text placeHolderText;
+    public TMP_Text example;
 }

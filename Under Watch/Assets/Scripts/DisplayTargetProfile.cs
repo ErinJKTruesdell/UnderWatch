@@ -1,52 +1,45 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 using UnityEngine.Networking;
-using System;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class ProfileStatManager : MonoBehaviour
+public class DisplayTargetProfile : MonoBehaviour
 {
-    public TMP_Text objectivesText;
-    public TMP_Text postsText;
-    public TMP_Text reactsText;
+public TMP_Text usernameText;
+    public TMP_Text fullNameText;
+    public RawImage profilePic;
+    public RawImage zoomedProfilePic;
 
     public TMP_Text workLoc;
     public TMP_Text attributes;
 
     public GameObject profileInfo;
 
-    public GameManager gm;
-
-    string un;
-    private void OnEnable()
+    public void ConfigureUser(UserInfo user)
     {
-        gm = FindObjectOfType<GameManager>();
+        usernameText.text = "@" + user.un;
+        fullNameText.text = user.firstName + " " + user.lastName;
+        profilePic.texture = user.profilePic;
+        zoomedProfilePic.texture = user.profilePic;
 
-        InitObjectivesCount();
-        InitPostsAndReacts();
-    }
-    void InitPostsAndReacts()
-    {
-        if (SceneManager.GetActiveScene().name == ("ClickedProfile"))
+        if (user.un != "")
         {
-            un = ShowClickedProfile.userName;
+            StartCoroutine(GetProfileData(user.un));
         }
-        else
-        {
-            un = GameManager.loggedInUser.un;
-        }
-
-        StartCoroutine(GetProfileData());
     }
-
-    void InitObjectivesCount()
+    public void ClickOnProfile()
     {
-        objectivesText.text = DayManager.objCompleted.ToString();
-    }
+        ShowClickedProfile.userName = usernameText.text;
+        ShowClickedProfile.sceneCameFrom = SceneManager.GetActiveScene().name;
 
-    IEnumerator GetProfileData()
+        SceneManager.LoadScene("ClickedProfile");
+    }
+    IEnumerator GetProfileData(string un)
     {
         WWWForm form = new WWWForm();
         form.AddField("username", un);
@@ -63,26 +56,21 @@ public class ProfileStatManager : MonoBehaviour
             {
                 Debug.Log("response: " + www.downloadHandler.text);
                 //$reactNum . "|" . $postNum. "|" . $work . "|" . $att1 . "|" . $att2 . "|" . $att3;
-                HandleProfileStatDisplay(www.downloadHandler.text);
+                HandleAttributeDisplay(www.downloadHandler.text);
             }
         }
     }
 
-    public void HandleProfileStatDisplay(string response)
+    void HandleAttributeDisplay(string response)
     {
         try
         {
             profileInfo.SetActive(true);
+
             workLoc.text = "";
             attributes.text = "";
 
             string[] partition = response.Split("@");
-            Debug.Log(partition[0]);
-            Debug.Log(partition[1]);
-            string[] statInfo = partition[0].Split("|");
-            reactsText.text = statInfo[0];
-            postsText.text = statInfo[1];
-
             string[] profAtt = partition[1].Split("|");
 
             Debug.Log("Assigning attributes" + profAtt[0] + profAtt[1] + profAtt[2] + profAtt[3]);
@@ -107,8 +95,9 @@ public class ProfileStatManager : MonoBehaviour
         {
             Debug.Log(e);
             profileInfo.SetActive(false);
+            workLoc.text = "";
+            attributes.text = "";
         }
-
         VLGFiddler.RebuildVLGLayout();
     }
 }
