@@ -22,10 +22,9 @@ public class SelfieUploader : MonoBehaviour
 
     public GameObject blockingPanel;
     public GameObject closeButton;
+
     public GameObject profileObjects;
-
     public TextMeshProUGUI responseText;
-
     public TextMeshProUGUI unText;
     public TextMeshProUGUI targetUNText;
     public TextMeshProUGUI targetNameText;
@@ -96,7 +95,7 @@ public class SelfieUploader : MonoBehaviour
             if (www.result != UnityWebRequest.Result.Success)
             {
                 approval = false;
-                responseText.text = "Error: " + www.error;
+                ErrorEventHandler.InvokeError("Server Error:", www.error, Color.red);
                 Debug.Log(www.error);
 
                 if (processingCoroutine != null)

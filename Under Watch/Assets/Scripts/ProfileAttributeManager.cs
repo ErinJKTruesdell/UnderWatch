@@ -15,9 +15,6 @@ public class ProfileAttributeManager : MonoBehaviour
     public Transform attParent;
     public GameObject privacyPolicy;
     public GameObject attPrefab;
-
-    public TextMeshProUGUI responseText;
-
     private void Start()
     {
         foreach (TMP_InputField att in attParent.GetComponentsInChildren<TMP_InputField>())
@@ -27,7 +24,6 @@ public class ProfileAttributeManager : MonoBehaviour
     }
     private void OnEnable()
     {
-        responseText.text = "";
         attributeObj.SetActive(true);
         privacyPolicy.SetActive(false);
 
@@ -42,9 +38,6 @@ public class ProfileAttributeManager : MonoBehaviour
 
     public void NextButton()
     {
-        responseText.text = "";
-        responseText.color = Color.white;
-
         if (CheckInput() == false)
         {
             return;
@@ -66,12 +59,12 @@ public class ProfileAttributeManager : MonoBehaviour
 
             if (response == "")
             {
-                responseText.text = "Missing one or more fields.";
+                ErrorEventHandler.InvokeError("Oops!", "Missing one or more fields", Color.red);
                 return false;
             }
             else if (response.Length < 3)
             {
-                responseText.text = "Response in one or more fields is too short!";
+                ErrorEventHandler.InvokeError("Oops!", "Response in one or more fields is too short!", Color.red);
                 return false;
             }
         }
@@ -157,8 +150,7 @@ public class ProfileAttributeManager : MonoBehaviour
             if (www.result != UnityWebRequest.Result.Success)
             {
                 Debug.Log("Failed to send data!: " + www.error + www.downloadHandler.text);
-                responseText.color = Color.red;
-                responseText.text = www.error + www.downloadHandler.text;
+                ErrorEventHandler.InvokeError("Attribute Error:", www.error + " " + www.downloadHandler.text, Color.red);
                 yield break;
             }
             else

@@ -14,8 +14,6 @@ using System;
 using UnityEngine.AI;
 using DG.Tweening;
 using static System.Net.Mime.MediaTypeNames;
-using static OnlineMapsBingMapsElevation;
-using Unity.VisualScripting;
 
 public class RegistrationManager : MonoBehaviour
 {
@@ -55,8 +53,6 @@ public class RegistrationManager : MonoBehaviour
     public GameObject attributePrivacyCanvas;
 
     WaitForEndOfFrame frameEnd = new WaitForEndOfFrame();
-
-    public TextMeshProUGUI responseText;
     public string pfpPath;
 
     new List<Vector2> originalPos = new List<Vector2>();
@@ -126,13 +122,12 @@ public class RegistrationManager : MonoBehaviour
     {
         if (email.text == "" || username.text == "" || password.text == "" || firstName.text == "" || lastName.text == "")
         {
-            responseText.text = "Missing one or more fields.";
+            ErrorEventHandler.InvokeError("Oops!", "Missing one or more fields!", Color.red);
         }
         else if (camUI.activeSelf)
         {
             selfieCam.InitWebcam();
 
-            responseText.text = "";
             regTextFields.transform.DOLocalMoveX(-1400f, .5f).SetEase(Ease.OutQuad)
                 .OnComplete(() => regTextFields.SetActive(false));
             nextButton.transform.DOLocalMoveX(-1400f, .5f).SetEase(Ease.OutQuad)
@@ -160,12 +155,11 @@ public class RegistrationManager : MonoBehaviour
     {
         if (email.text == "" || username.text == "" || password.text == "" || firstName.text == "" || lastName.text == "")
         {
-            responseText.text = "Missing one or more fields.";
+            ErrorEventHandler.InvokeError("Oops!", "Missing one or more fields!", Color.red);
         }
         else if (!isWorking)
         {
             StartCoroutine(doRegistration());
-            responseText.text = "";
         }
     }
 
@@ -244,7 +238,7 @@ public class RegistrationManager : MonoBehaviour
                     pfpImage.SetActive(true);
 
                     errorMessage = responseStr;
-                    responseText.text = errorMessage;
+                    ErrorEventHandler.InvokeError("Server Error:", errorMessage, Color.red);
                     Debug.Log("error: " + errorMessage);
                 }
             }

@@ -8,7 +8,6 @@ using TMPro;
 using System.Net;
 using DG.Tweening.Plugins.Core.PathCore;
 using UnityEngine.Android;
-using Unity.VisualScripting;
 using static System.Net.Mime.MediaTypeNames;
 
 public class SelfieCam : MonoBehaviour
@@ -21,8 +20,6 @@ public class SelfieCam : MonoBehaviour
     public GameObject button;
 
     public Transform camTransform;
-
-    public TextMeshProUGUI responseText;
 
     public SelfieUploader selfieUploader;
     public RegistrationManager regManager;
@@ -75,8 +72,7 @@ public class SelfieCam : MonoBehaviour
             }
             else
             {
-                responseText.color = Color.red;
-                responseText.text = "Camera permissions not authorized!";
+                ErrorEventHandler.InvokeError("Permission Issue:", "Camera permissions not authorized! Please fix this in your device settings", Color.red);
             }
         }
 #endif
@@ -113,8 +109,7 @@ public class SelfieCam : MonoBehaviour
         }
         else
         {
-            responseText.color = Color.red;
-            responseText.text = "Could not find any cameras!";
+            ErrorEventHandler.InvokeError("Camera Issue:", "Could not find any cameras!", Color.red);
         }
     }
     IEnumerator VerifyWebcamStarted()
@@ -147,8 +142,7 @@ public class SelfieCam : MonoBehaviour
                         isCamNull = true;
 
                     Debug.Log($"Webcam: {webcam.deviceName} failed to start within timeout. null: {isCamNull} isPlaying: {webcam.isPlaying} didUpdate: {webcam.didUpdateThisFrame}");
-                    responseText.color = Color.red;
-                    responseText.text = "Failed to start camera. Try restarting the app. Attempting to reinitialize...";
+                    ErrorEventHandler.InvokeError("Camera Issue:", "Failed to start camera. Try restarting the app. Attempting to reinitialize...", Color.red);
 
                     yield return new WaitForSeconds(3f);
                     InitWebcam();
@@ -180,8 +174,7 @@ public class SelfieCam : MonoBehaviour
         catch (Exception e)
         {
             Debug.Log(e + "Could not take a photo");
-            responseText.text += "Could not take a photo!";
-
+            ErrorEventHandler.InvokeError("Error:", "Could not take a photo! Try Again", Color.red);
             new WaitForSeconds(3);
             uploadPic(tex);
         }
@@ -221,8 +214,7 @@ public class SelfieCam : MonoBehaviour
         }
         else
         {
-            responseText.color = Color.red;
-            responseText.text = "No camera detected";
+            ErrorEventHandler.InvokeError("Camera Issue:", "No Camera detected", Color.red);
         }
     }
     void CleanupWebcam()

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static OnlineMapsGPXObject;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using static SC_LoginSystem;
@@ -12,7 +11,6 @@ public class GetTargetLocation : MonoBehaviour
 {
     public GameObject mapObj;
     public GameObject mapOverlay;
-    public OnlineMaps map;
 
     public float targetLat;
     public float targetLong;
@@ -62,17 +60,10 @@ public class GetTargetLocation : MonoBehaviour
         showMapButton.SetActive(false);
 
         //set lat and long
-        map.SetPosition(39.952f, -75.15f); //39.952f, -75.15f
-        map.markerManager.Add(new OnlineMapsMarker());
-        map.markerManager[0].SetPosition(39.952f, -75.15f);
-        map.markerManager[0].scale = 0.12f;
-
     }
 
     public void reCenter()
     {
-
-        map.SetPosition(targetLong, targetLat);
     }
 
     public IEnumerator LocateTarget(string username)
@@ -114,17 +105,9 @@ public class GetTargetLocation : MonoBehaviour
                     targetLong = float.Parse(dataChunks[3]);
 
                     //set lat and long
-                    map.SetPosition(targetLong, targetLat); //2.35, 48.87
-                    map.markerManager.Add(new OnlineMapsMarker());
-                    map.markerManager[0].SetPosition(targetLong, targetLat);
-                    map.markerManager[0].scale = 0.12f;
                 }
                 else
                 {
-                    map.SetPosition(0, 0); //2.35, 48.87
-                    map.markerManager.Add(new OnlineMapsMarker());
-                    map.markerManager[0].SetPosition(0, 0);
-                    map.markerManager[0].scale = 0.12f;
                 }
                 //get target's profile pic
                 string profUrl;

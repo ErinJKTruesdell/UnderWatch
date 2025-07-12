@@ -4,7 +4,6 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Mopsicus.InfiniteScroll;
-using Unity.VisualScripting;
 
 
 public class FrameColorChange : MonoBehaviour

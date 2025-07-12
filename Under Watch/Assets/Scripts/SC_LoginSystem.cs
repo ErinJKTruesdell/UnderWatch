@@ -6,9 +6,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.Events;
-using static OnlineMapsGPXObject;
-using Unity.VisualScripting;
-
 public class SC_LoginSystem : MonoBehaviour
 {
     public static SC_LoginSystem sclsInstance;

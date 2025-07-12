@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
-using static OnlineMapsGPXObject;
 using UnityEngine.Android;
 
 public class GameManager : MonoBehaviour
