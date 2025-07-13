@@ -12,10 +12,6 @@ public class GameManager : MonoBehaviour
     public static GameManager gmInstance;
 
     public static string rootURL = "egs01.westphal.drexel.edu/";
-
-    public DateTime loginTime = new();
-    public DateTime openSocialFeedTime = new();
-
     public SC_LoginSystem scls;
     public TouchScreenKeyboard keyboard;
     public AchieveMonitor ach;

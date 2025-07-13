@@ -143,6 +143,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1049384640789790864}
   - component: {fileID: 5173929460990345758}
+  - component: {fileID: 2037560712035703710}
   m_Layer: 5
   m_Name: SelfieObj
   m_TagString: Untagged
@@ -191,10 +192,21 @@ MonoBehaviour:
   overlay: {fileID: 3804764894551767498}
   button: {fileID: 9004938122840099106}
   camTransform: {fileID: 2573950025339524402}
-  responseText: {fileID: 743149907242431485}
   selfieUploader: {fileID: 0}
   regManager: {fileID: 0}
   tex: {fileID: 2800000, guid: 86fc385f383321449b999c971072afd7, type: 3}
+--- !u!114 &2037560712035703710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 356627929333297852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c1ccd34e5d1b1a4dbbee5551ae202cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1281559143979317092
 GameObject:
   m_ObjectHideFlags: 0
