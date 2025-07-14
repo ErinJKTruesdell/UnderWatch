@@ -91,13 +91,14 @@ public class SC_LoginSystem : MonoBehaviour
         return isLoggedIn;
     }
 
-    public void loginUponRegister(string username, string email, int points, string password, string firstName, string lastName, Texture pfp)
+    public void loginUponRegister(string username, string email, string password, string firstName, string lastName, Texture pfp)
     {
         Debug.Log("logging in on register: " + username);
 
         GameManager.loggedInUser = new(username, firstName, lastName, pfp, email);
         isLoggedIn = true;
-        StartCoroutine(doTargetAssignment(username, points));
+        StartCoroutine(doTargetAssignment(username));
+        //we no longer add points upon registration
 
         userLoggedIn?.Invoke();
     }
@@ -158,7 +159,7 @@ public class SC_LoginSystem : MonoBehaviour
         }
     }
 
-    public IEnumerator doTargetAssignment(string username, int pointsToAdd)
+    public IEnumerator doTargetAssignment(string username)
     {
         while (isWorking)
         {
@@ -173,7 +174,6 @@ public class SC_LoginSystem : MonoBehaviour
 
             WWWForm form = new WWWForm();
             form.AddField("username", username);
-            form.AddField("points", pointsToAdd);
 
             using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "assignTarget.php", form))
             {
@@ -307,7 +307,7 @@ public class SC_LoginSystem : MonoBehaviour
                 else if (responseText.Contains("No Target Found"))
                 {
                     Debug.Log("No target found, reassigning!");
-                    StartCoroutine(doTargetAssignment(GameManager.loggedInUser.un, 0));
+                    StartCoroutine(doTargetAssignment(GameManager.loggedInUser.un));
                 }
                 else
                 {

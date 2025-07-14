@@ -3657,6 +3657,7 @@ MonoBehaviour:
   attributes: {fileID: 2094927494}
   profileInfo: {fileID: 1012938322}
   locationLink: 
+  placeName: 
 --- !u!1 &1639495951
 GameObject:
   m_ObjectHideFlags: 0

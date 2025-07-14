@@ -9,6 +9,7 @@ public class SFPostItem
     //use TextMeshProUGUI instead of TMP_Text because it is a concrete component, not abstract base class
     //strings are assigned in SF_cell
     public string username;
+    public string targetUsername;
     public string placeName;
     public float latitude;
     public float longitude;
@@ -112,6 +113,7 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
     IEnumerator GetRequest(SFPostItem SFitem, string timestamp)
     {
         string usernameStr;
+        string targetUNTStr;
         string latStr;
         string longStr;
         string placeName;
@@ -177,10 +179,13 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
                     {
                         try
                         {
+                            //echo $username_other. "|" .$url_tmp. "|" .$date_tmp . "|" . $un_tmp."|".$target_un."|".$lat_tmp."%".$long_tmp."%".$place_name ."|". $post_id."@".$likes_data;
                             pfpImageURl = datachunks[0];
                             postImageURL = datachunks[1];
                             pfpImageURl = pfpImageURl.Replace("\n", "");
+                            targetUNTStr = datachunks[2];
                             usernameStr = datachunks[3];
+
                             //[4] needs to be split by % for lat/long
                             latStr = datachunks[5].Split('%')[0];
                             longStr = datachunks[5].Split('%')[1];
@@ -188,6 +193,7 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
                             postIDStr = datachunks[^1];
 
                             SFitem.username = usernameStr.Trim();
+                            SFitem.targetUsername = targetUNTStr.Trim();
                             SFitem.postID = postIDStr.Trim();
                             SFitem.latitude = float.Parse(latStr.Trim());
                             SFitem.longitude = float.Parse(longStr.Trim());

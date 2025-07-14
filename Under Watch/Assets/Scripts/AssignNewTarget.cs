@@ -36,7 +36,9 @@ public class AssignNewTarget : MonoBehaviour
     IEnumerator ChangeTargetRoutine()
     {
         string username = GameManager.loggedInUser.un;
-        yield return StartCoroutine(scls.doTargetAssignment(username, -25));
+        yield return StartCoroutine(scls.doTargetAssignment(username));
+        PointsManager.AddPoints(username, PointsManager.negChangeTargetPoints, PointsManager.Source.NegChangeTaret);
+
         StartCoroutine(getTargetLoc.LocateTarget(username));
 
         ClickedClosePopup();

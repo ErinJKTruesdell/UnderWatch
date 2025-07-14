@@ -193,7 +193,9 @@ public class SelfieUploader : MonoBehaviour
     {
         if (approval)
         {
-            StartCoroutine(scls.doTargetAssignment(GameManager.loggedInUser.un, 100));
+            StartCoroutine(scls.doTargetAssignment(GameManager.loggedInUser.un));
+            PointsManager.AddPoints(GameManager.loggedInUser.un, PointsManager.capturePoints, PointsManager.Source.TargetCapture);
+            PointsManager.AddPoints(targetUNText.text, PointsManager.beCapturedPoints, PointsManager.Source.BeCaptured);
         }
     }
 

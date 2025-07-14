@@ -14,6 +14,7 @@ public class ProfileStatManager : MonoBehaviour
 
     public TMP_Text workLoc;
     public TMP_Text attributes;
+    public TMP_Text pointText;
 
     public GameObject profileInfo;
 
@@ -25,10 +26,11 @@ public class ProfileStatManager : MonoBehaviour
         gm = FindObjectOfType<GameManager>();
 
         InitObjectivesCount();
-        InitPostsAndReacts();
+        InitPostsPointsAndReacts();
     }
-    void InitPostsAndReacts()
+    void InitPostsPointsAndReacts()
     {
+        pointText.text = "Points: " + 0;
         if (SceneManager.GetActiveScene().name == ("ClickedProfile"))
         {
             un = ShowClickedProfile.userName;
@@ -38,6 +40,7 @@ public class ProfileStatManager : MonoBehaviour
             un = GameManager.loggedInUser.un;
         }
 
+        PointsManager.GetUserPoints(un, GetPoints);
         StartCoroutine(GetProfileData());
     }
 
@@ -46,6 +49,10 @@ public class ProfileStatManager : MonoBehaviour
         objectivesText.text = DayManager.objCompleted.ToString();
     }
 
+    void GetPoints(int points)
+    {
+        pointText.text = "Points: " + points.ToString();
+    }
     IEnumerator GetProfileData()
     {
         WWWForm form = new WWWForm();

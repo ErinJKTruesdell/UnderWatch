@@ -58,7 +58,6 @@ public class RegistrationManager : MonoBehaviour
     new List<Vector2> originalPos = new List<Vector2>();
     //hopefully this value prevents anything from going off the screen
     int goDownByValue = 150;
-    public int pointsStart = 100;
 
     // Start is called before the first frame update
     public void Start()
@@ -226,7 +225,7 @@ public class RegistrationManager : MonoBehaviour
                     loadingAnim.SetActive(false);
                     Debug.Log("successRegister");
 
-                    loginSystem.loginUponRegister(username.text, email.text, pointsStart, password.text, firstName.text, lastName.text, profPic.texture);
+                    loginSystem.loginUponRegister(username.text, email.text, password.text, firstName.text, lastName.text, profPic.texture);
                     loginSystem.SetLoginPrefs(email.text, password.text, true);
                     attributePrivacyCanvas.SetActive(true);
                 }

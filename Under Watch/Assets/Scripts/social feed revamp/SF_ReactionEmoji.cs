@@ -107,6 +107,9 @@ public class SF_ReactionEmoji : MonoBehaviour
             FillLikeData();
             ColorizeBanner();
             LikeAnims();
+
+            PointsManager.AddPoints(GameManager.loggedInUser.un, PointsManager.postReactedPoints, PointsManager.Source.PostReact);
+            PointsManager.AddPoints(parentCell._postItem.targetUsername, PointsManager.targetReactedPoints, PointsManager.Source.TargetPostReact);
         }
         reactionInProgress = false;
     }
@@ -145,13 +148,15 @@ public class SF_ReactionEmoji : MonoBehaviour
         colorEmoji.SetActive(false);
         bannerObj.SetActive(false);
 
+        PointsManager.AddPoints(GameManager.loggedInUser.un, -PointsManager.postReactedPoints, PointsManager.Source.PostReact);
+        PointsManager.AddPoints(parentCell._postItem.targetUsername, -PointsManager.targetReactedPoints, PointsManager.Source.TargetPostReact);
+
         //on the php server, if the like from user already is true, then it will toggle the like off.
         if (!isAd)
             StartCoroutine(SendLikeDataToServer());
     }
     void FillLikeData()
     {
-
         reactNum++;
         reactNumText.text = reactNum.ToString();
 
@@ -197,8 +202,7 @@ public class SF_ReactionEmoji : MonoBehaviour
         form.AddField("react", reactName);
         form.AddField("post_id", postID);
 
-        //I dont think the like count is getting incremented
-
+        //like is autmoatically toggled on or off by the server
         using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "toggle_reaction.php", form))
         {
             yield return www.SendWebRequest();
