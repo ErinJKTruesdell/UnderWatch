@@ -193,7 +193,7 @@ public class SelfieCam : MonoBehaviour
         Debug.Log("File Upload Coroutine");
         if (selfieUploader != null)
         {
-            StartCoroutine(selfieUploader.SelfieUpload(path));
+            StartCoroutine(selfieUploader.SelfieGetLocation(path));
         }
         if (regManager != null)
         {

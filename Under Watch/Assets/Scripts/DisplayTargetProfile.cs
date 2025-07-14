@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Rendering;
@@ -10,8 +11,9 @@ using UnityEngine.UI;
 
 public class DisplayTargetProfile : MonoBehaviour
 {
-public TMP_Text usernameText;
+    public TMP_Text usernameText;
     public TMP_Text fullNameText;
+    public TMP_Text locationText;
     public RawImage profilePic;
     public RawImage zoomedProfilePic;
 
@@ -19,6 +21,8 @@ public TMP_Text usernameText;
     public TMP_Text attributes;
 
     public GameObject profileInfo;
+    public string locationLink;
+    public string placeName = "";
 
     public void ConfigureUser(UserInfo user)
     {
@@ -30,6 +34,11 @@ public TMP_Text usernameText;
         if (user.un != "")
         {
             StartCoroutine(GetProfileData(user.un));
+            StartCoroutine(GetUserLocation(user.un));
+        }
+        else
+        {
+            ErrorEventHandler.InvokeError("Target Error", "Can't find your target's username!", Color.red);
         }
     }
     public void ClickOnProfile()
@@ -49,7 +58,8 @@ public TMP_Text usernameText;
 
             if (www.result != UnityWebRequest.Result.Success)
             {
-                Debug.Log("Failed to load level: " + www.error + www.downloadHandler.text);
+                Debug.Log("Failed to load attributes: " + www.error + www.downloadHandler.text);
+                ErrorEventHandler.InvokeError("Attribute Server Error:", www.error, Color.red);
                 yield break;
             }
             else
@@ -99,5 +109,112 @@ public TMP_Text usernameText;
             attributes.text = "";
         }
         VLGFiddler.RebuildVLGLayout();
+    }
+
+    IEnumerator GetUserLocation(string un)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("username", un);
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "get-user-location.php", form))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log("Failed to load level: " + www.error + www.downloadHandler.text);
+                ErrorEventHandler.InvokeError("Attribute Server Error:", www.error, Color.red);
+                yield break;
+            }
+            else
+            {
+                //$latitude ."|". $longitude ."|". $place_name;
+                Debug.Log("response: " + www.downloadHandler.text);
+
+                string[] partition = www.downloadHandler.text.Split("|");
+                if (partition.Length >= 3)
+                {
+                    locationLink = "";
+
+                    float latitude = float.Parse(partition[0]);
+                    float longitude = float.Parse(partition[1]);
+                    string placeName = partition[2];
+
+                    HandleLocationCoords(latitude, longitude);
+                    HandlePlaceName(latitude, longitude, placeName);
+                }
+                else
+                {
+                    ErrorEventHandler.InvokeError("Incorrect location format!", "Sorry, looks like the location isn't working for this user!", Color.red);
+                }
+            }
+        }
+    }
+
+    void HandleLocationCoords(float latitude, float longitude)
+    {
+        if (latitude != 0 && longitude != 0)
+        {
+            string coords = latitude + ", " + longitude;    
+            if (coords != "0, 0")
+            {
+#if UNITY_IOS
+                locationLink = $"http://maps.apple.com/?daddr={coords}&dirflg=w";
+#elif UNITY_ANDROID || UNITY_EDITOR
+                locationLink = $"https://www.google.com/maps/dir/?api=1&destination={coords}&travelmode=walking";
+#else
+                locationLink = "";
+#endif
+            }
+        }
+        else
+        {
+            ErrorEventHandler.InvokeError("Location error!", "The coordinates are invalid", Color.red);
+        }
+    }
+
+    void HandlePlaceName(float latitude, float longitude, string placeName = "")
+    {
+        if (placeName == "")
+        {
+            if (latitude != 0 && longitude != 0)
+            {
+                Debug.Log("Geocoding coordinates: " + latitude + ", " + longitude);
+                ConvertCoordinates.StartGeocodeRequest(latitude, longitude, GeocodePlaceName);
+                return;
+            }
+            else
+            {
+                ErrorEventHandler.InvokeError("Location error!", "The coordinates are invalid", Color.red);
+                placeName = "No location found";
+                return;
+            }
+        }
+        else
+        {
+            locationText.text = placeName;
+        }
+    }
+
+    void GeocodePlaceName(List<string> premiseNames)
+    {
+        if (premiseNames.Count > 0)
+        {
+            placeName = premiseNames[0];
+            Debug.Log("Location found: " + placeName);
+            locationText.text = placeName;
+        }
+        else
+        {
+            ErrorEventHandler.InvokeError("Geocoding Error!", "No location found for coordinates", Color.red);
+        }
+    }
+
+    public void LocationClick()
+    {
+        Debug.Log("location clicked" + locationLink);
+        if (locationLink != "")
+        {
+            Application.OpenURL(locationLink);
+        }
     }
 }

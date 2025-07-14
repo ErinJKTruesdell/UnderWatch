@@ -9,7 +9,9 @@ public class SFPostItem
     //use TextMeshProUGUI instead of TMP_Text because it is a concrete component, not abstract base class
     //strings are assigned in SF_cell
     public string username;
-    public string location;
+    public string placeName;
+    public float latitude;
+    public float longitude;
     public string postID;
     public string adLink;
     //images are assigned in the downloadImages func
@@ -112,6 +114,7 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
         string usernameStr;
         string latStr;
         string longStr;
+        string placeName;
         string postIDStr;
 
         string postImageURL;
@@ -129,7 +132,7 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
         form.AddField("username", "asfdasdf");
         form.AddField("loggedInUser", GameManager.loggedInUser.un);
 
-        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "/get-next-photo.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "get-next-photo.php", form))
         {
             yield return www.SendWebRequest();
 
@@ -172,25 +175,37 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
 
                     else
                     {
-                        pfpImageURl = datachunks[0];
-                        postImageURL = datachunks[1];
-                        pfpImageURl = pfpImageURl.Replace("\n", "");
-                        usernameStr = datachunks[3];
-                        //[4] needs to be split by % for lat/long
-                        latStr = datachunks[5].Split('%')[0];
-                        longStr = datachunks[5].Split('%')[1];
-                        postIDStr = datachunks[^1];
+                        try
+                        {
+                            pfpImageURl = datachunks[0];
+                            postImageURL = datachunks[1];
+                            pfpImageURl = pfpImageURl.Replace("\n", "");
+                            usernameStr = datachunks[3];
+                            //[4] needs to be split by % for lat/long
+                            latStr = datachunks[5].Split('%')[0];
+                            longStr = datachunks[5].Split('%')[1];
+                            placeName = datachunks[5].Split('%')[2];
+                            postIDStr = datachunks[^1];
 
-                        SFitem.username = usernameStr.Trim();
-                        SFitem.postID = postIDStr.Trim();
-                        SFitem.location = latStr.Trim() + "," + longStr.Trim();
+                            SFitem.username = usernameStr.Trim();
+                            SFitem.postID = postIDStr.Trim();
+                            SFitem.latitude = float.Parse(latStr.Trim());
+                            SFitem.longitude = float.Parse(longStr.Trim());
+                            SFitem.placeName = placeName.Trim();
 
-                        string[] reactChunks = partition[1].Split("%");
-                        ParseReacts(reactChunks, SFitem);
-                        Debug.Log("Starting Download");
-                        //possibly make this a yield return to wait until post is fully loaded - faster as is, but less stable?
-                        StartCoroutine(downloadPostimage(GameManager.rootURL + postImageURL, SFitem));
-                        StartCoroutine(downloadPfpImage(GameManager.rootURL + pfpImageURl, SFitem));
+                            string[] reactChunks = partition[1].Split("%");
+                            ParseReacts(reactChunks, SFitem);
+                            Debug.Log("Starting Download");
+                            //possibly make this a yield return to wait until post is fully loaded - faster as is, but less stable?
+                            StartCoroutine(downloadPostimage(GameManager.rootURL + postImageURL, SFitem));
+                            StartCoroutine(downloadPfpImage(GameManager.rootURL + pfpImageURl, SFitem));
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.Log("Error parsing data: " + e.Message);
+                            ErrorEventHandler.InvokeError("Server Return Error!", "Unexpected data format. Please try again, or check your internet connection.", Color.red);
+                            yield break; // Exit if parsing fails
+                        }
                     }
                 }
                 else

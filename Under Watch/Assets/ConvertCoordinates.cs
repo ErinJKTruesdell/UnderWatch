@@ -10,7 +10,7 @@ public class ConvertCoordinates : MonoBehaviour
     public static ConvertCoordinates instance { get; private set; }
 
     // Example usage:
-    //ConvertCoordinatesTest.StartGeocodeRequest(latitude, longitude, OnGeocodeComplete);
+    //ConvertCoordinates.StartGeocodeRequest(latitude, longitude, OnGeocodeComplete);
     //void OnGeocodeComplete(List<string> premiseNames) {}
 
     void Awake()
@@ -73,7 +73,6 @@ public class ConvertCoordinates : MonoBehaviour
                     var resultDict = results[0] as Dictionary<string, object>;
 
                     ExtractComponent(resultDict, "premise", resultString);
-                    ExtractComponent(resultDict, "street_number", resultString);
 
                     onComplete.Invoke(resultString);
                 }

@@ -32,6 +32,11 @@ public class SelfieUploader : MonoBehaviour
     public RawImage targetPfpImage;
     public RawImage userPfpImage;
 
+    string locationName = "";
+    string imagePath = "";
+    float latitude;
+    float longitude;
+
     public int facesExpected = 1;
 
     bool approval;
@@ -51,40 +56,64 @@ public class SelfieUploader : MonoBehaviour
         }
     }
 
-    public IEnumerator SelfieUpload(string path)
+    public IEnumerator SelfieGetLocation(string path)
     {
-        //checks if null, if not start
+        //UI elements
         processingCoroutine ??= StartCoroutine(ShowProcessingAnimation());
-
         responseText.color = Color.white;
         responseText.text = "Verifying Image...";
-
         blockingPanel.SetActive(true);
         profileObjects.SetActive(true);
         profileObjects.transform.DOLocalMoveY(Screen.height * 3, 1.3f).SetEase(Ease.OutQuad).From();
 
         unText.text = "@" + GameManager.loggedInUser.un;
-        
-        //will getting the new user cause issues?
+        userPfpImage.texture = GameManager.loggedInUser.profilePic;
+
         targetUNText.text = GameManager.currTarget.un;
         targetPfpImage.texture = GameManager.currTarget.profilePic;
 
-        float latitude = Input.location.lastData.latitude;
-        float longitude = Input.location.lastData.longitude;
+        yield return new WaitUntil(() => Input.location.status != LocationServiceStatus.Initializing);
 
-        if (File.Exists(path))
+        // get location info for posting
+        imagePath = path;
+        latitude = Input.location.lastData.latitude;
+        longitude = Input.location.lastData.longitude;
+        locationName = "";
+
+        ConvertCoordinates.StartGeocodeRequest(latitude, longitude, SelfieUploadAfterLocation);
+    }
+
+    void SelfieUploadAfterLocation(List<string> premiseNames)
+    {
+        if (premiseNames.Count > 0)
+        {
+            locationName = premiseNames[0];
+            Debug.Log("Location found: " + locationName);
+        }
+        else
+        {
+            ErrorEventHandler.InvokeError("Geocoding Error!", "No location found for coordinates: " + latitude + ", " + longitude, Color.red);
+            locationName = latitude + ", " + longitude;
+        }
+        StartCoroutine(SelfieUpload());
+    }
+
+    public IEnumerator SelfieUpload()
+    {
+        if (File.Exists(imagePath))
         {
             Debug.Log("File exists! Uploading Form...");
 
             WWWForm form = new WWWForm();
 
-            string[] imageNames = path.Split("/");
+            string[] imageNames = imagePath.Split("/");
             string imageName = imageNames[imageNames.Length - 1];
-            form.AddBinaryData("file", File.ReadAllBytes(path), imageName);
+            form.AddBinaryData("file", File.ReadAllBytes(imagePath), imageName);
             form.AddField("username", GameManager.loggedInUser.un);
-            //always send location
+
             form.AddField("latitude", latitude.ToString());
             form.AddField("longitude", longitude.ToString());
+            form.AddField("place_name", locationName.ToString());
 
             form.AddField("faces_expected", facesExpected);
 
@@ -96,7 +125,7 @@ public class SelfieUploader : MonoBehaviour
             {
                 approval = false;
                 ErrorEventHandler.InvokeError("Server Error:", www.error, Color.red);
-                Debug.Log(www.error);
+                Debug.Log(www.error + " " + www.downloadHandler.text);
 
                 if (processingCoroutine != null)
                 {
@@ -120,7 +149,6 @@ public class SelfieUploader : MonoBehaviour
             Debug.Log("File does not exist");
         }
     }
-
     void HandleServerResponse(string jsonResponse)
     {
         if (processingCoroutine != null)
@@ -129,7 +157,7 @@ public class SelfieUploader : MonoBehaviour
             processingCoroutine = null;
         }
 
-        //yeah, it's not great, lets fix it later
+        //$isUserInPic ."|". $isTargetInPic ."|". $faceCount
         if (jsonResponse.Contains("Selfie Approved"))
         {
             responseText.text = "Verification successful";
@@ -145,6 +173,8 @@ public class SelfieUploader : MonoBehaviour
             responseText.text = "Error parsing server response.";
             approval = false;
         }
+        HandleStartingUIResponse(jsonResponse);
+        HandleFaceCount(jsonResponse);
     }
     public void HandleStartingUIResponse(string serverResponse)
     {
@@ -164,6 +194,28 @@ public class SelfieUploader : MonoBehaviour
         if (approval)
         {
             StartCoroutine(scls.doTargetAssignment(GameManager.loggedInUser.un, 100));
+        }
+    }
+
+    void HandleFaceCount(string jsonResponse)
+    {
+        string[] parts = jsonResponse.Split('|');
+        if (parts.Length >= 3)
+        {
+            int faceCount;
+            if (int.TryParse(parts[2], out faceCount))
+            {
+                Debug.Log("Face count: " + faceCount);
+            }
+            else
+            {
+                ErrorEventHandler.InvokeError("Face Count Error", "Unexpected number of faces in photo", Color.white);
+            }
+        }
+        else
+        {
+            Debug.Log("Unexpected server response format: " + jsonResponse);
+            ErrorEventHandler.InvokeError("Server Error", "Unexpected response format: " + jsonResponse, Color.red);
         }
     }
 

@@ -15,20 +15,6 @@ public class LocationServiceManager : MonoBehaviour
     {
         StartCoroutine(AskPermissions());
     }
-    void OnGeoCodeComplete(List<string> premiseNames)
-    {
-        if (premiseNames.Count > 0)
-        {
-            foreach (var name in premiseNames)
-            {
-                Debug.Log("Place name found" + name);
-            }
-        }
-        else
-        {
-            Debug.Log("No places found.");
-        }
-    }
 
     IEnumerator LocationCoroutine()
     {
@@ -58,12 +44,6 @@ public class LocationServiceManager : MonoBehaviour
                 + UnityEngine.Input.location.lastData.altitude + " "
                 + UnityEngine.Input.location.lastData.horizontalAccuracy + " "
                 + UnityEngine.Input.location.lastData.timestamp);
-
-            string date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            float _latitude = Input.location.lastData.latitude;
-            float _longitude = Input.location.lastData.longitude;
-            
-            ConvertCoordinates.StartGeocodeRequest(_latitude, _longitude, OnGeoCodeComplete);
         }
     }
 
@@ -77,8 +57,8 @@ public class LocationServiceManager : MonoBehaviour
 #if UNITY_EDITOR
         // No permission handling needed in Editor
 #elif UNITY_ANDROID
-        if (!UnityEngine.Android.Permission.HasUserAuthorizedPermission(UnityEngine.Android.Permission.CoarseLocation)) {
-            UnityEngine.Android.Permission.RequestUserPermission(UnityEngine.Android.Permission.CoarseLocation);
+        if (!UnityEngine.Android.Permission.HasUserAuthorizedPermission(UnityEngine.Android.Permission.PreciseLocation)) {
+            UnityEngine.Android.Permission.RequestUserPermission(UnityEngine.Android.Permission.PreciseLocation);
         }
         // First, check if user has location service enabled
         if (!UnityEngine.Input.location.isEnabledByUser) {

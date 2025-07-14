@@ -14,7 +14,6 @@ using UnityEngine.UIElements;
 public class SF_Cell : MonoBehaviour, ICell
 {
     public string postID;
-
     public AchieveMonitor achMon;
     public SC_LoginSystem scls;
 
@@ -40,8 +39,6 @@ public class SF_Cell : MonoBehaviour, ICell
     public UnityEngine.UI.Button pfpButton;
 
     List<int> loadedPosts = new();
-
-    bool adHasClicked = false;
     //ensure that these are added in order from smile -> gator
     public List<SF_ReactionEmoji> reacts = new();
     private List<string> allReactNames = new()
@@ -85,6 +82,7 @@ public class SF_Cell : MonoBehaviour, ICell
 
         StartCoroutine(LoadPostID());
         StartCoroutine(LoadPostUN());
+        StartCoroutine(LoadPostLocation());
 
         if (postItem.isAd)
         {
@@ -109,10 +107,6 @@ public class SF_Cell : MonoBehaviour, ICell
         }
         else
         {
-            //postItem.location
-            locText.text = "";
-            adButton.SetActive(false);
-
             StartCoroutine(LoadPostImage());
             StartCoroutine(LoadPfpImage());
         }
@@ -136,6 +130,29 @@ public class SF_Cell : MonoBehaviour, ICell
             yield return new WaitForSeconds(.1f);
 
         unText.text = _postItem.username;
+    }
+    IEnumerator LoadPostLocation()
+    {
+        while (_postItem.placeName == null)
+            yield return new WaitForSeconds(.1f);
+        locText.text = _postItem.placeName;
+        Debug.Log("Post location: " + _postItem.placeName);
+        string coords = _postItem.latitude + ", " + _postItem.longitude;
+
+        //hijacking the ad button 
+        if (coords != "0, 0")
+        {
+            #if UNITY_IOS
+                adLink = $"http://maps.apple.com/?daddr={coords}&dirflg=w";
+                adButton.SetActive(true);
+            #elif UNITY_ANDROID || UNITY_EDITOR
+                adLink = $"https://www.google.com/maps/dir/?api=1&destination={coords}&travelmode=walking";
+                adButton.SetActive(true);
+            #else
+                adLink = "";
+                adButton.SetActive(false);       
+            #endif
+        }
     }
     IEnumerator LoadPostAdURL()
     {
@@ -213,17 +230,10 @@ public class SF_Cell : MonoBehaviour, ICell
 
     public void AdClick()
     {
-        Debug.Log("ad clicked");
+        Debug.Log("ad clicked" + adLink);
         if (adLink != "")
         {
             Application.OpenURL(adLink);
-            if (!adHasClicked)
-            {
-                adHasClicked = true;
-                achMon.addAdClick();
-            }
         }
     }
-
-
 }
