@@ -20,6 +20,7 @@ public class SelfieCam : MonoBehaviour
     public GameObject button;
 
     public Transform camTransform;
+    public AspectRatioFitter ratioFitter;
 
     public SelfieUploader selfieUploader;
     public RegistrationManager regManager;
@@ -134,7 +135,7 @@ public class SelfieCam : MonoBehaviour
                 Debug.Log($"Webcam videoVerticallyMirrored: {webcam.videoVerticallyMirrored}");
                 // Make adjustments to image every frame to be safe, since Unity isn't 
                 // guaranteed to report correct data as soon as device camera is started
-
+#if !UNITY_EDITOR
                 if (webcam == null || !webcam.isPlaying)
                 {
                     bool isCamNull = false;
@@ -144,9 +145,10 @@ public class SelfieCam : MonoBehaviour
                     Debug.Log($"Webcam: {webcam.deviceName} failed to start within timeout. null: {isCamNull} isPlaying: {webcam.isPlaying} didUpdate: {webcam.didUpdateThisFrame}");
                     ErrorEventHandler.InvokeError("Camera Issue:", "Failed to start camera. Try restarting the app. Attempting to reinitialize...", Color.red);
 
-                    yield return new WaitForSeconds(3f);
+                    yield return new WaitForSeconds(8f);
                     InitWebcam();
                 }
+#endif
                 yield break;
             }
             yield return new WaitForSeconds(0.1f);
@@ -180,23 +182,29 @@ public class SelfieCam : MonoBehaviour
         }
     }
 
-    void uploadPic( Texture2D tex)
+    void uploadPic(Texture2D tex)
     {
         //tex and is assigned a default in inspector
 
-        byte[] bytes = tex.EncodeToPNG();
+        Texture2D rotatedTex = RotateTexture(tex, false); // true = 90° clockwise
+        Texture2D smallerTex = CropAndResize(rotatedTex, 1024, 1024);
+        byte[] bytes = smallerTex.EncodeToPNG();
+        Debug.Log($"Compressed size: {bytes.Length / 1024f:F2} KB");
 
         string filename = DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day + "-" + DateTime.Now.Hour + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Second + ".png";
         string path = UnityEngine.Application.persistentDataPath + filename;
         System.IO.File.WriteAllBytes(path, bytes);
 
-        Debug.Log("File Upload Coroutine");
         if (selfieUploader != null)
         {
+            Debug.Log("File Upload Coroutine");
+
             StartCoroutine(selfieUploader.SelfieGetLocation(path));
         }
         if (regManager != null)
         {
+            Debug.Log("File Upload Coroutine");
+
             regManager.CapturedPhotoFinalStep(tex, path);
         }
     }
@@ -293,6 +301,70 @@ public class SelfieCam : MonoBehaviour
     }
 #endif
 
+
+    Texture2D CropAndResize(Texture2D source, int targetWidth, int targetHeight)
+    {
+        float sourceAspect = (float)source.width / source.height;
+        float targetAspect = (float)targetWidth / targetHeight;
+
+        int cropWidth = source.width;
+        int cropHeight = source.height;
+
+        if (sourceAspect > targetAspect)
+        {
+            // Source is wider than target — crop width
+            cropWidth = Mathf.RoundToInt(source.height * targetAspect);
+        }
+        else
+        {
+            // Source is taller than target — crop height
+            cropHeight = Mathf.RoundToInt(source.width / targetAspect);
+        }
+
+        int cropX = (source.width - cropWidth) / 2;
+        int cropY = (source.height - cropHeight) / 2;
+
+        // Crop the texture
+        Color[] croppedPixels = source.GetPixels(cropX, cropY, cropWidth, cropHeight);
+        Texture2D croppedTex = new Texture2D(cropWidth, cropHeight);
+        croppedTex.SetPixels(croppedPixels);
+        croppedTex.Apply();
+
+        // Resize to target
+        RenderTexture rt = RenderTexture.GetTemporary(targetWidth, targetHeight);
+        Graphics.Blit(croppedTex, rt);
+        RenderTexture.active = rt;
+
+        Texture2D result = new Texture2D(targetWidth, targetHeight);
+        result.ReadPixels(new Rect(0, 0, targetWidth, targetHeight), 0, 0);
+        result.Apply();
+
+        RenderTexture.active = null;
+        RenderTexture.ReleaseTemporary(rt);
+
+        return result;
+    }
+
+    Texture2D RotateTexture(Texture2D original, bool clockwise)
+    {
+        int width = original.width;
+        int height = original.height;
+        Texture2D rotated = new Texture2D(height, width);
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (clockwise)
+                    rotated.SetPixel(y, width - x - 1, original.GetPixel(x, y));
+                else
+                    rotated.SetPixel(height - y - 1, x, original.GetPixel(x, y));
+            }
+        }
+
+        rotated.Apply();
+        return rotated;
+    }
     public void GetHighestAvailableResolution(WebCamDevice device, out int width, out int height)
     {
         width = 0;

@@ -9,6 +9,8 @@ using TMPro;
 using System.Net;
 using DG.Tweening.Plugins.Core.PathCore;
 using DG.Tweening;
+using System.Text;
+using UnityEngine.Android;
 
 public class SelfieUploader : MonoBehaviour
 {
@@ -24,6 +26,7 @@ public class SelfieUploader : MonoBehaviour
     public GameObject closeButton;
 
     public GameObject profileObjects;
+    float profileObjsStartingPos;
     public TextMeshProUGUI responseText;
     public TextMeshProUGUI unText;
     public TextMeshProUGUI targetUNText;
@@ -37,7 +40,7 @@ public class SelfieUploader : MonoBehaviour
     float latitude;
     float longitude;
 
-    public int facesExpected = 1;
+    public int facesExpected = 2;
 
     bool approval;
     void OnEnable()
@@ -54,6 +57,8 @@ public class SelfieUploader : MonoBehaviour
         {
             selfieCam = FindObjectOfType<SelfieCam>();
         }
+
+        profileObjects.transform.localPosition = new Vector3(0, Screen.height * 3, 0);
     }
 
     public IEnumerator SelfieGetLocation(string path)
@@ -63,8 +68,9 @@ public class SelfieUploader : MonoBehaviour
         responseText.color = Color.white;
         responseText.text = "Verifying Image...";
         blockingPanel.SetActive(true);
+        Debug.Log("hello:");
         profileObjects.SetActive(true);
-        profileObjects.transform.DOLocalMoveY(Screen.height * 3, 1.3f).SetEase(Ease.OutQuad).From();
+        profileObjects.transform.DOLocalMoveY(450, 1f).SetEase(Ease.OutQuad);
 
         unText.text = "@" + GameManager.loggedInUser.un;
         userPfpImage.texture = GameManager.loggedInUser.profilePic;
@@ -72,28 +78,44 @@ public class SelfieUploader : MonoBehaviour
         targetUNText.text = GameManager.currTarget.un;
         targetPfpImage.texture = GameManager.currTarget.profilePic;
 
+        imagePath = path;
+
+#if !UNITY_EDITOR
         yield return new WaitUntil(() => Input.location.status != LocationServiceStatus.Initializing);
 
         // get location info for posting
-        imagePath = path;
         latitude = Input.location.lastData.latitude;
         longitude = Input.location.lastData.longitude;
+#elif UNITY_EDITOR
+        // For testing in the editor, use a fixed location
+        latitude = 39.7749f; // Example: San Francisco latitude
+        longitude = -79.4194f; // Example: San Francisco longitude
+        ConvertCoordinates.StartGeocodeRequest(latitude, longitude, SelfieUploadAfterLocation);
+#endif
         locationName = "";
 
         ConvertCoordinates.StartGeocodeRequest(latitude, longitude, SelfieUploadAfterLocation);
+
+        yield return new WaitForSeconds(.01f); 
     }
 
-    void SelfieUploadAfterLocation(List<string> premiseNames)
+    void SelfieUploadAfterLocation(List<string> locationNames)
     {
-        if (premiseNames.Count > 0)
+        if (locationNames.Count == 1)
         {
-            locationName = premiseNames[0];
+            //this means it is a premise
+            locationName = locationNames[0];
+            Debug.Log("Location found: " + locationName);
+        }
+        else if (locationNames.Count > 1)
+        {
+            //this means it is a street address
+            locationName = string.Join(", ", locationNames);
             Debug.Log("Location found: " + locationName);
         }
         else
         {
-            ErrorEventHandler.InvokeError("Geocoding Error!", "No location found for coordinates: " + latitude + ", " + longitude, Color.red);
-            locationName = latitude + ", " + longitude;
+            ErrorEventHandler.InvokeError("Geocoding Error!", "No location found for coordinates", Color.red);
         }
         StartCoroutine(SelfieUpload());
     }
@@ -102,12 +124,18 @@ public class SelfieUploader : MonoBehaviour
     {
         if (File.Exists(imagePath))
         {
-            Debug.Log("File exists! Uploading Form...");
+            if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageRead))
+            {
+                Permission.RequestUserPermission(Permission.ExternalStorageRead);
+            }
+
+            Debug.Log("File exists! Uploading Form..." + GameManager.loggedInUser.un);
 
             WWWForm form = new WWWForm();
 
             string[] imageNames = imagePath.Split("/");
             string imageName = imageNames[imageNames.Length - 1];
+
             form.AddBinaryData("file", File.ReadAllBytes(imagePath), imageName);
             form.AddField("username", GameManager.loggedInUser.un);
 
@@ -235,7 +263,7 @@ public class SelfieUploader : MonoBehaviour
     {
         closeButton.SetActive(false);
         blockingPanel.SetActive(false);
-        profileObjects.transform.DOLocalMoveY(Screen.height * 3, 1.3f).SetEase(Ease.OutQuad)
+        profileObjects.transform.DOLocalMoveY(Screen.height * 3, .5f).SetEase(Ease.OutQuad)
             .OnComplete(() => profileObjects.SetActive(false));
 
         responseText.text = "";

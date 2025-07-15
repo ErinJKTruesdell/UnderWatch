@@ -2,10 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -195,11 +193,19 @@ public class DisplayTargetProfile : MonoBehaviour
         }
     }
 
-    void GeocodePlaceName(List<string> premiseNames)
+    void GeocodePlaceName(List<string> locationNames)
     {
-        if (premiseNames.Count > 0)
+        if (locationNames.Count == 1)
         {
-            placeName = premiseNames[0];
+            //this means it is a premise
+            placeName = locationNames[0];
+            Debug.Log("Location found: " + placeName);
+            locationText.text = placeName;
+        }
+        else if (locationNames.Count > 1)
+        {
+            //this means it is a street address
+            placeName = string.Join(", ", locationNames);
             Debug.Log("Location found: " + placeName);
             locationText.text = placeName;
         }

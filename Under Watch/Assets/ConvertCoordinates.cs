@@ -27,6 +27,7 @@ public class ConvertCoordinates : MonoBehaviour
     }
     public static void StartGeocodeRequest(float latitude, float longitude, Action<List<string>> onComplete)
     {
+        Debug.Log($"Starting geocode request for lat: {latitude}, long: {longitude}");
         if (instance != null)
         {
             instance.StartCoroutine(instance.ReverseGeocodeRequest(latitude, longitude, onComplete));
@@ -39,6 +40,7 @@ public class ConvertCoordinates : MonoBehaviour
 
     public IEnumerator ReverseGeocodeRequest(float latitude, float longitude, Action<List<string>> onComplete)
     {
+        Debug.Log("Beginning reverse geocode request...");
         //params:
         //latlng, key
         //option: result_type (premise | street address |subpremise)
@@ -62,19 +64,39 @@ public class ConvertCoordinates : MonoBehaviour
 
             string json = request.downloadHandler.text;
             var parsedJsonDict = Json.Deserialize(json) as Dictionary<string, object>;
-            var resultString = new List<string>();
 
             if (parsedJsonDict.ContainsKey("results"))
             {
+                Debug.Log("Results found in geocode response.");
                 var results = parsedJsonDict["results"] as List<object>;
 
                 if (results != null && results.Count > 0)
                 {
                     var resultDict = results[0] as Dictionary<string, object>;
+                    var premiseList = new List<string>();
+                    var addressList = new List<string>();
 
-                    ExtractComponent(resultDict, "premise", resultString);
+                    ExtractComponent(resultDict, "premise", premiseList);
 
-                    onComplete.Invoke(resultString);
+                    if (premiseList.Count > 0)
+                    {
+                        onComplete.Invoke(premiseList);
+                    }
+                    else
+                    {
+                        ExtractComponent(resultDict, "street_number", addressList);
+                        ExtractComponent(resultDict, "route", addressList);
+
+                        if (addressList.Count > 0)
+                        {
+                            onComplete.Invoke(addressList);
+                        }
+                    }
+                }
+                else 
+                {
+                    Debug.Log("No valid results found in geocode response." );
+                    onComplete.Invoke(new List<string>()); // Return empty list if no results
                 }
             }
         }
@@ -97,6 +119,7 @@ public class ConvertCoordinates : MonoBehaviour
                     //check various types and add to names
                     if (types != null && types.Contains(resultType))
                     {
+                        Debug.Log($"Found {resultType} in geocode response.");
                         string longName = compDict["long_name"] as string;
                         listToAdd.Add(longName);
                     }

@@ -775,7 +775,7 @@ GameObject:
   - component: {fileID: 842954091}
   - component: {fileID: 842954090}
   m_Layer: 5
-  m_Name: UN-Text (1)
+  m_Name: tName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1043,7 +1043,7 @@ GameObject:
   - component: {fileID: 1017592712}
   - component: {fileID: 1017592711}
   m_Layer: 5
-  m_Name: UN-Text
+  m_Name: tUN
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1258,7 +1258,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000022888184, y: 454}
+  m_AnchoredPosition: {x: 0, y: 454}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &1239701689 stripped
@@ -1943,7 +1943,7 @@ GameObject:
   - component: {fileID: 2017298530}
   - component: {fileID: 2017298529}
   m_Layer: 5
-  m_Name: UN-Text
+  m_Name: pUN
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2119,7 +2119,7 @@ MonoBehaviour:
   responseText: {fileID: 1637209449}
   unText: {fileID: 2017298529}
   targetUNText: {fileID: 1017592711}
-  targetNameText: {fileID: 0}
+  targetNameText: {fileID: 842954090}
   targetPfpImage: {fileID: 377923306}
   userPfpImage: {fileID: 716971590}
   facesExpected: 1
@@ -2230,6 +2230,10 @@ PrefabInstance:
     - target: {fileID: 5700915276936948148, guid: fbe2065d74e20fc4fbe7e697280d9e64, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7082828791527292127, guid: fbe2065d74e20fc4fbe7e697280d9e64, type: 3}
+      propertyPath: m_AspectRatio
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -53,12 +53,12 @@ public class LocationServiceManager : MonoBehaviour
         Debug.Log("Unity Remote detected, skipping location permission checks.");
         yield return new WaitWhile(() => !UnityEditor.EditorApplication.isRemoteConnected);
 #endif
-        
+
 #if UNITY_EDITOR
         // No permission handling needed in Editor
 #elif UNITY_ANDROID
-        if (!UnityEngine.Android.Permission.HasUserAuthorizedPermission(UnityEngine.Android.Permission.PreciseLocation)) {
-            UnityEngine.Android.Permission.RequestUserPermission(UnityEngine.Android.Permission.PreciseLocation);
+        if (!UnityEngine.Android.Permission.HasUserAuthorizedPermission(UnityEngine.Android.Permission.FineLocation)) {
+            UnityEngine.Android.Permission.RequestUserPermission(UnityEngine.Android.Permission.FineLocation);
         }
         // First, check if user has location service enabled
         if (!UnityEngine.Input.location.isEnabledByUser) {

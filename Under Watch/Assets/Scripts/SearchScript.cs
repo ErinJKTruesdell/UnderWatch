@@ -31,13 +31,11 @@ public class SearchScript : MonoBehaviour
 
     public GameObject loading;
 
-    public GameObject searchIcon;
-
     public Transform gridObj;
 
     public List<GameObject> Element = new();
 
-    public static string prevSearches;
+    public static string prevSearches = "";
 
     private void Awake()
     {
@@ -56,12 +54,15 @@ public class SearchScript : MonoBehaviour
         Debug.Log("stat");
         Debug.Log("Saved search:" + SearchScript.prevSearches);
         //todo: figure out why the saving is inconsistent AF
-        foreach (GameObject ele in Element)
+        if (Element.Count > 0)
         {
-            if (prevSearches.Contains(ele.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text.ToLower()))
+            foreach (GameObject ele in Element)
             {
-                ele.SetActive(true);
-                Debug.Log("Contains: " + ele.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
+                if (prevSearches.Contains(ele.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text.ToLower()))
+                {
+                    ele.SetActive(true);
+                    Debug.Log("Contains: " + ele.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text);
+                }
             }
         }
     }

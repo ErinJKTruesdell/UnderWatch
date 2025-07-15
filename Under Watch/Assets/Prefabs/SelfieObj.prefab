@@ -192,6 +192,7 @@ MonoBehaviour:
   overlay: {fileID: 3804764894551767498}
   button: {fileID: 9004938122840099106}
   camTransform: {fileID: 2573950025339524402}
+  ratioFitter: {fileID: 0}
   selfieUploader: {fileID: 0}
   regManager: {fileID: 0}
   tex: {fileID: 2800000, guid: 86fc385f383321449b999c971072afd7, type: 3}
@@ -241,8 +242,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -230.314}
-  m_SizeDelta: {x: -26.156, y: 406.581}
+  m_AnchoredPosition: {x: 0, y: -284.695}
+  m_SizeDelta: {x: -26.156, y: 327.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1600452486639421435
 CanvasRenderer:
@@ -352,7 +353,7 @@ GameObject:
   - component: {fileID: 2573950025339524402}
   - component: {fileID: 1442728686801238970}
   - component: {fileID: 2584464870295428503}
-  - component: {fileID: 3024942549136617127}
+  - component: {fileID: 2058030676191094939}
   m_Layer: 5
   m_Name: CameraView
   m_TagString: Untagged
@@ -376,8 +377,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: -2168.18}
+  m_AnchoredPosition: {x: -2.1340027, y: 0}
+  m_SizeDelta: {x: 1733.6328, y: -2031.3635}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1442728686801238970
 CanvasRenderer:
@@ -414,7 +415,7 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!114 &3024942549136617127
+--- !u!114 &2058030676191094939
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

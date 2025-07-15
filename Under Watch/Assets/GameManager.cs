@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager gmInstance;
 
-    public static string rootURL = "egs01.westphal.drexel.edu/";
+    public static string rootURL = "https://egs01.westphal.drexel.edu/";
     public SC_LoginSystem scls;
     public TouchScreenKeyboard keyboard;
     public AchieveMonitor ach;

@@ -937,7 +937,6 @@ MonoBehaviour:
   attParent: {fileID: 523407979}
   privacyPolicy: {fileID: 480340709}
   attPrefab: {fileID: 2402474461627850772, guid: 59a05768c14b9f94695918a1259e080a, type: 3}
-  responseText: {fileID: 1546609323}
 --- !u!1 &107233618
 GameObject:
   m_ObjectHideFlags: 0
@@ -1002,9 +1001,7 @@ MonoBehaviour:
   bg: {fileID: 1944680223}
   cacheToggle: {fileID: 1119123163}
   attributePrivacyCanvas: {fileID: 100673778}
-  responseText: {fileID: 769969389}
   pfpPath: 
-  pointsStart: 100
 --- !u!1 &158842884
 GameObject:
   m_ObjectHideFlags: 0
@@ -4217,6 +4214,14 @@ PrefabInstance:
     - target: {fileID: 2573950025339524402, guid: fbe2065d74e20fc4fbe7e697280d9e64, type: 3}
       propertyPath: m_SizeDelta.x
       value: 2160
+      objectReference: {fileID: 0}
+    - target: {fileID: 4774610794551806246, guid: fbe2065d74e20fc4fbe7e697280d9e64, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 107233618}
+    - target: {fileID: 4774610794551806246, guid: fbe2065d74e20fc4fbe7e697280d9e64, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5173929460990345758, guid: fbe2065d74e20fc4fbe7e697280d9e64, type: 3}
       propertyPath: regManager
