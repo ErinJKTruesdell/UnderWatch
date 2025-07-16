@@ -11,7 +11,11 @@ ShaderVariantCollection:
   - first: {fileID: 4800000, guid: 96246b1ead49a4c5a996fd477bc5a117, type: 3}
     second:
       variants:
+      - keywords: COLOR_FILTER
+        passType: 0
       - keywords: COLOR_FILTER DETAIL_MULTIPLY_ADDITIVE EDGE_SHINY SAMPLING_BLUR_FAST
+        passType: 0
+      - keywords: COLOR_FILTER EDGE_PLAIN GRADATION_COLOR2
         passType: 0
       - keywords: COLOR_FILTER EDGE_SHINY
         passType: 0
@@ -25,7 +29,26 @@ ShaderVariantCollection:
         passType: 0
       - keywords: COLOR_FILTER EDGE_SHINY TRANSITION_CUTOFF
         passType: 0
+      - keywords: COLOR_FILTER SAMPLING_EDGE_ALPHA
+        passType: 0
+      - keywords: DETAIL_MASKING EDGE_SHINY
+        passType: 0
+      - keywords: DETAIL_MULTIPLY EDGE_SHINY
+        passType: 0
+      - keywords: DETAIL_MULTIPLY_ADDITIVE
+        passType: 0
+      - keywords: EDGE_PLAIN
+        passType: 0
       - keywords: EDGE_SHINY
+        passType: 0
+  - first: {fileID: 4800000, guid: 935b7be1c88464d2eb87204fdfab5a38, type: 3}
+    second:
+      variants:
+      - keywords: EDGE_SHINY
+        passType: 0
+      - keywords: TRANSITION_BLAZE
+        passType: 0
+      - keywords: TRANSITION_PATTERN
         passType: 0
 --- !u!114 &11400000
 MonoBehaviour:
@@ -47,6 +70,22 @@ MonoBehaviour:
     m_OptionalShaders:
     - key: Hidden/UI/Default (SoftMaskable)
       value: Hidden/UI/Default (UIEffect)
+    - key: Hidden/TextMeshPro/Bitmap (SoftMaskable)
+      value: Hidden/TextMeshPro/Bitmap (UIEffect)
+    - key: Hidden/TextMeshPro/Distance Field (SoftMaskable)
+      value: Hidden/TextMeshPro/Distance Field (UIEffect)
+    - key: Hidden/TextMeshPro/Distance Field Overlay (SoftMaskable)
+      value: Hidden/TextMeshPro/Distance Field Overlay (UIEffect)
+    - key: Hidden/TextMeshPro/Distance Field SSD (SoftMaskable)
+      value: Hidden/TextMeshPro/Distance Field SSD (UIEffect)
+    - key: Hidden/TextMeshPro/Mobile/Bitmap (SoftMaskable)
+      value: Hidden/TextMeshPro/Mobile/Bitmap (UIEffect)
+    - key: Hidden/TextMeshPro/Mobile/Distance Field (SoftMaskable)
+      value: Hidden/TextMeshPro/Mobile/Distance Field (UIEffect)
+    - key: Hidden/TextMeshPro/Mobile/Distance Field Overlay (SoftMaskable)
+      value: Hidden/TextMeshPro/Mobile/Distance Field Overlay (UIEffect)
+    - key: Hidden/TextMeshPro/Mobile/Distance Field SSD (SoftMaskable)
+      value: Hidden/TextMeshPro/Mobile/Distance Field SSD (UIEffect)
     m_Asset: {fileID: -2823442024178651080}
     m_ErrorOnUnregisteredVariant: 0
     m_UnregisteredVariants: []
