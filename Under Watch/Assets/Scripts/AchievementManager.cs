@@ -39,8 +39,6 @@ public class AchievementManager : MonoBehaviour
     {
         DontDestroyOnLoad(this);
         AddAllAchievements();
-
-        StartCoroutine(CallEveryTenSeconds());
     }
 
     public void UpdateAchievement(PointsManager.Source achType, int updateReqBy, bool resetCount)
@@ -73,16 +71,6 @@ public class AchievementManager : MonoBehaviour
                 EnqueueAchievement(targetAch.title, GetFormattedDescription(targetAch), pointsToGive);
             }
             AchievementEventHandler.InvokeUpdatedAchievement();
-        }
-    }
-    private IEnumerator CallEveryTenSeconds()
-    {
-        yield return new WaitForSeconds(10f);
-        while (true)
-        {
-            AchievementEventHandler.InvokeAddToAchievment(PointsManager.Source.AchSnapStreaker, 1);
-            AchievementEventHandler.InvokeAddToAchievment(PointsManager.Source.AchSocialButterfly, 1);
-            yield return new WaitForSeconds(10f);
         }
     }
     void EnqueueAchievement(string title, string desc, int points)
