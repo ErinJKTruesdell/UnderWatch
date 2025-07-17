@@ -31,13 +31,11 @@ public class SearchScript : MonoBehaviour
 
     public GameObject loading;
 
-    public GameObject searchIcon;
-
     public Transform gridObj;
 
     public List<GameObject> Element = new();
 
-    public static string prevSearches;
+    public static string prevSearches = "";
 
     private void Awake()
     {
@@ -45,7 +43,6 @@ public class SearchScript : MonoBehaviour
         {
             loading.SetActive(true);
         }
-
 
         StartCoroutine(PopulateSearch());
 
@@ -57,12 +54,15 @@ public class SearchScript : MonoBehaviour
         Debug.Log("stat");
         Debug.Log("Saved search:" + SearchScript.prevSearches);
         //todo: figure out why the saving is inconsistent AF
-        foreach (GameObject ele in Element)
+        if (Element.Count > 0)
         {
-            if (prevSearches.Contains(ele.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text.ToLower()))
+            foreach (GameObject ele in Element)
             {
-                ele.SetActive(true);
-                Debug.Log("Contains: " + ele.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
+                if (prevSearches.Contains(ele.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text.ToLower()))
+                {
+                    ele.SetActive(true);
+                    Debug.Log("Contains: " + ele.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text);
+                }
             }
         }
     }
@@ -111,6 +111,7 @@ public class SearchScript : MonoBehaviour
                     if (UNData[j].Length > 2 && !UNData[j].Contains("Sponsored")) // trim off that last empty bit
                     {
                         userNames.Add(new userData(UNData[j], PFPData[j], fullNameData[j]));
+                        Debug.Log("pfp" + PFPData[j]);
                     }
                 }
 
@@ -121,7 +122,6 @@ public class SearchScript : MonoBehaviour
 
                 foreach (userData i in userNames)
                 {
-
                     GameObject searchUserItem = Instantiate(searchProfileItem) as GameObject;
                     searchUserItem.transform.parent = gridObj;
                     searchUserItem.transform.localScale = new Vector3(1, 1, 1);
@@ -135,7 +135,6 @@ public class SearchScript : MonoBehaviour
                     if (!prevSearches.Contains(i.username.Trim()))                    {
                         searchUserItem.SetActive(false);
                     }
-
 
                     //downlaod prof img
 
@@ -180,7 +179,7 @@ public class SearchScript : MonoBehaviour
         {
             foreach (GameObject ele in Element)
             {
-                if (ele.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text.ToLower().Contains(SearchText))
+                if (ele.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text.ToLower().Contains(SearchText))
                 {
                     ele.SetActive(true);
                 }
@@ -188,6 +187,13 @@ public class SearchScript : MonoBehaviour
                 {
                     ele.SetActive(false);
                 }
+            }
+        }
+        else
+        {
+            foreach (GameObject ele in Element)
+            {
+                ele.SetActive(false);
             }
         }
     }

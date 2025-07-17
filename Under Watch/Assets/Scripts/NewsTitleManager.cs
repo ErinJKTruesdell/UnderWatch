@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Events;
 using System;
-using Unity.VisualScripting;
 public class NewsObject
 {
     public int day;

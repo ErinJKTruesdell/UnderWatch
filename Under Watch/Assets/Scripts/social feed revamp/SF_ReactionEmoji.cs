@@ -55,7 +55,6 @@ public class SF_ReactionEmoji : MonoBehaviour
         //if user has liked this reaction before
         if (parentCell._postItem.ReactNumDict[reactName].Item2 == true)
         {
-            Debug.Log("reacted : " + parentCell._postItem.ReactNumDict[reactName].Item2);
             colorEmoji.SetActive(true);
             bannerObj.SetActive(true);
             userClicked = true;
@@ -68,7 +67,6 @@ public class SF_ReactionEmoji : MonoBehaviour
         {
             userClicked = false;
 
-            Debug.Log("reacted by others" + parentCell._postItem.ReactNumDict[reactName].Item2);
             LikeSetup();
             greyBanner.color = neutralGrey;
             greyEmoji.color = Color.white;
@@ -107,6 +105,9 @@ public class SF_ReactionEmoji : MonoBehaviour
             FillLikeData();
             ColorizeBanner();
             LikeAnims();
+
+            PointsManager.AddPoints(parentCell._postItem.posterUser.un, PointsManager.postReactedPoints, PointsManager.Source.PostReact);
+            PointsManager.AddPoints(parentCell._postItem.targetUser.un, PointsManager.targetReactedPoints, PointsManager.Source.TargetPostReact);
         }
         reactionInProgress = false;
     }
@@ -145,13 +146,15 @@ public class SF_ReactionEmoji : MonoBehaviour
         colorEmoji.SetActive(false);
         bannerObj.SetActive(false);
 
+        PointsManager.AddPoints(parentCell._postItem.posterUser.un, -PointsManager.postReactedPoints, PointsManager.Source.PostReact);
+        PointsManager.AddPoints(parentCell._postItem.targetUser.un, -PointsManager.targetReactedPoints, PointsManager.Source.TargetPostReact);
+
         //on the php server, if the like from user already is true, then it will toggle the like off.
         if (!isAd)
             StartCoroutine(SendLikeDataToServer());
     }
     void FillLikeData()
     {
-
         reactNum++;
         reactNumText.text = reactNum.ToString();
 
@@ -183,13 +186,13 @@ public class SF_ReactionEmoji : MonoBehaviour
     //this feels dangerous, could the user spam like/unlikes and crash the app?
     private IEnumerator SendLikeDataToServer()
     {
-        while (parentCell.postID == null || SC_LoginSystem.getUsername() == null)
+        while (parentCell.postID == null || GameManager.loggedInUser.un == null)
         {
             yield return new WaitForSeconds(.2f);
         }
 
         string postID = parentCell.postID;
-        string un = SC_LoginSystem.getUsername();
+        string un = GameManager.loggedInUser.un;
 
         WWWForm form = new WWWForm();
 
@@ -197,8 +200,7 @@ public class SF_ReactionEmoji : MonoBehaviour
         form.AddField("react", reactName);
         form.AddField("post_id", postID);
 
-        //I dont think the like count is getting incremented
-
+        //like is autmoatically toggled on or off by the server
         using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "toggle_reaction.php", form))
         {
             yield return www.SendWebRequest();

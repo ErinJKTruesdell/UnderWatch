@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -794,7 +793,6 @@ MonoBehaviour:
   SearchBar: {fileID: 1086634944}
   searchProfileItem: {fileID: 3466410525375771143, guid: d75f0d67f81cdd54c8568cd2434d6c6d, type: 3}
   loading: {fileID: 1607240160}
-  searchIcon: {fileID: 0}
   gridObj: {fileID: 8642650}
   Element: []
 --- !u!4 &1193331485
@@ -1736,7 +1734,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3323032359203365699, guid: 23677e8534865e547a1b3e695feeac55, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00047302246
+      value: 0.00048828125
       objectReference: {fileID: 0}
     - target: {fileID: 3996102166389825530, guid: 23677e8534865e547a1b3e695feeac55, type: 3}
       propertyPath: m_Color.b

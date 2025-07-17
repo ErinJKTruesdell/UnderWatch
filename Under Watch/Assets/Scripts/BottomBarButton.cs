@@ -40,7 +40,6 @@ public class BottomBarButton : MonoBehaviour
         if (SceneManager.GetActiveScene().name != sceneName && gm != null)
         {
             gm.ProgressToScene(sceneName);
-
         }
     }
 

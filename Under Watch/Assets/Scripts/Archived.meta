@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Under Watch/Assets/Scripts/Archived.meta
 guid: 3df22b99ca5b8d04d8a15298d23c6a60
+========
+guid: 605c3cef17dab4c419fd763dfcea3e52
+>>>>>>>> longStudyAndroid:Under Watch/Assets/Plugins/Android.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

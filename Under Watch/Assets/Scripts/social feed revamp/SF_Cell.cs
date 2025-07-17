@@ -14,8 +14,6 @@ using UnityEngine.UIElements;
 public class SF_Cell : MonoBehaviour, ICell
 {
     public string postID;
-
-    public AchieveMonitor achMon;
     public SC_LoginSystem scls;
 
     //UI
@@ -36,12 +34,10 @@ public class SF_Cell : MonoBehaviour, ICell
     private int _cellIndex;
 
     //ad handling
-    public UnityEngine.UI.Button adButton;
+    public GameObject adButton;
     public UnityEngine.UI.Button pfpButton;
 
     List<int> loadedPosts = new();
-
-    bool adHasClicked = false;
     //ensure that these are added in order from smile -> gator
     public List<SF_ReactionEmoji> reacts = new();
     private List<string> allReactNames = new()
@@ -64,7 +60,6 @@ public class SF_Cell : MonoBehaviour, ICell
     private void Start()
     {
         scls = GameObject.FindObjectOfType<SC_LoginSystem>();
-        achMon = GameObject.FindObjectOfType<AchieveMonitor>();
 
         //assign each react's value to the correct name\
         int i = 0;
@@ -85,12 +80,13 @@ public class SF_Cell : MonoBehaviour, ICell
 
         StartCoroutine(LoadPostID());
         StartCoroutine(LoadPostUN());
+        StartCoroutine(LoadPostLocation());
 
         if (postItem.isAd)
         {
             pfpImage.texture = snapPFPTex;
 
-            adButton.enabled = true;
+            adButton.SetActive(true);
             locText.text = "Click to engage with Sponsor";
 
             StartCoroutine(LoadPostAdURL());
@@ -109,10 +105,6 @@ public class SF_Cell : MonoBehaviour, ICell
         }
         else
         {
-            //postItem.location
-            locText.text = "";
-            adButton.enabled = false;
-
             StartCoroutine(LoadPostImage());
             StartCoroutine(LoadPfpImage());
         }
@@ -132,14 +124,37 @@ public class SF_Cell : MonoBehaviour, ICell
     }
     IEnumerator LoadPostUN()
     {
-        while (_postItem.username == null)
-            yield return new WaitForSeconds(.1f);
+        while (_postItem.posterUser == null || _postItem.posterUser.un == null)
+            yield return new WaitForSeconds(0.1f);
 
-        unText.text = _postItem.username;
+        unText.text = _postItem.posterUser.un;
+    }
+    IEnumerator LoadPostLocation()
+    {
+        while (_postItem.placeName == null)
+            yield return new WaitForSeconds(.1f);
+        locText.text = _postItem.placeName;
+        Debug.Log("Post location: " + _postItem.placeName);
+        string coords = _postItem.latitude + ", " + _postItem.longitude;
+
+        //hijacking the ad button 
+        if (coords != "0, 0")
+        {
+            #if UNITY_IOS
+                adLink = $"http://maps.apple.com/?daddr={coords}&dirflg=w";
+                adButton.SetActive(true);
+            #elif UNITY_ANDROID || UNITY_EDITOR
+                adLink = $"https://www.google.com/maps/dir/?api=1&destination={coords}&travelmode=walking";
+                adButton.SetActive(true);
+            #else
+                adLink = "";
+                adButton.SetActive(false);       
+            #endif
+        }
     }
     IEnumerator LoadPostAdURL()
     {
-        while (_postItem.username == null)
+        while (_postItem.posterUser.un == null)
             yield return new WaitForSeconds(.1f);
 
         adLink = _postItem.adLink;
@@ -164,6 +179,8 @@ public class SF_Cell : MonoBehaviour, ICell
             yield return new WaitForSeconds(.1f);
         }
         pfpImage.texture = _postItem.pfpPhoto;
+
+        _postItem.posterUser.profilePic = _postItem.pfpPhoto;
     }
 
     private void SetCellColor(int index)
@@ -205,7 +222,7 @@ public class SF_Cell : MonoBehaviour, ICell
 
     public void ClickOnProfile()
     {
-        ShowClickedProfile.userName = unText.text;
+        ShowClickedProfile.user = _postItem.posterUser;
         ShowClickedProfile.sceneCameFrom = SceneManager.GetActiveScene().name;
 
         SceneManager.LoadScene("ClickedProfile");
@@ -213,17 +230,13 @@ public class SF_Cell : MonoBehaviour, ICell
 
     public void AdClick()
     {
-        Debug.Log("ad clicked");
+        Debug.Log("ad clicked" + adLink);
         if (adLink != "")
         {
             Application.OpenURL(adLink);
-            if (!adHasClicked)
-            {
-                adHasClicked = true;
-                achMon.addAdClick();
-            }
+
+            if (_postItem.isAd)
+                AchievementEventHandler.InvokeAddToAchievment(PointsManager.Source.AchSuperSupporter, 1);
         }
     }
-
-
 }

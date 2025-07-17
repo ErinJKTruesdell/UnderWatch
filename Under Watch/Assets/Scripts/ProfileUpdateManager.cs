@@ -8,10 +8,7 @@ using UnityEngine.UI;
 
 public class ProfileUpdateManager : MonoBehaviour
 {
-    public TMP_Text errorText;
-
     public RawImage profPic;
-    public RawImage profPicOverlay;
     SC_LoginSystem loginSystem;
 
    // public int socialFeedIndex;
@@ -56,7 +53,8 @@ public class ProfileUpdateManager : MonoBehaviour
 
             if (uwr.result != UnityWebRequest.Result.Success)
             {
-                errorText.text = uwr.error;
+                ErrorEventHandler.InvokeError("Getting Photo Server Error!", "We couldn't get that picture", Color.red);
+                Debug.Log(uwr.error);
             }
             else
             {
@@ -100,7 +98,6 @@ public class ProfileUpdateManager : MonoBehaviour
                 //set img tex
 
                 //shut off overlay
-                profPicOverlay.color = Color.clear;
                 profImageSet = true;
 
             }
@@ -121,14 +118,11 @@ public class ProfileUpdateManager : MonoBehaviour
         return result;
     }
     public void RegisterUser()
-    {
-        
+    {        
         if (!isWorking && profImageSet)
         {
-            errorText.text = "";
             StartCoroutine(doUpdate());
         }
-
     }
 
     public IEnumerator doUpdate()
@@ -137,14 +131,13 @@ public class ProfileUpdateManager : MonoBehaviour
         string errorMessage = "";
 
         WWWForm form = new WWWForm();
-        string un = SC_LoginSystem.getUsername();
+        string un = GameManager.loggedInUser.un;
         form.AddField("username", un);
         Debug.Log(un);
         if (profImageSet)
         {
-            form.AddBinaryData("file", ImageConversion.EncodeToPNG(((Texture2D)profPic.texture)), SC_LoginSystem.getUsername() + "profPic.png");
+            form.AddBinaryData("file", ImageConversion.EncodeToPNG(((Texture2D)profPic.texture)), GameManager.loggedInUser.un + "profPic.png");
         }
-
 
         using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "profPic.php", form))
         {
@@ -165,7 +158,7 @@ public class ProfileUpdateManager : MonoBehaviour
             else
             {
                 errorMessage = responseText;
-                errorText.text = errorMessage;
+                Debug.Log("Error! " + errorMessage);
             }
             //}
         }

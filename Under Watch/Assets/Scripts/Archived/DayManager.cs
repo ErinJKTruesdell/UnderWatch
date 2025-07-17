@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using Unity.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
@@ -426,7 +425,7 @@ public class DayManager : MonoBehaviour
         Debug.Log("occuring");
 
         WWWForm form = new WWWForm();
-        form.AddField("username", SC_LoginSystem.getUsername());
+        form.AddField("username", GameManager.loggedInUser.un);
         form.AddField("level", currentDay);
         form.AddField("objs_completed", objCompleted);
         using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "level_update.php", form))
@@ -446,11 +445,11 @@ public class DayManager : MonoBehaviour
     }
     public IEnumerator LoadLevelNum()
     {
-        while (SC_LoginSystem.getUsername() == null)
+        while (GameManager.loggedInUser.un == null)
             yield return new WaitForSeconds(.1f);
 
         WWWForm form = new WWWForm();
-        form.AddField("username", SC_LoginSystem.getUsername());
+        form.AddField("username", GameManager.loggedInUser.un);
         using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "get-user-level.php", form))
         {
             yield return www.SendWebRequest();
@@ -479,7 +478,7 @@ public class DayManager : MonoBehaviour
     public IEnumerator LoadLevelProgress(int level)
     {
         WWWForm form = new WWWForm();
-        form.AddField("username", SC_LoginSystem.getUsername());
+        form.AddField("username", GameManager.loggedInUser.un);
         form.AddField("level_id", level);
         
 
@@ -554,7 +553,7 @@ public class DayManager : MonoBehaviour
         jsonData = UnityWebRequest.EscapeURL(jsonData);
 
         WWWForm form = new WWWForm();
-        form.AddField("username", SC_LoginSystem.getUsername());
+        form.AddField("username", GameManager.loggedInUser.un);
         form.AddField("level_id", currentLevel);
         form.AddField("requirement_data", jsonData);  // Send safely as a form field
 
@@ -579,7 +578,7 @@ public class DayManager : MonoBehaviour
         WWWForm form = new WWWForm();
         Debug.Log("Selected ad rate to upload: " + adrate);
         form.AddField("adRate", adrate.ToString());
-        form.AddField("username", SC_LoginSystem.getUsername());
+        form.AddField("username", GameManager.loggedInUser.un);
 
         using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "set-player-ad-rate.php", form))
         {

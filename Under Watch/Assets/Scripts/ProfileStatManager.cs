@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.Networking;
+using System;
+using UnityEngine.SceneManagement;
 
 public class ProfileStatManager : MonoBehaviour
 {
@@ -10,18 +12,36 @@ public class ProfileStatManager : MonoBehaviour
     public TMP_Text postsText;
     public TMP_Text reactsText;
 
-    public GameManager gm;
+    public TMP_Text workLoc;
+    public TMP_Text attributes;
+    public TMP_Text pointText;
 
+    public GameObject profileInfo;
+
+    public GameManager gm;
+    public ProfileDatabase pd;
+
+    string un;
     private void OnEnable()
     {
         gm = FindObjectOfType<GameManager>();
 
+        InitPostsPointsAndReacts();
         InitObjectivesCount();
-        InitPostsAndReacts();
     }
-
-    void InitPostsAndReacts()
+    void InitPostsPointsAndReacts()
     {
+        pointText.text = "Points: " + 0;
+        if (SceneManager.GetActiveScene().name == "ClickedProfile")
+        {
+            un = ShowClickedProfile.user.un;
+        }
+        else
+        {
+            un = GameManager.loggedInUser.un;
+        }
+
+        PointsManager.GetUserPoints(un, GetPoints);
         StartCoroutine(GetProfileData());
     }
 
@@ -30,10 +50,14 @@ public class ProfileStatManager : MonoBehaviour
         objectivesText.text = DayManager.objCompleted.ToString();
     }
 
+    void GetPoints(int points)
+    {
+        pointText.text = "Points: " + points.ToString();
+    }
     IEnumerator GetProfileData()
     {
         WWWForm form = new WWWForm();
-        form.AddField("username", SC_LoginSystem.getUsername());
+        form.AddField("username", un);
         using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "get-profile-stats.php", form))
         {
             yield return www.SendWebRequest();
@@ -46,12 +70,54 @@ public class ProfileStatManager : MonoBehaviour
             else
             {
                 Debug.Log("response: " + www.downloadHandler.text);
-
-                string[] partition = www.downloadHandler.text.Split("|");
-
-                reactsText.text = partition[0];
-                postsText.text = partition[1];
+                //$reactNum . "|" . $postNum. "|" . $work . "|" . $att1 . "|" . $att2 . "|" . $att3;
+                HandleProfileStatDisplay(www.downloadHandler.text);
             }
+        }
+    }
+
+    public void HandleProfileStatDisplay(string response)
+    {
+        try
+        {
+            //$work . "|" . $att1 . "|" . $att2 . "|" . $att3 ."@" . $reactNum . "|". $postNum . "|".
+            profileInfo.SetActive(true);
+            workLoc.text = "";
+            attributes.text = "";
+
+            string[] partition = response.Split("@");
+
+            string[] statInfo = partition[1].Split("|");
+            reactsText.text = statInfo[0];
+            postsText.text = statInfo[1];
+
+            string[] profAtt = partition[0].Split("|");
+
+            Debug.Log("Assigning attributes" + profAtt[0] + profAtt[1] + profAtt[2] + profAtt[3]);
+
+            //if the work string is empty, don't bother showing the rest
+            //check if a string is empty before adding it to the sentence
+            if (!string.IsNullOrEmpty(profAtt[0]))
+                workLoc.text = "I work at " + profAtt[0];
+            else
+                throw new Exception("Attributes string is empty.");
+
+            if (!string.IsNullOrEmpty(profAtt[1]))
+                attributes.text += $" {profAtt[1]}.";
+
+            if (!string.IsNullOrEmpty(profAtt[2]))
+                attributes.text += $" {profAtt[2]}";
+
+            if (!string.IsNullOrEmpty(profAtt[3]))
+                attributes.text += $", and {profAtt[3]}!";
+
+            VLGFiddler.RebuildVLGLayout();
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+            profileInfo.SetActive(false);
+            VLGFiddler.RebuildVLGLayout();
         }
     }
 }

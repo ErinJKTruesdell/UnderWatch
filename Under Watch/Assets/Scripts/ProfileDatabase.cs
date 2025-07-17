@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 public class ProfileDatabase : MonoBehaviour
 {
-
     public RawImage profileImage;
 
     public RawImage zoomedImage;
@@ -31,28 +30,43 @@ public class ProfileDatabase : MonoBehaviour
         gm.LogOut();
     }
 
-    public void fillCanvas(string username, string fullName)
+    void OnEnable()
     {
-        Debug.Log("Filling Canvas: " + username + fullName);
-        StartCoroutine(getAndDownloadImages(username));
+        if (SceneManager.GetActiveScene().name == "PlayerProfile")
+        {
+            fillCanvas(GameManager.loggedInUser);
+        }
+    }
+
+    public void fillCanvas(UserInfo user)
+    {
+        Debug.Log("Filling Canvas: " + user.un);
+
+        usernameText.text = "@" + user.un;
+        profileImage.texture = user.profilePic;
+        usernameText.gameObject.SetActive(true);
+
+        StartCoroutine(getAndDownloadImages(user.un));
+        fullNameText.text = user.firstName + " " + user.lastName;
     }
     private IEnumerator getAndDownloadImages(string username)
     {
+
+        foreach (Transform child in contentTransform)
+        {
+            Destroy(child.gameObject);
+        }
         // get data from server
         WWWForm form = new WWWForm();
         form.AddField("username", username); //dummy data
-        Debug.Log("usn: " + username);
-        usernameText.text = "@" + username;
-        usernameText.gameObject.SetActive(true);
 
-        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "/get-all-user-photos.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "get-all-user-photos.php", form))
         {
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
             {
                 //yay show the picture
-                //errorMessage = www.error;
                 string errorMessage = www.error;
                 Debug.Log(errorMessage);
 
@@ -70,12 +84,9 @@ public class ProfileDatabase : MonoBehaviour
 
                 if (userChunks.Length > 1)
                 {
-                    fullNameText.text = userChunks[0].Trim();
-                    Debug.Log("name: " + fullNameText.text);
+                    fullNameText.text = userChunks[0];
 
                     string profUrl = "/" + userChunks[1];
-                    Debug.Log(profUrl);
-                    StartCoroutine(downloadImageFromURL(GameManager.rootURL + profUrl, profileImage));
 
                     //create prefab and load images
                     for (int s = 1; s < userChunks.Length; s++)
@@ -93,12 +104,9 @@ public class ProfileDatabase : MonoBehaviour
                             StartCoroutine(downloadImageFromURL(GameManager.rootURL + i, ppp.thisImage));
                         }
                     }
-
                 }
             }
-
         }
-
     }
 
     private IEnumerator downloadImageFromURL(string url1, RawImage image1)

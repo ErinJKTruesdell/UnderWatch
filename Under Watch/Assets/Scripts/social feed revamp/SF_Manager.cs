@@ -8,8 +8,11 @@ public class SFPostItem
 {
     //use TextMeshProUGUI instead of TMP_Text because it is a concrete component, not abstract base class
     //strings are assigned in SF_cell
-    public string username;
-    public string location;
+    public UserInfo posterUser;
+    public UserInfo targetUser;
+    public string placeName;
+    public float latitude;
+    public float longitude;
     public string postID;
     public string adLink;
     //images are assigned in the downloadImages func
@@ -109,16 +112,11 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
     #region WEB-REQUESTS
     IEnumerator GetRequest(SFPostItem SFitem, string timestamp)
     {
-        string usernameStr;
-        string latStr;
-        string longStr;
-        string postIDStr;
-
         string postImageURL;
         string pfpImageURl;
 
         Debug.Log("Starting Request: " + timestamp);
-        while (SC_LoginSystem.getUsername() == null)
+        while (GameManager.loggedInUser == null)
         {
             yield return new WaitForEndOfFrame();
         }
@@ -127,9 +125,9 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
         form.AddField("previousDate", timestamp);
         // was originally a placeholder username "asfdasdf"
         form.AddField("username", "asfdasdf");
-        form.AddField("loggedInUser", SC_LoginSystem.getUsername());
+        form.AddField("loggedInUser", GameManager.loggedInUser.un);
 
-        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "/get-next-photo.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "get-next-photo.php", form))
         {
             yield return www.SendWebRequest();
 
@@ -162,9 +160,17 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
                         if (datachunks[3] != "")
                             SFitem.adLink = datachunks[3];
                         if (datachunks[4] != "")
-                            SFitem.username = datachunks[4];
+                            SFitem.posterUser = new UserInfo(
+                                datachunks[4],
+                                "Snap",
+                                "Gram"
+                            );
                         else
-                            SFitem.username = "SnapGram Advertiser";
+                            SFitem.posterUser = new UserInfo(
+                                "SnapGram Advertiser",
+                                "Snap",
+                                "Gram"
+                            );
 
                         SFitem.isAd = true;
                         yield return StartCoroutine(downloadAdImageFromURL(GameManager.rootURL + postImageURL, SFitem));
@@ -172,25 +178,63 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
 
                     else
                     {
-                        pfpImageURl = datachunks[0];
-                        postImageURL = datachunks[1];
-                        pfpImageURl = pfpImageURl.Replace("\n", "");
-                        usernameStr = datachunks[3];
-                        //[4] needs to be split by % for lat/long
-                        latStr = datachunks[5].Split('%')[0];
-                        longStr = datachunks[5].Split('%')[1];
-                        postIDStr = datachunks[^1];
+                        try
+                        {
+                           // echo $user_pfp. "|".$post_image_url. "|".$date_tmp. "|". $poster_un. "|" $poster_fn. "|". $poster_ln. "|".  $target_un. "|". $target_fn. "|". $target_ln. "|". $target_prof."|. $lat_tmp." % ".$long_tmp." % ".$place_name ." | ". $post_id."@".$likes_data;
+                            pfpImageURl = datachunks[0];
+                            pfpImageURl = pfpImageURl.Replace("\n", "");
 
-                        SFitem.username = usernameStr.Trim();
-                        SFitem.postID = postIDStr.Trim();
-                        SFitem.location = latStr.Trim() + "," + longStr.Trim();
+                            postImageURL = datachunks[1];
 
-                        string[] reactChunks = partition[1].Split("%");
-                        ParseReacts(reactChunks, SFitem);
-                        Debug.Log("Starting Download");
-                        //possibly make this a yield return to wait until post is fully loaded - faster as is, but less stable?
-                        StartCoroutine(downloadPostimage(GameManager.rootURL + postImageURL, SFitem));
-                        StartCoroutine(downloadPfpImage(GameManager.rootURL + pfpImageURl, SFitem));
+                            string usernameStr = datachunks[3];
+                            string uFN = datachunks[4];
+                            string uLN = datachunks[5];
+
+                            string targetUNTStr = datachunks[6];
+                            string tFN = datachunks[7];
+                            string tLN = datachunks[8];
+                            string targetPFP = datachunks[9];
+
+                            //[4] needs to be split by % for lat/long
+                            string latStr = datachunks[10].Split('%')[0];
+                            string longStr = datachunks[10].Split('%')[1];
+                            string placeName = datachunks[10].Split('%')[2];
+
+                            string postIDStr = datachunks[^1];
+
+                            SFitem.posterUser = new UserInfo(
+                                usernameStr.Trim(),
+                                uFN.Trim(),
+                                uLN.Trim()
+                            );
+
+                            SFitem.targetUser = new UserInfo(
+                                targetUNTStr.Trim(),
+                                tFN.Trim(),
+                                tLN.Trim()
+                            );
+                            Debug.Log($"Poster: {SFitem.posterUser?.un}, Target: {SFitem.targetUser?.un}");
+
+                            SFitem.postID = postIDStr.Trim();
+
+                            SFitem.latitude = float.Parse(latStr.Trim());
+                            SFitem.longitude = float.Parse(longStr.Trim());
+                            SFitem.placeName = placeName.Trim();
+
+                            string[] reactChunks = partition[1].Split("%");
+                            ParseReacts(reactChunks, SFitem);
+                            Debug.Log("Starting Download");
+                            //possibly make this a yield return to wait until post is fully loaded - faster as is, but less stable?
+                            StartCoroutine(downloadTargetPFP(GameManager.rootURL + targetPFP, SFitem));
+                            StartCoroutine(downloadPostimage(GameManager.rootURL + postImageURL, SFitem));
+                            StartCoroutine(downloadPfpImage(GameManager.rootURL + pfpImageURl, SFitem));
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.Log("Error parsing data: " + e.Message);
+                            ErrorEventHandler.InvokeError("Server Return Error!", "Unexpected data format. Please try again, or check your internet connection.", Color.red);
+                            yield break; // Exit if parsing fails
+                        }
                     }
                 }
                 else
@@ -200,7 +244,6 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
             }
         }
     }
-
     void ParseReacts(string[] reactChunks, SFPostItem postItem)
     {
         int i = 0;
@@ -259,6 +302,25 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
             }
 
             item.pfpPhoto = image2Download;
+        }
+    }
+    IEnumerator downloadTargetPFP(string url, SFPostItem item)
+    {
+        UnityWebRequest request2 = UnityWebRequestTexture.GetTexture(url);
+        yield return request2.SendWebRequest();
+        if (request2.isNetworkError || request2.isHttpError)
+        {
+            Debug.Log("error: " + url + request2.error);
+        }
+        else
+        {
+            Texture image2Download = ((DownloadHandlerTexture)request2.downloadHandler).texture;
+            if (image2Download == null)
+            {
+                Debug.Log("Pfp photo texture is null after download");
+            }
+
+            item.targetUser.profilePic = image2Download;
         }
     }
 
