@@ -14,7 +14,6 @@ using UnityEngine.UIElements;
 public class SF_Cell : MonoBehaviour, ICell
 {
     public string postID;
-    public AchieveMonitor achMon;
     public SC_LoginSystem scls;
 
     //UI
@@ -61,7 +60,6 @@ public class SF_Cell : MonoBehaviour, ICell
     private void Start()
     {
         scls = GameObject.FindObjectOfType<SC_LoginSystem>();
-        achMon = GameObject.FindObjectOfType<AchieveMonitor>();
 
         //assign each react's value to the correct name\
         int i = 0;

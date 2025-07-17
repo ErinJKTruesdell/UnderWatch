@@ -23,6 +23,11 @@ public class DisplayTargetProfile : MonoBehaviour
     public string placeName = "";
     public UserInfo targetUser;
 
+    void OnEnable()
+    {
+        ConfigureUser(GameManager.currTarget);
+    }
+
     public void ConfigureUser(UserInfo user)
     {
         targetUser = user;

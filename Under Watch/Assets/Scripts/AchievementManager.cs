@@ -28,7 +28,12 @@ public class AchievementObject
 public class AchievementManager : MonoBehaviour
 {
     public static List<AchievementObject> allAchievements;
-    public static List<AchievementObject> loadedAchievements;
+
+    void Awake()
+    {
+        DontDestroyOnLoad(this);
+        AddAllAchievements();
+    }
 
     public void UpdateAchievement(PointsManager.Source achType, int updateReqBy)
     {
@@ -48,15 +53,29 @@ public class AchievementManager : MonoBehaviour
         }
     }
 
-    public List<AchievementObject> LoadAchievements()
+    public List<AchievementObject> LoadListOfAchievements(List<AchievementObject> loadedAchievements)
     {
         //called when in ach scene:
-        // 1. check if loadedAchievements == allAchievements. If so, return
-        if (allAchievements != loadedAchievements)
-        {
-            loadedAchievements = allAchievements;
-        }
-        return allAchievements;
+        // check if loadedAchievements == allAchievements. If so, return
+        bool isSameList = true;
+        int i = 0;
+
+        if (loadedAchievements == null)
+            return allAchievements;
+        foreach (AchievementObject ach in allAchievements)
+            {
+                if (ach.title != loadedAchievements[i].title)
+                {
+                    isSameList = false;
+                    break;
+                }
+                i++;
+            }
+
+        if (isSameList)
+            return null;
+        else
+            return allAchievements;
     }
 
     public void AddAllAchievements()
@@ -101,7 +120,7 @@ public class AchievementManager : MonoBehaviour
             ),
             new AchievementObject(
                 _title: "Social Butterfly",
-                _description: "take a selfie with {value} total people",
+                _description: "You just made {value} new friends with the power of selfies!",
                 _pointSource: PointsManager.Source.AchSocialButterfly,
                 _reqsPerLevel: new List<int>
                 {
@@ -110,7 +129,7 @@ public class AchievementManager : MonoBehaviour
             ),
             new AchievementObject(
                 _title: "Super Supporter",
-                _description: "click on {value} ads",
+                _description: "Thanks for supporting {value} sponsored brands!",
                 _pointSource: PointsManager.Source.AchSuperSupporter,
                 _reqsPerLevel: new List<int>
                 {

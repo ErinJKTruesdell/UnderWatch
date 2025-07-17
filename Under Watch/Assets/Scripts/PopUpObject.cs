@@ -10,7 +10,12 @@ public class PopUpObject : MonoBehaviour
     public static PopUpObject popUpInstance { get; private set; }
     private void Awake()
     {
+        //MUST be active on load!
         popUpInstance = this;
+    }
+    private void Start()
+    {
+        gameObject.SetActive(false);
     }
     public void ConfigurePopup(string _title, string _desc)
     {

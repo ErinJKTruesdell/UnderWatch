@@ -160,9 +160,17 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
                         if (datachunks[3] != "")
                             SFitem.adLink = datachunks[3];
                         if (datachunks[4] != "")
-                            SFitem.posterUser.un = datachunks[4];
+                            SFitem.posterUser = new UserInfo(
+                                datachunks[4],
+                                "Snap",
+                                "Gram"
+                            );
                         else
-                            SFitem.posterUser.un = "SnapGram Advertiser";
+                            SFitem.posterUser = new UserInfo(
+                                "SnapGram Advertiser",
+                                "Snap",
+                                "Gram"
+                            );
 
                         SFitem.isAd = true;
                         yield return StartCoroutine(downloadAdImageFromURL(GameManager.rootURL + postImageURL, SFitem));
