@@ -144,3 +144,6 @@ Thumbs.db
 *.json
 Under Watch/Assets/APIKeys.cs
 Under Watch/Assets/APIKeys.cs.meta
+*.meta
+*.meta
+Under Watch/Assets/Scripts/SelfieUploader.cs.meta
