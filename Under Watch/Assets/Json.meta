@@ -1,9 +1,9 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Under Watch/Assets/Prefabs/Achievements.meta
-guid: 6b808955ea2924a7898c4eadfb5a7776
-========
+<<<<<<<< HEAD:Under Watch/Assets/Json.meta
 guid: 9f7d792a32ac6ad46a626165157f6932
->>>>>>>> longStudyAndroid:Under Watch/Assets/Json.meta
+========
+guid: c90e8630674e6bc4c97c9238e8bb8a1b
+>>>>>>>> longStudyIphone:Under Watch/Assets/Samples/ProjNet4GeoAPI-For-Unity/1.0.2.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

@@ -43,6 +43,8 @@ public class AchievementNotification : MonoBehaviour
 
         //set to right screen and load the scene 
         PlayerPrefs.SetInt(AchievementScreenManager.savedScreenName, 1);
+        PlayerPrefs.Save();
+
         SceneManager.LoadScene("Achievements");
 
         StopAllCoroutines();

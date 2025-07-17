@@ -156,7 +156,7 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
                     if (datachunks[0].Contains("Spon"))
                     {
                         //Sponsored|uploads/6802b70799fa1456967581.png|2024-10-18 00:00:00
-                        postImageURL = datachunks[1];
+                        postImageURL = datachunks[1].Trim();
                         if (datachunks[3] != "")
                             SFitem.adLink = datachunks[3];
                         if (datachunks[4] != "")
@@ -181,10 +181,10 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
                         try
                         {
                            // echo $user_pfp. "|".$post_image_url. "|".$date_tmp. "|". $poster_un. "|" $poster_fn. "|". $poster_ln. "|".  $target_un. "|". $target_fn. "|". $target_ln. "|". $target_prof."|. $lat_tmp." % ".$long_tmp." % ".$place_name ." | ". $post_id."@".$likes_data;
-                            pfpImageURl = datachunks[0];
-                            pfpImageURl = pfpImageURl.Replace("\n", "");
+                            pfpImageURl = datachunks[0].Trim();
+                            pfpImageURl = pfpImageURl.Replace("\n", "").Trim();
 
-                            postImageURL = datachunks[1];
+                            postImageURL = datachunks[1].Trim();
 
                             string usernameStr = datachunks[3];
                             string uFN = datachunks[4];

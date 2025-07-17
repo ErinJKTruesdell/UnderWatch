@@ -15,6 +15,7 @@ public class ProfileStatManager : MonoBehaviour
     public TMP_Text workLoc;
     public TMP_Text attributes;
     public TMP_Text pointText;
+    public GameObject pointsPopUp;
 
     public GameObject profileInfo;
 
@@ -53,7 +54,45 @@ public class ProfileStatManager : MonoBehaviour
     void GetPoints(int points)
     {
         pointText.text = "Points: " + points.ToString();
+        StartCoroutine(pointsAnim(points));
     }
+
+    IEnumerator pointsAnim(int points)
+    {
+        int originalPoints = PlayerPrefs.GetInt("points");
+
+        if (originalPoints != points)
+        {
+            pointsPopUp.SetActive(true);
+            TextMeshProUGUI pointsText = pointsPopUp.GetComponent<TextMeshProUGUI>();
+            pointsText.text = "+" + (points - originalPoints);
+            StartCoroutine(FadeToTransparent(pointsText, 3));
+
+            PlayerPrefs.SetInt("points", points);
+            PlayerPrefs.Save();
+
+            yield return new WaitForSeconds(3);
+
+            pointsPopUp.SetActive(false);
+        }
+    }
+
+    IEnumerator FadeToTransparent(TextMeshProUGUI text, float duration)
+    {
+        Color startColor = text.color;
+        Color endColor = new Color(startColor.r, startColor.g, startColor.b, 0f);
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            text.color = Color.Lerp(startColor, endColor, elapsed / duration);
+            yield return null;
+        }
+
+        text.color = endColor; // ensure it's fully transparent
+    }
+
     IEnumerator GetProfileData()
     {
         WWWForm form = new WWWForm();

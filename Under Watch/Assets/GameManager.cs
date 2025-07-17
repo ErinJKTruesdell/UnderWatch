@@ -69,6 +69,7 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.DeleteKey("savedPassword");
         PlayerPrefs.DeleteKey("currentDay");
         PlayerPrefs.DeleteKey("objectivesCompleted");
+        PlayerPrefs.Save();
 
         ProgressToScene("LoginScene");
         scls.isLoggedIn = false;
@@ -107,9 +108,10 @@ public class UserInfo
     public string firstName;
     public string lastName;
     public string email;
+    public string profileURL;
     //any other dating app info
 
-    public UserInfo(string _un, string _firstName, string _lastName, Texture _profilePic = null, string _email = " ")
+    public UserInfo(string _un, string _firstName, string _lastName, Texture _profilePic = null, string _email = " ", string _profileURL=" ")
     {
         un = _un;
         firstName = _firstName;
@@ -117,7 +119,8 @@ public class UserInfo
 
         profilePic = _profilePic;
         email = _email;
-
+        profileURL = _profileURL;
+        
         Debug.Log("Saved user: " + un);
     }
 }
