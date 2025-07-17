@@ -56,9 +56,10 @@ public class SelfieCam : MonoBehaviour
     IEnumerator RequestCamPerms(Action onAuthorized)
     {
 #if UNITY_IOS || UNITY_WEBGL
-        StartCoroutine(AskForPermissionIfRequired(UserAuthorization.WebCam, () => { InitializeCamera(); }));
-        onAuthorized?.Invoke();
-        return;
+        StartCoroutine(AskForPermissionIfRequired(UserAuthorization.WebCam, () => {
+            onAuthorized?.Invoke();
+        }));
+        return null;
 #elif UNITY_ANDROID
         if (!Permission.HasUserAuthorizedPermission(Permission.Camera))
         {
@@ -256,7 +257,7 @@ public class SelfieCam : MonoBehaviour
 #if UNITY_IOS || UNITY_WEBGL
     private bool CheckPermissionAndRaiseCallbackIfGranted(UserAuthorization authenticationType, Action authenticationGrantedAction)
     {
-        if (Application.HasUserAuthorization(authenticationType))
+        if (UnityEngine.Application.HasUserAuthorization(authenticationType))
         {
             if (authenticationGrantedAction != null)
                 authenticationGrantedAction();
@@ -270,7 +271,7 @@ public class SelfieCam : MonoBehaviour
     {
         if (!CheckPermissionAndRaiseCallbackIfGranted(authenticationType, authenticationGrantedAction))
         {
-            yield return Application.RequestUserAuthorization(authenticationType);
+            yield return UnityEngine.Application.RequestUserAuthorization(authenticationType);
             if (!CheckPermissionAndRaiseCallbackIfGranted(authenticationType, authenticationGrantedAction))
                 Debug.Log($"Permission {authenticationType} Denied");
         }
