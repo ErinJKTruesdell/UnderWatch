@@ -139,7 +139,7 @@ public class AdUploadManager : MonoBehaviour
         form.AddField("adRate", selectedAdRate.ToString()); 
 
 
-        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "/set_ad_rate.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "set_ad_rate.php", form))
         {
             yield return www.SendWebRequest();
 
@@ -154,7 +154,6 @@ public class AdUploadManager : MonoBehaviour
             {
                 //return null
                 string responseText = www.downloadHandler.text;
-
 
                 Debug.Log("Response: " + responseText);
                 selectedAdRate = int.Parse(responseText);
@@ -172,7 +171,6 @@ public class AdUploadManager : MonoBehaviour
         // get data from server
         WWWForm form = new WWWForm();
         form.AddField("s", "s"); //dummy data
-
 
         using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "/get_ad_rate.php", form))
         {
