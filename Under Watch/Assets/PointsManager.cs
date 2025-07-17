@@ -115,6 +115,7 @@ public class PointsManager : MonoBehaviour
             else
             {
                 string response = www.downloadHandler.text;
+                Debug.Log("points: " + response);
 
                 if (response.Contains("succeed"))
                 {
