@@ -43,7 +43,9 @@ public class ProfileDatabase : MonoBehaviour
         Debug.Log("Filling Canvas: " + user.un);
 
         usernameText.text = "@" + user.un;
-        profileImage.texture = user.profilePic;
+
+        if (user.profilePic != null)
+            profileImage.texture = user.profilePic;
         usernameText.gameObject.SetActive(true);
 
         StartCoroutine(getAndDownloadImages(user.un));

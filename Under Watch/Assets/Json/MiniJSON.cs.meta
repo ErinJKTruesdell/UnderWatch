@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Under Watch/Assets/Json/MiniJSON.cs.meta
 guid: 2a3395c7e282b634a811aa09425e2364
+========
+guid: 0c0d60c6e5194ce47bba3e41d01f7eec
+>>>>>>>> longStudyAndroid:Under Watch/Assets/ErrorEventHandler.cs.meta
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2

@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Under Watch/Assets/Samples.meta
 guid: b56161fa75b6c034aa9557f935241be0
+========
+guid: 0be909d09ac1f504391fc7198ad90aca
+>>>>>>>> longStudyAndroid:Under Watch/Assets/ProjectSettings.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

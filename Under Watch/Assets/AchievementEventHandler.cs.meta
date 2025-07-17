@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Under Watch/Assets/AchievementEventHandler.cs.meta
 guid: 2f1f092a6abe8f8468cc17d602c0ac66
+========
+guid: 4803663bee5cb9a4c833e49da87b2ad8
+>>>>>>>> longStudyAndroid:Under Watch/Assets/APIKeysTemplate.cs.meta
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2

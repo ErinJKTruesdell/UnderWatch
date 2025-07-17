@@ -96,7 +96,6 @@ public class DayManager : MonoBehaviour
 
         SetActiveReqs(currentDay);
 
-        UpdateAdRate();
         isLoadingLevels = false;
         loadingScreenBlocker.SetActive(false);
         maxDays = allDays.Count - 1;
@@ -166,7 +165,6 @@ public class DayManager : MonoBehaviour
         NewsButton.firstLoad = true;
 
         //server connections: 
-        UpdateAdRate();
         StartCoroutine(SendLevelData(currentDay));
         StartCoroutine(SendLevelNum());
     }
@@ -292,7 +290,7 @@ public class DayManager : MonoBehaviour
     }
 
 
-    void UpdateAdRate()
+    /*void UpdateAdRate()
     {
         switch (currentDay)
         {
@@ -321,7 +319,7 @@ public class DayManager : MonoBehaviour
                 StartCoroutine(setAdRate(1));
                 break;
         }
-    }
+    }*/
     private void AddNewRequirement(int dayNum, List<(ObjTypes, string, int, int)> reqData, int expectedFaces = 2)
     {
         //fills a dict with all the requirements for one day
@@ -572,7 +570,7 @@ public class DayManager : MonoBehaviour
         }
     }
 
-    public IEnumerator setAdRate(int adrate)
+    /*public IEnumerator setAdRate(int adrate)
     {
         // get data from server
         WWWForm form = new WWWForm();
@@ -600,7 +598,7 @@ public class DayManager : MonoBehaviour
             }
         }
 
-    }
+    }*/
 
     private void OnEnable()
     {

@@ -21,7 +21,6 @@ public class ShowClickedProfile : MonoBehaviour
 
         searchScript = new SearchScript();
     }
-
     public void BackButton()
     {
         SceneManager.LoadScene(sceneCameFrom);

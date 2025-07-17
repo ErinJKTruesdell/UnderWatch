@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Under Watch/Assets/ConvertCoordinates.cs.meta
 guid: 3c037246aa1ff874a8c11409d1d944bc
+========
+guid: 2f1f092a6abe8f8468cc17d602c0ac66
+>>>>>>>> longStudyAndroid:Under Watch/Assets/AchievementEventHandler.cs.meta
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2

@@ -125,13 +125,13 @@ public class PointsManager : MonoBehaviour
                     }
                     else
                     {
-                        Debug.LogError("Invalid response format: " + response);
+                        Debug.Log("Invalid response format: " + response);
                         onComplete.Invoke(0);
                     }
                 }
                 else
                 {
-                    Debug.LogError("Unexpected response: " + response);
+                    Debug.Log("Unexpected response: " + response);
                     onComplete.Invoke(0);
                 }
             }
