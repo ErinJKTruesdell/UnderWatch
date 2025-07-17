@@ -19,21 +19,22 @@ public class ProfileStatManager : MonoBehaviour
     public GameObject profileInfo;
 
     public GameManager gm;
+    public ProfileDatabase pd;
 
     string un;
     private void OnEnable()
     {
         gm = FindObjectOfType<GameManager>();
 
-        InitObjectivesCount();
         InitPostsPointsAndReacts();
+        InitObjectivesCount();
     }
     void InitPostsPointsAndReacts()
     {
         pointText.text = "Points: " + 0;
-        if (SceneManager.GetActiveScene().name == ("ClickedProfile"))
+        if (SceneManager.GetActiveScene().name == "ClickedProfile")
         {
-            un = ShowClickedProfile.userName;
+            un = ShowClickedProfile.user.un;
         }
         else
         {
@@ -79,18 +80,18 @@ public class ProfileStatManager : MonoBehaviour
     {
         try
         {
+            //$work . "|" . $att1 . "|" . $att2 . "|" . $att3 ."@" . $reactNum . "|". $postNum . "|".
             profileInfo.SetActive(true);
             workLoc.text = "";
             attributes.text = "";
 
             string[] partition = response.Split("@");
-            Debug.Log(partition[0]);
-            Debug.Log(partition[1]);
-            string[] statInfo = partition[0].Split("|");
+
+            string[] statInfo = partition[1].Split("|");
             reactsText.text = statInfo[0];
             postsText.text = statInfo[1];
 
-            string[] profAtt = partition[1].Split("|");
+            string[] profAtt = partition[0].Split("|");
 
             Debug.Log("Assigning attributes" + profAtt[0] + profAtt[1] + profAtt[2] + profAtt[3]);
 

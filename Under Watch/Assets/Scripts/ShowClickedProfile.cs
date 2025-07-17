@@ -2,28 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class ShowClickedProfile : MonoBehaviour
 {
     public GameObject zoomedImage;
+    public RawImage zoomedImageTex;
 
     public ProfileDatabase pd;
     public SearchScript searchScript;
 
-    public static string userName;
+    public static UserInfo user;
     public static string sceneCameFrom;
 
-    private void Start()
+    private void OnEnable()
     {
-        pd.fillCanvas(userName);
+        pd.fillCanvas(user);
 
         searchScript = new SearchScript();
     }
 
-    public void hideZoomedImage()
-    {
-        zoomedImage.SetActive(false);
-    }
     public void BackButton()
     {
         SceneManager.LoadScene(sceneCameFrom);

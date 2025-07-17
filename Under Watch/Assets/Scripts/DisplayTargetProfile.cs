@@ -21,9 +21,12 @@ public class DisplayTargetProfile : MonoBehaviour
     public GameObject profileInfo;
     public string locationLink;
     public string placeName = "";
+    public UserInfo targetUser;
 
     public void ConfigureUser(UserInfo user)
     {
+        targetUser = user;
+
         usernameText.text = "@" + user.un;
         fullNameText.text = user.firstName + " " + user.lastName;
         profilePic.texture = user.profilePic;
@@ -41,7 +44,7 @@ public class DisplayTargetProfile : MonoBehaviour
     }
     public void ClickOnProfile()
     {
-        ShowClickedProfile.userName = usernameText.text;
+        ShowClickedProfile.user = targetUser;
         ShowClickedProfile.sceneCameFrom = SceneManager.GetActiveScene().name;
 
         SceneManager.LoadScene("ClickedProfile");
@@ -164,15 +167,11 @@ public class DisplayTargetProfile : MonoBehaviour
 #endif
             }
         }
-        else
-        {
-            ErrorEventHandler.InvokeError("Location error!", "The coordinates are invalid", Color.red);
-        }
     }
 
     void HandlePlaceName(float latitude, float longitude, string placeName = "")
     {
-        if (placeName == "")
+        if (string.IsNullOrWhiteSpace(placeName))
         {
             if (latitude != 0 && longitude != 0)
             {
@@ -184,12 +183,9 @@ public class DisplayTargetProfile : MonoBehaviour
             {
                 ErrorEventHandler.InvokeError("Location error!", "The coordinates are invalid", Color.red);
                 placeName = "No location found";
+                locationText.text = placeName;
                 return;
             }
-        }
-        else
-        {
-            locationText.text = placeName;
         }
     }
 

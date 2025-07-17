@@ -13,7 +13,7 @@ public class LeaderboardItem : MonoBehaviour
 
     public void ClickOnProfile()
     {
-        ShowClickedProfile.userName = usernameText.text;
+        ShowClickedProfile.user.un = usernameText.text;
         ShowClickedProfile.sceneCameFrom = SceneManager.GetActiveScene().name;
 
         SceneManager.LoadScene("ClickedProfile");

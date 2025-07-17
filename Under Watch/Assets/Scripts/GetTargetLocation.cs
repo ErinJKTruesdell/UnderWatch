@@ -148,12 +148,12 @@ public class GetTargetLocation : MonoBehaviour
     {
         if (string.IsNullOrEmpty(targetText.text))
         {
-            ShowClickedProfile.userName = "";
+            ShowClickedProfile.user.un = "";
             Debug.Log("Target username not found");
         }
         else
         {
-            ShowClickedProfile.userName = targetText.text;
+            ShowClickedProfile.user.un = targetText.text;
 
         }
         ShowClickedProfile.sceneCameFrom = SceneManager.GetActiveScene().name;

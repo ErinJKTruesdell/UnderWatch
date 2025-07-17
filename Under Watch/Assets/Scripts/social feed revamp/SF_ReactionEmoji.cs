@@ -55,7 +55,6 @@ public class SF_ReactionEmoji : MonoBehaviour
         //if user has liked this reaction before
         if (parentCell._postItem.ReactNumDict[reactName].Item2 == true)
         {
-            Debug.Log("reacted : " + parentCell._postItem.ReactNumDict[reactName].Item2);
             colorEmoji.SetActive(true);
             bannerObj.SetActive(true);
             userClicked = true;
@@ -68,7 +67,6 @@ public class SF_ReactionEmoji : MonoBehaviour
         {
             userClicked = false;
 
-            Debug.Log("reacted by others" + parentCell._postItem.ReactNumDict[reactName].Item2);
             LikeSetup();
             greyBanner.color = neutralGrey;
             greyEmoji.color = Color.white;
@@ -108,8 +106,8 @@ public class SF_ReactionEmoji : MonoBehaviour
             ColorizeBanner();
             LikeAnims();
 
-            PointsManager.AddPoints(parentCell._postItem.targetUsername, PointsManager.postReactedPoints, PointsManager.Source.PostReact);
-            PointsManager.AddPoints(parentCell._postItem.username, PointsManager.targetReactedPoints, PointsManager.Source.TargetPostReact);
+            PointsManager.AddPoints(parentCell._postItem.posterUser.un, PointsManager.postReactedPoints, PointsManager.Source.PostReact);
+            PointsManager.AddPoints(parentCell._postItem.targetUser.un, PointsManager.targetReactedPoints, PointsManager.Source.TargetPostReact);
         }
         reactionInProgress = false;
     }
@@ -148,8 +146,8 @@ public class SF_ReactionEmoji : MonoBehaviour
         colorEmoji.SetActive(false);
         bannerObj.SetActive(false);
 
-        PointsManager.AddPoints(parentCell._postItem.username, -PointsManager.postReactedPoints, PointsManager.Source.PostReact);
-        PointsManager.AddPoints(parentCell._postItem.targetUsername, -PointsManager.targetReactedPoints, PointsManager.Source.TargetPostReact);
+        PointsManager.AddPoints(parentCell._postItem.posterUser.un, -PointsManager.postReactedPoints, PointsManager.Source.PostReact);
+        PointsManager.AddPoints(parentCell._postItem.targetUser.un, -PointsManager.targetReactedPoints, PointsManager.Source.TargetPostReact);
 
         //on the php server, if the like from user already is true, then it will toggle the like off.
         if (!isAd)

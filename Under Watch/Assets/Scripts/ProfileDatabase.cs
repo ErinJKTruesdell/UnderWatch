@@ -24,30 +24,38 @@ public class ProfileDatabase : MonoBehaviour
     private void Start()
     {
         gm = GameObject.FindObjectOfType<GameManager>();
-
-        fillCanvas(GameManager.loggedInUser.un);
     }
     public void PfDLogOut()
     {
         gm.LogOut();
     }
 
-    public void fillCanvas(string username)
+    void OnEnable()
     {
-        Debug.Log("Filling Canvas: " + username);
+        if (SceneManager.GetActiveScene().name == "PlayerProfile")
+        {
+            fillCanvas(GameManager.loggedInUser);
+        }
+    }
 
-        usernameText.text = "@" + username;
-        profileImage.texture = GameManager.loggedInUser.profilePic;
+    public void fillCanvas(UserInfo user)
+    {
+        Debug.Log("Filling Canvas: " + user.un);
+
+        usernameText.text = "@" + user.un;
+        profileImage.texture = user.profilePic;
         usernameText.gameObject.SetActive(true);
 
-        StartCoroutine(getAndDownloadImages(username));
-
-        if (username == GameManager.loggedInUser.un)
-            //if we're looking at the currently logged in user, we can just load the stored fullname
-            fullNameText.text = GameManager.loggedInUser.firstName + " " + GameManager.loggedInUser.lastName;
+        StartCoroutine(getAndDownloadImages(user.un));
+        fullNameText.text = user.firstName + " " + user.lastName;
     }
     private IEnumerator getAndDownloadImages(string username)
     {
+
+        foreach (Transform child in contentTransform)
+        {
+            Destroy(child.gameObject);
+        }
         // get data from server
         WWWForm form = new WWWForm();
         form.AddField("username", username); //dummy data
@@ -79,7 +87,6 @@ public class ProfileDatabase : MonoBehaviour
                     fullNameText.text = userChunks[0];
 
                     string profUrl = "/" + userChunks[1];
-                    Debug.Log(profUrl);
 
                     //create prefab and load images
                     for (int s = 1; s < userChunks.Length; s++)

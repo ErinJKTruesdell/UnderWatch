@@ -32,7 +32,7 @@ public class AchievementScreenManager : MonoBehaviour
 
     void OnEnable()
     {
-
+        Debug.Log("color: " + rightText.color);
         if (PlayerPrefs.GetInt(savedScreenName) == 1)
         {
             //we're on right screen

@@ -126,10 +126,10 @@ public class SF_Cell : MonoBehaviour, ICell
     }
     IEnumerator LoadPostUN()
     {
-        while (_postItem.username == null)
-            yield return new WaitForSeconds(.1f);
+        while (_postItem.posterUser == null || _postItem.posterUser.un == null)
+            yield return new WaitForSeconds(0.1f);
 
-        unText.text = _postItem.username;
+        unText.text = _postItem.posterUser.un;
     }
     IEnumerator LoadPostLocation()
     {
@@ -156,7 +156,7 @@ public class SF_Cell : MonoBehaviour, ICell
     }
     IEnumerator LoadPostAdURL()
     {
-        while (_postItem.username == null)
+        while (_postItem.posterUser.un == null)
             yield return new WaitForSeconds(.1f);
 
         adLink = _postItem.adLink;
@@ -181,6 +181,8 @@ public class SF_Cell : MonoBehaviour, ICell
             yield return new WaitForSeconds(.1f);
         }
         pfpImage.texture = _postItem.pfpPhoto;
+
+        _postItem.posterUser.profilePic = _postItem.pfpPhoto;
     }
 
     private void SetCellColor(int index)
@@ -222,7 +224,7 @@ public class SF_Cell : MonoBehaviour, ICell
 
     public void ClickOnProfile()
     {
-        ShowClickedProfile.userName = unText.text;
+        ShowClickedProfile.user = _postItem.posterUser;
         ShowClickedProfile.sceneCameFrom = SceneManager.GetActiveScene().name;
 
         SceneManager.LoadScene("ClickedProfile");

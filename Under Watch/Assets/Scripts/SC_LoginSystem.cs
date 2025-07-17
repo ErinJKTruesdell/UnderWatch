@@ -353,6 +353,7 @@ public class SC_LoginSystem : MonoBehaviour
             string profilePicURL = GameManager.rootURL + dataPartition[5].Trim();
 
             GameManager.loggedInUser = new(un, firstName, lastName, _email: email);
+            Debug.Log("logged in user: " + GameManager.loggedInUser.un);
             StartCoroutine(downloadImageFromURL(profilePicURL, GameManager.loggedInUser));
             StartCoroutine(GetTargetInfo());
         }

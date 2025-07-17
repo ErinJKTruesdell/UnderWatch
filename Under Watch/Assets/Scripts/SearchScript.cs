@@ -179,7 +179,7 @@ public class SearchScript : MonoBehaviour
         {
             foreach (GameObject ele in Element)
             {
-                if (ele.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text.ToLower().Contains(SearchText))
+                if (ele.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text.ToLower().Contains(SearchText))
                 {
                     ele.SetActive(true);
                 }

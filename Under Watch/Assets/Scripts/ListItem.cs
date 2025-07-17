@@ -47,7 +47,7 @@ public class ListItem : MonoBehaviour
 
     public void ClickOnProfile()
     {
-        ShowClickedProfile.userName = unText.text;
+        ShowClickedProfile.user.un = unText.text;
         ShowClickedProfile.sceneCameFrom = SceneManager.GetActiveScene().name;
 
         SceneManager.LoadScene("ClickedProfile");

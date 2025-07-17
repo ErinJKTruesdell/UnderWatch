@@ -8,10 +8,7 @@ using UnityEngine.UI;
 
 public class ProfileUpdateManager : MonoBehaviour
 {
-    public TMP_Text errorText;
-
     public RawImage profPic;
-    public RawImage profPicOverlay;
     SC_LoginSystem loginSystem;
 
    // public int socialFeedIndex;
@@ -56,7 +53,8 @@ public class ProfileUpdateManager : MonoBehaviour
 
             if (uwr.result != UnityWebRequest.Result.Success)
             {
-                errorText.text = uwr.error;
+                ErrorEventHandler.InvokeError("Getting Photo Server Error!", "We couldn't get that picture", Color.red);
+                Debug.Log(uwr.error);
             }
             else
             {
@@ -100,7 +98,6 @@ public class ProfileUpdateManager : MonoBehaviour
                 //set img tex
 
                 //shut off overlay
-                profPicOverlay.color = Color.clear;
                 profImageSet = true;
 
             }
@@ -124,7 +121,6 @@ public class ProfileUpdateManager : MonoBehaviour
     {        
         if (!isWorking && profImageSet)
         {
-            errorText.text = "";
             StartCoroutine(doUpdate());
         }
     }
@@ -162,7 +158,7 @@ public class ProfileUpdateManager : MonoBehaviour
             else
             {
                 errorMessage = responseText;
-                errorText.text = errorMessage;
+                Debug.Log("Error! " + errorMessage);
             }
             //}
         }

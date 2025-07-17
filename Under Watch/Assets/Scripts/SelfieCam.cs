@@ -205,7 +205,7 @@ public class SelfieCam : MonoBehaviour
         {
             Debug.Log("File Upload Coroutine");
 
-            regManager.CapturedPhotoFinalStep(tex, path);
+            regManager.CapturedPhotoFinalStep(smallerTex, path);
         }
     }
     public void capturePhoto()
