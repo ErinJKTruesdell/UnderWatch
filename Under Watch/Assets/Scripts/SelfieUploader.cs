@@ -11,6 +11,7 @@ using DG.Tweening.Plugins.Core.PathCore;
 using DG.Tweening;
 using System.Text;
 using UnityEngine.Android;
+using System.Linq;
 
 public class SelfieUploader : MonoBehaviour
 {
@@ -236,6 +237,20 @@ public class SelfieUploader : MonoBehaviour
             if (int.TryParse(parts[2], out faceCount))
             {
                 Debug.Log("Face count: " + faceCount);
+
+                var targetAch = AchievementManager.allAchievements
+                .FirstOrDefault(a => a.pointSource == PointsManager.Source.AchSocialButterfly);
+
+                for (int i = targetAch.reqsPerLevel.Count - 1; i >= 0; i--)
+                {
+                    //iterates backwards thru the list to catch the most impressive selfie first
+                    if (faceCount >= targetAch.reqsPerLevel[i]) 
+                    {
+                        AchievementEventHandler.InvokeAddToAchievment(PointsManager.Source.AchGramMaster, faceCount, resetCount: true);
+                        StartCoroutine(SendSelfieCountToServer(faceCount));
+                        break;
+                    }
+                }
             }
             else
             {
@@ -248,6 +263,29 @@ public class SelfieUploader : MonoBehaviour
             ErrorEventHandler.InvokeError("Server Error", "Unexpected response format: " + jsonResponse, Color.red);
         }
     }
+
+    IEnumerator SendSelfieCountToServer(int faces)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("username", GameManager.loggedInUser.un);
+        form.AddField("faces", faces);
+
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "post-selfie-count.php", form))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogWarning("Failed to send selfies: " + www.error);
+            }
+            else
+            {
+                string response = www.downloadHandler.text;
+                Debug.Log("Selfies sent successfully: " + response + " min");
+            }
+        }
+    }
+
 
     IEnumerator ShowProcessingAnimation()
     {

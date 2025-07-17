@@ -234,6 +234,9 @@ public class SF_Cell : MonoBehaviour, ICell
         if (adLink != "")
         {
             Application.OpenURL(adLink);
+
+            if (_postItem.isAd)
+                AchievementEventHandler.InvokeAddToAchievment(PointsManager.Source.AchSuperSupporter, 1);
         }
     }
 }

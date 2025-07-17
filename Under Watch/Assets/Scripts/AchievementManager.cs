@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.SceneManagement;
+using System;
 public class AchievementObject
 {
     public string title;
@@ -42,7 +43,7 @@ public class AchievementManager : MonoBehaviour
         StartCoroutine(CallEveryTenSeconds());
     }
 
-    public void UpdateAchievement(PointsManager.Source achType, int updateReqBy)
+    public void UpdateAchievement(PointsManager.Source achType, int updateReqBy, bool resetCount)
     {
         //linq is a godless creation
         //find an achievement in the list if it's pointSource == achType
@@ -51,13 +52,15 @@ public class AchievementManager : MonoBehaviour
 
         if (targetAch != null)
         {
-            targetAch.progress += updateReqBy;
+            if (resetCount)
+                targetAch.progress = updateReqBy;
+            else if (!resetCount)
+                targetAch.progress += updateReqBy;
 
             if (targetAch.currentLevel >= targetAch.reqsPerLevel.Count)
             {
                 return;
             }
-
             else if (targetAch.progress >= targetAch.reqsPerLevel[targetAch.currentLevel])
             {
                 Debug.Log("progress: " + targetAch.progress + " " + targetAch.currentLevel);

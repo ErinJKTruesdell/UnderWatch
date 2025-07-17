@@ -110,13 +110,14 @@ public class ProfileStatManager : MonoBehaviour
 
             if (!string.IsNullOrEmpty(profAtt[3]))
                 attributes.text += $", and {profAtt[3]}!";
+
+            VLGFiddler.RebuildVLGLayout();
         }
         catch (Exception e)
         {
             Debug.Log(e);
             profileInfo.SetActive(false);
+            VLGFiddler.RebuildVLGLayout();
         }
-
-        VLGFiddler.RebuildVLGLayout();
     }
 }

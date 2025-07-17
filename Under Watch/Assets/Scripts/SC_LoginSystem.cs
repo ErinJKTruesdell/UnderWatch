@@ -354,8 +354,11 @@ public class SC_LoginSystem : MonoBehaviour
 
             GameManager.loggedInUser = new(un, firstName, lastName, _email: email);
             Debug.Log("logged in user: " + GameManager.loggedInUser.un);
+
             StartCoroutine(downloadImageFromURL(profilePicURL, GameManager.loggedInUser));
             StartCoroutine(GetTargetInfo());
+
+            CheckUserAchievementProgress();
         }
         catch (IndexOutOfRangeException e)
         {
@@ -363,6 +366,22 @@ public class SC_LoginSystem : MonoBehaviour
             Debug.LogException(e);
         }
     }
+
+    void CheckUserAchievementProgress()
+    {
+        StartCoroutine(CheckLoginAchs());
+    }
+
+    bool IsWithinWindow(DateTime time, TimeSpan start, TimeSpan end)
+    {
+        TimeSpan now = time.TimeOfDay;
+
+        if (start <= end)
+            return now >= start && now <= end;
+        else
+            return now >= start || now <= end; // handles overnight windows
+    }
+
 
     IEnumerator CheckAccountEnabled(string email)
     {
@@ -400,6 +419,58 @@ public class SC_LoginSystem : MonoBehaviour
                     errorMessage = responseText;
                     errorText.text = errorMessage;
                     Debug.Log(errorMessage);
+                }
+            }
+        }
+    }
+
+    IEnumerator CheckLoginAchs()
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("username", GameManager.loggedInUser.un);
+
+        using (UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "get-login-streak.php", form))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                errorMessage = www.error;
+                Debug.Log("login streak error: " + www.error);
+            }
+            else
+            {
+                string responseText = www.downloadHandler.text;
+                Debug.Log(responseText);
+
+                try
+                {
+                    string[] dataPartition = responseText.Split('|');
+                    //login streaks
+                    if (dataPartition[0].Contains("Streak"))
+                    {
+                        string streakChunk = dataPartition[0].Split("@")[1];
+                        int streakNum = Convert.ToInt32(dataPartition[1]);
+                        AchievementEventHandler.InvokeAddToAchievment(PointsManager.Source.AchSnapStreaker, streakNum, resetCount: true);
+                    }
+                    //early bird
+                    if (dataPartition[1].Contains("Early"))
+                    {
+                        string earlyBirdData = dataPartition[0].Split("@")[1];
+                        int earlyNum = Convert.ToInt32(dataPartition[1]);
+                        AchievementEventHandler.InvokeAddToAchievment(PointsManager.Source.AchEarlyWorm, earlyNum, resetCount: true);
+                    }
+                    //bed bug
+                    if (dataPartition[2].Contains("Bed"))
+                    {
+                        string bedBugData = dataPartition[0].Split("@")[1];
+                        int bedNum = Convert.ToInt32(dataPartition[1]);
+                        AchievementEventHandler.InvokeAddToAchievment(PointsManager.Source.AchBedBug, bedNum, resetCount: true);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.Log(e);
                 }
             }
         }
@@ -464,9 +535,7 @@ public class SC_LoginSystem : MonoBehaviour
             {
                 pqm.receiveResetResponse(responseText);
             }
-
         }
-
         isWorking = false;
     }
 
