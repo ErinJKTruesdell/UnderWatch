@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.SceneManagement;
 public class AchievementObject
 {
     public string title;
@@ -29,15 +30,22 @@ public class AchievementManager : MonoBehaviour
 {
     public static List<AchievementObject> allAchievements;
 
+    public GameObject achievementNotifObj;
+    public Queue<IEnumerator> achievementQueue = new();
+    public static bool isProcessingAchQueue;
+    public Transform notifParent;
     void Awake()
     {
         DontDestroyOnLoad(this);
         AddAllAchievements();
+
+        StartCoroutine(CallEveryTenSeconds());
     }
 
     public void UpdateAchievement(PointsManager.Source achType, int updateReqBy)
     {
         //linq is a godless creation
+        //find an achievement in the list if it's pointSource == achType
         var targetAch = allAchievements
             .FirstOrDefault(a => a.pointSource == achType);
 
@@ -45,37 +53,58 @@ public class AchievementManager : MonoBehaviour
         {
             targetAch.progress += updateReqBy;
 
-            if (targetAch.progress >= targetAch.reqsPerLevel[targetAch.currentLevel] && targetAch.currentLevel < targetAch.reqsPerLevel.Count)
+            if (targetAch.currentLevel >= targetAch.reqsPerLevel.Count)
             {
+                return;
+            }
+
+            else if (targetAch.progress >= targetAch.reqsPerLevel[targetAch.currentLevel])
+            {
+                Debug.Log("progress: " + targetAch.progress + " " + targetAch.currentLevel);
                 //go to next level of target ach if we've surpassed the requirement, and if we're beneath the max reqs per level
                 targetAch.currentLevel++;
+                int pointsToGive = targetAch.pointsPerLevel[targetAch.currentLevel];
+
+                PointsManager.AddPoints(GameManager.loggedInUser.un, pointsToGive, achType);
+
+                EnqueueAchievement(targetAch.title, GetFormattedDescription(targetAch), pointsToGive);
             }
+            AchievementEventHandler.InvokeUpdatedAchievement();
         }
     }
-
-    public List<AchievementObject> LoadListOfAchievements(List<AchievementObject> loadedAchievements)
+    private IEnumerator CallEveryTenSeconds()
     {
-        //called when in ach scene:
-        // check if loadedAchievements == allAchievements. If so, return
-        bool isSameList = true;
-        int i = 0;
+        yield return new WaitForSeconds(10f);
+        while (true)
+        {
+            AchievementEventHandler.InvokeAddToAchievment(PointsManager.Source.AchSnapStreaker, 1);
+            AchievementEventHandler.InvokeAddToAchievment(PointsManager.Source.AchSocialButterfly, 1);
+            yield return new WaitForSeconds(10f);
+        }
+    }
+    void EnqueueAchievement(string title, string desc, int points)
+    {
+        achievementQueue.Enqueue(DisplayAchievement(title, desc, points));
+        if (!isProcessingAchQueue && !ErrorManager.isProcessingErrorsQueue)
+            StartCoroutine(ProcessAchievementQueue());
+    }
 
-        if (loadedAchievements == null)
-            return allAchievements;
-        foreach (AchievementObject ach in allAchievements)
-            {
-                if (ach.title != loadedAchievements[i].title)
-                {
-                    isSameList = false;
-                    break;
-                }
-                i++;
-            }
+    public IEnumerator ProcessAchievementQueue()
+    {
+        isProcessingAchQueue = true;
+        while (achievementQueue.Count > 0)
+        {
+            IEnumerator nextAch = achievementQueue.Dequeue();
+            yield return StartCoroutine(nextAch); 
+        }
+        isProcessingAchQueue = false;
+    }
 
-        if (isSameList)
-            return null;
-        else
-            return allAchievements;
+    public IEnumerator DisplayAchievement(string title, string desc, int points)
+    {
+        GameObject ach = Instantiate(achievementNotifObj, notifParent);
+        AchievementNotification achNotif = achievementNotifObj.GetComponent<AchievementNotification>();
+        yield return StartCoroutine(achNotif.ConfigureNotif(title, desc, points));
     }
 
     public void AddAllAchievements()
@@ -140,10 +169,54 @@ public class AchievementManager : MonoBehaviour
         Debug.Log("Added all achievements to list, size: " + allAchievements.Count);
     }
 
+    public static string GetFormattedDescription(AchievementObject _achObj)
+    {
+        int currLevel = _achObj.currentLevel;
+        List<int> reqNums = _achObj.reqsPerLevel;
+
+        string descStr = _achObj.description;
+        //by default just return the description
+
+        //inserts the next req number wherever the {value} is found
+        if (descStr.Contains("{value}"))
+        {
+            int level = Mathf.Clamp(currLevel, 0, reqNums.Count - 1);
+            int replacer = reqNums[level];
+            descStr = descStr.Replace("{value}", replacer.ToString());
+
+            if (descStr.Contains("{nth}"))
+            {
+                int replaceNum = reqNums[level];
+                string replacerStr = ReturnNthString(replaceNum);
+                descStr = descStr.Replace("{nth}", replacerStr);
+            }
+        }
+        return descStr;
+    }
+
+    public static string ReturnNthString(int num)
+    {
+        //100% homegrown cage free code
+        switch (num)
+        {
+            default:
+                return "nth";
+            case 1:
+                return "st";
+            case 2:
+                return "nd";
+            case 3:
+                return "rd";
+            case 4 or 5 or 6 or 8:
+                return "th";
+            case int n when n == 7 || n >= 9:
+                return "nth";
+        }
+    }
+
     private void OnEnable()
     {
         AchievementEventHandler.onIncrementedAchievement += UpdateAchievement;
-
     }
     private void OnDisable()
     {

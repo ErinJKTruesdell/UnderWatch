@@ -33,5 +33,4 @@ public class PopUpObject : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
-
 }

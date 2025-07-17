@@ -11,7 +11,7 @@ public class ErrorManager : MonoBehaviour
     public Transform errorParent;
 
     private Queue<IEnumerator> errorQueue = new();
-    bool isProcessingQueue = false;
+    public static bool isProcessingErrorsQueue = false;
 
     void Awake()
     {
@@ -39,18 +39,18 @@ public class ErrorManager : MonoBehaviour
     void EnqueueError(string header, string body, Color? headerColor)
     {
         errorQueue.Enqueue(CoroutineDisplayError(header, body, headerColor));
-        if (!isProcessingQueue)
+        if (!isProcessingErrorsQueue && !AchievementManager.isProcessingAchQueue)
             StartCoroutine(ProcessErrorQueue());
     }
     private IEnumerator ProcessErrorQueue()
     {
-        isProcessingQueue = true;
+        isProcessingErrorsQueue = true;
         while (errorQueue.Count > 0)
         {
             IEnumerator nextError = errorQueue.Dequeue();
             yield return StartCoroutine(nextError);
         }
-        isProcessingQueue = false;
+        isProcessingErrorsQueue = false;
     }
     IEnumerator CoroutineDisplayError(string header, string body, Color? headerColor)
     {

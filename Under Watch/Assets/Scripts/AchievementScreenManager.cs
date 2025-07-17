@@ -17,7 +17,7 @@ public class AchievementScreenManager : MonoBehaviour
     public TextMeshProUGUI leftText;
     public TextMeshProUGUI rightText;
 
-    public string savedScreenName = "saved_screen";
+    public static string savedScreenName = "saved_screen";
     public float offscreenPost = 1000;
     public Color offBarColor = new(0, 0, 0, .2f);
     public Coroutine animationCoroutine;

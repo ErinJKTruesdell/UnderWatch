@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+
 
 public class AchievementSpawner : MonoBehaviour
 {
@@ -15,17 +17,21 @@ public class AchievementSpawner : MonoBehaviour
 
         InstantiateAchievements();
 
-        AchievementEventHandler.InvokeAddToAchievment(PointsManager.Source.AchSnapStreaker, 1);
+        AchievementEventHandler.onUpdatedAchievement += InstantiateAchievements;
+    }
+    void OnDisable()
+    {
+        AchievementEventHandler.onUpdatedAchievement -= InstantiateAchievements;
     }
 
-    void InstantiateAchievements()
+    public void InstantiateAchievements()
     {
-        List<AchievementObject> newAchs = achievementManager.LoadListOfAchievements(loadedAchievements);
+        List<AchievementObject> newAchs = AchievementManager.allAchievements;
         if (newAchs == null)
             return;
         else
         {
-            loadedAchievements = new();
+            ResetAchievements();
 
             foreach (AchievementObject ach in newAchs)
             {
@@ -33,6 +39,15 @@ public class AchievementSpawner : MonoBehaviour
                 achObj.GetComponent<BadgeObject>().ConfigureAchievement(ach);
                 loadedAchievements.Add(ach);
             }
+        }
+    }
+
+    void ResetAchievements()
+    {
+        loadedAchievements = new();
+        foreach (Transform child in achievmentGrid)
+        {
+            Destroy(child.gameObject);
         }
     }
 }

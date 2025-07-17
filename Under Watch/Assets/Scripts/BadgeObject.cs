@@ -33,6 +33,7 @@ public class BadgeObject : MonoBehaviour
         bigNumText = badge.GetComponentInChildren<TextMeshProUGUI>();
 
         int progressNum = Mathf.Clamp(achObj.progress, 0, 99);
+        Debug.Log(progressNum);
         bigNumText.text = progressNum.ToString();
 
         if (achObj.currentLevel > 0)
@@ -48,50 +49,6 @@ public class BadgeObject : MonoBehaviour
     {
         PopUpObject popUp = PopUpObject.popUpInstance;
         popUp.title.text = "alskdf";
-        popUp.ConfigurePopup(achObj.title, GetFormattedDescription(achObj));
-    }
-
-    public string GetFormattedDescription(AchievementObject _achObj)
-    {
-        int currLevel = _achObj.currentLevel;
-        List<int> reqNums = _achObj.reqsPerLevel;
-
-        string descStr = _achObj.description;
-        //by default just return the description
-
-        //inserts the next req number wherever the {value} is found
-        if (descStr.Contains("{value}"))
-        {
-            int replacer = reqNums[currLevel];
-            descStr = descStr.Replace("{value}", replacer.ToString());
-
-            if (descStr.Contains("{nth}"))
-            {
-                int replaceNum = reqNums[currLevel];
-                string replacerStr = ReturnNthString(replaceNum);
-                descStr = descStr.Replace("{nth}", replacerStr);
-            }
-        }
-        return descStr;
-    }
-
-    public string ReturnNthString(int num)
-    {
-        //100% homegrown cage free code
-        switch (num)
-        {
-            default:
-                return "nth";
-            case 1:
-                return "st";
-            case 2:
-                return "nd";
-            case 3:
-                return "rd";
-            case 4 or 5 or 6 or 8:
-                return "th";
-            case int n when n == 7 || n >= 9:
-                return "nth";
-        }
+        popUp.ConfigurePopup(achObj.title, AchievementManager.GetFormattedDescription(achObj));
     }
 }

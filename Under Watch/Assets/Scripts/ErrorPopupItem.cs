@@ -14,10 +14,10 @@ public class ErrorPopupItem : MonoBehaviour
     {
         thisInstance = gameObject;
         transform.localPosition = new Vector3(0, 2000, 0); // Start off-screen
-        StartCoroutine(DoCouroutineThing());
+        StartCoroutine(MoveDown());
     }
 
-    IEnumerator DoCouroutineThing()
+    IEnumerator MoveDown()
     {
         transform.DOLocalMoveY(1700, .4f).SetEase(Ease.InQuad);
         yield return new WaitForSeconds(3f);
