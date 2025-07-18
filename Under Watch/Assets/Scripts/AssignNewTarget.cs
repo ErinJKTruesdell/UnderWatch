@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AssignNewTarget : MonoBehaviour
 {
@@ -8,7 +9,6 @@ public class AssignNewTarget : MonoBehaviour
 
     public GameManager gm;
     public SC_LoginSystem scls;
-    public GetTargetLocation getTargetLoc;
     private void Start()
     {
         gm = FindObjectOfType<GameManager>();
@@ -39,9 +39,9 @@ public class AssignNewTarget : MonoBehaviour
         yield return StartCoroutine(scls.doTargetAssignment(username));
         PointsManager.AddPoints(username, PointsManager.negChangeTargetPoints, PointsManager.Source.NegChangeTaret);
 
-        StartCoroutine(getTargetLoc.LocateTarget(username));
-
         ClickedClosePopup();
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
 }
