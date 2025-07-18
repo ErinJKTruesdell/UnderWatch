@@ -12,9 +12,9 @@ public class TimeSpentTracker : MonoBehaviour
     {
         timeAccumulator += Time.deltaTime;
 
-        if (timeAccumulator >= 60f)
+        if (timeAccumulator >= 60)
         {
-            timeAccumulator -= 60f;
+            timeAccumulator -= 60;
             minutesReported++;
             StartCoroutine(SendMinutesToServer(1)); // Send 1 minute at a time
         }
@@ -32,7 +32,7 @@ public class TimeSpentTracker : MonoBehaviour
 
             if (www.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogWarning("Failed to send time: " + www.error);
+                Debug.Log("Failed to send time: " + www.error);
             }
             else
             {

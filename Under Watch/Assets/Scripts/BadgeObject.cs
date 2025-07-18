@@ -33,7 +33,6 @@ public class BadgeObject : MonoBehaviour
         bigNumText = badge.GetComponentInChildren<TextMeshProUGUI>();
 
         int progressNum = Mathf.Clamp(achObj.progress, 0, 99);
-        Debug.Log(progressNum);
         bigNumText.text = progressNum.ToString();
 
         if (achObj.currentLevel > 0)
@@ -48,7 +47,6 @@ public class BadgeObject : MonoBehaviour
     public void ClickOnAchievement()
     {
         PopUpObject popUp = PopUpObject.popUpInstance;
-        popUp.title.text = "alskdf";
         popUp.ConfigurePopup(achObj.title, AchievementManager.GetFormattedDescription(achObj));
     }
 }
