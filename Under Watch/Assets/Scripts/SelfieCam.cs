@@ -7,7 +7,6 @@ using System.IO;
 using TMPro;
 using System.Net;
 using DG.Tweening.Plugins.Core.PathCore;
-using UnityEngine.Android;
 using static System.Net.Mime.MediaTypeNames;
 
 public class SelfieCam : MonoBehaviour
@@ -20,7 +19,6 @@ public class SelfieCam : MonoBehaviour
     public GameObject button;
 
     public Transform camTransform;
-    public AspectRatioFitter ratioFitter;
 
     public SelfieUploader selfieUploader;
     public RegistrationManager regManager;
@@ -128,8 +126,6 @@ public class SelfieCam : MonoBehaviour
                 webcam.Play();
 
                 camView.texture = webcam;
-                float ratio = (float)webcam.width / webcam.height;
-                camView.GetComponent<AspectRatioFitter>().aspectRatio = ratio;
 
                 Debug.Log($"Texture assigned to material: {webcam.width}x{webcam.height}");
                 Debug.Log($"Webcam videoRotationAngle: {webcam.videoRotationAngle}");
@@ -211,7 +207,7 @@ public class SelfieCam : MonoBehaviour
     }
     public void capturePhoto()
     {
-        if (devices.Length > 1)
+        if (devices.Length > 0)
         {
             if (webcam == null || !webcam.isPlaying)
                 InitWebcam();
