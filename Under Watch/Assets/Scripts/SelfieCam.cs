@@ -12,7 +12,7 @@ using UnityEngine.Android;
 public class SelfieCam : MonoBehaviour
 {
     public RawImage camView;
-    WebCamDevice[] devices; 
+    WebCamDevice[] devices;
     public WebCamTexture webcam;
 
     public GameObject overlay;
@@ -39,6 +39,10 @@ public class SelfieCam : MonoBehaviour
     void OnEnable()
     {
         InitWebcam();
+#if UNITY_ANDROID
+        camTransform.rotation *= Quaternion.Euler(0, 0, 180);
+        camTransform.localScale = new Vector3(1, -1, 1);
+#endif
     }
     public void InitWebcam()
     {
@@ -47,7 +51,8 @@ public class SelfieCam : MonoBehaviour
         button.SetActive(true);
 
         // Request permissions first, then initialize camera
-        StartCoroutine(RequestCamPerms(() => {
+        StartCoroutine(RequestCamPerms(() =>
+        {
             FindCameras();
         }));
     }
@@ -68,7 +73,7 @@ public class SelfieCam : MonoBehaviour
 
             if (Permission.HasUserAuthorizedPermission(Permission.Camera))
             {
-                onAuthorized?.Invoke(); 
+                onAuthorized?.Invoke();
             }
             else
             {
@@ -184,7 +189,13 @@ public class SelfieCam : MonoBehaviour
         //tex and is assigned a default in inspector
         Texture2D rotatedTex = RotateTexture(tex, true);
         Texture2D smallerTex = CropAndResize(rotatedTex, 1024, 1024);
+
+#if UNITY_ANDROID
+        Texture2D flippedTex = FlipVertically(smallerTex);
+        byte[] bytes = flippedTex.EncodeToPNG();
+#else
         byte[] bytes = smallerTex.EncodeToPNG();
+#endif
         Debug.Log($"Compressed size: {bytes.Length / 1024f:F2} KB");
 
         string filename = $"{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.png";
@@ -361,6 +372,22 @@ public class SelfieCam : MonoBehaviour
         rotated.Apply();
         return rotated;
     }
+
+    private Texture2D FlipVertically(Texture2D original)
+    {
+        int width = original.width;
+        int height = original.height;
+        Texture2D flipped = new Texture2D(width, height);
+
+        for (int y = 0; y < height; y++)
+        {
+            flipped.SetPixels(0, y, width, 1, original.GetPixels(0, height - y - 1, width, 1));
+        }
+
+        flipped.Apply();
+        return flipped;
+    }
+
     public void GetHighestAvailableResolution(WebCamDevice device, out int width, out int height)
     {
         width = 0;
@@ -387,3 +414,5 @@ public class SelfieCam : MonoBehaviour
         }
     }
 }
+
+

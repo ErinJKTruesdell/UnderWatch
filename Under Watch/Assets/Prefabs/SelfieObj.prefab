@@ -179,7 +179,6 @@ MonoBehaviour:
   overlay: {fileID: 3804764894551767498}
   button: {fileID: 9004938122840099106}
   camTransform: {fileID: 2573950025339524402}
-  ratioFitter: {fileID: 0}
   selfieUploader: {fileID: 0}
   regManager: {fileID: 0}
   tex: {fileID: 2800000, guid: 86fc385f383321449b999c971072afd7, type: 3}
@@ -221,17 +220,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1500881296254182217}
-  m_LocalRotation: {x: 0.7071068, y: 0.7071068, z: 0, w: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 0.70710677, w: -0.7071069}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1049384640789790864}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 270}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1733.6328, y: -2031.3635}
+  m_SizeDelta: {x: 0, y: -2031.3635}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1442728686801238970
 CanvasRenderer:
@@ -281,7 +280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 2
-  m_AspectRatio: 2
+  m_AspectRatio: 1.7
 --- !u!1 &3303586357708214134
 GameObject:
   m_ObjectHideFlags: 0
