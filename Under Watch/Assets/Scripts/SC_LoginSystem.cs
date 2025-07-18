@@ -265,11 +265,7 @@ public class SC_LoginSystem : MonoBehaviour
                         SetUserInfo(responseText);
 
                         //store registration information 
-                        if (isCached == false)
-                        {
-                            Debug.Log(isCached);
-                            SetLoginPrefs(email, password, true);
-                        }
+                        SetLoginPrefs(email, password, true);
                     }
                     else
                     {

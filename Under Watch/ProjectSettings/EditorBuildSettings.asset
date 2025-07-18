@@ -18,11 +18,11 @@ EditorBuildSettings:
     path: Assets/Scenes/TwoCameraScene.unity
     guid: 7a36335a92768c94a9989493786177b3
   - enabled: 1
-    path: Assets/Scenes/SearchScene.unity
-    guid: 63bd762c42f50c8429b3ff9fef8a537d
-  - enabled: 1
     path: Assets/Scenes/SocialFeed.unity
     guid: 298a31c50f03bc84bb38b87d115ad10e
+  - enabled: 1
+    path: Assets/Scenes/SearchScene.unity
+    guid: 63bd762c42f50c8429b3ff9fef8a537d
   - enabled: 1
     path: Assets/Scenes/SingleCameraScene.unity
     guid: 8fd5160b54563374c803e9cf2f430b7a

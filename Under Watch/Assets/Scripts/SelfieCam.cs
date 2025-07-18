@@ -387,5 +387,3 @@ public class SelfieCam : MonoBehaviour
         }
     }
 }
-
-
