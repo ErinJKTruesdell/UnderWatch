@@ -166,7 +166,7 @@ public class SelfieCam : MonoBehaviour
             tex.SetPixels(webcam.GetPixels());
             tex.Apply();
 
-            camView.texture = tex;
+            //camView.texture = tex;
 
             uploadPic(tex);
         }
@@ -182,8 +182,7 @@ public class SelfieCam : MonoBehaviour
     void uploadPic(Texture2D tex)
     {
         //tex and is assigned a default in inspector
-
-        Texture2D rotatedTex = RotateTexture(tex, false); // true = 90° clockwise
+        Texture2D rotatedTex = RotateTexture(tex, true);
         Texture2D smallerTex = CropAndResize(rotatedTex, 1024, 1024);
         byte[] bytes = smallerTex.EncodeToPNG();
         Debug.Log($"Compressed size: {bytes.Length / 1024f:F2} KB");
