@@ -8,6 +8,10 @@ public class TimeSpentTracker : MonoBehaviour
     private float timeAccumulator = 0f;
     private int minutesReported = 0;
 
+    void Awake()
+    {
+        StartCoroutine(SendMinutesToServer(1));
+    }
     void Update()
     {
         timeAccumulator += Time.deltaTime;
@@ -42,6 +46,7 @@ public class TimeSpentTracker : MonoBehaviour
                 int mins = Convert.ToInt32(response);
                 if (mins > 0)
                 {
+                    AchievementManager.SetAchProgressObtained(PointsManager.Source.AchGramMaster, mins);
                     AchievementEventHandler.InvokeAddToAchievment(PointsManager.Source.AchGramMaster, mins, resetCount: true);
                 }
             }

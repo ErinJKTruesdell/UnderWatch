@@ -36,6 +36,8 @@ public class SelfieUploader : MonoBehaviour
     public RawImage targetPfpImage;
     public RawImage userPfpImage;
 
+    public GameObject requestManualOverridePanel;
+
     string locationName = "";
     string imagePath = "";
     float latitude;
@@ -161,6 +163,7 @@ public class SelfieUploader : MonoBehaviour
                     StopCoroutine(processingCoroutine);
                     processingCoroutine = null;
                 }
+                requestManualOverridePanel.SetActive(true);
                 closeButton.SetActive(true);
             }
             else
@@ -226,6 +229,10 @@ public class SelfieUploader : MonoBehaviour
             PointsManager.AddPoints(GameManager.loggedInUser.un, PointsManager.capturePoints, PointsManager.Source.TargetCapture);
             PointsManager.AddPoints(targetUNText.text, PointsManager.beCapturedPoints, PointsManager.Source.BeCaptured);
         }
+        else
+        {
+            requestManualOverridePanel.SetActive(true);
+        }
     }
 
     void HandleFaceCount(string jsonResponse)
@@ -246,6 +253,8 @@ public class SelfieUploader : MonoBehaviour
                     //iterates backwards thru the list to catch the most impressive selfie first
                     if (faceCount >= targetAch.reqsPerLevel[i]) 
                     {
+                        AchievementManager.SetAchProgressObtained(PointsManager.Source.AchGramMaster, faceCount);
+
                         AchievementEventHandler.InvokeAddToAchievment(PointsManager.Source.AchGramMaster, faceCount, resetCount: true);
                         StartCoroutine(SendSelfieCountToServer(faceCount));
                         break;
@@ -286,7 +295,6 @@ public class SelfieUploader : MonoBehaviour
         }
     }
 
-
     IEnumerator ShowProcessingAnimation()
     {
         int dotCount = 0;
@@ -299,6 +307,7 @@ public class SelfieUploader : MonoBehaviour
     }
     public void CloseBlockerPanel()
     {
+        requestManualOverridePanel.SetActive(false);
         closeButton.SetActive(false);
         blockingPanel.SetActive(false);
         profileObjects.transform.DOLocalMoveY(Screen.height * 3, .5f).SetEase(Ease.OutQuad)

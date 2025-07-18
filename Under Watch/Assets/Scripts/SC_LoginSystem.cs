@@ -446,21 +446,30 @@ public class SC_LoginSystem : MonoBehaviour
                     if (dataPartition[0].Contains("Streak"))
                     {
                         string[] streakChunks = dataPartition[0].Split("@");
-                        int streakNum = Convert.ToInt32(streakChunks[1]);
+                        Debug.Log(streakChunks[1]);
+                        int streakNum = Convert.ToInt32(streakChunks[1].Trim());
+                        AchievementManager.SetAchProgressObtained(PointsManager.Source.AchSnapStreaker, streakNum);
+
                         AchievementEventHandler.InvokeAddToAchievment(PointsManager.Source.AchSnapStreaker, streakNum, resetCount: true);
                     }
                     //early bird
                     if (dataPartition[1].Contains("Early"))
                     {
                         string[] earlyBirdData = dataPartition[1].Split("@");
-                        int earlyNum = Convert.ToInt32(earlyBirdData[1]);
+                        int earlyNum = Convert.ToInt32(earlyBirdData[1].Trim());
+                        AchievementManager.SetAchProgressObtained(PointsManager.Source.AchEarlyWorm, earlyNum);
+
+
                         AchievementEventHandler.InvokeAddToAchievment(PointsManager.Source.AchEarlyWorm, earlyNum, resetCount: true);
                     }
                     //bed bug
                     if (dataPartition[2].Contains("Bed"))
                     {
                         string[] bedBugData = dataPartition[2].Split("@");
-                        int bedNum = Convert.ToInt32(bedBugData[1]);
+                        int bedNum = Convert.ToInt32(bedBugData[1].Trim());
+                        AchievementManager.SetAchProgressObtained(PointsManager.Source.AchBedBug, bedNum);
+
+
                         AchievementEventHandler.InvokeAddToAchievment(PointsManager.Source.AchBedBug, bedNum, resetCount: true);
                     }
                 }

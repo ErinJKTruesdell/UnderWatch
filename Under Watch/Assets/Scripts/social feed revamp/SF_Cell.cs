@@ -235,6 +235,7 @@ public class SF_Cell : MonoBehaviour, ICell
             Application.OpenURL(adLink);
 
             if (_postItem.isAd)
+                AchievementManager.SetAchProgressObtained(PointsManager.Source.AchSuperSupporter, AchievementManager.GetAchMaxObtained(PointsManager.Source.AchSuperSupporter) + 1);
                 AchievementEventHandler.InvokeAddToAchievment(PointsManager.Source.AchSuperSupporter, 1);
         }
     }

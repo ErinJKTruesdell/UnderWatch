@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 
 public class ProfileStatManager : MonoBehaviour
 {
-    public TMP_Text objectivesText;
+    //public TMP_Text objectivesText;
     public TMP_Text postsText;
     public TMP_Text reactsText;
 
@@ -48,7 +48,7 @@ public class ProfileStatManager : MonoBehaviour
 
     void InitObjectivesCount()
     {
-        objectivesText.text = DayManager.objCompleted.ToString();
+        //objectivesText.text = DayManager.objCompleted.ToString();
     }
 
     void GetPoints(int points)

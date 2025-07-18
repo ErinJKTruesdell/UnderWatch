@@ -41,7 +41,20 @@ public class AchievementManager : MonoBehaviour
         AddAllAchievements();
     }
 
-    public void UpdateAchievement(PointsManager.Source achType, int updateReqBy, bool resetCount)
+    public static void SetAchProgressObtained(PointsManager.Source achType, int progress)
+    {
+        if (progress > GetAchMaxObtained(achType))
+        {
+            PlayerPrefs.SetInt(achType.ToString(), progress);
+            PlayerPrefs.Save();
+        }
+    }
+    public static int GetAchMaxObtained(PointsManager.Source achType)
+    {
+        return PlayerPrefs.GetInt(achType.ToString());
+    }
+
+    public void UpdateAchievement(PointsManager.Source achType, int updateReqBy, bool resetCount=false)
     {
         //linq is a godless creation
         //find an achievement in the list if it's pointSource == achType
@@ -61,13 +74,16 @@ public class AchievementManager : MonoBehaviour
             }
             else if (targetAch.progress >= targetAch.reqsPerLevel[targetAch.currentLevel])
             {
+                if (targetAch.progress > GetAchMaxObtained(achType))
+                {
+                    //go to next level of target ach if we've surpassed the requirement, and if we're beneath the max reqs per level
+                    int pointsToGive = targetAch.pointsPerLevel[targetAch.currentLevel];
+
+                    PointsManager.AddPoints(GameManager.loggedInUser.un, pointsToGive, achType);
+
+                    EnqueueAchievement(targetAch.title, GetFormattedDescription(targetAch), pointsToGive);
+                }
                 Debug.Log("progress: " + targetAch.progress + " " + targetAch.currentLevel);
-                //go to next level of target ach if we've surpassed the requirement, and if we're beneath the max reqs per level
-                int pointsToGive = targetAch.pointsPerLevel[targetAch.currentLevel];
-
-                PointsManager.AddPoints(GameManager.loggedInUser.un, pointsToGive, achType);
-
-                EnqueueAchievement(targetAch.title, GetFormattedDescription(targetAch), pointsToGive);
 
                 targetAch.currentLevel++;
             }
