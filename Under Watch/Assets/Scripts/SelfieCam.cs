@@ -40,9 +40,11 @@ public class SelfieCam : MonoBehaviour
     {
         InitWebcam();
 #if UNITY_ANDROID
+        //vertically flip live feed
         camTransform.rotation *= Quaternion.Euler(0, 0, 180);
-        camTransform.localScale = new Vector3(1, -1, 1);
 #endif
+        //mirror live feed
+        camTransform.localScale = new Vector3(1, -1, 1);
     }
     public void InitWebcam()
     {
