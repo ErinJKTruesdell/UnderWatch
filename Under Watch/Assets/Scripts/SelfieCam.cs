@@ -8,6 +8,7 @@ using TMPro;
 using System.Net;
 using DG.Tweening.Plugins.Core.PathCore;
 using static System.Net.Mime.MediaTypeNames;
+using UnityEngine.Android;
 
 public class SelfieCam : MonoBehaviour
 {
