@@ -685,6 +685,7 @@ GameObject:
   - component: {fileID: 5917157716111156431}
   - component: {fileID: 2727809387147700433}
   - component: {fileID: 2652840148184711183}
+  - component: {fileID: 4460914464110043593}
   m_Layer: 5
   m_Name: ProfileInfo
   m_TagString: Untagged
@@ -710,8 +711,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 400, y: -698.458}
-  m_SizeDelta: {x: 800, y: 75}
+  m_AnchoredPosition: {x: 400, y: -752.458}
+  m_SizeDelta: {x: 800, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7717824970560032317
 CanvasRenderer:
@@ -806,6 +807,18 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 3, y: -3}
   m_UseGraphicAlpha: 1
+--- !u!114 &4460914464110043593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2810012303917958640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 790dc2b3f4bfbe845bc50fae5222972b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3642148415892464041
 GameObject:
   m_ObjectHideFlags: 0
@@ -2887,6 +2900,7 @@ MonoBehaviour:
   workLoc: {fileID: 811265796738655876}
   attributes: {fileID: 9181433450366511878}
   pointText: {fileID: 8623084816118324102}
+  pointsPopUp: {fileID: 0}
   profileInfo: {fileID: 2810012303917958640}
   gm: {fileID: 0}
   pd: {fileID: 1520332813278288992}
@@ -2904,7 +2918,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   zoomedImage: {fileID: 2459236317901448398}
   zoomedRawImage: {fileID: 9202643131036090833}
-  sourceTex: {fileID: 0}
+  sourceTex: {fileID: 7214598804217094152}
 --- !u!1 &7880229537168285316
 GameObject:
   m_ObjectHideFlags: 0
@@ -3158,6 +3172,7 @@ GameObject:
   - component: {fileID: 5031989739622628778}
   - component: {fileID: 2368667128633633548}
   - component: {fileID: 5557864427685561113}
+  - component: {fileID: 6088898163665170558}
   m_Layer: 5
   m_Name: circlemask
   m_TagString: Untagged
@@ -3233,6 +3248,62 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 1
+--- !u!114 &6088898163665170558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8091482989118924764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 2368667128633633548}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2908157630950100083}
+        m_TargetAssemblyTypeName: ZoomImage, Assembly-CSharp
+        m_MethodName: showZoomedImage
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8668668510684018277
 GameObject:
   m_ObjectHideFlags: 0
@@ -3307,10 +3378,10 @@ MonoBehaviour:
   m_Padding:
     m_Left: 0
     m_Right: 0
-    m_Top: -14
+    m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 1
-  m_Spacing: 5
+  m_Spacing: 25
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
