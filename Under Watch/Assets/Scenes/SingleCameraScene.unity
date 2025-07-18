@@ -2375,6 +2375,10 @@ PrefabInstance:
       propertyPath: selfieUploader
       value: 
       objectReference: {fileID: 2136051676}
+    - target: {fileID: 5575865248237509828, guid: fbe2065d74e20fc4fbe7e697280d9e64, type: 3}
+      propertyPath: m_AspectRatio
+      value: 1.8
+      objectReference: {fileID: 0}
     - target: {fileID: 5700915276936948148, guid: fbe2065d74e20fc4fbe7e697280d9e64, type: 3}
       propertyPath: m_IsActive
       value: 1
