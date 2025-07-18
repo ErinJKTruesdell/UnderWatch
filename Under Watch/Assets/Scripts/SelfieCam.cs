@@ -39,6 +39,12 @@ public class SelfieCam : MonoBehaviour
     void OnEnable()
     {
         InitWebcam();
+
+#if UNITY_ANDROID
+        camTransform.rotation *= Quaternion.Euler(0, 0, 180);
+        camTransform.localScale = new Vector3(1, -1, 1);
+#endif
+
     }
     public void InitWebcam()
     {
@@ -182,9 +188,17 @@ public class SelfieCam : MonoBehaviour
     void uploadPic(Texture2D tex)
     {
         //tex and is assigned a default in inspector
+        ErrorEventHandler.InvokeError("Hold on a sec", "Camera is encoding your picture, please hold");
+
         Texture2D rotatedTex = RotateTexture(tex, true);
         Texture2D smallerTex = CropAndResize(rotatedTex, 1024, 1024);
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+        Texture2D flippedTex = FlipVertically(smallerTex);
+        byte[] bytes = flippedTex.EncodeToPNG();
+#else
         byte[] bytes = smallerTex.EncodeToPNG();
+#endif        
         Debug.Log($"Compressed size: {bytes.Length / 1024f:F2} KB");
 
         string filename = $"{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.png";
@@ -339,6 +353,21 @@ public class SelfieCam : MonoBehaviour
         RenderTexture.ReleaseTemporary(rt);
 
         return result;
+    }
+
+    private Texture2D FlipVertically(Texture2D original)
+    {
+        int width = original.width;
+        int height = original.height;
+        Texture2D flipped = new Texture2D(width, height);
+
+        for (int y = 0; y < height; y++)
+        {
+            flipped.SetPixels(0, y, width, 1, original.GetPixels(0, height - y - 1, width, 1));
+        }
+
+        flipped.Apply();
+        return flipped;
     }
 
     Texture2D RotateTexture(Texture2D original, bool clockwise)
