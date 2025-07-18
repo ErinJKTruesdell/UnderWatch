@@ -35,8 +35,6 @@ public class SF_Cell : MonoBehaviour, ICell
 
     //ad handling
     public GameObject adButton;
-    public UnityEngine.UI.Button pfpButton;
-
     List<int> loadedPosts = new();
     //ensure that these are added in order from smile -> gator
     public List<SF_ReactionEmoji> reacts = new();
@@ -222,6 +220,7 @@ public class SF_Cell : MonoBehaviour, ICell
 
     public void ClickOnProfile()
     {
+        Debug.Log("asdkjlasdjkl");
         ShowClickedProfile.user = _postItem.posterUser;
         ShowClickedProfile.sceneCameFrom = SceneManager.GetActiveScene().name;
 
@@ -236,6 +235,7 @@ public class SF_Cell : MonoBehaviour, ICell
             Application.OpenURL(adLink);
 
             if (_postItem.isAd)
+                AchievementManager.SetAchProgressObtained(PointsManager.Source.AchSuperSupporter, AchievementManager.GetAchMaxObtained(PointsManager.Source.AchSuperSupporter) + 1);
                 AchievementEventHandler.InvokeAddToAchievment(PointsManager.Source.AchSuperSupporter, 1);
         }
     }

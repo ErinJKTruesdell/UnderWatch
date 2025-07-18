@@ -14,8 +14,6 @@ public class GameManager : MonoBehaviour
     public static string rootURL = "https://egs01.westphal.drexel.edu/";
     public SC_LoginSystem scls;
     public TouchScreenKeyboard keyboard;
-    public AchieveMonitor ach;
-
     static public Color32 blueCol = new(99, 202, 225, 255);
     static public Color32 pinkCol = new(237, 30, 121, 255);
     static public Color32 redCol = new(180, 17, 75, 255);

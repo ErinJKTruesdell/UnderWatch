@@ -55,7 +55,7 @@ public class ErrorManager : MonoBehaviour
     IEnumerator CoroutineDisplayError(string header, string body, Color? headerColor)
     {
         GameObject error = Instantiate(errorPrefab, errorParent.transform);
-        ErrorPopupItem errorPopup = errorPrefab.GetComponent<ErrorPopupItem>();
+        ErrorPopupItem errorPopup = error.GetComponent<ErrorPopupItem>();
         yield return StartCoroutine(errorPopup.ConfigureErrorPopup(header, body, headerColor));
     }   
 }

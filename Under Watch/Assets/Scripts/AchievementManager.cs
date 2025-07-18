@@ -41,7 +41,20 @@ public class AchievementManager : MonoBehaviour
         AddAllAchievements();
     }
 
-    public void UpdateAchievement(PointsManager.Source achType, int updateReqBy, bool resetCount)
+    public static void SetAchProgressObtained(PointsManager.Source achType, int progress)
+    {
+        if (progress > GetAchMaxObtained(achType))
+        {
+            PlayerPrefs.SetInt(achType.ToString(), progress);
+            PlayerPrefs.Save();
+        }
+    }
+    public static int GetAchMaxObtained(PointsManager.Source achType)
+    {
+        return PlayerPrefs.GetInt(achType.ToString());
+    }
+
+    public void UpdateAchievement(PointsManager.Source achType, int updateReqBy, bool resetCount=false)
     {
         //linq is a godless creation
         //find an achievement in the list if it's pointSource == achType
@@ -61,14 +74,18 @@ public class AchievementManager : MonoBehaviour
             }
             else if (targetAch.progress >= targetAch.reqsPerLevel[targetAch.currentLevel])
             {
+                if (targetAch.progress > GetAchMaxObtained(achType))
+                {
+                    //go to next level of target ach if we've surpassed the requirement, and if we're beneath the max reqs per level
+                    int pointsToGive = targetAch.pointsPerLevel[targetAch.currentLevel];
+
+                    PointsManager.AddPoints(GameManager.loggedInUser.un, pointsToGive, achType);
+
+                    EnqueueAchievement(targetAch.title, GetFormattedDescription(targetAch), pointsToGive);
+                }
                 Debug.Log("progress: " + targetAch.progress + " " + targetAch.currentLevel);
-                //go to next level of target ach if we've surpassed the requirement, and if we're beneath the max reqs per level
+
                 targetAch.currentLevel++;
-                int pointsToGive = targetAch.pointsPerLevel[targetAch.currentLevel];
-
-                PointsManager.AddPoints(GameManager.loggedInUser.un, pointsToGive, achType);
-
-                EnqueueAchievement(targetAch.title, GetFormattedDescription(targetAch), pointsToGive);
             }
             AchievementEventHandler.InvokeUpdatedAchievement();
         }
@@ -94,7 +111,7 @@ public class AchievementManager : MonoBehaviour
     public IEnumerator DisplayAchievement(string title, string desc, int points)
     {
         GameObject ach = Instantiate(achievementNotifObj, notifParent);
-        AchievementNotification achNotif = achievementNotifObj.GetComponent<AchievementNotification>();
+        AchievementNotification achNotif = ach.GetComponent<AchievementNotification>();
         yield return StartCoroutine(achNotif.ConfigureNotif(title, desc, points));
     }
 
@@ -162,7 +179,6 @@ public class AchievementManager : MonoBehaviour
 
     public static string GetFormattedDescription(AchievementObject _achObj)
     {
-        int currLevel = _achObj.currentLevel;
         List<int> reqNums = _achObj.reqsPerLevel;
 
         string descStr = _achObj.description;
@@ -171,14 +187,12 @@ public class AchievementManager : MonoBehaviour
         //inserts the next req number wherever the {value} is found
         if (descStr.Contains("{value}"))
         {
-            int level = Mathf.Clamp(currLevel, 0, reqNums.Count - 1);
-            int replacer = reqNums[level];
+            int replacer = _achObj.progress;
             descStr = descStr.Replace("{value}", replacer.ToString());
 
             if (descStr.Contains("{nth}"))
             {
-                int replaceNum = reqNums[level];
-                string replacerStr = ReturnNthString(replaceNum);
+                string replacerStr = ReturnNthString(replacer);
                 descStr = descStr.Replace("{nth}", replacerStr);
             }
         }

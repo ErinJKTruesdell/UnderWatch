@@ -48,8 +48,7 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
     public SC_LoginSystem scls;
 
     //webrequest
-    string currentPhotoTimestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-
+    int lastSeenPostID = 999999999; // Start with int.MaxValue to fetch newest
     Queue<SFPostItem> emptyItemsQueue = new();
     bool isFirstLoad = false;
     bool isWorking = false;
@@ -95,12 +94,10 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
 
         SF_Manager.isScrollEnd = false;
 
-        string localTimestamp = currentPhotoTimestamp;
         while (emptyItemsQueue.Count > 0)
         {
             SFPostItem emptyObj = emptyItemsQueue.Dequeue();
-            yield return StartCoroutine(GetRequest(emptyObj, localTimestamp));  // Waits for download to finish
-            localTimestamp = currentPhotoTimestamp; // currentPhotoTimestamp is updated in GetRequest
+            yield return StartCoroutine(GetRequest(emptyObj));  // Waits for download to finish
         }
         if (isFirstLoad)
             _recyclableScrollRect.ReloadData();  // Notify scroll list that data is ready
@@ -110,20 +107,18 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
 
 
     #region WEB-REQUESTS
-    IEnumerator GetRequest(SFPostItem SFitem, string timestamp)
+    IEnumerator GetRequest(SFPostItem SFitem)
     {
         string postImageURL;
         string pfpImageURl;
 
-        Debug.Log("Starting Request: " + timestamp);
+        Debug.Log("Starting Request: " + lastSeenPostID);
         while (GameManager.loggedInUser == null)
         {
             yield return new WaitForEndOfFrame();
         }
         WWWForm form = new WWWForm();
-        //form.AddField("previousDate", currentPhotoTimestamp);
-        form.AddField("previousDate", timestamp);
-        // was originally a placeholder username "asfdasdf"
+        form.AddField("last_seen_post_id", lastSeenPostID);
         form.AddField("username", "asfdasdf");
         form.AddField("loggedInUser", GameManager.loggedInUser.un);
 
@@ -151,8 +146,7 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
                 {
                     string[] datachunks = partition[0].Split("|");
 
-                    string newTimeStamp = datachunks[2];
-                    currentPhotoTimestamp = newTimeStamp;
+                    string receivedDate = datachunks[2];
                     if (datachunks[0].Contains("Spon"))
                     {
                         //Sponsored|uploads/6802b70799fa1456967581.png|2024-10-18 00:00:00
@@ -201,6 +195,7 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
                             string placeName = datachunks[10].Split('%')[2];
 
                             string postIDStr = datachunks[^1];
+                            lastSeenPostID = Convert.ToInt32(postIDStr);
 
                             SFitem.posterUser = new UserInfo(
                                 usernameStr.Trim(),
