@@ -7,7 +7,6 @@ using System.IO;
 using TMPro;
 using System.Net;
 using DG.Tweening.Plugins.Core.PathCore;
-using static System.Net.Mime.MediaTypeNames;
 using UnityEngine.Android;
 
 public class SelfieCam : MonoBehaviour
@@ -185,12 +184,12 @@ public class SelfieCam : MonoBehaviour
         //tex and is assigned a default in inspector
 
         Texture2D rotatedTex = RotateTexture(tex, false); // true = 90° clockwise
-        Texture2D smallerTex = CropAndResize(rotatedTex, 2048, 2048);
+        Texture2D smallerTex = CropAndResize(rotatedTex, 1024, 1024);
         byte[] bytes = smallerTex.EncodeToPNG();
         Debug.Log($"Compressed size: {bytes.Length / 1024f:F2} KB");
 
-        string filename = DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day + "-" + DateTime.Now.Hour + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Second + ".png";
-        string path = UnityEngine.Application.persistentDataPath + filename;
+        string filename = $"{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.png";
+        string path = System.IO.Path.Combine(Application.persistentDataPath, filename);
         System.IO.File.WriteAllBytes(path, bytes);
 
         if (selfieUploader != null)
