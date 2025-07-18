@@ -4213,7 +4213,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2573950025339524402, guid: fbe2065d74e20fc4fbe7e697280d9e64, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1733.6328
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4774610794551806246, guid: fbe2065d74e20fc4fbe7e697280d9e64, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4774610794551806246, guid: fbe2065d74e20fc4fbe7e697280d9e64, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4774610794551806246, guid: fbe2065d74e20fc4fbe7e697280d9e64, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 107233618}
+    - target: {fileID: 4774610794551806246, guid: fbe2065d74e20fc4fbe7e697280d9e64, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5173929460990345758, guid: fbe2065d74e20fc4fbe7e697280d9e64, type: 3}
       propertyPath: regManager
