@@ -8,7 +8,6 @@ using TMPro;
 using System.Net;
 using DG.Tweening.Plugins.Core.PathCore;
 using UnityEngine.Android;
-using static System.Net.Mime.MediaTypeNames;
 
 public class SelfieCam : MonoBehaviour
 {
@@ -20,7 +19,6 @@ public class SelfieCam : MonoBehaviour
     public GameObject button;
 
     public Transform camTransform;
-    public AspectRatioFitter ratioFitter;
 
     public SelfieUploader selfieUploader;
     public RegistrationManager regManager;
@@ -128,8 +126,6 @@ public class SelfieCam : MonoBehaviour
                 webcam.Play();
 
                 camView.texture = webcam;
-                float ratio = (float)webcam.width / webcam.height;
-                camView.GetComponent<AspectRatioFitter>().aspectRatio = ratio;
 
                 Debug.Log($"Texture assigned to material: {webcam.width}x{webcam.height}");
                 Debug.Log($"Webcam videoRotationAngle: {webcam.videoRotationAngle}");
@@ -170,7 +166,7 @@ public class SelfieCam : MonoBehaviour
             tex.SetPixels(webcam.GetPixels());
             tex.Apply();
 
-            camView.texture = tex;
+            //camView.texture = tex;
 
             uploadPic(tex);
         }
@@ -186,14 +182,13 @@ public class SelfieCam : MonoBehaviour
     void uploadPic(Texture2D tex)
     {
         //tex and is assigned a default in inspector
-
-        Texture2D rotatedTex = RotateTexture(tex, false); // true = 90° clockwise
-        Texture2D smallerTex = CropAndResize(rotatedTex, 2048, 2048);
+        Texture2D rotatedTex = RotateTexture(tex, true);
+        Texture2D smallerTex = CropAndResize(rotatedTex, 1024, 1024);
         byte[] bytes = smallerTex.EncodeToPNG();
         Debug.Log($"Compressed size: {bytes.Length / 1024f:F2} KB");
 
-        string filename = DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day + "-" + DateTime.Now.Hour + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Second + ".png";
-        string path = UnityEngine.Application.persistentDataPath + filename;
+        string filename = $"{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.png";
+        string path = System.IO.Path.Combine(Application.persistentDataPath, filename);
         System.IO.File.WriteAllBytes(path, bytes);
 
         if (selfieUploader != null)
@@ -211,7 +206,7 @@ public class SelfieCam : MonoBehaviour
     }
     public void capturePhoto()
     {
-        if (devices.Length > 1)
+        if (devices.Length > 0)
         {
             if (webcam == null || !webcam.isPlaying)
                 InitWebcam();
@@ -392,5 +387,3 @@ public class SelfieCam : MonoBehaviour
         }
     }
 }
-
-
