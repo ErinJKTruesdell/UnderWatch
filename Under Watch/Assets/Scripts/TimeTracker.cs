@@ -7,11 +7,6 @@ public class TimeSpentTracker : MonoBehaviour
 {
     private float timeAccumulator = 0f;
     private int minutesReported = 0;
-
-    void Awake()
-    {
-        StartCoroutine(SendMinutesToServer(1));
-    }
     void Update()
     {
         timeAccumulator += Time.deltaTime;
@@ -24,7 +19,7 @@ public class TimeSpentTracker : MonoBehaviour
         }
     }
 
-    IEnumerator SendMinutesToServer(int minutes)
+    public IEnumerator SendMinutesToServer(int minutes)
     {
         WWWForm form = new WWWForm();
         form.AddField("username", GameManager.loggedInUser.un);

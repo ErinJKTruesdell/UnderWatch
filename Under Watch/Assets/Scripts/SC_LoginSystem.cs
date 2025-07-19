@@ -38,6 +38,8 @@ public class SC_LoginSystem : MonoBehaviour
     public int registerSceneIndex;
 
     public PasswordQueryManager pqm;
+    public LocationOnLogin locationLogin;
+    public TimeSpentTracker timeTracker;
     public GameManager gm;
 
     public GameObject loginFields;
@@ -94,8 +96,10 @@ public class SC_LoginSystem : MonoBehaviour
     public void loginUponRegister(string username, string email, string password, string firstName, string lastName, Texture pfp)
     {
         Debug.Log("logging in on register: " + username);
-
         GameManager.loggedInUser = new(username, firstName, lastName, pfp, email);
+        StartCoroutine(locationLogin.GetLocation());
+        StartCoroutine(timeTracker.SendMinutesToServer(1));
+
         isLoggedIn = true;
         StartCoroutine(doTargetAssignment(username));
         //we no longer add points upon registration
@@ -353,6 +357,9 @@ public class SC_LoginSystem : MonoBehaviour
 
             StartCoroutine(downloadImageFromURL(profilePicURL, GameManager.loggedInUser));
             StartCoroutine(GetTargetInfo());
+
+            StartCoroutine(locationLogin.GetLocation());
+            StartCoroutine(timeTracker.SendMinutesToServer(1));
 
             CheckUserAchievementProgress();
         }
