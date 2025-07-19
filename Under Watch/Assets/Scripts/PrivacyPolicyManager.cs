@@ -1,10 +1,10 @@
 using DG.Tweening;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using System;
 
 public class PrivacyPolicyManager : MonoBehaviour
 {
@@ -13,6 +13,7 @@ public class PrivacyPolicyManager : MonoBehaviour
     public GameManager gm;
 
     public Transform containersParent;
+    public GameObject PrivacyPolicyPopup;
     public PrivacyPolicyData[] dataContainers;
 
     bool tweenFinished = false;
@@ -20,6 +21,11 @@ public class PrivacyPolicyManager : MonoBehaviour
     private void Awake()
     {
         dataContainers = containersParent.GetComponentsInChildren<PrivacyPolicyData>();
+
+        if (SceneManager.GetActiveScene().name == "ProfileSetup")
+        {
+            ActivatePrivacyPolicy();
+        }
     }
     private void Start()
     {
@@ -28,15 +34,42 @@ public class PrivacyPolicyManager : MonoBehaviour
 
     private void OnEnable()
     {
-        ActivatePrivacyPolicy();
+        if (SceneManager.GetActiveScene().name != "ProfileSetup")
+            DeterminePrivacyPolicy();
+    }
+
+    void DeterminePrivacyPolicy()
+    {
+        DateTime startDate = new DateTime(2025, 7, 18);
+        int day = (DateTime.UtcNow.Date - startDate).Days;
+        Debug.Log("day: " + day);
+
+        foreach (PrivacyPolicyData data in dataContainers)
+        {
+            if (data.day == day && PlayerPrefs.GetInt("seenDay") != day)
+            {
+                PlayerPrefs.SetInt("seenDay", day);
+                PlayerPrefs.Save();
+
+                PrivacyPolicyPopup.SetActive(true);
+
+                ActivatePrivacyPolicy();
+                return;
+            }
+        }
     }
 
     private void ActivatePrivacyPolicy()
     {
+        Debug.Log("sdfjkh");
+        DateTime startDate = new DateTime(2025, 7, 18);
+        int day = (DateTime.UtcNow.Date - startDate).Days;
+
         foreach (PrivacyPolicyData data in dataContainers)
         {
-            if (data.day == DayManager.currentDay)
+            if (data.day == day)
             {
+                PrivacyPolicyPopup.SetActive(true);
                 detailsTitleText.text = data.title;
                 detailsDescText.text = data.desc;
                 break;
@@ -45,9 +78,16 @@ public class PrivacyPolicyManager : MonoBehaviour
     }
     public void AgreeToPolicy()
     {
-        StartCoroutine(ActivateAccount());
-        transform.DOLocalMoveY(1400f, .5f).SetEase(Ease.OutQuad)
-            .OnComplete(() => tweenFinished = true);
+        if (SceneManager.GetActiveScene().name == "ProfileSetup")
+        {
+            StartCoroutine(ActivateAccount());
+
+            PrivacyPolicyPopup.transform.DOLocalMoveY(1400f, .5f).SetEase(Ease.OutQuad)
+    .OnComplete(() => tweenFinished = true);
+        }
+        PrivacyPolicyPopup.transform.DOLocalMoveY(1400f, .5f).SetEase(Ease.OutQuad)
+            .OnComplete(() => PrivacyPolicyPopup.SetActive(false));
+
     }
 
     IEnumerator ActivateAccount()

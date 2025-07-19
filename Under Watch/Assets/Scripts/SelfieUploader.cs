@@ -71,7 +71,6 @@ public class SelfieUploader : MonoBehaviour
         responseText.color = Color.white;
         responseText.text = "Verifying Image...";
         blockingPanel.SetActive(true);
-        Debug.Log("hello:");
         profileObjects.SetActive(true);
         profileObjects.transform.DOLocalMoveY(450, 1f).SetEase(Ease.OutQuad);
 
@@ -89,15 +88,17 @@ public class SelfieUploader : MonoBehaviour
         // get location info for posting
         latitude = Input.location.lastData.latitude;
         longitude = Input.location.lastData.longitude;
+
+        locationName = "";
+
+        ConvertCoordinates.StartGeocodeRequest(latitude, longitude, SelfieUploadAfterLocation);
+
 #elif UNITY_EDITOR
         // For testing in the editor, use a fixed location
         latitude = 39.7749f; // Example: San Francisco latitude
         longitude = -79.4194f; // Example: San Francisco longitude
         ConvertCoordinates.StartGeocodeRequest(latitude, longitude, SelfieUploadAfterLocation);
 #endif
-        locationName = "";
-
-        ConvertCoordinates.StartGeocodeRequest(latitude, longitude, SelfieUploadAfterLocation);
 
         yield return new WaitForSeconds(.01f); 
     }
@@ -144,12 +145,12 @@ public class SelfieUploader : MonoBehaviour
 
             form.AddField("latitude", latitude.ToString());
             form.AddField("longitude", longitude.ToString());
-            form.AddField("place_name", locationName.ToString());
+            form.AddField("place_name", locationName);
 
             form.AddField("faces_expected", facesExpected);
 
             UnityWebRequest www = UnityWebRequest.Post(GameManager.rootURL + "uploadImage.php", form);
-            Debug.Log("Sending web request...");
+            Debug.Log("Sending web request..." + locationName);
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)

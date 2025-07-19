@@ -87,7 +87,9 @@ public class NewsTitleManager : MonoBehaviour
 
     private void AddAllNewsData()
     {
-        int day = DayManager.currentDay;
+        DateTime startDate = new DateTime(2025, 7, 18);
+        int day = (DateTime.UtcNow.Date - startDate).Days;
+        
         List<GameObject> containersToDestroy = new();
 
         foreach (NewsDataContainer newsData in newsDataContainers)

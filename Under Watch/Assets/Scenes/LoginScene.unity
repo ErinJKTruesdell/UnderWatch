@@ -737,6 +737,8 @@ GameObject:
   m_Component:
   - component: {fileID: 386920555}
   - component: {fileID: 386920554}
+  - component: {fileID: 386920557}
+  - component: {fileID: 386920556}
   m_Layer: 0
   m_Name: LoginSystem
   m_TagString: Untagged
@@ -766,6 +768,8 @@ MonoBehaviour:
   cacheCheckToggle: {fileID: 1223838698}
   registerSceneIndex: 1
   pqm: {fileID: 0}
+  locationLogin: {fileID: 386920557}
+  timeTracker: {fileID: 872406430}
   gm: {fileID: 872406427}
   loginFields: {fileID: 1429891408}
   emailField: {fileID: 2084137682}
@@ -790,6 +794,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &386920556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 386920553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c1ccd34e5d1b1a4dbbee5551ae202cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &386920557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 386920553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80fb112165d9f2947ba041b43bc180b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &490063104
 GameObject:
   m_ObjectHideFlags: 0
