@@ -11,6 +11,7 @@ public class RequestOverride : MonoBehaviour
     {
         StartCoroutine(RequestOverrideRoutine());
         SU.responseText.text = "Requested override";
+        ErrorEventHandler.InvokeError("Override Request Acknowledged!", "Hold for confirmation that your request was sent", Color.yellow);
 
         SU.CloseBlockerPanel();
     }

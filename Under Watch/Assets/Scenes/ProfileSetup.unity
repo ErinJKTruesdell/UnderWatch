@@ -1734,6 +1734,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 100673782}
     m_Modifications:
+    - target: {fileID: 567116714472188317, guid: 3dc9ed0f1daaa924ba096e03499c5af5, type: 3}
+      propertyPath: PrivacyPolicyPopup
+      value: 
+      objectReference: {fileID: 480340709}
     - target: {fileID: 1222502971710689802, guid: 3dc9ed0f1daaa924ba096e03499c5af5, type: 3}
       propertyPath: m_Name
       value: PrivacyPolicyData_day0
