@@ -87,7 +87,7 @@ public class DisplayTargetProfile : MonoBehaviour
             attributes.text = "";
 
             string[] partition = response.Split("@");
-            string[] profAtt = partition[1].Split("|");
+            string[] profAtt = partition[0].Split("|");
 
             Debug.Log("Assigning attributes" + profAtt[0] + profAtt[1] + profAtt[2] + profAtt[3]);
 
@@ -99,7 +99,7 @@ public class DisplayTargetProfile : MonoBehaviour
                 throw new Exception("Attributes string is empty.");
 
             if (!string.IsNullOrEmpty(profAtt[1]))
-                attributes.text += $" {profAtt[1]}.";
+                attributes.text += $"{profAtt[1]}.";
 
             if (!string.IsNullOrEmpty(profAtt[2]))
                 attributes.text += $" {profAtt[2]}";
@@ -127,8 +127,8 @@ public class DisplayTargetProfile : MonoBehaviour
 
             if (www.result != UnityWebRequest.Result.Success)
             {
-                Debug.Log("Failed to load level: " + www.error + www.downloadHandler.text);
-                ErrorEventHandler.InvokeError("Attribute Server Error:", www.error, Color.red);
+                Debug.Log("Failed to load location: " + www.error + www.downloadHandler.text);
+                ErrorEventHandler.InvokeError("Location Server Error:", www.error, Color.red);
                 yield break;
             }
             else
@@ -137,8 +137,9 @@ public class DisplayTargetProfile : MonoBehaviour
                 Debug.Log("response: " + www.downloadHandler.text);
 
                 string[] partition = www.downloadHandler.text.Split("|");
-                if (partition.Length >= 3)
+                if (partition.Length > 2)
                 {
+                    Debug.Log("location found!");
                     locationLink = "";
 
                     float latitude = float.Parse(partition[0]);
@@ -192,6 +193,7 @@ public class DisplayTargetProfile : MonoBehaviour
                 return;
             }
         }
+        locationText.text = placeName;
     }
 
     void GeocodePlaceName(List<string> locationNames)

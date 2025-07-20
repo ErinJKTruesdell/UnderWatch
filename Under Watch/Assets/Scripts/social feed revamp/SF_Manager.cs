@@ -147,7 +147,7 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
                     string[] datachunks = partition[0].Split("|");
 
                     string receivedDate = datachunks[2];
-                    if (datachunks[0].Contains("Spon"))
+                    if (datachunks[0].Contains("Sponsored"))
                     {
                         //Sponsored|uploads/6802b70799fa1456967581.png|2024-10-18 00:00:00
                         postImageURL = datachunks[1].Trim();
@@ -203,24 +203,30 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
                                 uLN.Trim()
                             );
 
-                            SFitem.targetUser = new UserInfo(
-                                targetUNTStr.Trim(),
-                                tFN.Trim(),
-                                tLN.Trim()
-                            );
-                            Debug.Log($"Poster: {SFitem.posterUser?.un}, Target: {SFitem.targetUser?.un}");
+                            if (!string.IsNullOrWhiteSpace(targetUNTStr))
+                            {
+                                SFitem.targetUser = new UserInfo(
+                                    targetUNTStr.Trim(),
+                                    tFN.Trim(),
+                                    tLN.Trim()
+                                );
+                                StartCoroutine(downloadTargetPFP(GameManager.rootURL + targetPFP, SFitem));
+                            }
 
+                            if (!string.IsNullOrWhiteSpace(placeName))
+                            {
+                                SFitem.latitude = float.Parse(latStr.Trim());
+                                SFitem.longitude = float.Parse(longStr.Trim());
+                                SFitem.placeName = placeName.Trim();
+                            }
+
+                            Debug.Log($"Poster: {SFitem.posterUser?.un}");
                             SFitem.postID = postIDStr.Trim();
-
-                            SFitem.latitude = float.Parse(latStr.Trim());
-                            SFitem.longitude = float.Parse(longStr.Trim());
-                            SFitem.placeName = placeName.Trim();
 
                             string[] reactChunks = partition[1].Split("%");
                             ParseReacts(reactChunks, SFitem);
                             Debug.Log("Starting Download");
                             //possibly make this a yield return to wait until post is fully loaded - faster as is, but less stable?
-                            StartCoroutine(downloadTargetPFP(GameManager.rootURL + targetPFP, SFitem));
                             StartCoroutine(downloadPostimage(GameManager.rootURL + postImageURL, SFitem));
                             StartCoroutine(downloadPfpImage(GameManager.rootURL + pfpImageURl, SFitem));
                         }

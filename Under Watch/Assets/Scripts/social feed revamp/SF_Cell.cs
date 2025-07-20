@@ -129,6 +129,8 @@ public class SF_Cell : MonoBehaviour, ICell
     }
     IEnumerator LoadPostLocation()
     {
+        locText.text = "";
+
         while (_postItem.placeName == null)
             yield return new WaitForSeconds(.1f);
         locText.text = _postItem.placeName;
