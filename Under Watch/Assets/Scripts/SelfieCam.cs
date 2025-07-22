@@ -194,9 +194,9 @@ public class SelfieCam : MonoBehaviour
 
 #if UNITY_ANDROID
         Texture2D flippedTex = FlipVertically(smallerTex);
-        byte[] bytes = flippedTex.EncodeToPNG();
+        byte[] bytes = flippedTex.EncodeToJPG(90);
 #else
-        byte[] bytes = smallerTex.EncodeToPNG();
+        byte[] bytes = smallerTex.EncodeToJPG(90);
 #endif
         Debug.Log($"Compressed size: {bytes.Length / 1024f:F2} KB");
 

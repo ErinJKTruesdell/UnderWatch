@@ -42,16 +42,18 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
 
     private List<SFPostItem> postList = new();
 
-    public static bool isScrollEnd = false;
-
     public RecyclableScrollRect scrollRect;
     public SC_LoginSystem scls;
 
     //webrequest
     int lastSeenPostID = 999999999; // Start with int.MaxValue to fetch newest
     Queue<SFPostItem> emptyItemsQueue = new();
+    Queue<(string url, Action<Texture> onComplete)> imageQueue = new();
+    bool isDownloadingImage = false;
     bool isFirstLoad = false;
     bool isWorking = false;
+    [SerializeField] private float loadThreshold = 0.1f; // 10% from bottom
+
 
     //Recyclable scroll rect's data source must be assigned in Awake.
     private void Awake()
@@ -64,19 +66,22 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
     private void Start()
     {
         InitData();
-
-        scrollRect.onValueChanged.AddListener(ListenerMethod);
+        scrollRect.onValueChanged.AddListener(OnScroll);
     }
-    public void ListenerMethod(Vector2 value)
+
+    private void OnScroll(Vector2 scrollPos)
     {
-        //if scrolled near end
-        if (isScrollEnd && !isWorking)
+        // Only vertical matters here
+        float verticalPos = scrollRect.verticalNormalizedPosition;
+
+        if (verticalPos <= loadThreshold && !isWorking)
         {
-            Debug.Log("scrolling at end!");
-            InitData();
-            SF_Manager.isScrollEnd = false;
+            Debug.Log("Scrolled near bottom. Loading more content...");
+            isWorking = true;
+            InitData(); // Load next batch
         }
     }
+
     //Initialising postList with dummy data 
     public void InitData()
     {
@@ -91,8 +96,6 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
             postList.Add(obj);
             emptyItemsQueue.Enqueue(obj);
         }
-
-        SF_Manager.isScrollEnd = false;
 
         while (emptyItemsQueue.Count > 0)
         {
@@ -167,7 +170,7 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
                             );
 
                         SFitem.isAd = true;
-                        yield return StartCoroutine(downloadAdImageFromURL(GameManager.rootURL + postImageURL, SFitem));
+                        EnqueueImageDownload(GameManager.rootURL + postImageURL, tex => SFitem.postPhoto = tex);
                     }
 
                     else
@@ -210,7 +213,6 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
                                     tFN.Trim(),
                                     tLN.Trim()
                                 );
-                                StartCoroutine(downloadTargetPFP(GameManager.rootURL + targetPFP, SFitem));
                             }
 
                             if (!string.IsNullOrWhiteSpace(placeName))
@@ -227,8 +229,8 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
                             ParseReacts(reactChunks, SFitem);
                             Debug.Log("Starting Download");
                             //possibly make this a yield return to wait until post is fully loaded - faster as is, but less stable?
-                            StartCoroutine(downloadPostimage(GameManager.rootURL + postImageURL, SFitem));
-                            StartCoroutine(downloadPfpImage(GameManager.rootURL + pfpImageURl, SFitem));
+                            EnqueueImageDownload(GameManager.rootURL + postImageURL, tex => SFitem.postPhoto = tex);
+                            EnqueueImageDownload(GameManager.rootURL + pfpImageURl, tex => SFitem.pfpPhoto = tex);
                         }
                         catch (Exception e)
                         {
@@ -265,87 +267,35 @@ public class SF_Manager : MonoBehaviour, IRecyclableScrollRectDataSource
        // Debug.Log("reacts: " + debugList);
     }
 
-    IEnumerator downloadPostimage(string url1, SFPostItem item)
+    void EnqueueImageDownload(string url, Action<Texture> callback)
     {
-        Debug.Log("Starting Download Request");
-
-        UnityWebRequest request = UnityWebRequestTexture.GetTexture(url1);
-        yield return request.SendWebRequest();
-        if (request.isNetworkError || request.isHttpError)
-        {
-            Debug.Log("error: " + url1 + request.error);
-        }
-        else
-        {
-            Texture image1Download = ((DownloadHandlerTexture)request.downloadHandler).texture;
-            if (image1Download == null)
-            {
-                Debug.Log("Post photo texture is null after download");
-            }
-
-            item.postPhoto = image1Download;
-        }
-    }
-    IEnumerator downloadPfpImage(string url2, SFPostItem item)
-    {
-        UnityWebRequest request2 = UnityWebRequestTexture.GetTexture(url2);
-        yield return request2.SendWebRequest();
-        if (request2.isNetworkError || request2.isHttpError)
-        {
-            Debug.Log("error: " + url2 + request2.error);
-        }
-        else
-        {
-            Texture image2Download = ((DownloadHandlerTexture)request2.downloadHandler).texture;
-            if (image2Download == null)
-            {
-                Debug.Log("Pfp photo texture is null after download");
-            }
-
-            item.pfpPhoto = image2Download;
-        }
-    }
-    IEnumerator downloadTargetPFP(string url, SFPostItem item)
-    {
-        UnityWebRequest request2 = UnityWebRequestTexture.GetTexture(url);
-        yield return request2.SendWebRequest();
-        if (request2.isNetworkError || request2.isHttpError)
-        {
-            Debug.Log("error: " + url + request2.error);
-        }
-        else
-        {
-            Texture image2Download = ((DownloadHandlerTexture)request2.downloadHandler).texture;
-            if (image2Download == null)
-            {
-                Debug.Log("Pfp photo texture is null after download");
-            }
-
-            item.targetUser.profilePic = image2Download;
-        }
+        imageQueue.Enqueue((url, callback));
+        if (!isDownloadingImage)
+            StartCoroutine(ProcessImageQueue());
     }
 
-    IEnumerator downloadAdImageFromURL(string url, SFPostItem item)
+    IEnumerator ProcessImageQueue()
     {
-        Debug.Log("Starting Ad Download Request");
+        isDownloadingImage = true;
 
-        UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
-        yield return request.SendWebRequest();
-
-        if (request.isNetworkError || request.isHttpError)
+        while (imageQueue.Count > 0)
         {
-            Debug.Log(request.error);
-        }
-        else
-        {
-            Texture image1Download = ((DownloadHandlerTexture)request.downloadHandler).texture;
-            if (image1Download == null)
+            var (url, onComplete) = imageQueue.Dequeue();
+            using (UnityWebRequest request = UnityWebRequestTexture.GetTexture(url))
             {
-                Debug.Log("Post photo texture is null after download");
+                yield return request.SendWebRequest();
+
+                if (request.result == UnityWebRequest.Result.Success)
+                {
+                    Texture tex = ((DownloadHandlerTexture)request.downloadHandler).texture;
+                    onComplete?.Invoke(tex);
+                }
             }
 
-            item.postPhoto = image1Download;
+            yield return new WaitForSeconds(0.2f); // slight delay to reduce spike
         }
+
+        isDownloadingImage = false;
     }
     #endregion
 

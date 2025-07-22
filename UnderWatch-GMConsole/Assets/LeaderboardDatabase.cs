@@ -19,7 +19,7 @@ public class  pointsData
 public class LeaderboardDatabase : MonoBehaviour
 {
 
-
+/*
     public GameObject leaderboardItemPrefab;
     public int height = 50;
     public GameObject leaderboardloading;
@@ -136,6 +136,6 @@ public class LeaderboardDatabase : MonoBehaviour
             image1.texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
         }
 
-    }
+    }*/
 
 }

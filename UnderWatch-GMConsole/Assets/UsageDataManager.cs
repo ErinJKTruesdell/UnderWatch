@@ -25,7 +25,7 @@ public class UsageDataManager : MonoBehaviour
 
     public void RefreshUsageData()
     {
-        database.doLeaderboard();
+        //database.doLeaderboard();
         udg.doUsageData();
     }
 

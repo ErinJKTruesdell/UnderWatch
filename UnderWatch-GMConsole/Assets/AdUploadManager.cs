@@ -296,9 +296,12 @@ public class AdUploadManager : MonoBehaviour
                 using (UnityWebRequest www = UnityWebRequest.Post(rootURL + "uploadAdImage.php", form))
                 {
                     yield return www.SendWebRequest();
+                    Debug.Log("help me ");
 
                     if (www.result != UnityWebRequest.Result.Success)
                     {
+                        Debug.Log("ERRROROROREOEORR");
+
                         errorMessage = www.error;
                     }
                     //else

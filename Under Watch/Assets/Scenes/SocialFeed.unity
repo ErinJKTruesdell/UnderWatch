@@ -1605,7 +1605,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _recyclableScrollRect: {fileID: 644708042}
-  _dataLength: 5
+  _dataLength: 3
   scrollRect: {fileID: 644708042}
   scls: {fileID: 0}
 --- !u!114 &1992330860
